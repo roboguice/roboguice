@@ -68,12 +68,6 @@ public abstract class GuiceActivity extends Activity {
 
 
 
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
     @Override
     protected void onPause() {
         super.onPause();

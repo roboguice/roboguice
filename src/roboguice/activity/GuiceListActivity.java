@@ -69,11 +69,6 @@ public abstract class GuiceListActivity extends ListActivity {
 
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         scope.exit(this);

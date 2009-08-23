@@ -71,11 +71,6 @@ public abstract class GuiceExpandableListActivity extends ExpandableListActivity
 
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
     protected void onPause() {
         super.onPause();
         scope.exit(this);

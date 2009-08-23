@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="lib" path="lib/guice-2.0-no_aop.jar" sourcepath="lib/guice-2.0-src.jar"/>
+	<classpathentry kind="lib" path="/opt/local/android-sdk-mac_x86-1.5_r3/platforms/android-1.5/android.jar" sourcepath="/opt/local/android-sdk-mac_x86-1.5_r3/platforms/android-1.5/sources"/>
+	<classpathentry kind="lib" path="/opt/local/android-sdk-mac_x86-1.5_r3/add-ons/google_apis-3/libs/maps.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -67,7 +67,7 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
             throw new RuntimeException(e);
 
         } catch (IllegalArgumentException f ) {
-            throw new IllegalArgumentException( String.format("Can't assign %s value %s to %s field %s", value.getClass(), value, field.getType(), field.getName() ));
+            throw new IllegalArgumentException( String.format("Can't assign %s value %s to %s field %s", value!=null ? value.getClass() : "(null)", value, field.getType(), field.getName() ));
         }
     }
 }

@@ -2,7 +2,6 @@ package roboguice.activity;
 
 import roboguice.inject.ActivityScope;
 
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import android.app.Activity;
@@ -12,7 +11,7 @@ import android.view.ViewGroup.LayoutParams;
 
 
 public abstract class GuiceActivity extends Activity {
-    @Inject protected ActivityScope scope;
+    protected ActivityScope scope = getInjector().getInstance(ActivityScope.class);
 
     @Override
     public void setContentView(int layoutResID) {

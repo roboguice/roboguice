@@ -2,7 +2,6 @@ package roboguice.activity;
 
 import roboguice.inject.ActivityScope;
 
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 import android.app.ListActivity;
@@ -11,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 public abstract class GuiceListActivity extends ListActivity {
-    @Inject protected ActivityScope scope;
+    protected ActivityScope scope = getInjector().getInstance(ActivityScope.class);
 
 
     @Override

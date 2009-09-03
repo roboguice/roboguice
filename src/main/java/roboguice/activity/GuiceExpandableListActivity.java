@@ -65,8 +65,10 @@ public abstract class GuiceExpandableListActivity extends ExpandableListActivity
 
 
 
-
-
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return this;
+    }
 
 
     @Override

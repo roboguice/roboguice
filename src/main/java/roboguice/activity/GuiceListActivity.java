@@ -64,7 +64,10 @@ public abstract class GuiceListActivity extends ListActivity {
     }
 
 
-
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return this;
+    }
 
 
     @Override

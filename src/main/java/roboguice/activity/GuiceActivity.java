@@ -35,7 +35,10 @@ public abstract class GuiceActivity extends Activity {
     }
 
 
-
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return this;
+    }
 
 
     @Override

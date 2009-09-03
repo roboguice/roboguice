@@ -63,9 +63,10 @@ public abstract class GuiceMapActivity extends MapActivity {
         super.onResume();
     }
 
-
-
-
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return this;
+    }
 
 
     @Override

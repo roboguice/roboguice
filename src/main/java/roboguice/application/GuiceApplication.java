@@ -11,7 +11,7 @@ import com.google.inject.Stage;
 import android.app.Application;
 
 public class GuiceApplication extends Application implements Module {
-    protected Injector guice = Guice.createInjector( Stage.PRODUCTION, this );
+    protected Injector guice;
 
     @Override
     public void onCreate() {
@@ -23,7 +23,7 @@ public class GuiceApplication extends Application implements Module {
     }
 
     public Injector getInjector() {
-        return guice;
+        return guice!=null ? guice : ( guice = Guice.createInjector( Stage.PRODUCTION, this ) );
     }
 
     /**

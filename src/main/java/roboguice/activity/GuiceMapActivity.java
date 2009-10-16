@@ -1,6 +1,7 @@
 package roboguice.activity;
 
-import roboguice.inject.ActivityScope;
+import roboguice.application.GuiceApplication;
+import roboguice.inject.ContextScope;
 
 import com.google.android.maps.MapActivity;
 import com.google.inject.Injector;
@@ -11,7 +12,7 @@ import android.view.ViewGroup.LayoutParams;
 
 
 public abstract class GuiceMapActivity extends MapActivity {
-    protected ActivityScope scope = getInjector().getInstance(ActivityScope.class);
+    protected ContextScope scope;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -40,6 +41,7 @@ public abstract class GuiceMapActivity extends MapActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        scope = getInjector().getInstance(ContextScope.class);
         scope.enter(this);
         super.onCreate(savedInstanceState);
     }
@@ -76,6 +78,9 @@ public abstract class GuiceMapActivity extends MapActivity {
     }
 
 
-    protected abstract Injector getInjector();
+    public Injector getInjector() {
+        return ((GuiceApplication)getApplication()).getInjector();
+    }
+
 }
 

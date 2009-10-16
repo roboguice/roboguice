@@ -24,7 +24,7 @@ package roboguice.inject;
  * provide for that key if it was not yet seeded: <pre>   {@code
  *
  *   bind(key)
- *       .toProvider(ActivityScope.<KeyClass>seededKeyProvider())
+ *       .toProvider(ContextScope.<KeyClass>seededKeyProvider())
  *       .in(ScopeAnnotation.class);
  * }</pre>
  *
@@ -44,13 +44,13 @@ import com.google.inject.OutOfScopeException;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
-import android.app.Activity;
+import android.content.Context;
 
-public class ActivityScope implements Scope {
+public class ContextScope implements Scope {
 
     protected static final Provider<Object> SEEDED_KEY_PROVIDER = new Provider<Object>() {
         public Object get() {
-            throw new IllegalStateException("If you got here then it means that your code asked for scoped object which should have been explicitly seeded in this scope by calling ActivityScope.seed(), but was not.");
+            throw new IllegalStateException("If you got here then it means that your code asked for scoped object which should have been explicitly seeded in this scope by calling ContextScope.seed(), but was not.");
         }
     };
 
@@ -61,15 +61,15 @@ public class ActivityScope implements Scope {
      * However, once they're closed, all their previous values are gone forever
      * until the scope is reinitialized again via enter().
      */
-    public void enter( Activity activity ) {
+    public void enter( Context context ) {
         if(values.get()==null )
             values.set( new HashMap<Key<?>,Object>( ) );
 
-        values.get().put(Key.get(Activity.class), activity);
+        values.get().put(Key.get(Context.class), context);
     }
 
 
-    public void exit( Activity activity ) {
+    public void exit( Context context ) {
         values.remove();
     }
 

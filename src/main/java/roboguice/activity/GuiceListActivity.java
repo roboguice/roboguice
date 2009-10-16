@@ -1,6 +1,7 @@
 package roboguice.activity;
 
-import roboguice.inject.ActivityScope;
+import roboguice.application.GuiceApplication;
+import roboguice.inject.ContextScope;
 
 import com.google.inject.Injector;
 
@@ -9,8 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-public abstract class GuiceListActivity extends ListActivity {
-    protected ActivityScope scope = getInjector().getInstance(ActivityScope.class);
+public class GuiceListActivity extends ListActivity {
+    protected ContextScope scope;
 
 
     @Override
@@ -40,6 +41,7 @@ public abstract class GuiceListActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        scope = getInjector().getInstance(ContextScope.class);
         scope.enter(this);
         super.onCreate(savedInstanceState);
     }
@@ -77,6 +79,9 @@ public abstract class GuiceListActivity extends ListActivity {
     }
 
 
-    protected abstract Injector getInjector();
+    public Injector getInjector() {
+        return ((GuiceApplication)getApplication()).getInjector();
+    }
+
 
 }

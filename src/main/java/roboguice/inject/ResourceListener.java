@@ -10,15 +10,16 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
 public class ResourceListener implements TypeListener {
-    protected Provider<Activity> activity;
+    protected Provider<Context> context;
 
-    public ResourceListener( Provider<Activity> activity ) {
-        this.activity = activity;
+    public ResourceListener( Provider<Context> context ) {
+        this.context = context;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -26,7 +27,7 @@ public class ResourceListener implements TypeListener {
         while( c!=null ) {
             for (Field field : c.getDeclaredFields())
                 if( field.isAnnotationPresent(InjectResource.class) )
-                    typeEncounter.register(new ResourceMembersInjector<I>(field, activity, field.getAnnotation(InjectResource.class)));
+                    typeEncounter.register(new ResourceMembersInjector<I>(field, context, field.getAnnotation(InjectResource.class)));
             c = c.getSuperclass();
         }
     }
@@ -35,25 +36,31 @@ public class ResourceListener implements TypeListener {
 
 class ResourceMembersInjector<T> implements MembersInjector<T> {
     protected Field field;
-    protected Provider<Activity> activity;
+    protected Provider<Context> contextProvider;
     protected InjectResource annotation;
 
-    public ResourceMembersInjector( Field field, Provider<Activity> activity, InjectResource annotation ) {
+    public ResourceMembersInjector( Field field, Provider<Context> context, InjectResource annotation ) {
         this.field = field;
-        this.activity = activity;
+        this.contextProvider = context;
         this.annotation = annotation;
     }
 
     public void injectMembers(T instance) {
+        final Context context = contextProvider.get();
+
+        if( !(context instanceof Activity) )
+            return;
+
+        final Activity activity = (Activity)context;
         Object value = null;
 
         try {
 
             final int id = annotation.value();
-            final Resources resources = activity.get().getResources();
+            final Resources resources = contextProvider.get().getResources();
             final Class<?> t = field.getType();
             value = String.class.isAssignableFrom(t) ? resources.getString(id) :
-                                 View.class.isAssignableFrom(t) ? activity.get().findViewById(id) :
+                                 View.class.isAssignableFrom(t) ? activity.findViewById(id) :
                                  Drawable.class.isAssignableFrom(t) ? resources.getDrawable(id) :
                                  null ;
 

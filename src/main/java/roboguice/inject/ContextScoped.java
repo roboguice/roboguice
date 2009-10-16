@@ -12,4 +12,4 @@ import com.google.inject.ScopeAnnotation;
 
 
 @Target({ TYPE, METHOD, FIELD }) @Retention(RUNTIME) @ScopeAnnotation
-public @interface ActivityScoped {}
+public @interface ContextScoped {}

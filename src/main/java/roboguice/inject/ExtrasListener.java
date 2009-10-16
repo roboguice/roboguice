@@ -12,13 +12,14 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 public class ExtrasListener implements TypeListener {
-    protected Provider<Activity> activity;
+    protected Provider<Context> contextProvider;
 
-    public ExtrasListener( Provider<Activity> activity ) {
-        this.activity = activity;
+    public ExtrasListener( Provider<Context> contextProvider ) {
+        this.contextProvider = contextProvider;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -26,7 +27,7 @@ public class ExtrasListener implements TypeListener {
         while( c!=null ) {
             for (Field field : c.getDeclaredFields())
                 if( field.isAnnotationPresent(InjectExtra.class) )
-                    typeEncounter.register(new ExtrasMembersInjector<I>(field, activity, field.getAnnotation(InjectExtra.class)));
+                    typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
             c = c.getSuperclass();
         }
     }
@@ -35,22 +36,28 @@ public class ExtrasListener implements TypeListener {
 
 class ExtrasMembersInjector<T> implements MembersInjector<T> {
     protected Field field;
-    protected Provider<Activity> activity;
+    protected Provider<Context> contextProvider;
     protected InjectExtra annotation;
 
-    public ExtrasMembersInjector( Field field, Provider<Activity> activity, InjectExtra annotation ) {
+    public ExtrasMembersInjector( Field field, Provider<Context> contextProvider, InjectExtra annotation ) {
         this.field = field;
-        this.activity = activity;
+        this.contextProvider = contextProvider;
         this.annotation = annotation;
     }
 
     public void injectMembers(T instance) {
+        final Context context = contextProvider.get();
+
+        if( !(context instanceof Activity))
+            return;
+
+        final Activity activity = (Activity)context;
         Object value = null;
 
         try {
 
             final String id = annotation.value();
-            final Bundle extras = activity.get().getIntent().getExtras();
+            final Bundle extras = activity.getIntent().getExtras();
 
             value = extras==null ? null : extras.get(id) ;
 

@@ -1,6 +1,7 @@
 package roboguice.activity;
 
-import roboguice.inject.ActivityScope;
+import roboguice.application.GuiceApplication;
+import roboguice.inject.ContextScope;
 
 import com.google.inject.Injector;
 
@@ -10,8 +11,10 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 
-public abstract class GuiceExpandableListActivity extends ExpandableListActivity {
-    protected ActivityScope scope = getInjector().getInstance(ActivityScope.class);
+public class GuiceExpandableListActivity extends ExpandableListActivity {
+    protected ContextScope scope;
+
+
 
     @Override
     public void setContentView(int layoutResID) {
@@ -40,6 +43,7 @@ public abstract class GuiceExpandableListActivity extends ExpandableListActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        scope = getInjector().getInstance(ContextScope.class);
         scope.enter(this);
         super.onCreate(savedInstanceState);
     }
@@ -78,6 +82,8 @@ public abstract class GuiceExpandableListActivity extends ExpandableListActivity
     }
 
 
-    protected abstract Injector getInjector();
+    public Injector getInjector() {
+        return ((GuiceApplication)getApplication()).getInjector();
+    }
 
 }

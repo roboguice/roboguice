@@ -2,3 +2,4 @@ syntax: regexp
 ^bin/
 ^target/
 \.DS_Store
+^samples/bin/

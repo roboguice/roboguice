@@ -20,13 +20,14 @@ public class DoctorTenma extends GuiceActivity {
     @InjectResource(R.id.widget1) protected TextView helloView;
     @InjectResource(R.string.hello) protected String hello;
 
-    // You can inject Extras from the intent that started this activity.
+    // You can inject Extras from the intent that started this activity,
+    // equivalent to getIntent().getExtras().getXXX()
     // See ExtrasListener for details.
     // They can be @Nullable, or have @DefaultBoolean, Integer, String values.
     @InjectExtra("someValue") @Nullable protected Integer someValue;
 
     // You can inject various useful android objects.
-    // See GuiceApplication.configure to see what's configured.
+    // See GuiceApplication.configure to see what's available.
     @Inject protected SharedPreferences prefs;
 
     @Override

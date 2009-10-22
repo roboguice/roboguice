@@ -4,9 +4,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
+<TextView 
+    android:id="@+id/widget1" 
     android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/hello"
-    />
+    android:layout_height="wrap_content" />
 </LinearLayout>

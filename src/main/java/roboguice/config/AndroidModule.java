@@ -17,14 +17,15 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 
 public class AndroidModule extends AbstractModule {
-    protected GuiceApplication app;
+    protected Application app;
 
-    public AndroidModule( GuiceApplication app ) {
+    public AndroidModule( Application app ) {
         this.app = app;
     }
 

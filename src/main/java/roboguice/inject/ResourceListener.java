@@ -2,8 +2,6 @@ package roboguice.inject;
 
 import java.lang.reflect.Field;
 
-import roboguice.application.GuiceApplication;
-
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
@@ -12,15 +10,16 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.view.View;
 
 public class ResourceListener implements TypeListener {
     protected Provider<Context> context;
-    protected GuiceApplication app;
+    protected Application app;
 
-    public ResourceListener( Provider<Context> context, GuiceApplication app ) {
+    public ResourceListener( Provider<Context> context, Application app ) {
         this.context = context;
         this.app = app;
     }
@@ -39,15 +38,21 @@ public class ResourceListener implements TypeListener {
 
 class ResourceMembersInjector<T> implements MembersInjector<T> {
     protected Field field;
-    protected Provider<Context> contextProvider;
-    protected GuiceApplication app;
+    protected Context context;
+    protected Application app;
     protected InjectResource annotation;
 
-    public ResourceMembersInjector( Field field, Provider<Context> context, GuiceApplication app, InjectResource annotation ) {
+    public ResourceMembersInjector( Field field, Provider<Context> contextProvider, Application app, InjectResource annotation ) {
         this.field = field;
-        this.contextProvider = context;
         this.app = app;
         this.annotation = annotation;
+
+        try {
+            this.context = contextProvider.get();
+        } catch( Exception e ) {
+            // ignored
+        }
+
     }
 
     public void injectMembers(T instance) {
@@ -60,13 +65,13 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
             final Class<?> t = field.getType();
 
             if( View.class.isAssignableFrom(t) )
-                value = ((Activity)contextProvider.get()).findViewById(id); // context must be an activity
+                value = ((Activity)context).findViewById(id); // context must be an activity
 
             else if( String.class.isAssignableFrom(t) )
-                value = app.getResources().getString(id);
+                value = (context!=null ? context : app).getResources().getString(id);
 
             else if( Drawable.class.isAssignableFrom(t) )
-                value = app.getResources().getDrawable(id);
+                value = (context!=null ? context : app).getResources().getDrawable(id);
 
 
             if( value==null && field.getAnnotation(Nullable.class)==null )

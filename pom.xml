@@ -3,7 +3,7 @@
   <groupId>robo-guice</groupId>
   <artifactId>robo-guice</artifactId>
   <name>robo-guice</name>
-  <version>0.1-SNAPSHOT</version>
+  <version>0.3-SNAPSHOT</version>
 
   <description>
     A framework for using Google Guice dependency injection in Android.

@@ -38,7 +38,7 @@ public class ResourceListener implements TypeListener {
 
 class ResourceMembersInjector<T> implements MembersInjector<T> {
     protected Field field;
-    protected Context context;
+    protected Provider<Context> contextProvider;
     protected Application app;
     protected InjectResource annotation;
 
@@ -46,16 +46,17 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
         this.field = field;
         this.app = app;
         this.annotation = annotation;
-
-        try {
-            this.context = contextProvider.get();
-        } catch( Exception e ) {
-            // ignored
-        }
-
+        this.contextProvider = contextProvider;
     }
 
     public void injectMembers(T instance) {
+
+        Context context = app;
+        try {
+            context = contextProvider.get();
+        } catch( Exception e ) {
+            // ignored.  If we're not inside a context, use app.
+        }
 
         Object value = null;
 
@@ -68,10 +69,10 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
                 value = ((Activity)context).findViewById(id); // context must be an activity
 
             else if( String.class.isAssignableFrom(t) )
-                value = (context!=null ? context : app).getResources().getString(id);
+                value = context.getResources().getString(id);
 
             else if( Drawable.class.isAssignableFrom(t) )
-                value = (context!=null ? context : app).getResources().getDrawable(id);
+                value = context.getResources().getDrawable(id);
 
 
             if( value==null && field.getAnnotation(Nullable.class)==null )

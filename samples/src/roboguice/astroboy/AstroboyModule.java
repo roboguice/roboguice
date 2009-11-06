@@ -1,22 +1,18 @@
 package roboguice.astroboy;
 
-import roboguice.config.AndroidModule;
-import android.app.Application;
-
+import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
-public class AstroboyModule extends AndroidModule {
-
-    public AstroboyModule(Application app) {
-        super(app);
-    }
+public class AstroboyModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        super.configure();
+        /*
+         * Here is the place to write the configuration specific to your application, i.e. your own custom bindings.
+         */
+
         // BUG need a better way to set default preferences context
         bindConstant().annotatedWith(Names.named("sharedPreferencesContext")).to("roboguice.astroboy");
 
     }
-
 }

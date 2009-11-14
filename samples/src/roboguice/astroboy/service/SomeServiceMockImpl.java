@@ -1,6 +1,5 @@
 package roboguice.astroboy.service;
 
-import roboguice.application.GuiceApplication;
 import roboguice.astroboy.AstroboyApplication;
 
 import com.google.inject.Inject;
@@ -10,16 +9,7 @@ import com.google.inject.Inject;
  */
 public class SomeServiceMockImpl implements SomeService {
 
-    protected AstroboyApplication application;
-
-    @Inject
-    public SomeServiceMockImpl(GuiceApplication application) {
-        /*
-         * There is currently no way to directly get an AstroboyApplication injected, so we need to cast. See
-         * AndroidModule for details.
-         */
-        this.application = (AstroboyApplication) application;
-    }
+    @Inject protected AstroboyApplication application;
 
     public String gimmeAString() {
         return "Application says: " + application.sayWhoYouAre();

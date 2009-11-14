@@ -7,11 +7,11 @@ import com.google.inject.Inject;
 /**
  * Demonstrate how a dependency to the Application instance is resolved.
  */
-public class SomeServiceMockImpl implements SomeService {
+public class TalkingThingMockImpl implements TalkingThing {
 
     @Inject protected AstroboyApplication application;
 
-    public String gimmeAString() {
-        return "Application says: " + application.sayWhoYouAre();
+    public String talk() {
+        return "My master is " + application.getClass().getName();
     }
 }

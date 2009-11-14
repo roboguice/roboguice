@@ -8,9 +8,9 @@ import com.google.inject.Inject;
 /**
  * Demonstrate how a dependency to the Application instance is resolved.
  */
-public class SomeServiceMockImpl implements ISomeService {
+public class SomeServiceMockImpl implements SomeService {
 
-    private final AstroboyApplication application;
+    protected AstroboyApplication application;
 
     @Inject
     public SomeServiceMockImpl(GuiceApplication application) {
@@ -21,7 +21,7 @@ public class SomeServiceMockImpl implements ISomeService {
         this.application = (AstroboyApplication) application;
     }
 
-    public String gimeAString() {
+    public String gimmeAString() {
         return "Application says: " + application.sayWhoYouAre();
     }
 }

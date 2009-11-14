@@ -1,6 +1,6 @@
 package roboguice.astroboy;
 
-import roboguice.astroboy.service.ISomeService;
+import roboguice.astroboy.service.SomeService;
 import roboguice.astroboy.service.SomeServiceMockImpl;
 
 import com.google.inject.AbstractModule;
@@ -13,7 +13,7 @@ public class AstroboyModule extends AbstractModule {
         /*
          * Here is the place to write the configuration specific to your application, i.e. your own custom bindings.
          */
-        bind(ISomeService.class).to(SomeServiceMockImpl.class);
+        bind(SomeService.class).to(SomeServiceMockImpl.class);
 
         // BUG need a better way to set default preferences context
         bindConstant().annotatedWith(Names.named("sharedPreferencesContext")).to("roboguice.astroboy");

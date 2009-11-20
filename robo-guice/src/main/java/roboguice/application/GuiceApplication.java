@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import roboguice.config.AndroidModule;
-import android.app.Application;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
+
+import android.app.Application;
 
 /**
  * This class is in charge of starting the Guice configuration. When the {@link #getInjector()} method is called for the
@@ -24,22 +25,21 @@ import com.google.inject.Stage;
  * <br />
  * For instance : &lt;application android:icon="@drawable/icon" android:label="@string/app_name"
  * android:name="roboguice.application.GuiceApplication"&gt;&lt;/application&gt;
- * 
+ *
  * @see GuiceInjectableApplication How to get your Application injected as well.
  */
 public class GuiceApplication extends Application {
 
     /**
-     * The {@link Injector} of your application. Has a private scope so that the only way to get it is through
-     * {@link #getInjector()}. This ensure you will never get a null {@link Injector}.
+     * The {@link Injector} of your application.
      */
-    private Injector guice;
+    protected Injector guice;
 
     /**
      * Returns the {@link Injector} of your application. If none exists yet, creates one by calling
      * {@link #createInjector()}.
      */
-    public Injector getInjector() {
+    public synchronized Injector getInjector() {
         return guice != null ? guice : (guice = createInjector());
     }
 
@@ -50,7 +50,7 @@ public class GuiceApplication extends Application {
      * In most cases, you should <strong>NOT</strong> override the {@link #createInjector()} method, unless you don't
      * want an {@link AndroidModule} to be created.
      */
-    protected Injector createInjector() {
+    protected synchronized Injector createInjector() {
         ArrayList<Module> modules = new ArrayList<Module>();
         modules.add(new AndroidModule(this));
         addApplicationModules(modules);
@@ -65,7 +65,7 @@ public class GuiceApplication extends Application {
      * This method is called by {@link #createInjector()}.<br />
      * <br />
      * The default implementation is a no-op and does nothing.
-     * 
+     *
      * @param modules
      *            The list of modules to which you may add your own custom modules. Please notice that it already
      *            contains one module, which is an instance of {@link AndroidModule}.

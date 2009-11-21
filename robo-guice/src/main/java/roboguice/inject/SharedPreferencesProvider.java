@@ -9,16 +9,13 @@ import android.content.SharedPreferences;
 
 
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
-    protected String context;
+    protected static final String DEFAULT = "default";
 
+    @Inject(optional=true) @Named("sharedPreferencesContext") protected String context;
     @Inject protected Provider<Context> contextProvider;
 
-    @Inject
-    public SharedPreferencesProvider( @Named("sharedPreferencesContext") String context ) {
-        this.context = context;
-    }
 
     public SharedPreferences get() {
-        return contextProvider.get().getSharedPreferences(context, Context.MODE_PRIVATE);
+        return contextProvider.get().getSharedPreferences(context!=null ? context : DEFAULT, Context.MODE_PRIVATE);
     }
 }

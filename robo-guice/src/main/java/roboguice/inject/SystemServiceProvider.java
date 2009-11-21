@@ -7,7 +7,7 @@ import android.content.Context;
 
 public class SystemServiceProvider<T> implements Provider<T>{
 
-    @Inject protected Context context;
+    @Inject protected Provider<Context> context;
     protected String service;
 
     public SystemServiceProvider( String service ) {
@@ -16,7 +16,7 @@ public class SystemServiceProvider<T> implements Provider<T>{
 
     @SuppressWarnings("unchecked")
     public T get() {
-        return (T) context.getSystemService(service);
+        return (T) context.get().getSystemService(service);
     }
 
 }

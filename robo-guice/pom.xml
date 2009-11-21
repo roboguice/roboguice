@@ -1,82 +1,109 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>robo-guice</groupId>
-  <artifactId>robo-guice</artifactId>
-  <name>robo-guice</name>
-  <version>0.4-SNAPSHOT</version>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>robo-guice</groupId>
+    <artifactId>robo-guice</artifactId>
+    <name>robo-guice</name>
+    <version>0.4-SNAPSHOT</version>
 
-  <description>
+    <description>
     A framework for using Google Guice dependency injection in Android.
   </description>
 
-  <url>http://code.google.com/p/robo-guice/</url>
-  <issueManagement>
-    <system>Google Code Issue Tracker</system>
-    <url>http://code.google.com/p/robo-guice/issues/list</url>
-  </issueManagement>
-  <developers>
-    <developer>
-      <id>mburton</id>
-      <name>Michael Burton</name>
-      <email>mike@niskala.org</email>
-    </developer>
-  </developers>
+    <url>http://code.google.com/p/robo-guice/</url>
+    <issueManagement>
+        <system>Google Code Issue Tracker</system>
+        <url>http://code.google.com/p/robo-guice/issues/list</url>
+    </issueManagement>
+    <developers>
+        <developer>
+            <id>mburton</id>
+            <name>Michael Burton</name>
+            <email>mike@niskala.org</email>
+        </developer>
+    </developers>
 
-  <build>
-    <defaultGoal>package</defaultGoal>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.2</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <build>
+        <defaultGoal>package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.0-beta-9</version>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.jvnet.wagon-svn</groupId>
+                <artifactId>wagon-svn</artifactId>
+                <version>RELEASE</version>
+            </extension>
+        </extensions>
+        
+    </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>android</groupId>
-      <artifactId>android</artifactId>
-      <version>1.5_r3</version>
-      <scope>provided</scope>
-    </dependency>
-  <dependency>
-    <groupId>add-ons</groupId>
-    <artifactId>maps</artifactId>
-    <version>3</version>
-    <scope>provided</scope>
-  </dependency>
-    <dependency>
-      <groupId>com.google.inject</groupId>
-      <artifactId>guice</artifactId>
-      <version>2.0</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+    <scm>
+        <connection>scm:hg:https://robo-guice.googlecode.com/hg/</connection>
+        <developerConnection>scm:hg:https://robo-guice.googlecode.com/hg/</developerConnection>
+    </scm>
 
-<!--
-  <repositories>
-    <repository>
-      <id>google-maven-repository</id>
-      <name>Google Maven Repository</name>
-      <url>http://google-maven-repository.googlecode.com/svn/repository/</url>
-    </repository>
-  </repositories>
--->
+    <dependencies>
+        <dependency>
+            <groupId>android</groupId>
+            <artifactId>android</artifactId>
+            <version>1.5_r3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>add-ons</groupId>
+            <artifactId>maps</artifactId>
+            <version>3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+
+    <repositories>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net Repository for Maven</name>
+            <url>http://download.java.net/maven/2/</url>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>java.net-m2-repository</id>
+            <url>java-net:/maven2-repository/trunk/repository/</url>
+        </repository>
+    </distributionManagement>
 
 </project>

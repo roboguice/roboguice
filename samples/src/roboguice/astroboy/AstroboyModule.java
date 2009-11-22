@@ -2,14 +2,14 @@ package roboguice.astroboy;
 
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.astroboy.service.TalkingThingMockImpl;
+import roboguice.config.AbstractAndroidModule;
 import roboguice.inject.GuiceApplicationProvider;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
-public class AstroboyModule extends AbstractModule {
+public class AstroboyModule extends AbstractAndroidModule {
 
     @Override
     protected void configure() {

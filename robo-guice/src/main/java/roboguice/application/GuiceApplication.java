@@ -1,7 +1,6 @@
 package roboguice.application;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import roboguice.config.AbstractAndroidModule;
@@ -76,7 +75,10 @@ public class GuiceApplication extends Application implements Module {
 	protected Provider<Context>			contextProvider			= contextScope.scope(Key.get(Context.class), throwingContextProvider);
 	protected ResourceListener			resourceListener		= new ResourceListener(contextProvider, this);
 	protected ExtrasListener			extrasListener			= new ExtrasListener(contextProvider);
-	protected List<StaticTypeListener>	staticTypeListeners		= new ArrayList<StaticTypeListener>(Arrays.asList(resourceListener));
+	protected List<StaticTypeListener>	staticTypeListeners		= new ArrayList<StaticTypeListener>();
+	{
+		staticTypeListeners.add(resourceListener);
+	}
 
 	/**
 	 * Returns the {@link Injector} of your application. If none exists yet,

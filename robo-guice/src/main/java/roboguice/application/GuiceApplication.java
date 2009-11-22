@@ -81,6 +81,11 @@ public class GuiceApplication extends Application implements Module {
 	/**
 	 * Returns the {@link Injector} of your application. If none exists yet,
 	 * creates one by calling {@link #createInjector()}.
+	 * 
+	 * This method is thread-safe.
+	 * 
+	 * If you decide to override {@link #getInjector()}, you will have to handle
+	 * synchronization.
 	 */
 	public Injector getInjector() {
 		if (guice == null) {
@@ -95,15 +100,15 @@ public class GuiceApplication extends Application implements Module {
 
 	/**
 	 * Creates an {@link Injector} configured for this application. This
-	 * {@link Injector} will be configured with this (being a {@link Module})
-	 * , plus any {@link Module} you might add by overriding
+	 * {@link Injector} will be configured with this (being a {@link Module}) ,
+	 * plus any {@link Module} you might add by overriding
 	 * {@link #addApplicationModules(List)}. <br />
 	 * <br />
 	 * In most cases, you should <strong>NOT</strong> override the
-	 * {@link #createInjector()} method, unless you don't want an
-	 * this to be used as a configuration module.
+	 * {@link #createInjector()} method, unless you don't want an this to be
+	 * used as a configuration module.
 	 */
-	protected synchronized Injector createInjector() {
+	protected Injector createInjector() {
 		ArrayList<Module> modules = new ArrayList<Module>();
 		modules.add(this);
 		addApplicationModules(modules);

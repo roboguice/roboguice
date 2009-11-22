@@ -95,13 +95,13 @@ public class GuiceApplication extends Application implements Module {
 
 	/**
 	 * Creates an {@link Injector} configured for this application. This
-	 * {@link Injector} will be configured with an {@link AbstractAndroidModule}
+	 * {@link Injector} will be configured with this (being a {@link Module})
 	 * , plus any {@link Module} you might add by overriding
 	 * {@link #addApplicationModules(List)}. <br />
 	 * <br />
 	 * In most cases, you should <strong>NOT</strong> override the
 	 * {@link #createInjector()} method, unless you don't want an
-	 * {@link AbstractAndroidModule} to be created.
+	 * this to be used as a configuration module.
 	 */
 	protected synchronized Injector createInjector() {
 		ArrayList<Module> modules = new ArrayList<Module>();

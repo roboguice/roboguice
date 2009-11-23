@@ -33,6 +33,7 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -120,7 +121,8 @@ public class GuiceApplication extends Application implements Module {
     /**
      * You should override this method to do your own custom bindings. <br />
      * To do so, you must create implementations of the {@link Module} interface, and add them to the list of
-     * {@link Module} given as a parameter. <br />
+     * {@link Module} given as a parameter. The easiest way to create an {@link Module} implementation is to subclass
+     * {@link AbstractModule}, which provides proxy methods to the binder methods (enabling more readable configuration)<br />
      * <br />
      * If you want to enable static injection of resources and extras, please see {@link AbstractAndroidModule}.<br />
      * <br />

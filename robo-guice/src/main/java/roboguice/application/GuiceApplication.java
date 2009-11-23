@@ -14,6 +14,17 @@ import roboguice.inject.ResourcesProvider;
 import roboguice.inject.SharedPreferencesProvider;
 import roboguice.inject.StaticTypeListener;
 import roboguice.inject.SystemServiceProvider;
+
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.Provider;
+import com.google.inject.Stage;
+import com.google.inject.TypeLiteral;
+import com.google.inject.matcher.Matchers;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
@@ -33,16 +44,6 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.inject.Binder;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Stage;
-import com.google.inject.TypeLiteral;
-import com.google.inject.matcher.Matchers;
-
 /**
  * This class is in charge of starting the Guice configuration. When the
  * {@link #getInjector()} method is called for the first time, a new Injector is
@@ -60,7 +61,7 @@ import com.google.inject.matcher.Matchers;
  * For instance : &lt;application android:icon="@drawable/icon"
  * android:label="@string/app_name"
  * android:name="roboguice.application.GuiceApplication"&gt;&lt;/application&gt;
- * 
+ *
  * @see GuiceInjectableApplication How to get your Application injected as well.
  */
 public class GuiceApplication extends Application implements Module {
@@ -76,6 +77,7 @@ public class GuiceApplication extends Application implements Module {
 	protected ResourceListener			resourceListener		= new ResourceListener(contextProvider, this);
 	protected ExtrasListener			extrasListener			= new ExtrasListener(contextProvider);
 	protected List<StaticTypeListener>	staticTypeListeners		= new ArrayList<StaticTypeListener>();
+
 	{
 		staticTypeListeners.add(resourceListener);
 	}
@@ -83,9 +85,9 @@ public class GuiceApplication extends Application implements Module {
 	/**
 	 * Returns the {@link Injector} of your application. If none exists yet,
 	 * creates one by calling {@link #createInjector()}.
-	 * 
+	 *
 	 * This method is thread-safe.
-	 * 
+	 *
 	 * If you decide to override {@link #getInjector()}, you will have to handle
 	 * synchronization.
 	 */
@@ -131,7 +133,7 @@ public class GuiceApplication extends Application implements Module {
 	 * This method is called by {@link #createInjector()}.<br />
 	 * <br />
 	 * The default implementation is a no-op and does nothing.
-	 * 
+	 *
 	 * @param modules
 	 *            The list of modules to which you may add your own custom
 	 *            modules. Please notice that it already contains one module,

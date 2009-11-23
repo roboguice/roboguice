@@ -13,7 +13,10 @@ import com.google.inject.BindingAnnotation;
  * value is compulsory, and correspond to the key of the extra.<br />
  * <br />
  * You can use this annotation combined with @Nullable, or @DefaultXXX to set the default value when trying to get the
- * extra (XXX being a wrapper type, @DefaultBoolean for isntance)<br />
+ * extra (XXX being a wrapper type, @DefaultBoolean for instance)<br />
+ * <br />
+ * You SHOULD NOT define a default value in Java ({@code @InjectExtra("someValue") Integer someValue = 2; //DO NOT DO
+ * THIS} ), but rather use @DefaultXXX annotations, because a value will always be injected. <br />
  * <br />
  * Usage example:<br /> {@code @InjectExtra("someValue") protected Integer someValue;}<br />
  * <br />{@code @InjectExtra("someValue") @DefaultInteger(2) protected Integer someValue;}

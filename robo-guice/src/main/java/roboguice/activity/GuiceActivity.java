@@ -2,15 +2,36 @@ package roboguice.activity;
 
 import roboguice.application.GuiceApplication;
 import roboguice.inject.ContextScope;
-
-import com.google.inject.Injector;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
+import com.google.inject.Injector;
 
+/**
+ * A {@link GuiceActivity} extends from {@link Activity} to provide dynamic injection of collaborators, using Google
+ * Guice.<br />
+ * <br />
+ * Your own activities that usually extend from {@link Activity} should now extend from {@link GuiceActivity}.<br />
+ * <br />
+ * If your activities extend from subclasses of {@link Activity} provided by the Android SDK, we provided Guice versions
+ * as well for the most used : see {@link GuiceExpandableListActivity}, {@link GuiceListActivity}, and other classes
+ * located in package <strong>roboguice.activity</strong>.<br />
+ * <br />
+ * If we didn't provide what you need, you have two options : either post an issue on <a
+ * href="http://code.google.com/p/robo-guice/issues/list">the bug tracker</a>, or implement it yourself. Have a look at
+ * the source code of this class ({@link GuiceActivity}), you won't have to write that much changes. And of course, you
+ * are welcome to contribute and send your implementations to the robo-guice project.<br />
+ * <br />
+ * Please be aware that collaborators are not injected into this until you call {@link #setContentView(int)} (calling
+ * any of the overloads of this methods will work).<br />
+ * <br />
+ * You can have access to the Guice {@link Injector} at any time, by calling {@link #getInjector()}.<br />
+ * However, you will not have access to Context scoped beans until {@link #onCreate(Bundle)} is called. <br />
+ * <br />
+ * 
+ */
 public class GuiceActivity extends Activity {
     protected ContextScope scope;
 
@@ -20,14 +41,11 @@ public class GuiceActivity extends Activity {
         getInjector().injectMembers(this);
     }
 
-
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
         getInjector().injectMembers(this);
     }
-
-
 
     @Override
     public void setContentView(View view) {
@@ -35,12 +53,10 @@ public class GuiceActivity extends Activity {
         getInjector().injectMembers(this);
     }
 
-
     @Override
     public Object onRetainNonConfigurationInstance() {
         return this;
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +64,6 @@ public class GuiceActivity extends Activity {
         scope.enter(this);
         super.onCreate(savedInstanceState);
     }
-
 
     @Override
     protected void onRestart() {
@@ -68,22 +83,17 @@ public class GuiceActivity extends Activity {
         super.onResume();
     }
 
-
-
-
-
     @Override
     protected void onPause() {
         super.onPause();
         scope.exit(this);
     }
 
-
-
+    /**
+     * @see GuiceApplication#getInjector()
+     */
     public Injector getInjector() {
-        return ((GuiceApplication)getApplication()).getInjector();
+        return ((GuiceApplication) getApplication()).getInjector();
     }
 
-
 }
-

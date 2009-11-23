@@ -2,15 +2,19 @@ package roboguice.activity;
 
 import roboguice.application.GuiceApplication;
 import roboguice.inject.ContextScope;
-
-import com.google.android.maps.MapActivity;
-import com.google.inject.Injector;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
+import com.google.android.maps.MapActivity;
+import com.google.inject.Injector;
 
+/**
+ * A {@link GuiceMapActivity} extends from {@link MapActivity} to provide dynamic injection of collaborators, using
+ * Google Guice.<br />
+ * 
+ * @see GuiceActivity
+ */
 public abstract class GuiceMapActivity extends MapActivity {
     protected ContextScope scope;
 
@@ -20,14 +24,11 @@ public abstract class GuiceMapActivity extends MapActivity {
         getInjector().injectMembers(this);
     }
 
-
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
         getInjector().injectMembers(this);
     }
-
-
 
     @Override
     public void setContentView(View view) {
@@ -35,17 +36,12 @@ public abstract class GuiceMapActivity extends MapActivity {
         getInjector().injectMembers(this);
     }
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         scope = getInjector().getInstance(ContextScope.class);
         scope.enter(this);
         super.onCreate(savedInstanceState);
     }
-
 
     @Override
     protected void onRestart() {
@@ -70,17 +66,17 @@ public abstract class GuiceMapActivity extends MapActivity {
         return this;
     }
 
-
     @Override
     protected void onPause() {
         super.onPause();
         scope.exit(this);
     }
 
-
+    /**
+     * @see GuiceApplication#getInjector()
+     */
     public Injector getInjector() {
-        return ((GuiceApplication)getApplication()).getInjector();
+        return ((GuiceApplication) getApplication()).getInjector();
     }
 
 }
-

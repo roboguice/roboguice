@@ -26,4 +26,5 @@ import com.google.inject.BindingAnnotation;
 @BindingAnnotation
 public @interface InjectExtra {
     String value();
+    boolean optional() default false;
 }

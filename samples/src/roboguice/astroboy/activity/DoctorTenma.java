@@ -26,7 +26,7 @@ public class DoctorTenma extends GuiceActivity {
     // equivalent to getIntent().getExtras().getXXX()
     // See ExtrasListener for details.
     // They can be @Nullable, or have @DefaultBoolean, Integer, String values.
-    @InjectExtra("someValue") @Nullable protected Integer someValue;
+    @InjectExtra(value="someValue", optional=true) @Nullable protected Integer someValue;
 
     // You can inject various useful android objects.
     // See GuiceApplication.configure to see what's available.

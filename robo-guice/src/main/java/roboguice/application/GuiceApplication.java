@@ -14,17 +14,6 @@ import roboguice.inject.ResourcesProvider;
 import roboguice.inject.SharedPreferencesProvider;
 import roboguice.inject.StaticTypeListener;
 import roboguice.inject.SystemServiceProvider;
-
-import com.google.inject.Binder;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Stage;
-import com.google.inject.TypeLiteral;
-import com.google.inject.matcher.Matchers;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
@@ -44,20 +33,33 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.Provider;
+import com.google.inject.Stage;
+import com.google.inject.TypeLiteral;
+import com.google.inject.matcher.Matchers;
+
 /**
- * This class is in charge of starting the Guice configuration. When the {@link #getInjector()} method is called for the
- * first time, a new Injector is created, and the magic begins !<br />
+ * This class is in charge of starting the Guice configuration. When the
+ * {@link #getInjector()} method is called for the first time, a new Injector is
+ * created, and the magic begins !<br />
  * <br />
- * To add your own custom bindings, you should override this class and override the {@link #addApplicationModules(List)}
- * method. <br />
+ * To add your own custom bindings, you should override this class and override
+ * the {@link #addApplicationModules(List)} method. <br />
  * <br />
- * You must define this class (or any subclass) as the application in your <strong>AndroidManifest.xml</strong> file.
- * This can be done by adding {@code android:name="fully qualified name of your application class"} to the {@code
+ * You must define this class (or any subclass) as the application in your
+ * <strong>AndroidManifest.xml</strong> file. This can be done by adding {@code
+ * android:name="fully qualified name of your application class"} to the {@code
  * <application/>} tag. <br />
  * <br />
- * For instance : <br /> {@code <application android:icon="@drawable/icon" android:label="@string/app_name"
+ * For instance : <br /> {@code <application android:icon="@drawable/icon"
+ * android:label="@string/app_name"
  * android:name="roboguice.application.GuiceApplication"> [...] </application> }
- *
+ * 
  * @see GuiceInjectableApplication How to get your Application injected as well.
  */
 public class GuiceApplication extends Application implements Module {
@@ -67,30 +69,27 @@ public class GuiceApplication extends Application implements Module {
      */
     protected Injector                 guice;
 
-    protected ContextScope             contextScope            = new ContextScope();
-    protected Provider<Context>        throwingContextProvider = ContextScope.<Context> seededKeyProvider();
-    protected Provider<Context>        contextProvider         = contextScope.scope(Key.get(Context.class),
-                                                                       throwingContextProvider);
-    protected ResourceListener         resourceListener        = new ResourceListener(contextProvider, this);
-    protected ExtrasListener           extrasListener          = new ExtrasListener(contextProvider);
-    protected List<StaticTypeListener> staticTypeListeners     = new ArrayList<StaticTypeListener>();
-
-    {
-        staticTypeListeners.add(resourceListener);
-    }
+    protected ContextScope             contextScope;
+    protected Provider<Context>        throwingContextProvider;
+    protected Provider<Context>        contextProvider;
+    protected ResourceListener         resourceListener;
+    protected ExtrasListener           extrasListener;
+    protected List<StaticTypeListener> staticTypeListeners;
 
     /**
-     * Returns the {@link Injector} of your application. If none exists yet, creates one by calling
-     * {@link #createInjector()}. <br />
+     * Returns the {@link Injector} of your application. If none exists yet,
+     * creates one by calling {@link #createInjector()}. <br />
      * <br />
      * This method is thread-safe.<br />
      * <br />
-     * If you decide to override {@link #getInjector()}, you will have to handle synchronization.
+     * If you decide to override {@link #getInjector()}, you will have to handle
+     * synchronization.
      */
     public Injector getInjector() {
         if (guice == null) {
             synchronized (this) {
                 if (guice == null) {
+                    initInstanceMembers();
                     guice = createInjector();
                 }
             }
@@ -99,11 +98,36 @@ public class GuiceApplication extends Application implements Module {
     }
 
     /**
-     * Creates an {@link Injector} configured for this application. This {@link Injector} will be configured with this
-     * (being a {@link Module}) , plus any {@link Module} you might add by overriding
+     * Since we don't create the injector when the {@link GuiceApplication} is
+     * instantiated, but rather when getInjector is first called (lazy
+     * initialization), the same lazy initialization is applied to this
+     * application instance members, which are not used until the injector is
+     * first created. The main advantage is that robo-guice footprint is close
+     * to zero if no GuiceActivity is used when running the application.
+     */
+    protected void initInstanceMembers() {
+        contextScope = new ContextScope();
+
+        throwingContextProvider = ContextScope.<Context> seededKeyProvider();
+
+        contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
+
+        resourceListener = new ResourceListener(contextProvider, this);
+
+        extrasListener = new ExtrasListener(contextProvider);
+
+        staticTypeListeners = new ArrayList<StaticTypeListener>();
+        staticTypeListeners.add(resourceListener);
+    }
+
+    /**
+     * Creates an {@link Injector} configured for this application. This
+     * {@link Injector} will be configured with this (being a {@link Module}) ,
+     * plus any {@link Module} you might add by overriding
      * {@link #addApplicationModules(List)}. <br />
      * <br />
-     * In most cases, you should <strong>NOT</strong> override the {@link #createInjector()} method.
+     * In most cases, you should <strong>NOT</strong> override the
+     * {@link #createInjector()} method.
      */
     protected Injector createInjector() {
         ArrayList<Module> modules = new ArrayList<Module>();
@@ -119,17 +143,20 @@ public class GuiceApplication extends Application implements Module {
 
     /**
      * You should override this method to add your own custom bindings. <br />
-     * To do so, you must create implementations of the {@link Module} interface, and add them to the list of
-     * {@link Module} given as a parameter. The easiest way to create an {@link Module} implementation is to subclass
-     * {@link AbstractAndroidModule}, which provides proxy methods to the binder methods (enabling more readable configuration)<br />
+     * To do so, you must create implementations of the {@link Module}
+     * interface, and add them to the list of {@link Module} given as a
+     * parameter. The easiest way to create an {@link Module} implementation is
+     * to subclass {@link AbstractAndroidModule}, which provides proxy methods
+     * to the binder methods (enabling more readable configuration)<br />
      * <br />
      * This method is called by {@link #createInjector()}.<br />
      * <br />
      * The default implementation is a no-op and does nothing.
-     *
+     * 
      * @param modules
-     *            The list of modules to which you may add your own custom modules. Please notice that it already
-     *            contains one module, which is this.
+     *            The list of modules to which you may add your own custom
+     *            modules. Please notice that it already contains one module,
+     *            which is this.
      */
     protected void addApplicationModules(List<Module> modules) {
     }
@@ -137,8 +164,9 @@ public class GuiceApplication extends Application implements Module {
     /**
      * Configure this module to define Android related bindings.<br />
      * <br />
-     * If you want to provide your own bindings, you should <strong>NOT</strong> override this method, but rather create
-     * a {@link Module} implementation and add it to the configuring modules by overriding
+     * If you want to provide your own bindings, you should <strong>NOT</strong>
+     * override this method, but rather create a {@link Module} implementation
+     * and add it to the configuring modules by overriding
      * {@link #addApplicationModules(List)}.<br />
      */
     public void configure(Binder b) {

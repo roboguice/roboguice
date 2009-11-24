@@ -1,5 +1,7 @@
 package roboguice.astroboy;
 
+import roboguice.astroboy.bean.Person;
+import roboguice.astroboy.bean.PersonFromNameExtraProvider;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.astroboy.service.TalkingThingMockImpl;
 import roboguice.config.AbstractAndroidModule;
@@ -21,6 +23,7 @@ public class AstroboyModule extends AbstractAndroidModule {
         // BUG it would be nice if this particular binding could be done automatically somehow
         bind(AstroboyApplication.class).toProvider(Key.get(new TypeLiteral<GuiceApplicationProvider<AstroboyApplication>>(){}));
 
+        bind(Person.class).toProvider(PersonFromNameExtraProvider.class);
 
         // BUG need a better way to set default preferences context
         bindConstant().annotatedWith(Names.named("sharedPreferencesContext")).to("roboguice.astroboy");

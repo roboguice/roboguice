@@ -6,7 +6,10 @@ import static junit.framework.Assert.assertNull;
 import java.util.Date;
 
 import roboguice.activity.GuiceActivity;
+import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
+import roboguice.astroboy.bean.Person;
+import roboguice.astroboy.bean.PersonFromNameExtraProvider;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectExtra;
@@ -22,8 +25,10 @@ import com.google.inject.internal.Nullable;
 public class DoctorTenma extends GuiceActivity {
     // You can inject arbitrary View, String, and other types of resources.
     // See ResourceListener for details.
-    @InjectResource(R.id.widget1) protected TextView helloView;
-    @InjectResource(R.string.hello) protected String hello;
+    @InjectResource(R.id.widget1)
+    protected TextView          helloView;
+    @InjectResource(R.string.hello)
+    protected String            hello;
 
     /**
      * You can inject Extras from the intent that started this activity with
@@ -55,19 +60,28 @@ public class DoctorTenma extends GuiceActivity {
     @Nullable
     protected Object            nullInjectedMember = new Object();
 
-
+    /**
+     * This example shows how to inject a bean created from an extra value. See
+     * {@link PersonFromNameExtraProvider} to see how a Person is created. A
+     * binding is actually done in {@link AstroboyModule}.
+     */
+    @Inject
+    protected Person            personFromExtra;
 
     // You can inject various useful android objects.
     // See GuiceApplication.configure to see what's available.
-    @Inject protected SharedPreferences prefs;
+    @Inject
+    protected SharedPreferences prefs;
 
     // Injecting a collaborator
-    @Inject protected TalkingThing talker;
+    @Inject
+    protected TalkingThing      talker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main); // Injection doesn't happen until you call setContentView()
+        setContentView(R.layout.main); // Injection doesn't happen until you
+        // call setContentView()
 
         helloView.setText(hello + ", " + this.getClass().getSimpleName());
 
@@ -75,9 +89,9 @@ public class DoctorTenma extends GuiceActivity {
         assertNull(nullInjectedMember);
         assertEquals(myDateExtra, new Date(0));
         assertEquals(nameExtra, "Atom");
+        assertEquals(personFromExtra.getName(), "Atom");
 
         Log.d("DoctorTenma", talker.talk());
 
     }
-
 }

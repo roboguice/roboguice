@@ -11,15 +11,21 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.astroboy;
 
+import java.util.Date;
+
+import roboguice.astroboy.bean.DateExtraConverter;
+import roboguice.astroboy.bean.DateTwiceExtraConverter;
 import roboguice.astroboy.bean.Person;
+import roboguice.astroboy.bean.PersonExtraConverter;
 import roboguice.astroboy.bean.PersonFromNameExtraProvider;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.astroboy.service.TalkingThingMockImpl;
 import roboguice.config.AbstractAndroidModule;
+import roboguice.inject.ExtraConverter;
 import roboguice.inject.GuiceApplicationProvider;
 
 import com.google.inject.Key;
@@ -39,6 +45,15 @@ public class AstroboyModule extends AbstractAndroidModule {
         bind(AstroboyApplication.class).toProvider(Key.get(new TypeLiteral<GuiceApplicationProvider<AstroboyApplication>>(){}));
 
         bind(Person.class).toProvider(PersonFromNameExtraProvider.class);
+
+        bind(new TypeLiteral<ExtraConverter<String, Person>>() {
+        }).to(PersonExtraConverter.class);
+
+        bind(new TypeLiteral<ExtraConverter<Long, Date>>() {
+        }).to(DateExtraConverter.class);
+
+        bind(new TypeLiteral<ExtraConverter<Integer, Date>>() {
+        }).to(DateTwiceExtraConverter.class);
 
         // BUG need a better way to set default preferences context
         bindConstant().annotatedWith(Names.named("sharedPreferencesContext")).to("roboguice.astroboy");

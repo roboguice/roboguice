@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.astroboy.activity;
 
@@ -23,7 +23,10 @@ import java.util.Date;
 import roboguice.activity.GuiceActivity;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
+import roboguice.astroboy.bean.DateExtraConverter;
+import roboguice.astroboy.bean.DateTwiceExtraConverter;
 import roboguice.astroboy.bean.Person;
+import roboguice.astroboy.bean.PersonExtraConverter;
 import roboguice.astroboy.bean.PersonFromNameExtraProvider;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.inject.ExtrasListener;
@@ -76,12 +79,40 @@ public class DoctorTenma extends GuiceActivity {
     protected Object            nullInjectedMember = new Object();
 
     /**
-     * This example shows how to inject a bean created from an extra value. See
+     * This example shows how to inject a bean converted from an extra value
+     * using a provider. The String extra is converted into a Person. See
      * {@link PersonFromNameExtraProvider} to see how a Person is created. A
-     * binding is actually done in {@link AstroboyModule}.
+     * binding is actually done in {@link AstroboyModule}.<br />
+     * <br />
+     * The extra key is defined in the provider. This is useful if you want to
+     * inject a bean created from multiple extra values (e.g. creating a person
+     * from its name and age).
      */
     @Inject
     protected Person            personFromExtra;
+
+    /**
+     * This is a more flexible way to inject a bean : a converter is configured
+     * and bound, and robo-guice uses this converter to create a Person from a
+     * String extra. See {@link PersonExtraConverter} and {@link AstroboyModule}
+     * .
+     */
+    @InjectExtra("nameExtra")
+    protected Person            personFromConvertedExtra;
+
+    /**
+     * This date is injected using the converter {@link DateExtraConverter} that
+     * converts a {@link Long} to a {@link Date}.
+     */
+    @InjectExtra("timestampExtra")
+    protected Date              dateFromTimestampExtra;
+
+    /**
+     * This date is injected using the converter {@link DateTwiceExtraConverter}
+     * that converts an {@link Integer} (doubled) to a {@link Date}.
+     */
+    @InjectExtra("timestampTwiceExtra")
+    protected Date              dateFromTimestampTwiceExtra;
 
     // You can inject various useful android objects.
     // See GuiceApplication.configure to see what's available.
@@ -105,6 +136,10 @@ public class DoctorTenma extends GuiceActivity {
         assertEquals(myDateExtra, new Date(0));
         assertEquals(nameExtra, "Atom");
         assertEquals(personFromExtra.getName(), "Atom");
+        assertEquals(personFromExtra.getAge().getTime(), 3000L);
+        assertEquals(personFromConvertedExtra.getName(), "Atom");
+        assertEquals(dateFromTimestampExtra.getTime(), 1000L);
+        assertEquals(dateFromTimestampTwiceExtra.getTime(), 2000L);
 
         Log.d("DoctorTenma", talker.talk());
 

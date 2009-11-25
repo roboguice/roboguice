@@ -11,20 +11,33 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.astroboy.bean;
+
+import java.util.Date;
 
 public class Person {
 
     private final String name;
+    private final Date   age;
 
     public Person(String name) {
         this.name = name;
+        age = new Date();
+    }
+
+    public Person(String name, Date age) {
+        this.name = name;
+        this.age = age;
     }
 
     public String getName() {
         return name;
+    }
+
+    public Date getAge() {
+        return age;
     }
 
 }

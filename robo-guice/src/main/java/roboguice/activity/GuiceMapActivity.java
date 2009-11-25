@@ -11,12 +11,13 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.activity;
 
 import roboguice.application.GuiceApplication;
 import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -30,7 +31,7 @@ import com.google.inject.Injector;
  * 
  * @see GuiceActivity
  */
-public abstract class GuiceMapActivity extends MapActivity {
+public abstract class GuiceMapActivity extends MapActivity implements InjectorProvider {
     protected ContextScope scope;
 
     @Override

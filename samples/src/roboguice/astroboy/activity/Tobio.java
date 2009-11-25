@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.astroboy.activity;
 
@@ -34,6 +34,9 @@ public class Tobio extends Activity {
         Intent intent = new Intent(this, DoctorTenma.class);
         intent.putExtra("nullExtra", (Serializable) null);
         intent.putExtra("nameExtra", "Atom");
+        intent.putExtra("ageExtra", 3000L);
+        intent.putExtra("timestampExtra", 1000L);
+        intent.putExtra("timestampTwiceExtra", 1000);
 
         startActivity(intent);
     }

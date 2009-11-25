@@ -11,23 +11,28 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
 
 import java.lang.reflect.Field;
-import java.util.Date;
+import java.lang.reflect.ParameterizedType;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.google.inject.Binding;
+import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
+import com.google.inject.util.Types;
 
 public class ExtrasListener implements TypeListener {
     protected Provider<Context> contextProvider;
@@ -37,6 +42,7 @@ public class ExtrasListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
+
         Class<?> c = typeLiteral.getRawType();
         while (c != null) {
             for (Field field : c.getDeclaredFields()) {
@@ -48,7 +54,6 @@ public class ExtrasListener implements TypeListener {
             c = c.getSuperclass();
         }
     }
-
 }
 
 class ExtrasMembersInjector<T> implements MembersInjector<T> {
@@ -88,13 +93,24 @@ class ExtrasMembersInjector<T> implements MembersInjector<T> {
 
         value = extras.get(id);
 
+        // Context must implement InjectorProvider to enable extra conversion
+        if (context instanceof InjectorProvider) {
+            Injector injector = ((InjectorProvider)context).getInjector();
+            value = convert(field, value, injector);
+        }
+
+        /*
+         * Please notice : null checking is done AFTER conversion. Having
+         * @Nullable on a field means "the injected value might be null", ie
+         * "the converted value might be null". Which also means that if you
+         * don't use @Nullable and a converter returns null, an exception will
+         * be thrown (which I find to be the most logic behavior).
+         */
         if (value == null && field.getAnnotation(Nullable.class) == null) {
             throw new NullPointerException(String.format(
                     "Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
                     .getName()));
         }
-
-        value = convert(field, value);
 
         field.setAccessible(true);
         try {
@@ -110,19 +126,29 @@ class ExtrasMembersInjector<T> implements MembersInjector<T> {
         }
     }
 
-    /**
-     * Special handling for certain types. BUG I'd rather come up with a more generic solution
-     */
-    protected Object convert(Field field, Object value) {
+    @SuppressWarnings("unchecked")
+    protected Object convert(Field field, Object value, Injector injector) {
+
         if (value == null) {
             return null;
         }
 
-        final Class<?> c = field.getType();
-        if (c.isAssignableFrom(Date.class) && value.getClass().isAssignableFrom(Long.class)) {
-            return new Date((Long) value);
+        // Building parameterized converter type
+        // Please notice that the extra type and the field type must EXACTLY
+        // match the declared converter parameter types.
+        ParameterizedType pt = Types.newParameterizedType(ExtraConverter.class, value.getClass(), field.getType());
+        Key<?> key = Key.get(pt);
+
+        // Getting bindings map to check if a binding exists
+        // We DO NOT currently check for injector's parent bindings. Should we ?
+        Map<Key<?>, Binding<?>> bindings = injector.getBindings();
+
+        if (bindings.containsKey(key)) {
+            ExtraConverter converter = (ExtraConverter) injector.getInstance(key);
+            value = converter.convert(value);
         }
 
         return value;
+
     }
 }

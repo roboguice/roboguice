@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.application;
 
@@ -24,6 +24,7 @@ import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScoped;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.GuiceApplicationProvider;
+import roboguice.inject.InjectorProvider;
 import roboguice.inject.ResourceListener;
 import roboguice.inject.ResourcesProvider;
 import roboguice.inject.SharedPreferencesProvider;
@@ -77,7 +78,7 @@ import com.google.inject.matcher.Matchers;
  * 
  * @see GuiceInjectableApplication How to get your Application injected as well.
  */
-public class GuiceApplication extends Application implements Module {
+public class GuiceApplication extends Application implements Module, InjectorProvider {
 
     /**
      * The {@link Injector} of your application.

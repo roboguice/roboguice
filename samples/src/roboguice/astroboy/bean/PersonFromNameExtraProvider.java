@@ -11,9 +11,11 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.astroboy.bean;
+
+import java.util.Date;
 
 import roboguice.inject.ContextScoped;
 import roboguice.inject.InjectExtra;
@@ -26,9 +28,16 @@ public class PersonFromNameExtraProvider implements Provider<Person> {
     @InjectExtra("nameExtra")
     protected String nameExtra;
 
+    @InjectExtra(value = "ageExtra", optional = true)
+    protected Date   ageExtra;
+
     @Override
     public Person get() {
-        return new Person(nameExtra);
+        if (ageExtra == null) {
+            return new Person(nameExtra);
+        } else {
+            return new Person(nameExtra, ageExtra);
+        }
     }
 
 }

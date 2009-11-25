@@ -11,22 +11,33 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
-package roboguice.astroboy.service;
+package roboguice.astroboy.bean;
 
-import roboguice.astroboy.AstroboyApplication;
+import java.util.Date;
 
-import com.google.inject.Inject;
+public class Person {
 
-/**
- * Demonstrate how a dependency to the Application instance is resolved.
- */
-public class TalkingThingMockImpl implements TalkingThing {
+    private final String name;
+    private final Date   age;
 
-    @Inject protected AstroboyApplication application;
-
-    public String talk() {
-        return "My master is " + application.getClass().getName();
+    public Person(String name) {
+        this.name = name;
+        age = new Date();
     }
+
+    public Person(String name, Date age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Date getAge() {
+        return age;
+    }
+
 }

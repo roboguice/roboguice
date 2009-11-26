@@ -190,9 +190,10 @@ public class GuiceApplication extends Application implements Module, InjectorPro
         // Sundry Android Classes
         b.bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         b.bind(Resources.class).toProvider(ResourcesProvider.class);
-        b.bind(GuiceApplication.class).toProvider(
-                Key.get(new TypeLiteral<GuiceApplicationProvider<GuiceApplication>>() {
-                }));
+
+
+        b.bind(Application.class).toProvider(Key.get(new TypeLiteral<GuiceApplicationProvider<GuiceApplication>>() {
+        }));
 
         // System Services
         b.bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));

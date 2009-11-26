@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 Michael Burton
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -30,6 +30,17 @@ import roboguice.inject.ResourcesProvider;
 import roboguice.inject.SharedPreferencesProvider;
 import roboguice.inject.StaticTypeListener;
 import roboguice.inject.SystemServiceProvider;
+
+import com.google.inject.Binder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.Module;
+import com.google.inject.Provider;
+import com.google.inject.Stage;
+import com.google.inject.TypeLiteral;
+import com.google.inject.matcher.Matchers;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
@@ -49,16 +60,6 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.inject.Binder;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Stage;
-import com.google.inject.TypeLiteral;
-import com.google.inject.matcher.Matchers;
-
 /**
  * This class is in charge of starting the Guice configuration. When the
  * {@link #getInjector()} method is called for the first time, a new Injector is
@@ -75,7 +76,7 @@ import com.google.inject.matcher.Matchers;
  * For instance : <br /> {@code <application android:icon="@drawable/icon"
  * android:label="@string/app_name"
  * android:name="roboguice.application.GuiceApplication"> [...] </application> }
- * 
+ *
  * @see GuiceInjectableApplication How to get your Application injected as well.
  */
 public class GuiceApplication extends Application implements Module, InjectorProvider {
@@ -128,7 +129,7 @@ public class GuiceApplication extends Application implements Module, InjectorPro
 
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
 
-        resourceListener = new ResourceListener(contextProvider, this);
+        resourceListener = new ResourceListener(contextProvider, this, contextScope);
 
         extrasListener = new ExtrasListener(contextProvider);
 
@@ -168,7 +169,7 @@ public class GuiceApplication extends Application implements Module, InjectorPro
      * This method is called by {@link #createInjector()}.<br />
      * <br />
      * The default implementation is a no-op and does nothing.
-     * 
+     *
      * @param modules
      *            The list of modules to which you may add your own custom
      *            modules. Please notice that it already contains one module,

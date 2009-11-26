@@ -1,17 +1,17 @@
 /*
  * Copyright 2009 Michael Burton
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
 
@@ -51,8 +51,11 @@ package roboguice.inject;
  */
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import roboguice.util.Pair;
 
 import com.google.inject.Key;
 import com.google.inject.OutOfScopeException;
@@ -70,6 +73,7 @@ public class ContextScope implements Scope {
     };
 
     protected final ThreadLocal<Map<Key<?>, Object>> values = new ThreadLocal<Map<Key<?>, Object>>();
+    protected ArrayList<Pair<?,ResourceMembersInjector>> resourcesForInjection = new ArrayList();
 
     /**
      * Scopes can be entered multiple times with no problems (eg. from onCreate(), onStart(), etc).
@@ -124,5 +128,17 @@ public class ContextScope implements Scope {
     @SuppressWarnings( { "unchecked" })
     public static <T> Provider<T> seededKeyProvider() {
         return (Provider<T>) SEEDED_KEY_PROVIDER;
+    }
+
+
+    public void registerInstanceForResourceInjection(Object instance, ResourceMembersInjector injector) {
+        resourcesForInjection.add( new Pair<Object, ResourceMembersInjector>(instance,injector) );
+    }
+
+    public void injectResources() {
+        for( int i=resourcesForInjection.size()-1; i>=0 ; --i ) {
+            final Pair<?,ResourceMembersInjector> p = resourcesForInjection.remove(i);
+            p.second.reallyInjectMembers( p.first );
+        }
     }
 }

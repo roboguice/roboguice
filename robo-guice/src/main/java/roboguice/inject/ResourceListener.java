@@ -1,17 +1,17 @@
 /*
  * Copyright 2009 Michael Burton
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
 
@@ -33,10 +33,12 @@ import android.view.View;
 public class ResourceListener implements StaticTypeListener {
     protected Provider<Context> context;
     protected Application app;
+    protected ContextScope scope;
 
-    public ResourceListener( Provider<Context> context, Application app ) {
+    public ResourceListener( Provider<Context> context, Application app, ContextScope scope ) {
         this.context = context;
         this.app = app;
+        this.scope = scope;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -44,7 +46,7 @@ public class ResourceListener implements StaticTypeListener {
         while( c!=null ) {
             for (Field field : c.getDeclaredFields())
                 if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class) )
-                    typeEncounter.register(new ResourceMembersInjector<I>(field, context, app, field.getAnnotation(InjectResource.class)));
+                    typeEncounter.register(new ResourceMembersInjector<I>(field, context, app, field.getAnnotation(InjectResource.class), scope));
             c = c.getSuperclass();
         }
     }
@@ -55,7 +57,7 @@ public class ResourceListener implements StaticTypeListener {
             while( c!=null ) {
                 for (Field field : c.getDeclaredFields())
                     if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class) )
-                        new ResourceMembersInjector(field, context, app, field.getAnnotation(InjectResource.class)).injectMembers(null);
+                        new ResourceMembersInjector(field, context, app, field.getAnnotation(InjectResource.class), scope).injectMembers(null);
                 c = c.getSuperclass();
             }
         }
@@ -69,16 +71,21 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
     protected Provider<Context> contextProvider;
     protected Application app;
     protected InjectResource annotation;
+    protected ContextScope scope;
 
-    public ResourceMembersInjector( Field field, Provider<Context> contextProvider, Application app, InjectResource annotation ) {
+    public ResourceMembersInjector( Field field, Provider<Context> contextProvider, Application app, InjectResource annotation, ContextScope scope ) {
         this.field = field;
         this.app = app;
         this.annotation = annotation;
         this.contextProvider = contextProvider;
+        this.scope = scope;
     }
 
     public void injectMembers(T instance) {
+        scope.registerInstanceForResourceInjection( instance, this );
+    }
 
+    public void reallyInjectMembers( T instance ) {
         Context context = app;
         try {
             context = contextProvider.get();

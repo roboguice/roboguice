@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 Michael Burton
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,45 +18,48 @@ package roboguice.activity;
 import roboguice.application.GuiceApplication;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
-import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 
 import com.google.android.maps.MapActivity;
 import com.google.inject.Injector;
 
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+
 /**
  * A {@link GuiceMapActivity} extends from {@link MapActivity} to provide dynamic injection of collaborators, using
  * Google Guice.<br />
- * 
+ *
  * @see GuiceActivity
  */
 public abstract class GuiceMapActivity extends MapActivity implements InjectorProvider {
     protected ContextScope scope;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        final Injector injector = getInjector();
+        scope = injector.getInstance(ContextScope.class);
+        scope.enter(this);
+        injector.injectMembers(this);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        getInjector().injectMembers(this);
+        scope.injectResources();
     }
 
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
-        getInjector().injectMembers(this);
+        scope.injectResources();
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
-        getInjector().injectMembers(this);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        scope = getInjector().getInstance(ContextScope.class);
-        scope.enter(this);
-        super.onCreate(savedInstanceState);
+        scope.injectResources();
     }
 
     @Override

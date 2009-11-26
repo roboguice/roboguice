@@ -11,11 +11,13 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.astroboy.service;
 
 import roboguice.astroboy.AstroboyApplication;
+import roboguice.astroboy.R;
+import roboguice.inject.StringResourceFactory;
 
 import com.google.inject.Inject;
 
@@ -26,7 +28,10 @@ public class TalkingThingMockImpl implements TalkingThing {
 
     @Inject protected AstroboyApplication application;
 
+    @Inject
+    protected StringResourceFactory stringRF;
+
     public String talk() {
-        return "My master is " + application.getClass().getName();
+        return stringRF.get(R.string.hello) + ", my master is " + application.getClass().getName();
     }
 }

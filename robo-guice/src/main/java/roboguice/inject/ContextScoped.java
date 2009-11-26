@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
 
@@ -25,6 +25,9 @@ import java.lang.annotation.Target;
 
 import com.google.inject.ScopeAnnotation;
 
-
+/**
+ * Apply this to implementation classes when you want one instance per context
+ * instance.
+ */
 @Target({ TYPE, METHOD, FIELD }) @Retention(RUNTIME) @ScopeAnnotation
 public @interface ContextScoped {}

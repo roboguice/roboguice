@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.astroboy;
 
@@ -25,7 +25,7 @@ public class AstroboyApplication extends GuiceApplication {
 
     @Override
     protected void addApplicationModules(List<Module> modules) {
-        modules.add(new AstroboyModule());
+        modules.add(new AstroboyModule(this));
     }
 
 }

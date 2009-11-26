@@ -23,7 +23,6 @@ import roboguice.inject.ActivityProvider;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScoped;
 import roboguice.inject.ExtrasListener;
-import roboguice.inject.GuiceApplicationProvider;
 import roboguice.inject.InjectorProvider;
 import roboguice.inject.ResourceListener;
 import roboguice.inject.ResourcesProvider;
@@ -56,7 +55,6 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.Stage;
-import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 
 /**
@@ -79,6 +77,16 @@ import com.google.inject.matcher.Matchers;
  * @see GuiceInjectableApplication How to get your Application injected as well.
  */
 public class GuiceApplication extends Application implements Module, InjectorProvider {
+
+    protected static int instanceCount = 0;
+
+    public GuiceApplication() {
+        if (instanceCount > 0) {
+            throw new IllegalStateException(
+            "A GuiceApplication should not be instanciated more than once. This exception may happen if you try to inject a subclass of Application without specific binding configuration");
+        }
+        instanceCount++;
+    }
 
     /**
      * The {@link Injector} of your application.
@@ -191,9 +199,8 @@ public class GuiceApplication extends Application implements Module, InjectorPro
         b.bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         b.bind(Resources.class).toProvider(ResourcesProvider.class);
 
-
-        b.bind(Application.class).toProvider(Key.get(new TypeLiteral<GuiceApplicationProvider<GuiceApplication>>() {
-        }));
+        b.bind(Application.class).to(GuiceApplication.class);
+        b.bind(GuiceApplication.class).toInstance(this);
 
         // System Services
         b.bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));

@@ -15,7 +15,7 @@
  */
 package roboguice.inject;
 
-import android.content.Context;
+import android.app.Application;
 import android.content.res.Resources;
 
 import com.google.inject.Inject;
@@ -24,14 +24,15 @@ import com.google.inject.Singleton;
 
 @Singleton
 public class ResourcesProvider implements Provider<Resources> {
-    protected Resources obj;
+
+    protected Resources resources;
 
     @Inject
-    public ResourcesProvider( Context context ) {
-        obj = context.getResources();
+    public ResourcesProvider(Application application) {
+        resources = application.getResources();
     }
 
     public Resources get() {
-        return obj;
+        return resources;
     }
 }

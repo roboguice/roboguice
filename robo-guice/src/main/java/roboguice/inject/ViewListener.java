@@ -15,6 +15,8 @@
  */
 package roboguice.inject;
 
+import static junit.framework.Assert.assertNotNull;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
@@ -31,10 +33,12 @@ import android.content.Context;
 public class ViewListener implements StaticTypeListener {
     protected Provider<Context> context;
     protected Application app;
+    protected ContextScope scope;
 
-    public ViewListener( Provider<Context> context, Application app ) {
+    public ViewListener( Provider<Context> context, Application app, ContextScope scope ) {
         this.context = context;
         this.app = app;
+        this.scope = scope;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -42,7 +46,7 @@ public class ViewListener implements StaticTypeListener {
         while( c!=null ) {
             for (Field field : c.getDeclaredFields())
                 if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) )
-                    typeEncounter.register(new ViewMembersInjector<I>(field, context, field.getAnnotation(InjectView.class)));
+                    typeEncounter.register(new ViewMembersInjector<I>(field, context, field.getAnnotation(InjectView.class), scope));
             c = c.getSuperclass();
         }
     }
@@ -53,7 +57,7 @@ public class ViewListener implements StaticTypeListener {
             while( c!=null ) {
                 for (Field field : c.getDeclaredFields())
                     if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) )
-                        new ViewMembersInjector(field, context, field.getAnnotation(InjectView.class)).injectMembers(null);
+                        new ViewMembersInjector(field, context, field.getAnnotation(InjectView.class), scope).injectMembers(null);
                 c = c.getSuperclass();
             }
         }
@@ -66,14 +70,24 @@ class ViewMembersInjector<T> implements MembersInjector<T> {
     protected Field field;
     protected Provider<Context> contextProvider;
     protected InjectView annotation;
+    protected ContextScope scope;
+    protected T instance;
 
-    public ViewMembersInjector( Field field, Provider<Context> contextProvider, InjectView annotation ) {
+    public ViewMembersInjector( Field field, Provider<Context> contextProvider, InjectView annotation, ContextScope scope ) {
         this.field = field;
         this.annotation = annotation;
         this.contextProvider = contextProvider;
+        this.scope = scope;
     }
 
     public void injectMembers(T instance) {
+        // Mark instance for injection during setContentView
+        this.instance = instance;
+        scope.registerViewForInjection( this );
+    }
+
+    public void reallyInjectMembers() {
+        assertNotNull(instance);
 
         Object value = null;
 

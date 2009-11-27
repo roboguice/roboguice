@@ -42,5 +42,6 @@ public class Tobio extends Activity {
         intent.putExtra("timestampTwiceExtra", 1000);
 
         startActivity(intent);
+        finish();
     }
 }

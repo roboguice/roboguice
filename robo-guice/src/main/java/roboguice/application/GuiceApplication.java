@@ -129,7 +129,7 @@ public class GuiceApplication extends Application implements Module, InjectorPro
         throwingContextProvider = ContextScope.<Context> seededKeyProvider();
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
         resourceListener = new ResourceListener(this);
-        viewListener = new ViewListener(contextProvider, this);
+        viewListener = new ViewListener(contextProvider, this, contextScope);
         extrasListener = new ExtrasListener(contextProvider);
         staticTypeListeners = new ArrayList<StaticTypeListener>();
         staticTypeListeners.add(resourceListener);

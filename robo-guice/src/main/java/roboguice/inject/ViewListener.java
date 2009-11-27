@@ -19,17 +19,21 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import com.google.inject.MembersInjector;
+import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 
+import android.app.Activity;
 import android.app.Application;
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 
-public class ResourceListener implements StaticTypeListener {
+public class ViewListener implements StaticTypeListener {
+    protected Provider<Context> context;
     protected Application app;
 
-    public ResourceListener( Application app ) {
+    public ViewListener( Provider<Context> context, Application app ) {
+        this.context = context;
         this.app = app;
     }
 
@@ -37,8 +41,8 @@ public class ResourceListener implements StaticTypeListener {
         Class<?> c = typeLiteral.getRawType();
         while( c!=null ) {
             for (Field field : c.getDeclaredFields())
-                if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class) )
-                    typeEncounter.register(new ResourceMembersInjector<I>(field, app, field.getAnnotation(InjectResource.class)));
+                if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) )
+                    typeEncounter.register(new ViewMembersInjector<I>(field, context, field.getAnnotation(InjectView.class)));
             c = c.getSuperclass();
         }
     }
@@ -48,8 +52,8 @@ public class ResourceListener implements StaticTypeListener {
         for( Class<?> c : types ) {
             while( c!=null ) {
                 for (Field field : c.getDeclaredFields())
-                    if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class) )
-                        new ResourceMembersInjector(field, app, field.getAnnotation(InjectResource.class)).injectMembers(null);
+                    if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) )
+                        new ViewMembersInjector(field, context, field.getAnnotation(InjectView.class)).injectMembers(null);
                 c = c.getSuperclass();
             }
         }
@@ -58,15 +62,15 @@ public class ResourceListener implements StaticTypeListener {
 }
 
 
-class ResourceMembersInjector<T> implements MembersInjector<T> {
+class ViewMembersInjector<T> implements MembersInjector<T> {
     protected Field field;
-    protected Application app;
-    protected InjectResource annotation;
+    protected Provider<Context> contextProvider;
+    protected InjectView annotation;
 
-    public ResourceMembersInjector( Field field, Application app, InjectResource annotation ) {
+    public ViewMembersInjector( Field field, Provider<Context> contextProvider, InjectView annotation ) {
         this.field = field;
-        this.app = app;
         this.annotation = annotation;
+        this.contextProvider = contextProvider;
     }
 
     public void injectMembers(T instance) {
@@ -75,15 +79,7 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
 
         try {
 
-            final int id = annotation.value();
-            final Class<?> t = field.getType();
-
-            if( String.class.isAssignableFrom(t) )
-                value = app.getResources().getString(id);
-
-            else if( Drawable.class.isAssignableFrom(t) )
-                value = app.getResources().getDrawable(id);
-
+            value = ((Activity) contextProvider.get()).findViewById(annotation.value());
 
             if( value==null && field.getAnnotation(Nullable.class)==null )
                 throw new NullPointerException( String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName() ));

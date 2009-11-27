@@ -1,17 +1,17 @@
 /*
  * Copyright 2009 Michael Burton
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
 
@@ -51,6 +51,7 @@ package roboguice.inject;
  */
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,6 +72,8 @@ public class ContextScope implements Scope {
 
     protected final ThreadLocal<Map<Key<?>, Object>> values = new ThreadLocal<Map<Key<?>, Object>>();
 
+    protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
+
     /**
      * Scopes can be entered multiple times with no problems (eg. from onCreate(), onStart(), etc).
      * However, once they're closed, all their previous values are gone forever
@@ -88,6 +91,15 @@ public class ContextScope implements Scope {
         values.remove();
     }
 
+
+    public void registerViewForInjection( ViewMembersInjector<?> injector ) {
+        viewsForInjection.add(injector);
+    }
+
+    public void injectViews() {
+        for( int i=viewsForInjection.size()-1; i>=0 ; --i )
+            viewsForInjection.remove(i).reallyInjectMembers();
+    }
 
 
 

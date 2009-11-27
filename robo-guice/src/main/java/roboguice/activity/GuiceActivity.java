@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 Michael Burton
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,13 @@ package roboguice.activity;
 import roboguice.application.GuiceApplication;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
+
+import com.google.inject.Injector;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-
-import com.google.inject.Injector;
 
 /**
  * A {@link GuiceActivity} extends from {@link Activity} to provide dynamic injection of collaborators, using Google
@@ -46,39 +47,41 @@ import com.google.inject.Injector;
  * You can have access to the Guice {@link Injector} at any time, by calling {@link #getInjector()}.<br />
  * However, you will not have access to Context scoped beans until {@link #onCreate(Bundle)} is called. <br />
  * <br />
- * 
+ *
  */
 public class GuiceActivity extends Activity implements InjectorProvider {
     protected ContextScope scope;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        final Injector injector = getInjector();
+        scope = injector.getInstance(ContextScope.class);
+        scope.enter(this);
+        injector.injectMembers(this);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        getInjector().injectMembers(this);
+        scope.injectViews();
     }
 
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
-        getInjector().injectMembers(this);
+        scope.injectViews();
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
-        getInjector().injectMembers(this);
+        scope.injectViews();
     }
 
     @Override
     public Object onRetainNonConfigurationInstance() {
         return this;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        scope = getInjector().getInstance(ContextScope.class);
-        scope.enter(this);
-        super.onCreate(savedInstanceState);
     }
 
     @Override

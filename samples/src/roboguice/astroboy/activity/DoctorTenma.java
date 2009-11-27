@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 Michael Burton
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,18 +32,20 @@ import roboguice.astroboy.service.TalkingThing;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
+
+import com.google.inject.Inject;
+import com.google.inject.internal.Nullable;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.google.inject.Inject;
-import com.google.inject.internal.Nullable;
-
 public class DoctorTenma extends GuiceActivity {
     // You can inject arbitrary View, String, and other types of resources.
     // See ResourceListener for details.
-    @InjectResource(R.id.widget1)
+    @InjectView(R.id.widget1)
     protected TextView          helloView;
     @InjectResource(R.string.hello)
     protected String            hello;
@@ -53,7 +55,7 @@ public class DoctorTenma extends GuiceActivity {
      * {@link InjectExtra}, this annotation is basically equivalent to the
      * following code : {@code
      * nameExtra=getIntent().getStringExtra("nameExtra");}
-     * 
+     *
      * @see ExtrasListener
      */
     @InjectExtra("nameExtra")

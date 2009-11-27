@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 Michael Burton
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -30,7 +30,7 @@ import com.google.inject.Singleton;
  * TypeLiteral<ExtraConverter<Long, Date>>() ).to(DateExtraConverter.class);}<br />
  * <br />
  * Usage in your components is as simple as : {@code
- * @InjectExtra("timestampExtra") protected Date date; } <br />
+ * \@InjectExtra("timestampExtra") protected Date date; } <br />
  * <br />
  * You will usually want your converters to be singletons, so you should
  * annotate them with {@link Singleton}.<br />
@@ -39,16 +39,16 @@ import com.google.inject.Singleton;
  * injected is scoped should implements {@link InjectorProvider} to get
  * the convert mechanism to work. This is because the {@link ExtrasMembersInjector}
  * need an {@link Injector} to get an {@link ExtraConverter} instance.
- * 
+ *
  * @param <FROM>
  * @param <TO>
- * 
+ *
  * @author py.ricau+robo-guice@gmail.com (Pierre-Yves Ricau)
  */
 public interface ExtraConverter<FROM, TO> {
     /**
      * Converts an instance of FROM to an instances of TO. May return null.
-     * 
+     *
      * @param from
      *            The extra value to be converted.
      * @return The converted object that will be injected.

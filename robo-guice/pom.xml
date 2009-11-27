@@ -106,4 +106,18 @@
         </repository>
     </distributionManagement>
 
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.6.1</version>
+        <configuration>
+          <reportOutputDirectory>docs</reportOutputDirectory>
+          <destDir>apidocs</destDir>
+        </configuration>
+      </plugin>
+    </plugins>
+  </reporting>
+
 </project>

@@ -73,9 +73,7 @@ public class ContextScope implements Scope {
     };
 
     protected final ThreadLocal<Map<Key<?>, Object>> values = new ThreadLocal<Map<Key<?>, Object>>();
-
-    @SuppressWarnings("unchecked")
-    protected ArrayList<Pair<?,ResourceMembersInjector>> resourcesForInjection = new ArrayList<Pair<?,ResourceMembersInjector>>();
+    protected ArrayList<Pair<?,ResourceMembersInjector>> resourcesForInjection = new ArrayList();
 
     /**
      * Scopes can be entered multiple times with no problems (eg. from onCreate(), onStart(), etc).
@@ -133,12 +131,10 @@ public class ContextScope implements Scope {
     }
 
 
-    @SuppressWarnings("unchecked")
-    public <T> void registerInstanceForResourceInjection(T instance, ResourceMembersInjector<T> injector) {
-        resourcesForInjection.add( new Pair<T, ResourceMembersInjector>(instance,injector) );
+    public void registerInstanceForResourceInjection(Object instance, ResourceMembersInjector injector) {
+        resourcesForInjection.add( new Pair<Object, ResourceMembersInjector>(instance,injector) );
     }
 
-    @SuppressWarnings("unchecked")
     public void injectResources() {
         for( int i=resourcesForInjection.size()-1; i>=0 ; --i ) {
             final Pair<?,ResourceMembersInjector> p = resourcesForInjection.remove(i);

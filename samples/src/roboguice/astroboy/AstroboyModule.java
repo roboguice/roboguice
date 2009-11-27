@@ -45,9 +45,6 @@ public class AstroboyModule extends AbstractAndroidModule {
          */
         bind(TalkingThing.class).to(TalkingThingMockImpl.class);
 
-        // BUG it would be nice if this particular binding could be done automatically somehow
-        bind(AstroboyApplication.class).toInstance(application);
-
         bind(Person.class).toProvider(PersonFromNameExtraProvider.class);
 
         bind(new TypeLiteral<ExtraConverter<String, Person>>() {

@@ -199,8 +199,10 @@ public class GuiceApplication extends Application implements Module, InjectorPro
         b.bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         b.bind(Resources.class).toProvider(ResourcesProvider.class);
 
-        b.bind(Application.class).to(GuiceApplication.class);
-        b.bind(GuiceApplication.class).toInstance(this);
+        for (Class<?> c = getClass(); c != null && Application.class.isAssignableFrom(c); c = c
+        .getSuperclass()) {
+            b.bind((Class<Object>) c).toInstance(this);
+        }
 
         // System Services
         b.bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));

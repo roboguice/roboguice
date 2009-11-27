@@ -38,7 +38,6 @@ import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.Stage;
-import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 
 import android.app.Activity;
@@ -193,16 +192,16 @@ public class GuiceApplication extends Application implements Module, InjectorPro
      * and add it to the configuring modules by overriding
      * {@link #addApplicationModules(List)}.<br />
      */
+    @SuppressWarnings("unchecked")
     public void configure(Binder b) {
 
         // Sundry Android Classes
         b.bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         b.bind(Resources.class).toProvider(ResourcesProvider.class);
 
-        for (Class<?> c = getClass(); c != null && Application.class.isAssignableFrom(c); c = c
-        .getSuperclass()) {
+        for (Class<? extends Object> c=getClass(); c!=null && Application.class.isAssignableFrom(c); c=c.getSuperclass())
             b.bind((Class<Object>) c).toInstance(this);
-        }
+
 
         // System Services
         b.bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));

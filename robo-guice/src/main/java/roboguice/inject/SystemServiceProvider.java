@@ -11,27 +11,38 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
+
+import android.app.Application;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import android.content.Context;
-
 public class SystemServiceProvider<T> implements Provider<T>{
 
-    @Inject protected Provider<Context> context;
-    protected String service;
+    @Inject
+    protected Application application;
 
-    public SystemServiceProvider( String service ) {
-        this.service = service;
+    protected String            serviceName;
+
+    protected T                 service;
+
+    public SystemServiceProvider(String serviceName) {
+        this.serviceName = serviceName;
     }
 
     @SuppressWarnings("unchecked")
     public T get() {
-        return (T) context.get().getSystemService(service);
+        if (service == null) {
+            synchronized (this) {
+                if (service == null) {
+                    service = (T) application.getSystemService(serviceName);
+                    application = null;
+                }
+            }
+        }
+        return service;
     }
-
 }

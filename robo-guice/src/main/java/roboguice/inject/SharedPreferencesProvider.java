@@ -11,26 +11,43 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.name.Named;
-
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
+@Singleton
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
+
     protected static final String DEFAULT = "default";
 
-    @Inject(optional=true) @Named("sharedPreferencesContext") protected String context;
-    @Inject protected Provider<Context> contextProvider;
+    @Inject(optional = true)
+    @Named("sharedPreferencesContext")
+    protected String              contextName;
 
+    @Inject
+    protected Application         application;
+
+    protected SharedPreferences   preferences;
 
     public SharedPreferences get() {
-        return contextProvider.get().getSharedPreferences(context!=null ? context : DEFAULT, Context.MODE_PRIVATE);
+        if (preferences == null) {
+            synchronized (this) {
+                if (preferences == null) {
+                    preferences = application.getSharedPreferences(contextName != null ? contextName : DEFAULT,
+                            Context.MODE_PRIVATE);
+                    application=null;
+                }
+            }
+        }
+        return preferences;
     }
 }

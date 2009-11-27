@@ -26,13 +26,17 @@ import roboguice.astroboy.service.TalkingThing;
 import roboguice.astroboy.service.TalkingThingMockImpl;
 import roboguice.config.AbstractAndroidModule;
 import roboguice.inject.ExtraConverter;
-import roboguice.inject.GuiceApplicationProvider;
 
-import com.google.inject.Key;
 import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
 public class AstroboyModule extends AbstractAndroidModule {
+
+    protected AstroboyApplication application;
+
+    public AstroboyModule(AstroboyApplication application) {
+        this.application = application;
+    }
 
     @Override
     protected void configure() {
@@ -40,9 +44,6 @@ public class AstroboyModule extends AbstractAndroidModule {
          * Here is the place to write the configuration specific to your application, i.e. your own custom bindings.
          */
         bind(TalkingThing.class).to(TalkingThingMockImpl.class);
-
-        // BUG it would be nice if this particular binding could be done automatically somehow
-        bind(AstroboyApplication.class).toProvider(Key.get(new TypeLiteral<GuiceApplicationProvider<AstroboyApplication>>(){}));
 
         bind(Person.class).toProvider(PersonFromNameExtraProvider.class);
 

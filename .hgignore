@@ -2,4 +2,4 @@ syntax: regexp
 \.DS_Store
 ^bin/
 ^samples/bin/
-^robo-guice/target/
+^roboguice/target/

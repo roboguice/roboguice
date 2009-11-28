@@ -3,19 +3,19 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>robo-guice</groupId>
-    <artifactId>robo-guice</artifactId>
-    <name>robo-guice</name>
+    <groupId>roboguice</groupId>
+    <artifactId>roboguice</artifactId>
+    <name>roboguice</name>
     <version>0.5-SNAPSHOT</version>
 
     <description>
     A framework for using Google Guice dependency injection in Android.
   </description>
 
-    <url>http://code.google.com/p/robo-guice/</url>
+    <url>http://code.google.com/p/roboguice/</url>
     <issueManagement>
         <system>Google Code Issue Tracker</system>
-        <url>http://code.google.com/p/robo-guice/issues/list</url>
+        <url>http://code.google.com/p/roboguice/issues/list</url>
     </issueManagement>
     <developers>
         <developer>
@@ -65,8 +65,8 @@
     </build>
 
     <scm>
-        <connection>scm:hg:https://robo-guice.googlecode.com/hg/</connection>
-        <developerConnection>scm:hg:https://robo-guice.googlecode.com/hg/</developerConnection>
+        <connection>scm:hg:https://roboguice.googlecode.com/hg/</connection>
+        <developerConnection>scm:hg:https://roboguice.googlecode.com/hg/</developerConnection>
     </scm>
 
     <dependencies>

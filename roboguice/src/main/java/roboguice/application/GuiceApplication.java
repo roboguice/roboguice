@@ -20,6 +20,7 @@ import java.util.List;
 
 import roboguice.config.AbstractAndroidModule;
 import roboguice.inject.ActivityProvider;
+import roboguice.inject.ContentResolverProvider;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScoped;
 import roboguice.inject.ExtrasListener;
@@ -47,6 +48,7 @@ import android.app.Application;
 import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.app.SearchManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -198,6 +200,7 @@ public class GuiceApplication extends Application implements Module, InjectorPro
         // Sundry Android Classes
         b.bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         b.bind(Resources.class).toProvider(ResourcesProvider.class);
+        b.bind(ContentResolver.class).toProvider( ContentResolverProvider.class );
 
         for (Class<? extends Object> c=getClass(); c!=null && Application.class.isAssignableFrom(c); c=c.getSuperclass())
             b.bind((Class<Object>) c).toInstance(this);

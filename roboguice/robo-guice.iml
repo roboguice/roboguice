@@ -8,18 +8,16 @@
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="jdk" jdkName="1.5" jdkType="JavaSDK" />
+    <orderEntry type="library" name="Android 1.5 Google APIs" level="application" />
     <orderEntry type="module-library">
-      <library name="guice-2.0-no_aop.jar">
+      <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/guice-2.0-no_aop.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../goodrec/opentable/android/lib/guice-2.0-no_aop.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/lib/guice-2.0-src.jar!/" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Android 1.5 Google APIs" level="application" />
   </component>
 </module>
 

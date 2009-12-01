@@ -3,3 +3,4 @@ syntax: regexp
 ^bin/
 ^samples/bin/
 ^roboguice/target/
+.*.iws$

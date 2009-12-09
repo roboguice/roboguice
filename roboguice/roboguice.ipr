@@ -89,14 +89,14 @@
     <option name="ADDITIONAL_OPTIONS_STRING" value="" />
   </component>
   <component name="ProjectDetails">
-    <option name="projectName" value="robo-guice" />
+    <option name="projectName" value="roboguice" />
   </component>
   <component name="ProjectKey">
     <option name="state" value="project://default" />
   </component>
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/robo-guice.iml" filepath="$PROJECT_DIR$/robo-guice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/roboguice.iml" filepath="$PROJECT_DIR$/roboguice.iml" />
     </modules>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">

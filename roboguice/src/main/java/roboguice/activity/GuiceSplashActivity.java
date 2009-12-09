@@ -11,7 +11,7 @@ import android.os.Bundle;
  * initializing the guice injector in the background.
  *
  * Use of this class is definitely not required in order to use
- * robo-guice, but it can be useful if your app startup times
+ * RoboGuice, but it can be useful if your app startup times
  * are longer than desired.
  *
  * To use, simply override onCreate to call setContentView.

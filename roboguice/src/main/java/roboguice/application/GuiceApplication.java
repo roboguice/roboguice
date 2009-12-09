@@ -131,7 +131,7 @@ public class GuiceApplication extends Application implements Module, InjectorPro
      * instantiated, but rather when getInjector is first called (lazy
      * initialization), the same lazy initialization is applied to this
      * application instance members, which are not used until the injector is
-     * first created. The main advantage is that robo-guice footprint is close
+     * first created. The main advantage is that roboguice footprint is close
      * to zero if no GuiceActivity is used when running the application.
      */
     protected void initInstanceMembers() {

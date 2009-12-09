@@ -37,9 +37,9 @@ import android.view.ViewGroup.LayoutParams;
  * located in package <strong>roboguice.activity</strong>.<br />
  * <br />
  * If we didn't provide what you need, you have two options : either post an issue on <a
- * href="http://code.google.com/p/robo-guice/issues/list">the bug tracker</a>, or implement it yourself. Have a look at
+ * href="http://code.google.com/p/roboguice/issues/list">the bug tracker</a>, or implement it yourself. Have a look at
  * the source code of this class ({@link GuiceActivity}), you won't have to write that much changes. And of course, you
- * are welcome to contribute and send your implementations to the robo-guice project.<br />
+ * are welcome to contribute and send your implementations to the RoboGuice project.<br />
  * <br />
  * Please be aware that collaborators are not injected into this until you call {@link #setContentView(int)} (calling
  * any of the overloads of this methods will work).<br />

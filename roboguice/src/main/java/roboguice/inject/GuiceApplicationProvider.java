@@ -15,12 +15,16 @@
  */
 package roboguice.inject;
 
-import android.app.Application;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+import android.app.Application;
+
+/**
+ * 
+ * @author Mike Burton
+ */
 @Singleton
 public class GuiceApplicationProvider<T extends Application> implements Provider<T>{
     @Inject

@@ -22,7 +22,10 @@ import com.google.inject.name.Named;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-
+/**
+ * 
+ * @author Mike Burton
+ */
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
     protected static final String DEFAULT = "default";
 

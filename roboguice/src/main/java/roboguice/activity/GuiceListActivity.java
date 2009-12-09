@@ -31,6 +31,8 @@ import android.view.ViewGroup.LayoutParams;
  * Google Guice.<br />
  *
  * @see GuiceActivity
+ * 
+ * @author Mike Burton
  */
 public class GuiceListActivity extends ListActivity implements InjectorProvider {
     protected ContextScope scope;

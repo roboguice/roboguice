@@ -26,6 +26,10 @@ import com.google.inject.spi.TypeEncounter;
 import android.app.Application;
 import android.graphics.drawable.Drawable;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 public class ResourceListener implements StaticTypeListener {
     protected Application app;
 

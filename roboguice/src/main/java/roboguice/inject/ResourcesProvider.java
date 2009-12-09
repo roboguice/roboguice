@@ -22,6 +22,10 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 @Singleton
 public class ResourcesProvider implements Provider<Resources> {
 

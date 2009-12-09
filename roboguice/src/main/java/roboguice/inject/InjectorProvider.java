@@ -17,6 +17,10 @@ package roboguice.inject;
 
 import com.google.inject.Injector;
 
+/**
+ * 
+ * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
+ */
 public interface InjectorProvider {
     Injector getInjector();
 }

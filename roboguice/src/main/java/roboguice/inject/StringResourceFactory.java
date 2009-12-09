@@ -20,6 +20,10 @@ import android.content.res.Resources;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+/**
+ * 
+ * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
+ */
 @Singleton
 public class StringResourceFactory implements ResourceFactory<String>{
 

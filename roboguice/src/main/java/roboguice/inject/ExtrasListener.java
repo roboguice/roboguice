@@ -34,6 +34,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+/**
+ * 
+ * @author Mike Burton
+ * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
+ */
 public class ExtrasListener implements TypeListener {
     protected Provider<Context> contextProvider;
 
@@ -130,8 +135,9 @@ class ExtrasMembersInjector<T> implements MembersInjector<T> {
     protected Object convert(Field field, Object value, Injector injector) {
 
         // Don't try to convert null or primitives
-        if (value == null || field.getType().isPrimitive() )
+        if (value == null || field.getType().isPrimitive() ) {
             return value;
+        }
 
 
         // Building parameterized converter type

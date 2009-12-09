@@ -47,6 +47,8 @@ import com.google.inject.internal.Nullable;
  * <br />
  * Usage example:<br /> {@code @InjectExtra("someValue") protected Integer someValue;}<br />
  * <br />{@code @InjectExtra("someValue") @Nullable protected Integer someValue;}
+ * 
+ * @author Mike Burton
  */
 @Retention(RUNTIME)
 @Target( { ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })

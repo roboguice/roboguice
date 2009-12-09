@@ -30,6 +30,10 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 public class ViewListener implements StaticTypeListener {
     protected Provider<Context> context;
     protected Application app;
@@ -44,9 +48,11 @@ public class ViewListener implements StaticTypeListener {
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
         Class<?> c = typeLiteral.getRawType();
         while( c!=null ) {
-            for (Field field : c.getDeclaredFields())
-                if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) )
+            for (Field field : c.getDeclaredFields()) {
+                if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) ) {
                     typeEncounter.register(new ViewMembersInjector<I>(field, context, field.getAnnotation(InjectView.class), scope));
+                }
+            }
             c = c.getSuperclass();
         }
     }
@@ -55,9 +61,11 @@ public class ViewListener implements StaticTypeListener {
     public void requestStaticInjection(Class<?>... types) {
         for( Class<?> c : types ) {
             while( c!=null ) {
-                for (Field field : c.getDeclaredFields())
-                    if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) )
+                for (Field field : c.getDeclaredFields()) {
+                    if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) ) {
                         new ViewMembersInjector(field, context, field.getAnnotation(InjectView.class), scope).injectMembers(null);
+                    }
+                }
                 c = c.getSuperclass();
             }
         }
@@ -95,8 +103,9 @@ class ViewMembersInjector<T> implements MembersInjector<T> {
 
             value = ((Activity) contextProvider.get()).findViewById(annotation.value());
 
-            if( value==null && field.getAnnotation(Nullable.class)==null )
+            if( value==null && field.getAnnotation(Nullable.class)==null ) {
                 throw new NullPointerException( String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName() ));
+            }
 
             field.setAccessible(true);
             field.set(instance, value );

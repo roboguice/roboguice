@@ -15,6 +15,10 @@
  */
 package roboguice.inject;
 
+/**
+ * 
+ * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
+ */
 public interface ResourceFactory<T> {
     T get(int id);
 }

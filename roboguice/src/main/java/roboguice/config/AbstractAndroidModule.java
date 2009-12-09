@@ -21,6 +21,10 @@ import roboguice.inject.StaticTypeListener;
 
 import com.google.inject.AbstractModule;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 public abstract class AbstractAndroidModule extends AbstractModule {
     protected List<StaticTypeListener> listeners;
 

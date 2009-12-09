@@ -21,6 +21,10 @@ import com.google.inject.Provider;
 import android.content.ContentResolver;
 import android.content.Context;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 @ContextScoped
 public class ContentResolverProvider implements Provider<ContentResolver> {
     @Inject protected Context context;

@@ -43,7 +43,7 @@ import com.google.inject.Singleton;
  * @param <FROM>
  * @param <TO>
  *
- * @author py.ricau+roboguice@gmail.com (Pierre-Yves Ricau)
+ * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
 public interface ExtraConverter<FROM, TO> {
     /**

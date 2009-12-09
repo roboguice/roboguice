@@ -62,6 +62,10 @@ import com.google.inject.Scope;
 
 import android.content.Context;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 public class ContextScope implements Scope {
 
     protected static final Provider<Object> SEEDED_KEY_PROVIDER = new Provider<Object>() {
@@ -80,8 +84,9 @@ public class ContextScope implements Scope {
      * until the scope is reinitialized again via enter().
      */
     public void enter( Context context ) {
-        if(values.get()==null )
+        if(values.get()==null ) {
             values.set( new HashMap<Key<?>,Object>( ) );
+        }
 
         values.get().put(Key.get(Context.class), context);
     }
@@ -97,8 +102,9 @@ public class ContextScope implements Scope {
     }
 
     public void injectViews() {
-        for( int i=viewsForInjection.size()-1; i>=0 ; --i )
+        for( int i=viewsForInjection.size()-1; i>=0 ; --i ) {
             viewsForInjection.remove(i).reallyInjectMembers();
+        }
     }
 
 
@@ -121,8 +127,9 @@ public class ContextScope implements Scope {
 
     protected <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
         final Map<Key<?>, Object> scopedObjects = values.get();
-        if (scopedObjects == null)
+        if (scopedObjects == null) {
             throw new OutOfScopeException("Cannot access " + key + " outside of a scoping block");
+        }
 
         return scopedObjects;
     }

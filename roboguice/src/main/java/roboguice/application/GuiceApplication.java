@@ -79,6 +79,8 @@ import android.view.inputmethod.InputMethodManager;
  * android:name="roboguice.application.GuiceApplication"> [...] </application> }
  *
  * @see GuiceInjectableApplication How to get your Application injected as well.
+ *
+ * @author Mike Burton
  */
 public class GuiceApplication extends Application implements Module, InjectorProvider {
 

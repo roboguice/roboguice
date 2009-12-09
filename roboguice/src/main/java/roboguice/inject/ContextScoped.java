@@ -28,6 +28,8 @@ import com.google.inject.ScopeAnnotation;
 /**
  * Apply this to implementation classes when you want one instance per context
  * instance.
+ * 
+ * @author Mike Burton
  */
 @Target({ TYPE, METHOD, FIELD }) @Retention(RUNTIME) @ScopeAnnotation
 public @interface ContextScoped {}

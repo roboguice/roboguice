@@ -47,7 +47,8 @@ import android.view.ViewGroup.LayoutParams;
  * You can have access to the Guice {@link Injector} at any time, by calling {@link #getInjector()}.<br />
  * However, you will not have access to Context scoped beans until {@link #onCreate(Bundle)} is called. <br />
  * <br />
- *
+ * 
+ * @author Mike Burton
  */
 public class GuiceActivity extends Activity implements InjectorProvider {
     protected ContextScope scope;

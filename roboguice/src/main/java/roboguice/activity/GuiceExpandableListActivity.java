@@ -31,6 +31,8 @@ import android.view.ViewGroup.LayoutParams;
  * collaborators, using Google Guice.<br />
  *
  * @see GuiceActivity
+ * 
+ * @author Mike Burton
  */
 public class GuiceExpandableListActivity extends ExpandableListActivity implements InjectorProvider {
     protected ContextScope scope;

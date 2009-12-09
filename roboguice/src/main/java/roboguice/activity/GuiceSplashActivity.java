@@ -17,7 +17,7 @@ import android.os.Bundle;
  * To use, simply override onCreate to call setContentView.
  * Then override startNextActivity to specify where to go next.
  *
- * @author mike
+ * @author Mike Burton
  *
  */
 public abstract class GuiceSplashActivity extends Activity {

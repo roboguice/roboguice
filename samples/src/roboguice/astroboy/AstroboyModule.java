@@ -26,9 +26,9 @@ import roboguice.astroboy.service.TalkingThing;
 import roboguice.astroboy.service.TalkingThingMockImpl;
 import roboguice.config.AbstractAndroidModule;
 import roboguice.inject.ExtraConverter;
+import roboguice.inject.SharedPreferencesName;
 
 import com.google.inject.TypeLiteral;
-import com.google.inject.name.Names;
 
 public class AstroboyModule extends AbstractAndroidModule {
 
@@ -57,6 +57,6 @@ public class AstroboyModule extends AbstractAndroidModule {
         }).to(DateTwiceExtraConverter.class);
 
         // BUG need a better way to set default preferences context
-        bindConstant().annotatedWith(Names.named("sharedPreferencesContext")).to("roboguice.astroboy");
+        bindConstant().annotatedWith(SharedPreferencesName.class).to("roboguice.astroboy");
     }
 }

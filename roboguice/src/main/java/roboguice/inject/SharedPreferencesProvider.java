@@ -17,7 +17,6 @@ package roboguice.inject;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.name.Named;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,16 +28,13 @@ import android.content.SharedPreferences;
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
     protected static final String DEFAULT = "default";
 
-    protected String context;
+    @Inject(optional = true)
+    @SharedPreferencesName
+    protected String context = DEFAULT;
 
     @Inject protected Provider<Context> contextProvider;
 
-    @Inject
-    public SharedPreferencesProvider( @Named("sharedPreferencesContext") String context ) {
-        this.context = context;
-    }
-
     public SharedPreferences get() {
-        return contextProvider.get().getSharedPreferences(context!=null ? context : DEFAULT, Context.MODE_PRIVATE);
+        return contextProvider.get().getSharedPreferences(context, Context.MODE_PRIVATE);
     }
 }

@@ -19,47 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import roboguice.config.AbstractAndroidModule;
-import roboguice.inject.ActivityProvider;
-import roboguice.inject.ContentResolverProvider;
+import roboguice.config.RoboGuiceModule;
 import roboguice.inject.ContextScope;
-import roboguice.inject.ContextScoped;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectorProvider;
 import roboguice.inject.ResourceListener;
-import roboguice.inject.ResourcesProvider;
-import roboguice.inject.SharedPreferencesProvider;
 import roboguice.inject.StaticTypeListener;
-import roboguice.inject.SystemServiceProvider;
 import roboguice.inject.ViewListener;
 
-import com.google.inject.Binder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.Stage;
-import com.google.inject.matcher.Matchers;
 
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.AlarmManager;
 import android.app.Application;
-import android.app.KeyguardManager;
-import android.app.NotificationManager;
-import android.app.SearchManager;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.location.LocationManager;
-import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
-import android.os.PowerManager;
-import android.os.Vibrator;
-import android.view.LayoutInflater;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 
 /**
  * This class is in charge of starting the Guice configuration. When the
@@ -82,17 +58,7 @@ import android.view.inputmethod.InputMethodManager;
  *
  * @author Mike Burton
  */
-public class GuiceApplication extends Application implements Module, InjectorProvider {
-
-    protected static int instanceCount = 0;
-
-    public GuiceApplication() {
-        if (instanceCount > 0) {
-            throw new IllegalStateException(
-            "A GuiceApplication should not be instanciated more than once. This exception may happen if you try to inject a subclass of Application without specific binding configuration");
-        }
-        instanceCount++;
-    }
+public class GuiceApplication extends Application implements InjectorProvider {
 
     /**
      * The {@link Injector} of your application.
@@ -149,8 +115,8 @@ public class GuiceApplication extends Application implements Module, InjectorPro
 
     /**
      * Creates an {@link Injector} configured for this application. This
-     * {@link Injector} will be configured with this (being a {@link Module}) ,
-     * plus any {@link Module} you might add by overriding
+     * {@link Injector} will be configured with a {@link RoboGuiceModule} , plus
+     * any {@link Module} you might add by overriding
      * {@link #addApplicationModules(List)}. <br />
      * <br />
      * In most cases, you should <strong>NOT</strong> override the
@@ -158,7 +124,8 @@ public class GuiceApplication extends Application implements Module, InjectorPro
      */
     protected Injector createInjector() {
         ArrayList<Module> modules = new ArrayList<Module>();
-        modules.add(this);
+        Module roboguiceModule = new RoboGuiceModule(contextScope, throwingContextProvider, contextProvider, resourceListener, viewListener, extrasListener);
+        modules.add(roboguiceModule);
         addApplicationModules(modules);
         for (Module m : modules) {
             if (m instanceof AbstractAndroidModule) {
@@ -186,53 +153,6 @@ public class GuiceApplication extends Application implements Module, InjectorPro
      *            which is this.
      */
     protected void addApplicationModules(List<Module> modules) {
-    }
-
-    /**
-     * Configure this module to define Android related bindings.<br />
-     * <br />
-     * If you want to provide your own bindings, you should <strong>NOT</strong>
-     * override this method, but rather create a {@link Module} implementation
-     * and add it to the configuring modules by overriding
-     * {@link #addApplicationModules(List)}.<br />
-     */
-    @SuppressWarnings("unchecked")
-    public void configure(Binder b) {
-
-        // Sundry Android Classes
-        b.bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
-        b.bind(Resources.class).toProvider(ResourcesProvider.class);
-        b.bind(ContentResolver.class).toProvider( ContentResolverProvider.class );
-
-        for (Class<? extends Object> c=getClass(); c!=null && Application.class.isAssignableFrom(c); c=c.getSuperclass())
-            b.bind((Class<Object>) c).toInstance(this);
-
-
-        // System Services
-        b.bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));
-        b.bind(WindowManager.class).toProvider(new SystemServiceProvider<WindowManager>(Context.WINDOW_SERVICE));
-        b.bind(LayoutInflater.class).toProvider( new SystemServiceProvider<LayoutInflater>(Context.LAYOUT_INFLATER_SERVICE));
-        b.bind(ActivityManager.class).toProvider(new SystemServiceProvider<ActivityManager>(Context.ACTIVITY_SERVICE));
-        b.bind(PowerManager.class).toProvider(new SystemServiceProvider<PowerManager>(Context.POWER_SERVICE));
-        b.bind(AlarmManager.class).toProvider(new SystemServiceProvider<AlarmManager>(Context.ALARM_SERVICE));
-        b.bind(NotificationManager.class).toProvider( new SystemServiceProvider<NotificationManager>(Context.NOTIFICATION_SERVICE));
-        b.bind(KeyguardManager.class).toProvider(new SystemServiceProvider<KeyguardManager>(Context.KEYGUARD_SERVICE));
-        b.bind(SearchManager.class).toProvider(new SystemServiceProvider<SearchManager>(Context.SEARCH_SERVICE));
-        b.bind(Vibrator.class).toProvider(new SystemServiceProvider<Vibrator>(Context.VIBRATOR_SERVICE));
-        b.bind(ConnectivityManager.class).toProvider( new SystemServiceProvider<ConnectivityManager>(Context.CONNECTIVITY_SERVICE));
-        b.bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(Context.WIFI_SERVICE));
-        b.bind(InputMethodManager.class).toProvider( new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
-
-        // Context Scope bindings
-        b.bindScope(ContextScoped.class, contextScope);
-        b.bind(ContextScope.class).toInstance(contextScope);
-        b.bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
-        b.bind(Activity.class).toProvider(ActivityProvider.class);
-
-        // Android Resources, Views and extras require special handling
-        b.bindListener(Matchers.any(), resourceListener);
-        b.bindListener(Matchers.any(), extrasListener);
-        b.bindListener(Matchers.any(), viewListener);
     }
 
     public List<StaticTypeListener> getStaticTypeListeners() {

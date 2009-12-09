@@ -2,7 +2,7 @@ This sample application was built using Eclipse.
 
 Caveats
 - Eclipse seems to be having some problems when both the
-  robo-guice and astroboy projects are open.  You may
+  RoboGuice and astroboy projects are open.  You may
   get various errors and warnings because astroboy is
   a subdir of roboguice, but they seem to be ignorable.
 - You will probably have to update the astroboy's reference

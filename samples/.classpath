@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/robo-guice"/>
-	<classpathentry kind="lib" path="../robo-guice/lib/guice-2.0-no_aop.jar" sourcepath="../robo-guice/lib/guice-2.0-src.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/roboguice"/>
+	<classpathentry kind="lib" path="../roboguice/lib/guice-2.0-no_aop.jar" sourcepath="../roboguice/lib/guice-2.0-src.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

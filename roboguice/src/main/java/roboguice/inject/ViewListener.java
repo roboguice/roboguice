@@ -35,13 +35,13 @@ import android.content.Context;
  * @author Mike Burton
  */
 public class ViewListener implements StaticTypeListener {
-    protected Provider<Context> context;
-    protected Application app;
+    protected Provider<Context> contextProvider;
+    protected Application application;
     protected ContextScope scope;
 
-    public ViewListener( Provider<Context> context, Application app, ContextScope scope ) {
-        this.context = context;
-        this.app = app;
+    public ViewListener( Provider<Context> contextProvider, Application application, ContextScope scope ) {
+        this.contextProvider = contextProvider;
+        this.application = application;
         this.scope = scope;
     }
 
@@ -50,7 +50,7 @@ public class ViewListener implements StaticTypeListener {
         while( c!=null ) {
             for (Field field : c.getDeclaredFields()) {
                 if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) ) {
-                    typeEncounter.register(new ViewMembersInjector<I>(field, context, field.getAnnotation(InjectView.class), scope));
+                    typeEncounter.register(new ViewMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectView.class), scope));
                 }
             }
             c = c.getSuperclass();
@@ -63,7 +63,7 @@ public class ViewListener implements StaticTypeListener {
             while( c!=null ) {
                 for (Field field : c.getDeclaredFields()) {
                     if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) ) {
-                        new ViewMembersInjector(field, context, field.getAnnotation(InjectView.class), scope).injectMembers(null);
+                        new ViewMembersInjector(field, contextProvider, field.getAnnotation(InjectView.class), scope).injectMembers(null);
                     }
                 }
                 c = c.getSuperclass();

@@ -63,7 +63,7 @@ public class GuiceApplication extends Application implements InjectorProvider {
     /**
      * The {@link Injector} of your application.
      */
-    protected Injector                 guice;
+    protected Injector                 guiceInjector;
 
     protected ContextScope             contextScope;
     protected Provider<Context>        throwingContextProvider;
@@ -83,15 +83,15 @@ public class GuiceApplication extends Application implements InjectorProvider {
      * synchronization.
      */
     public Injector getInjector() {
-        if (guice == null) {
+        if (guiceInjector == null) {
             synchronized (this) {
-                if (guice == null) {
+                if (guiceInjector == null) {
                     initInstanceMembers();
-                    guice = createInjector();
+                    guiceInjector = createInjector();
                 }
             }
         }
-        return guice;
+        return guiceInjector;
     }
 
     /**

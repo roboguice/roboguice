@@ -31,10 +31,10 @@ import android.graphics.drawable.Drawable;
  * @author Mike Burton
  */
 public class ResourceListener implements StaticTypeListener {
-    protected Application app;
+    protected Application application;
 
-    public ResourceListener( Application app ) {
-        this.app = app;
+    public ResourceListener( Application application ) {
+        this.application = application;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -42,7 +42,7 @@ public class ResourceListener implements StaticTypeListener {
         while( c!=null ) {
             for (Field field : c.getDeclaredFields())
                 if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class) )
-                    typeEncounter.register(new ResourceMembersInjector<I>(field, app, field.getAnnotation(InjectResource.class)));
+                    typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
             c = c.getSuperclass();
         }
     }
@@ -53,7 +53,7 @@ public class ResourceListener implements StaticTypeListener {
             while( c!=null ) {
                 for (Field field : c.getDeclaredFields())
                     if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class) )
-                        new ResourceMembersInjector(field, app, field.getAnnotation(InjectResource.class)).injectMembers(null);
+                        new ResourceMembersInjector(field, application, field.getAnnotation(InjectResource.class)).injectMembers(null);
                 c = c.getSuperclass();
             }
         }
@@ -64,12 +64,12 @@ public class ResourceListener implements StaticTypeListener {
 
 class ResourceMembersInjector<T> implements MembersInjector<T> {
     protected Field field;
-    protected Application app;
+    protected Application application;
     protected InjectResource annotation;
 
-    public ResourceMembersInjector( Field field, Application app, InjectResource annotation ) {
+    public ResourceMembersInjector( Field field, Application application, InjectResource annotation ) {
         this.field = field;
-        this.app = app;
+        this.application = application;
         this.annotation = annotation;
     }
 
@@ -83,10 +83,10 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
             final Class<?> t = field.getType();
 
             if( String.class.isAssignableFrom(t) )
-                value = app.getResources().getString(id);
+                value = application.getResources().getString(id);
 
             else if( Drawable.class.isAssignableFrom(t) )
-                value = app.getResources().getDrawable(id);
+                value = application.getResources().getDrawable(id);
 
 
             if( value==null && field.getAnnotation(Nullable.class)==null )

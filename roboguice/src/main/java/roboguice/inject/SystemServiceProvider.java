@@ -26,16 +26,16 @@ import android.content.Context;
  */
 public class SystemServiceProvider<T> implements Provider<T>{
 
-    @Inject protected Provider<Context> context;
-    protected String service;
+    @Inject protected Provider<Context> contextProvider;
+    protected String serviceName;
 
-    public SystemServiceProvider( String service ) {
-        this.service = service;
+    public SystemServiceProvider( String serviceName ) {
+        this.serviceName = serviceName;
     }
 
     @SuppressWarnings("unchecked")
     public T get() {
-        return (T) context.get().getSystemService(service);
+        return (T) contextProvider.get().getSystemService(serviceName);
     }
 
 }

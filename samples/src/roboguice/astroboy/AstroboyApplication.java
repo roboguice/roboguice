@@ -25,7 +25,7 @@ public class AstroboyApplication extends GuiceApplication {
 
     @Override
     protected void addApplicationModules(List<Module> modules) {
-        modules.add(new AstroboyModule(this));
+        modules.add(new AstroboyModule());
     }
 
 }

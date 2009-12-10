@@ -54,15 +54,17 @@ public class RoboGuiceModule extends AbstractModule {
     protected final ResourceListener resourceListener;
     protected final ViewListener viewListener;
     protected final ExtrasListener extrasListener;
+    protected final Application application;
 
     public RoboGuiceModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
-            ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener) {
+            ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener, Application application) {
         this.contextScope = contextScope;
         this.throwingContextProvider = throwingContextProvider;
         this.contextProvider = contextProvider;
         this.resourceListener = resourceListener;
         this.viewListener = viewListener;
         this.extrasListener = extrasListener;
+        this.application = application;
     }
 
     /**
@@ -81,8 +83,8 @@ public class RoboGuiceModule extends AbstractModule {
         bind(Resources.class).toProvider(ResourcesProvider.class);
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
 
-        for (Class<? extends Object> c = getClass(); c != null && Application.class.isAssignableFrom(c); c = c.getSuperclass()) {
-            bind((Class<Object>) c).toInstance(this);
+        for (Class<? extends Object> c = application.getClass(); c != null && Application.class.isAssignableFrom(c); c = c.getSuperclass()) {
+            bind((Class<Object>) c).toInstance(application);
         }
 
         // System Services

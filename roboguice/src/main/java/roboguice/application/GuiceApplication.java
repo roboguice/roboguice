@@ -124,7 +124,8 @@ public class GuiceApplication extends Application implements InjectorProvider {
      */
     protected Injector createInjector() {
         ArrayList<Module> modules = new ArrayList<Module>();
-        Module roboguiceModule = new RoboGuiceModule(contextScope, throwingContextProvider, contextProvider, resourceListener, viewListener, extrasListener);
+        Module roboguiceModule = new RoboGuiceModule(contextScope, throwingContextProvider, contextProvider, resourceListener, viewListener, extrasListener,
+                this);
         modules.add(roboguiceModule);
         addApplicationModules(modules);
         for (Module m : modules) {

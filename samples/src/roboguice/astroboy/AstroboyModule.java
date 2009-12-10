@@ -32,12 +32,6 @@ import com.google.inject.TypeLiteral;
 
 public class AstroboyModule extends AbstractAndroidModule {
 
-    protected AstroboyApplication application;
-
-    public AstroboyModule(AstroboyApplication application) {
-        this.application = application;
-    }
-
     @Override
     protected void configure() {
         /*

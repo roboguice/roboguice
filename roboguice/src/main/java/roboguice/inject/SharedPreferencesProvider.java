@@ -34,6 +34,14 @@ public class SharedPreferencesProvider implements Provider<SharedPreferences> {
 
     @Inject protected Provider<Context> contextProvider;
 
+    public SharedPreferencesProvider() {
+    }
+
+    public SharedPreferencesProvider(String context, Provider<Context> contextProvider) {
+        this.context = context;
+        this.contextProvider = contextProvider;
+    }
+
     public SharedPreferences get() {
         return contextProvider.get().getSharedPreferences(context, Context.MODE_PRIVATE);
     }

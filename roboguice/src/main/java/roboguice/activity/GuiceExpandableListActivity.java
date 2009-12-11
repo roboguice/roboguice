@@ -27,9 +27,10 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 /**
- * A {@link GuiceExpandableListActivity} extends from {@link ExpandableListActivity} to provide dynamic injection of
- * collaborators, using Google Guice.<br />
- *
+ * A {@link GuiceExpandableListActivity} extends from
+ * {@link ExpandableListActivity} to provide dynamic injection of collaborators,
+ * using Google Guice.<br />
+ * 
  * @see GuiceActivity
  * 
  * @author Mike Burton

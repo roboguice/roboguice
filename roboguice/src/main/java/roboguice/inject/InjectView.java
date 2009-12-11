@@ -24,8 +24,9 @@ import java.lang.annotation.Target;
 import com.google.inject.BindingAnnotation;
 
 /**
- * Indicates that a variable member of a class (whether static or not) should be injected with an Android view. The
- * value is compulsory, and correspond to the id of the view.<br />
+ * Indicates that a variable member of a class (whether static or not) should be
+ * injected with an Android view. The value is compulsory, and correspond to the
+ * id of the view.<br />
  * Usage example:<br /> {@code @InjectView(R.string.hello) protected TextView hello;}
  * 
  * @author Mike Burton

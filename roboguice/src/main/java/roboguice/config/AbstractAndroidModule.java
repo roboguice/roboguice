@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.config;
 
@@ -31,8 +31,9 @@ public abstract class AbstractAndroidModule extends AbstractModule {
     @Override
     protected void requestStaticInjection(Class<?>... types) {
         super.requestStaticInjection(types);
-        for( StaticTypeListener l : listeners )
+        for (StaticTypeListener l : listeners) {
             l.requestStaticInjection(types);
+        }
     }
 
     public void setStaticTypeListeners(List<StaticTypeListener> listeners) {

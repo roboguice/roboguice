@@ -24,12 +24,13 @@ import android.content.Context;
  * 
  * @author Mike Burton
  */
-public class SystemServiceProvider<T> implements Provider<T>{
+public class SystemServiceProvider<T> implements Provider<T> {
 
-    @Inject protected Provider<Context> contextProvider;
+    @Inject
+    protected Provider<Context> contextProvider;
     protected String serviceName;
 
-    public SystemServiceProvider( String serviceName ) {
+    public SystemServiceProvider(String serviceName) {
         this.serviceName = serviceName;
     }
 

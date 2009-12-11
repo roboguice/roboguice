@@ -31,5 +31,8 @@ import com.google.inject.ScopeAnnotation;
  * 
  * @author Mike Burton
  */
-@Target({ TYPE, METHOD, FIELD }) @Retention(RUNTIME) @ScopeAnnotation
-public @interface ContextScoped {}
+@Target( { TYPE, METHOD, FIELD })
+@Retention(RUNTIME)
+@ScopeAnnotation
+public @interface ContextScoped {
+}

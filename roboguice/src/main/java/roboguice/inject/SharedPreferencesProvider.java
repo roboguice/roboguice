@@ -32,7 +32,8 @@ public class SharedPreferencesProvider implements Provider<SharedPreferences> {
     @SharedPreferencesName
     protected String preferencesName = DEFAULT;
 
-    @Inject protected Provider<Context> contextProvider;
+    @Inject
+    protected Provider<Context> contextProvider;
 
     public SharedPreferencesProvider() {
     }

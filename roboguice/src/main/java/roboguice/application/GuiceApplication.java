@@ -53,9 +53,9 @@ import android.content.Context;
  * For instance : <br /> {@code <application android:icon="@drawable/icon"
  * android:label="@string/app_name"
  * android:name="roboguice.application.GuiceApplication"> [...] </application> }
- *
+ * 
  * @see GuiceInjectableApplication How to get your Application injected as well.
- *
+ * 
  * @author Mike Burton
  */
 public class GuiceApplication extends Application implements InjectorProvider {
@@ -63,14 +63,14 @@ public class GuiceApplication extends Application implements InjectorProvider {
     /**
      * The {@link Injector} of your application.
      */
-    protected Injector                 guiceInjector;
+    protected Injector guiceInjector;
 
-    protected ContextScope             contextScope;
-    protected Provider<Context>        throwingContextProvider;
-    protected Provider<Context>        contextProvider;
-    protected ResourceListener         resourceListener;
-    protected ViewListener             viewListener;
-    protected ExtrasListener           extrasListener;
+    protected ContextScope contextScope;
+    protected Provider<Context> throwingContextProvider;
+    protected Provider<Context> contextProvider;
+    protected ResourceListener resourceListener;
+    protected ViewListener viewListener;
+    protected ExtrasListener extrasListener;
     protected List<StaticTypeListener> staticTypeListeners;
 
     /**
@@ -99,8 +99,8 @@ public class GuiceApplication extends Application implements InjectorProvider {
      * instantiated, but rather when getInjector is first called (lazy
      * initialization), the same lazy initialization is applied to this
      * application instance members, which are not used until the injector is
-     * first created. The main advantage is that roboguice footprint is close
-     * to zero if no GuiceActivity is used when running the application.
+     * first created. The main advantage is that roboguice footprint is close to
+     * zero if no GuiceActivity is used when running the application.
      */
     protected void initInstanceMembers() {
         contextScope = new ContextScope();
@@ -147,7 +147,7 @@ public class GuiceApplication extends Application implements InjectorProvider {
      * This method is called by {@link #createInjector()}.<br />
      * <br />
      * The default implementation is a no-op and does nothing.
-     *
+     * 
      * @param modules
      *            The list of modules to which you may add your own custom
      *            modules. Please notice that it already contains one module,

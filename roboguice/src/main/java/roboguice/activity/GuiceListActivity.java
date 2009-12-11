@@ -27,9 +27,9 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 /**
- * A {@link GuiceListActivity} extends from {@link ListActivity} to provide dynamic injection of collaborators, using
- * Google Guice.<br />
- *
+ * A {@link GuiceListActivity} extends from {@link ListActivity} to provide
+ * dynamic injection of collaborators, using Google Guice.<br />
+ * 
  * @see GuiceActivity
  * 
  * @author Mike Burton

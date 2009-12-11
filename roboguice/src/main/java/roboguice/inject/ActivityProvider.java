@@ -28,7 +28,8 @@ import android.content.Context;
  */
 @Singleton
 public class ActivityProvider implements Provider<Activity> {
-    @Inject Provider<Context> contextProvider;
+    @Inject
+    Provider<Context> contextProvider;
 
     public Activity get() {
         return (Activity) contextProvider.get();

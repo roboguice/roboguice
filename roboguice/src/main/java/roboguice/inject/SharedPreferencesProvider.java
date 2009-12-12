@@ -28,22 +28,28 @@ import android.content.SharedPreferences;
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
     protected static final String DEFAULT = "default";
 
-    @Inject(optional = true)
-    @SharedPreferencesName
-    protected String preferencesName = DEFAULT;
+    protected final String preferencesName;
 
     @Inject
     protected Provider<Context> contextProvider;
 
-    public SharedPreferencesProvider() {
+    @Inject
+    public SharedPreferencesProvider(PreferencesNameHolder preferencesNameHolder) {
+        preferencesName = preferencesNameHolder.value;
     }
 
-    public SharedPreferencesProvider(String preferencesName, Provider<Context> contextProvider) {
+    public SharedPreferencesProvider(String preferencesName) {
         this.preferencesName = preferencesName;
-        this.contextProvider = contextProvider;
     }
 
     public SharedPreferences get() {
         return contextProvider.get().getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
     }
+
+    static class PreferencesNameHolder {
+        @Inject(optional = true)
+        @SharedPreferencesName
+        private String value = DEFAULT;
+    }
+
 }

@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
 
@@ -37,9 +37,8 @@ import com.google.inject.internal.Nullable;
  * values. However, if you wish to allow injection of null values, you should
  * use the {@link Nullable} annotation.<br />
  * <br />
- * You can define a default value in Java when the extra is optional :
- * <br /> {@code @InjectExtra(value="someValue", optional=true) Integer someValue =
- * 2;} ) <br />
+ * You can define a default value in Java when the extra is optional : <br /> {@code
+ * @InjectExtra(value="someValue", optional=true) Integer someValue = 2;} ) <br />
  * However, it is a non-sense to inject a default value in Java if the extra is
  * not optional : {@code @InjectExtra("someValue") Integer someValue = 2; // DO
  * NOT DO THIS}
@@ -47,6 +46,8 @@ import com.google.inject.internal.Nullable;
  * <br />
  * Usage example:<br /> {@code @InjectExtra("someValue") protected Integer someValue;}<br />
  * <br />{@code @InjectExtra("someValue") @Nullable protected Integer someValue;}
+ * 
+ * @author Mike Burton
  */
 @Retention(RUNTIME)
 @Target( { ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })

@@ -11,12 +11,16 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.inject;
 
 import com.google.inject.spi.TypeListener;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 public interface StaticTypeListener extends TypeListener {
 
     public void requestStaticInjection(Class<?>... types);

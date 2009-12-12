@@ -11,7 +11,7 @@
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
- * and limitations under the License. 
+ * and limitations under the License.
  */
 package roboguice.application;
 
@@ -22,12 +22,12 @@ import com.google.inject.Injector;
 /**
  * Like GuiceApplication, but allows you to inject resource into the application
  * itself.
- *
+ * 
  * Introduces additional cost to the app's startup time, so may not be desirable
  * in all cases.
- *
- * @author mike
- *
+ * 
+ * @author Mike Burton
+ * 
  */
 public class GuiceInjectableApplication extends GuiceApplication {
     @Override

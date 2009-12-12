@@ -50,7 +50,6 @@ package roboguice.inject;
  * From http://code.google.com/p/google-guice/wiki/CustomScopes
  */
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,11 +61,16 @@ import com.google.inject.Scope;
 
 import android.content.Context;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 public class ContextScope implements Scope {
 
     protected static final Provider<Object> SEEDED_KEY_PROVIDER = new Provider<Object>() {
         public Object get() {
-            throw new IllegalStateException("If you got here then it means that your code asked for scoped object which should have been explicitly seeded in this scope by calling ContextScope.seed(), but was not.");
+            throw new IllegalStateException(
+            "If you got here then it means that your code asked for scoped object which should have been explicitly seeded in this scope by calling ContextScope.seed(), but was not.");
         }
     };
 
@@ -75,33 +79,32 @@ public class ContextScope implements Scope {
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
 
     /**
-     * Scopes can be entered multiple times with no problems (eg. from onCreate(), onStart(), etc).
-     * However, once they're closed, all their previous values are gone forever
-     * until the scope is reinitialized again via enter().
+     * Scopes can be entered multiple times with no problems (eg. from
+     * onCreate(), onStart(), etc). However, once they're closed, all their
+     * previous values are gone forever until the scope is reinitialized again
+     * via enter().
      */
-    public void enter( Context context ) {
-        if(values.get()==null )
-            values.set( new HashMap<Key<?>,Object>( ) );
+    public void enter(Context context) {
+        if (values.get() == null) {
+            values.set(new HashMap<Key<?>, Object>());
+        }
 
         values.get().put(Key.get(Context.class), context);
     }
 
-
-    public void exit( Context context ) {
+    public void exit(Context context) {
         values.remove();
     }
 
-
-    public void registerViewForInjection( ViewMembersInjector<?> injector ) {
+    public void registerViewForInjection(ViewMembersInjector<?> injector) {
         viewsForInjection.add(injector);
     }
 
     public void injectViews() {
-        for( int i=viewsForInjection.size()-1; i>=0 ; --i )
+        for (int i = viewsForInjection.size() - 1; i >= 0; --i) {
             viewsForInjection.remove(i).reallyInjectMembers();
+        }
     }
-
-
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
@@ -121,8 +124,9 @@ public class ContextScope implements Scope {
 
     protected <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
         final Map<Key<?>, Object> scopedObjects = values.get();
-        if (scopedObjects == null)
+        if (scopedObjects == null) {
             throw new OutOfScopeException("Cannot access " + key + " outside of a scoping block");
+        }
 
         return scopedObjects;
     }
@@ -130,7 +134,7 @@ public class ContextScope implements Scope {
     /**
      * Returns a provider that always throws exception complaining that the
      * object in question must be seeded before it can be injected.
-     *
+     * 
      * @return typed provider
      */
     @SuppressWarnings( { "unchecked" })

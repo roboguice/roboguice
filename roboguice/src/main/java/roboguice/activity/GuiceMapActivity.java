@@ -27,10 +27,12 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 /**
- * A {@link GuiceMapActivity} extends from {@link MapActivity} to provide dynamic injection of collaborators, using
- * Google Guice.<br />
- *
+ * A {@link GuiceMapActivity} extends from {@link MapActivity} to provide
+ * dynamic injection of collaborators, using Google Guice.<br />
+ * 
  * @see GuiceActivity
+ * 
+ * @author Mike Burton
  */
 public abstract class GuiceMapActivity extends MapActivity implements InjectorProvider {
     protected ContextScope scope;
@@ -43,7 +45,6 @@ public abstract class GuiceMapActivity extends MapActivity implements InjectorPr
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
     }
-
 
     @Override
     public void setContentView(int layoutResID) {

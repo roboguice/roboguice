@@ -35,20 +35,20 @@ import com.google.inject.Singleton;
  * You will usually want your converters to be singletons, so you should
  * annotate them with {@link Singleton}.<br />
  * <br />
- * Please notice that the context in which the bean that gets the extra
- * injected is scoped should implements {@link InjectorProvider} to get
- * the convert mechanism to work. This is because the {@link ExtrasMembersInjector}
- * need an {@link Injector} to get an {@link ExtraConverter} instance.
- *
+ * Please notice that the context in which the bean that gets the extra injected
+ * is scoped should implements {@link InjectorProvider} to get the convert
+ * mechanism to work. This is because the {@link ExtrasMembersInjector} need an
+ * {@link Injector} to get an {@link ExtraConverter} instance.
+ * 
  * @param <FROM>
  * @param <TO>
- *
- * @author py.ricau+robo-guice@gmail.com (Pierre-Yves Ricau)
+ * 
+ * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
 public interface ExtraConverter<FROM, TO> {
     /**
      * Converts an instance of FROM to an instances of TO. May return null.
-     *
+     * 
      * @param from
      *            The extra value to be converted.
      * @return The converted object that will be injected.

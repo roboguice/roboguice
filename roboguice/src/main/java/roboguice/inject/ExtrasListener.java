@@ -34,6 +34,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+/**
+ * 
+ * @author Mike Burton
+ * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
+ */
 public class ExtrasListener implements TypeListener {
     protected Provider<Context> contextProvider;
 
@@ -47,8 +52,7 @@ public class ExtrasListener implements TypeListener {
         while (c != null) {
             for (Field field : c.getDeclaredFields()) {
                 if (field.isAnnotationPresent(InjectExtra.class)) {
-                    typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field
-                            .getAnnotation(InjectExtra.class)));
+                    typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
                 }
             }
             c = c.getSuperclass();
@@ -57,9 +61,9 @@ public class ExtrasListener implements TypeListener {
 }
 
 class ExtrasMembersInjector<T> implements MembersInjector<T> {
-    protected Field             field;
+    protected Field field;
     protected Provider<Context> contextProvider;
-    protected InjectExtra       annotation;
+    protected InjectExtra annotation;
 
     public ExtrasMembersInjector(Field field, Provider<Context> contextProvider, InjectExtra annotation) {
         this.field = field;
@@ -81,12 +85,12 @@ class ExtrasMembersInjector<T> implements MembersInjector<T> {
         final Bundle extras = activity.getIntent().getExtras();
 
         if (extras == null || !extras.containsKey(id)) {
-            // If no extra found and the extra injection is optional, no injection happens.
+            // If no extra found and the extra injection is optional, no
+            // injection happens.
             if (annotation.optional()) {
                 return;
             } else {
-                throw new IllegalStateException(String.format(
-                        "Can't find the mandatory extra identified by key [%s] on field %s.%s", id, field
+                throw new IllegalStateException(String.format("Can't find the mandatory extra identified by key [%s] on field %s.%s", id, field
                         .getDeclaringClass(), field.getName()));
             }
         }
@@ -95,20 +99,20 @@ class ExtrasMembersInjector<T> implements MembersInjector<T> {
 
         // Context must implement InjectorProvider to enable extra conversion
         if (context instanceof InjectorProvider) {
-            Injector injector = ((InjectorProvider)context).getInjector();
+            Injector injector = ((InjectorProvider) context).getInjector();
             value = convert(field, value, injector);
         }
 
         /*
          * Please notice : null checking is done AFTER conversion. Having
+         * 
          * @Nullable on a field means "the injected value might be null", ie
          * "the converted value might be null". Which also means that if you
          * don't use @Nullable and a converter returns null, an exception will
          * be thrown (which I find to be the most logic behavior).
          */
         if (value == null && field.getAnnotation(Nullable.class) == null) {
-            throw new NullPointerException(String.format(
-                    "Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
+            throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
                     .getName()));
         }
 
@@ -121,8 +125,8 @@ class ExtrasMembersInjector<T> implements MembersInjector<T> {
             throw new RuntimeException(e);
 
         } catch (IllegalArgumentException f) {
-            throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s",
-                    value != null ? value.getClass() : "(null)", value, field.getType(), field.getName()));
+            throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
+                    field.getType(), field.getName()));
         }
     }
 
@@ -130,9 +134,9 @@ class ExtrasMembersInjector<T> implements MembersInjector<T> {
     protected Object convert(Field field, Object value, Injector injector) {
 
         // Don't try to convert null or primitives
-        if (value == null || field.getType().isPrimitive() )
+        if (value == null || field.getType().isPrimitive()) {
             return value;
-
+        }
 
         // Building parameterized converter type
         // Please notice that the extra type and the field type must EXACTLY

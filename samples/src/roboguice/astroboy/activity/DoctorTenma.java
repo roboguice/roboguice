@@ -33,14 +33,13 @@ import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
-
-import com.google.inject.Inject;
-import com.google.inject.internal.Nullable;
-
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
+import com.google.inject.Inject;
+import com.google.inject.internal.Nullable;
 
 public class DoctorTenma extends GuiceActivity {
     // You can inject arbitrary View, String, and other types of resources.
@@ -95,7 +94,7 @@ public class DoctorTenma extends GuiceActivity {
 
     /**
      * This is a more flexible way to inject a bean : a converter is configured
-     * and bound, and robo-guice uses this converter to create a Person from a
+     * and bound, and RoboGuice uses this converter to create a Person from a
      * String extra. See {@link PersonExtraConverter} and {@link AstroboyModule}
      * .
      */

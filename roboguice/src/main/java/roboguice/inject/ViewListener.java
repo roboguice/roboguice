@@ -30,41 +30,48 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 
+/**
+ * 
+ * @author Mike Burton
+ */
 public class ViewListener implements StaticTypeListener {
-    protected Provider<Context> context;
-    protected Application app;
+    protected Provider<Context> contextProvider;
+    protected Application application;
     protected ContextScope scope;
 
-    public ViewListener( Provider<Context> context, Application app, ContextScope scope ) {
-        this.context = context;
-        this.app = app;
+    public ViewListener(Provider<Context> contextProvider, Application application, ContextScope scope) {
+        this.contextProvider = contextProvider;
+        this.application = application;
         this.scope = scope;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
         Class<?> c = typeLiteral.getRawType();
-        while( c!=null ) {
-            for (Field field : c.getDeclaredFields())
-                if( !Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) )
-                    typeEncounter.register(new ViewMembersInjector<I>(field, context, field.getAnnotation(InjectView.class), scope));
+        while (c != null) {
+            for (Field field : c.getDeclaredFields()) {
+                if (!Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class)) {
+                    typeEncounter.register(new ViewMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectView.class), scope));
+                }
+            }
             c = c.getSuperclass();
         }
     }
 
     @SuppressWarnings("unchecked")
     public void requestStaticInjection(Class<?>... types) {
-        for( Class<?> c : types ) {
-            while( c!=null ) {
-                for (Field field : c.getDeclaredFields())
-                    if( Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class) )
-                        new ViewMembersInjector(field, context, field.getAnnotation(InjectView.class), scope).injectMembers(null);
+        for (Class<?> c : types) {
+            while (c != null) {
+                for (Field field : c.getDeclaredFields()) {
+                    if (Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class)) {
+                        new ViewMembersInjector(field, contextProvider, field.getAnnotation(InjectView.class), scope).injectMembers(null);
+                    }
+                }
                 c = c.getSuperclass();
             }
         }
 
     }
 }
-
 
 class ViewMembersInjector<T> implements MembersInjector<T> {
     protected Field field;
@@ -73,7 +80,7 @@ class ViewMembersInjector<T> implements MembersInjector<T> {
     protected ContextScope scope;
     protected T instance;
 
-    public ViewMembersInjector( Field field, Provider<Context> contextProvider, InjectView annotation, ContextScope scope ) {
+    public ViewMembersInjector(Field field, Provider<Context> contextProvider, InjectView annotation, ContextScope scope) {
         this.field = field;
         this.annotation = annotation;
         this.contextProvider = contextProvider;
@@ -83,7 +90,7 @@ class ViewMembersInjector<T> implements MembersInjector<T> {
     public void injectMembers(T instance) {
         // Mark instance for injection during setContentView
         this.instance = instance;
-        scope.registerViewForInjection( this );
+        scope.registerViewForInjection(this);
     }
 
     public void reallyInjectMembers() {
@@ -95,17 +102,20 @@ class ViewMembersInjector<T> implements MembersInjector<T> {
 
             value = ((Activity) contextProvider.get()).findViewById(annotation.value());
 
-            if( value==null && field.getAnnotation(Nullable.class)==null )
-                throw new NullPointerException( String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName() ));
+            if (value == null && field.getAnnotation(Nullable.class) == null) {
+                throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
+                        .getName()));
+            }
 
             field.setAccessible(true);
-            field.set(instance, value );
+            field.set(instance, value);
 
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
 
-        } catch (IllegalArgumentException f ) {
-            throw new IllegalArgumentException( String.format("Can't assign %s value %s to %s field %s", value!=null ? value.getClass() : "(null)", value, field.getType(), field.getName() ));
+        } catch (IllegalArgumentException f) {
+            throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
+                    field.getType(), field.getName()));
         }
     }
 }

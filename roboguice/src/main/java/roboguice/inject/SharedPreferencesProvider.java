@@ -22,8 +22,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 /**
- * 
+ *
  * @author Mike Burton
+ * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
     protected static final String DEFAULT = "default";
@@ -46,10 +47,11 @@ public class SharedPreferencesProvider implements Provider<SharedPreferences> {
         return contextProvider.get().getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
     }
 
+    // http://code.google.com/p/google-guice/wiki/FrequentlyAskedQuestions => How can I inject optional parameters into a constructor?
     static class PreferencesNameHolder {
         @Inject(optional = true)
         @SharedPreferencesName
-        private String value = DEFAULT;
+        protected String value = DEFAULT;
     }
 
 }

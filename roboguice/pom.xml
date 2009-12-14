@@ -6,7 +6,7 @@
     <groupId>roboguice</groupId>
     <artifactId>roboguice</artifactId>
     <name>roboguice</name>
-    <version>0.5-SNAPSHOT</version>
+    <version>1.0-RC1</version>
 
     <description>
     A framework for using Google Guice dependency injection in Android.

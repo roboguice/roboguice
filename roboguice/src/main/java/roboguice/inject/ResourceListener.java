@@ -24,7 +24,7 @@ import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 
 import android.app.Application;
-import android.content.res.TypedArray;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 
 
@@ -87,20 +87,16 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
 
             final int id = annotation.value();
             final Class<?> t = field.getType();
+            final Resources resources = application.getResources();
 
             if (String.class.isAssignableFrom(t)) {
-                value = application.getResources().getString(id);
+                value = resources.getString(id);
             } else if (Drawable.class.isAssignableFrom(t)) {
-                value = application.getResources().getDrawable(id);
+                value = resources.getDrawable(id);
             } else if (String[].class.isAssignableFrom(t)) {
-                    // <array> resource
-                value = application.getResources().getStringArray(id);
-            } else if (int.class.isAssignableFrom(t) || Integer.class.isAssignableFrom(t)) {
-                    // <color> resource
-                value = application.getResources().getColor(id);
+                value = resources.getStringArray(id);
             } else if (int[].class.isAssignableFrom(t) || Integer[].class.isAssignableFrom(t)) {
-                    // <integer-array>
-                value = readResIntArray(id);
+                value = resources.getIntArray(id);
             }
 
             if (value == null && field.getAnnotation(Nullable.class) == null) {
@@ -118,38 +114,5 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
             throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
                     field.getType(), field.getName()));
         }
-    }
-
-
-    /**
-     * Read Android's <integer-array> resource.
-     * Under normal circumstances we could simply use getResources().getIntArray(id) and
-     * it works fine if your resource look like:
-     *      <integer-array name="myInts">
-     *          <item>1</item>
-     *          <item>2</item>
-     *          <item>3</item>
-     *          <item>99</item>
-     *      </integer-array>
-     * Unfortunately it doesn't work if you want to address id's of other resources, e.g.
-     *      <integer-array name="myInts">
-     *          <item>@drawable/my_icon</item>
-     *          <item>@drawable/main_menu</item>
-     *      </integer-array>
-     * In this case getIntArray() returns zero for @items.
-     * This method provides work-around to fix this issue.
-     * @return  Array of ints.
-     */
-    private int[] readResIntArray(int id) {
-
-        final TypedArray typedArray = this.application.getResources().obtainTypedArray(id);
-        final int len = typedArray.length();
-        final int[] values = new int[len];
-        for (int i = 0; i < len; i++) {
-            final int value = typedArray.getResourceId(i, 0);
-            values[i] = (value == 0) ? typedArray.getInt(i, 0) : value;
-        }
-        typedArray.recycle();
-        return values;
     }
 }

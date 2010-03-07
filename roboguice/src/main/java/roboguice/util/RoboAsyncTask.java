@@ -7,6 +7,12 @@ import android.content.Context;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+/**
+ * Allows injection to happen for tasks that execute in a background thread.
+ * 
+ * @param <ArgumentT>
+ * @param <ResultT>
+ */
 public abstract class RoboAsyncTask<ArgumentT, ResultT> extends SafeAsyncTask<ArgumentT, ResultT> {
     @Inject static protected Provider<Context> contextProvider;
     @Inject static protected Provider<ContextScope> scopeProvider;

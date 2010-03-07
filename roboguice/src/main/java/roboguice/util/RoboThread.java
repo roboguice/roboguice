@@ -7,6 +7,14 @@ import android.content.Context;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+/**
+ * An extension to {@link Thread} that which propogates the current
+ * Context to the background thread.
+ *
+ * Current limitations:  any parameters set in the RoboThread are
+ * ignored other than Runnable.  This means that priorities, groups,
+ * names, etc. won't be honored. Yet.
+ */
 public class RoboThread extends Thread {
     @Inject static protected Provider<Context> contextProvider;
     @Inject static protected Provider<ContextScope> scopeProvider;

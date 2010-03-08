@@ -11,7 +11,32 @@ import com.google.inject.Injector;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 
-public class RoboUnitTestCase<T extends GuiceApplication> extends InstrumentationTestCase {
+/**
+ * Use RoboUnitTestCase when you'd like to make simple unit tests that
+ * may depend on Context resources, but do not depend on Activities,
+ * Services, ContentProviders, or other Contexts directly.
+ *
+ * An example:
+ *
+ * <code>
+ * public class MyTest extends RoboUnitTestCase<MyApplication> {
+ *
+ *  // Make sure you use one of the @*Test annotations AND begin
+ *  // your testcase's name with "test"
+ *  @MediumTest
+ *  public void test01() {
+ *      // Make sure you're using com.mydomain.R, not com.mydomain.test.R
+ *      assertEquals("Hello World, Lop!", getContext().getString(com.mydomain.R.string.hello));
+ *  }
+ *
+ * }
+ * </code>
+ *
+ * @param <AppType> The type of your Application class.  This class must have a
+ *                  constructor that accepts a Context argument and calls
+ *                  {@link android.app.Application#attachBaseContext(android.content.Context)}
+ */
+public class RoboUnitTestCase<AppType extends GuiceApplication> extends InstrumentationTestCase {
     protected Injector injector;
 
     @Override

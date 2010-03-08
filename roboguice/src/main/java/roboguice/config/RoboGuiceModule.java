@@ -1,31 +1,11 @@
 package roboguice.config;
 
-import java.util.List;
-
 import roboguice.application.GuiceApplication;
-import roboguice.inject.ActivityProvider;
-import roboguice.inject.ContentResolverProvider;
-import roboguice.inject.ContextScope;
-import roboguice.inject.ContextScoped;
-import roboguice.inject.ExtrasListener;
-import roboguice.inject.ResourceListener;
-import roboguice.inject.ResourcesProvider;
-import roboguice.inject.SharedPreferencesProvider;
-import roboguice.inject.SystemServiceProvider;
-import roboguice.inject.ViewListener;
+import roboguice.inject.*;
+import roboguice.util.RoboAsyncTask;
+import roboguice.util.RoboThread;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.matcher.Matchers;
-
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.Application;
-import android.app.KeyguardManager;
-import android.app.NotificationManager;
-import android.app.SearchManager;
+import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -38,6 +18,13 @@ import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Module;
+import com.google.inject.Provider;
+import com.google.inject.matcher.Matchers;
+
+import java.util.List;
 
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
@@ -112,6 +99,10 @@ public class RoboGuiceModule extends AbstractModule {
         bindListener(Matchers.any(), resourceListener);
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
+
+        requestStaticInjection( RoboThread.class );
+        requestStaticInjection( RoboAsyncTask.class );
+        
     }
 
 }

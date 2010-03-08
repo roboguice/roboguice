@@ -11,7 +11,7 @@ import com.google.inject.Injector;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 
-public class RoboInstrumentationTestCase<T extends GuiceApplication> extends InstrumentationTestCase {
+public class RoboUnitTestCase<T extends GuiceApplication> extends InstrumentationTestCase {
     protected Injector injector;
 
     @Override

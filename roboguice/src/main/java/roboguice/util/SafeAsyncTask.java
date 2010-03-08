@@ -70,7 +70,6 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
                     return rtrn;
 
                 } catch( final Exception e ) {
-                    Log.d("roboguice", "Exception caught during background processing", e);
                     try {
                         postToUiThreadAndWait( new Callable<Object>() {
                             public Object call() throws Exception {
@@ -164,10 +163,15 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
     protected void onSuccess( ResultT t ) throws Exception {}
 
     /**
+     * Logs the exception as an Error by default, but this method may
+     * be overridden by subclasses.
+     * 
      * @param e the exception thrown from {@link #onPreExecute()}, {@link #doInBackground(Object)}, or {@link #onSuccess(Object)}
      * @throws RuntimeException, ignored
      */
-    protected void onException( Exception e ) {}
+    protected void onException( Exception e ) {
+        Log.e("roboguice", "Exception caught during background processing", e);
+    }
 
     /**
      * @throws RuntimeException, ignored

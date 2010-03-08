@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 /**
- * An extension to {@link Thread} that which propogates the current
+ * An extension to {@link Thread} which propogates the current
  * Context to the background thread.
  *
  * Current limitations:  any parameters set in the RoboThread are

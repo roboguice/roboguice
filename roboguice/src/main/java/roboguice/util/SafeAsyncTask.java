@@ -10,8 +10,8 @@ import java.util.concurrent.*;
  *
  * Unlike AsyncTask, this class properly propagates exceptions.
  *
- * Current limitations: does not yet handle cancel or progress, although it shouldn't be
- * hard to add these.  Also, it doesn't support the ellipsis operator in execute(), but this can be
+ * Current limitations: does not yet handle progress, although it shouldn't be
+ * hard to add.  Also, it doesn't support the ellipsis operator in execute(), but this can be
  * simulated with a collection
  * 
  * @param <ArgumentT>
@@ -22,6 +22,7 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
 
     protected Handler handler;
     protected ThreadFactory threadFactory;
+    protected FutureTask<ResultT> future;
 
 
     public SafeAsyncTask() {
@@ -46,7 +47,7 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
 
 
     public SafeAsyncTask<ArgumentT,ResultT> execute( final ArgumentT arg ) {
-        final FutureTask<ResultT> internalTask = new FutureTask<ResultT>( new Callable<ResultT>() {
+        future = new FutureTask<ResultT>( new Callable<ResultT>() {
             public ResultT call() throws Exception {
                 try {
                     postToUiThreadAndWait( new Callable<Object>() {
@@ -73,7 +74,10 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
                     try {
                         postToUiThreadAndWait( new Callable<Object>() {
                             public Object call() throws Exception {
-                                onException(e);
+                                if( e instanceof InterruptedException )
+                                    onInterrupted((InterruptedException)e);
+                                else
+                                    onException(e);
                                 return null;
                             }
                         });
@@ -96,9 +100,13 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
             }
         });
 
-        threadFactory.newThread( internalTask ).start();
+        threadFactory.newThread( future ).start();
 
         return this;
+    }
+
+    public boolean cancel( boolean mayInterruptIfRunning ) {
+        return future != null && future.cancel(mayInterruptIfRunning);
     }
 
     /**
@@ -160,12 +168,27 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
      * @param t the result of {@link #doInBackground(Object)}
      * @throws Exception, captured on passed to onException() if present.
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     protected void onSuccess( ResultT t ) throws Exception {}
+
+    /**
+     * Called when the thread has been interrupted, likely because
+     * the task was canceled.
+     *
+     * By default, calls {@link #onException(Exception)}, but this method
+     * may be overridden to handle interruptions differently than other
+     * exceptions.
+     *
+     * @param e the exception thrown from {@link #onPreExecute()}, {@link #doInBackground(Object)}, or {@link #onSuccess(Object)}
+     */
+    protected void onInterrupted( InterruptedException e ) {
+        onException(e);
+    }
 
     /**
      * Logs the exception as an Error by default, but this method may
      * be overridden by subclasses.
-     * 
+     *
      * @param e the exception thrown from {@link #onPreExecute()}, {@link #doInBackground(Object)}, or {@link #onSuccess(Object)}
      * @throws RuntimeException, ignored
      */

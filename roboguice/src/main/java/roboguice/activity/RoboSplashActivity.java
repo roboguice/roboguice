@@ -1,6 +1,6 @@
 package roboguice.activity;
 
-import roboguice.application.GuiceApplication;
+import roboguice.application.RoboApplication;
 import roboguice.inject.ContextScope;
 
 import android.app.Activity;
@@ -33,7 +33,7 @@ public abstract class RoboSplashActivity extends Activity {
                 // Set up a new thread since app.getInjector() takes so long
                 // Set the execution context for this thread in case the user
                 // want to use the injector
-                final GuiceApplication app = (GuiceApplication) getApplication();
+                final RoboApplication app = (RoboApplication) getApplication();
                 final ContextScope scope = app.getInjector().getInstance(ContextScope.class);
 
                 scope.enter(app);
@@ -67,7 +67,7 @@ public abstract class RoboSplashActivity extends Activity {
      * 
      * @param app
      */
-    protected void doStuffInBackground(GuiceApplication app) {
+    protected void doStuffInBackground(RoboApplication app) {
     }
 
     /**

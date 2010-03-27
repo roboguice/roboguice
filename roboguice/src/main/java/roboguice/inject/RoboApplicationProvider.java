@@ -26,7 +26,7 @@ import android.app.Application;
  * @author Mike Burton
  */
 @Singleton
-public class GuiceApplicationProvider<T extends Application> implements Provider<T> {
+public class RoboApplicationProvider<T extends Application> implements Provider<T> {
     @Inject
     protected Application application;
 

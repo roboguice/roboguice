@@ -1,6 +1,6 @@
 package roboguice.test;
 
-import roboguice.application.GuiceApplication;
+import roboguice.application.RoboApplication;
 import roboguice.inject.ContextScope;
 
 import android.content.Context;
@@ -36,14 +36,14 @@ import java.lang.reflect.ParameterizedType;
  *                  constructor that accepts a Context argument and calls
  *                  {@link android.app.Application#attachBaseContext(android.content.Context)}
  */
-public class RoboUnitTestCase<AppType extends GuiceApplication> extends InstrumentationTestCase {
+public class RoboUnitTestCase<AppType extends RoboApplication> extends InstrumentationTestCase {
     protected Injector injector;
 
     @Override
     protected void runTest() throws Throwable {
         final Context context = getInstrumentation().getTargetContext();
         final Constructor constructor = applicationType().getConstructor(Context.class);
-        final GuiceApplication app = (GuiceApplication)constructor.newInstance(context);
+        final RoboApplication app = (RoboApplication)constructor.newInstance(context);
         injector = app.getInjector();
         final ContextScope scope = injector.getInstance(ContextScope.class);
 
@@ -59,9 +59,9 @@ public class RoboUnitTestCase<AppType extends GuiceApplication> extends Instrume
         return injector;
     }
 
-    protected Class<? extends GuiceApplication> applicationType() {
+    protected Class<? extends RoboApplication> applicationType() {
         final ParameterizedType parameterizedType = (ParameterizedType) getClass().getGenericSuperclass();
-        return (Class<? extends GuiceApplication>) parameterizedType.getActualTypeArguments()[0];
+        return (Class<? extends RoboApplication>) parameterizedType.getActualTypeArguments()[0];
     }
 
 }

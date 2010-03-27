@@ -20,7 +20,7 @@ import roboguice.inject.ContextScope;
 import com.google.inject.Injector;
 
 /**
- * Like GuiceApplication, but allows you to inject resource into the application
+ * Like RoboApplication, but allows you to inject resource into the application
  * itself.
  * 
  * Introduces additional cost to the app's startup time, so may not be desirable
@@ -29,7 +29,7 @@ import com.google.inject.Injector;
  * @author Mike Burton
  * 
  */
-public class GuiceInjectableApplication extends GuiceApplication {
+public class RoboInjectableApplication extends RoboApplication {
     @Override
     public void onCreate() {
         super.onCreate();

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import roboguice.config.AbstractAndroidModule;
-import roboguice.config.RoboGuiceModule;
+import roboguice.config.RoboModule;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectorProvider;
@@ -52,13 +52,13 @@ import android.content.Context;
  * <br />
  * For instance : <br /> {@code <application android:icon="@drawable/icon"
  * android:label="@string/app_name"
- * android:name="roboguice.application.GuiceApplication"> [...] </application> }
+ * android:name="roboguice.application.RoboApplication"> [...] </application> }
  * 
- * @see GuiceInjectableApplication How to get your Application injected as well.
+ * @see RoboInjectableApplication How to get your Application injected as well.
  * 
  * @author Mike Burton
  */
-public class GuiceApplication extends Application implements InjectorProvider {
+public class RoboApplication extends Application implements InjectorProvider {
 
     /**
      * The {@link Injector} of your application.
@@ -95,7 +95,7 @@ public class GuiceApplication extends Application implements InjectorProvider {
     }
 
     /**
-     * Since we don't create the injector when the {@link GuiceApplication} is
+     * Since we don't create the injector when the {@link RoboApplication} is
      * instantiated, but rather when getInjector is first called (lazy
      * initialization), the same lazy initialization is applied to this
      * application instance members, which are not used until the injector is
@@ -115,7 +115,7 @@ public class GuiceApplication extends Application implements InjectorProvider {
 
     /**
      * Creates an {@link Injector} configured for this application. This
-     * {@link Injector} will be configured with a {@link RoboGuiceModule} , plus
+     * {@link Injector} will be configured with a {@link roboguice.config.RoboModule} , plus
      * any {@link Module} you might add by overriding
      * {@link #addApplicationModules(List)}. <br />
      * <br />
@@ -124,7 +124,7 @@ public class GuiceApplication extends Application implements InjectorProvider {
      */
     protected Injector createInjector() {
         ArrayList<Module> modules = new ArrayList<Module>();
-        Module roboguiceModule = new RoboGuiceModule(contextScope, throwingContextProvider, contextProvider, resourceListener, viewListener, extrasListener,
+        Module roboguiceModule = new RoboModule(contextScope, throwingContextProvider, contextProvider, resourceListener, viewListener, extrasListener,
                 this);
         modules.add(roboguiceModule);
         addApplicationModules(modules);

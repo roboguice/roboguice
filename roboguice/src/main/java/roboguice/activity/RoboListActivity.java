@@ -15,7 +15,7 @@
  */
 package roboguice.activity;
 
-import roboguice.application.GuiceApplication;
+import roboguice.application.RoboApplication;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
 
@@ -94,10 +94,10 @@ public class RoboListActivity extends ListActivity implements InjectorProvider {
     }
 
     /**
-     * @see GuiceApplication#getInjector()
+     * @see roboguice.application.RoboApplication#getInjector()
      */
     public Injector getInjector() {
-        return ((GuiceApplication) getApplication()).getInjector();
+        return ((RoboApplication) getApplication()).getInjector();
     }
 
 }

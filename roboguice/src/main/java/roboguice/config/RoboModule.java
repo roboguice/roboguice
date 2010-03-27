@@ -1,6 +1,5 @@
 package roboguice.config;
 
-import roboguice.application.GuiceApplication;
 import roboguice.inject.*;
 import roboguice.util.RoboAsyncTask;
 import roboguice.util.RoboThread;
@@ -29,12 +28,12 @@ import java.util.List;
 
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
- * Used by {@link GuiceApplication}.
+ * Used by {@link roboguice.application.RoboApplication}.
  * 
  * @author Mike Burton
  * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
-public class RoboGuiceModule extends AbstractModule {
+public class RoboModule extends AbstractModule {
 
     protected final ContextScope contextScope;
     protected final Provider<Context> throwingContextProvider;
@@ -44,7 +43,7 @@ public class RoboGuiceModule extends AbstractModule {
     protected final ExtrasListener extrasListener;
     protected final Application application;
 
-    public RoboGuiceModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
+    public RoboModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
             ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener, Application application) {
         this.contextScope = contextScope;
         this.throwingContextProvider = throwingContextProvider;
@@ -61,7 +60,7 @@ public class RoboGuiceModule extends AbstractModule {
      * If you want to provide your own bindings, you should <strong>NOT</strong>
      * override this method, but rather create a {@link Module} implementation
      * and add it to the configuring modules by overriding
-     * {@link GuiceApplication#addApplicationModules(List)}.<br />
+     * {@link roboguice.application.RoboApplication#addApplicationModules(List)}.<br />
      */
     @SuppressWarnings("unchecked")
     @Override

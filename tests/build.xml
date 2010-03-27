@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="." default="help">
+<project name="roboguice-tests" default="help">
 
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked in in Version
@@ -63,5 +63,38 @@
          build steps are used.
     -->
     <setup />
+
+
+
+
+    <target name="build-roboguice">
+        <exec dir="../roboguice" executable="mvn" failonerror="true">
+            <arg value="package"/>
+        </exec>
+    </target>
+
+    <target name="copy-roboguice">
+        <copy todir="libs">
+            <fileset dir="../roboguice/target/" includes="*.jar" excludes="*-tests.jar,*-source.jar"/>
+            <fileset dir="../roboguice/lib" includes="guice-2.0-no_aop.jar"/>
+        </copy>
+    </target>
+
+    <target name="deploy" depends="build-roboguice,copy-roboguice">
+        <exec executable="adb" failonerror="false">
+            <arg line="-e uninstall roboguice.test"/>
+        </exec>
+        <exec executable="adb" failonerror="true">
+            <arg line="-e install bin/roboguice-tests-debug.apk"/>
+        </exec>
+    </target>
+
+    <target name="tests" depends="build-roboguice,copy-roboguice,debug,deploy">
+        <exec executable="adb" failonerror="true">
+            <arg line="shell am instrument -w roboguice.test/android.test.InstrumentationTestRunner"/>
+        </exec>
+    </target>
+
+
 
 </project>

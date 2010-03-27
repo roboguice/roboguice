@@ -1,0 +1,7 @@
+SUPPORTED TARGETS
+    mvn, or mvn package (to build)
+    mvn install         (to build and install to your ~/.m2 directory)
+    mvn javadoc:javadoc (to build javadocs)
+    mvn deploy          (for repository maintainers only)
+
+For more information, see http://code.google.com/p/roboguice/wiki/MaintainerInstructions

@@ -1,6 +1,7 @@
 syntax: regexp
 \.DS_Store
-^classes/
+target/
+classes/
 /bin/
 .*.iws$
 local.properties

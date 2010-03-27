@@ -1,0 +1,4 @@
+SUPPORTED TARGETS
+    mvn install
+    mvn javadoc:javadoc
+    mvn deploy (for repository maintainers)

@@ -15,24 +15,16 @@
  */
 package roboguice.astroboy.activity;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNull;
-
-import java.util.Date;
-
-import roboguice.activity.GuiceActivity;
+import roboguice.activity.RoboActivity;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
-import roboguice.astroboy.bean.DateExtraConverter;
-import roboguice.astroboy.bean.DateTwiceExtraConverter;
-import roboguice.astroboy.bean.Person;
-import roboguice.astroboy.bean.PersonExtraConverter;
-import roboguice.astroboy.bean.PersonFromNameExtraProvider;
+import roboguice.astroboy.bean.*;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,7 +33,12 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 import com.google.inject.internal.Nullable;
 
-public class DoctorTenma extends GuiceActivity {
+import java.util.Date;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNull;
+
+public class DoctorTenma extends RoboActivity {
     // You can inject arbitrary View, String, and other types of resources.
     // See ResourceListener for details.
     @InjectView(R.id.widget1)

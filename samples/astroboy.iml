@@ -18,17 +18,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library name="guice-2.0-no_aop.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/../roboguice/lib/guice-2.0-no_aop.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../roboguice/lib/guice-2.0-src.jar!/" />
-        </SOURCES>
-      </library>
-    </orderEntry>
     <orderEntry type="library" scope="PROVIDED" name="Android 1.5 Google APIs" level="application" />
     <orderEntry type="module" module-name="roboguice" />
   </component>

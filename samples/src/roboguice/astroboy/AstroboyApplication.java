@@ -15,13 +15,13 @@
  */
 package roboguice.astroboy;
 
-import java.util.List;
-
-import roboguice.application.GuiceApplication;
+import roboguice.application.RoboApplication;
 
 import com.google.inject.Module;
 
-public class AstroboyApplication extends GuiceApplication {
+import java.util.List;
+
+public class AstroboyApplication extends RoboApplication {
 
     @Override
     protected void addApplicationModules(List<Module> modules) {

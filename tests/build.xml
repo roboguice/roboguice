@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="android" default="help">
+
+    <import file="android.xml" />
+
+    <target name="get-roboguice">
+        <copy file="/Users/mike/.m2/repository/roboguice/roboguice/1.1-SNAPSHOT/roboguice-1.1-SNAPSHOT.jar"
+              todir="libs"/>
+        <copy file="../roboguice/lib/guice-2.0-no_aop.jar"
+              todir="libs"/>
+    </target>
+
+</project>

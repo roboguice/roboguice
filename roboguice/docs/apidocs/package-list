@@ -2,3 +2,5 @@ roboguice.activity
 roboguice.application
 roboguice.config
 roboguice.inject
+roboguice.test
+roboguice.util

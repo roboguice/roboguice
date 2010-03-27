@@ -19,47 +19,25 @@ import roboguice.application.GuiceApplication;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
 
-import com.google.inject.Injector;
-
-import android.app.Activity;
+import android.app.LauncherActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
+import com.google.inject.Injector;
+
 /**
- * A {@link GuiceActivity} extends from {@link Activity} to provide dynamic
- * injection of collaborators, using Google Guice.<br />
- * <br />
- * Your own activities that usually extend from {@link Activity} should now
- * extend from {@link GuiceActivity}.<br />
- * <br />
- * If your activities extend from subclasses of {@link Activity} provided by the
- * Android SDK, we provided Guice versions as well for the most used : see
- * {@link GuiceExpandableListActivity}, {@link GuiceListActivity}, and other
- * classes located in package <strong>roboguice.activity</strong>.<br />
- * <br />
- * If we didn't provide what you need, you have two options : either post an
- * issue on <a href="http://code.google.com/p/roboguice/issues/list">the bug
- * tracker</a>, or implement it yourself. Have a look at the source code of this
- * class ({@link GuiceActivity}), you won't have to write that much changes. And
- * of course, you are welcome to contribute and send your implementations to the
- * RoboGuice project.<br />
- * <br />
- * Please be aware that collaborators are not injected into this until you call
- * {@link #setContentView(int)} (calling any of the overloads of this methods
- * will work).<br />
- * <br />
- * You can have access to the Guice {@link Injector} at any time, by calling
- * {@link #getInjector()}.<br />
- * However, you will not have access to Context scoped beans until
- * {@link #onCreate(Bundle)} is called. <br />
- * <br />
+ * A {@link RoboLauncherActivity} extends from {@link LauncherActivity} to provide
+ * dynamic injection of collaborators, using Google Guice.<br />
  * 
- * @author Mike Burton
+ * @see RoboActivity
+ * 
+ * @author Toly Pochkin
  */
-public class GuiceActivity extends Activity implements InjectorProvider {
+public class RoboLauncherActivity extends LauncherActivity implements InjectorProvider {
     protected ContextScope scope;
 
+    /** {@inheritDoc } */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = getInjector();
@@ -69,45 +47,52 @@ public class GuiceActivity extends Activity implements InjectorProvider {
         super.onCreate(savedInstanceState);
     }
 
+    /** {@inheritDoc } */
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         scope.injectViews();
     }
 
+    /** {@inheritDoc } */
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
         scope.injectViews();
     }
 
+    /** {@inheritDoc } */
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
         scope.injectViews();
     }
 
-    @Override
-    public Object onRetainNonConfigurationInstance() {
-        return this;
-    }
-
+    /** {@inheritDoc } */
     @Override
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
     }
 
+    /** {@inheritDoc } */
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
     }
 
+    /** {@inheritDoc } */
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
+    }
+
+    /** {@inheritDoc } */
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        return this;
     }
 
     @Override

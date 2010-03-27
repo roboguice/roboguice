@@ -19,22 +19,22 @@ import roboguice.application.GuiceApplication;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
 
+import com.google.android.maps.MapActivity;
 import com.google.inject.Injector;
 
-import android.app.ListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 /**
- * A {@link GuiceListActivity} extends from {@link ListActivity} to provide
+ * A {@link RoboMapActivity} extends from {@link MapActivity} to provide
  * dynamic injection of collaborators, using Google Guice.<br />
  * 
- * @see GuiceActivity
+ * @see RoboActivity
  * 
  * @author Mike Burton
  */
-public class GuiceListActivity extends ListActivity implements InjectorProvider {
+public abstract class RoboMapActivity extends MapActivity implements InjectorProvider {
     protected ContextScope scope;
 
     @Override

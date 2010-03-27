@@ -21,23 +21,23 @@ import roboguice.inject.InjectorProvider;
 
 import com.google.inject.Injector;
 
-import android.app.ExpandableListActivity;
+import android.app.TabActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 /**
- * A {@link GuiceExpandableListActivity} extends from
- * {@link ExpandableListActivity} to provide dynamic injection of collaborators,
- * using Google Guice.<br />
+ * A {@link RoboTabActivity} extends from {@link TabActivity} to provide
+ * dynamic injection of collaborators, using Google Guice.<br />
  * 
- * @see GuiceActivity
+ * @see RoboActivity
  * 
- * @author Mike Burton
+ * @author Toly Pochkin
  */
-public class GuiceExpandableListActivity extends ExpandableListActivity implements InjectorProvider {
+public class RoboTabActivity extends TabActivity implements InjectorProvider {
     protected ContextScope scope;
 
+    /** {@inheritDoc } */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = getInjector();
@@ -47,42 +47,49 @@ public class GuiceExpandableListActivity extends ExpandableListActivity implemen
         super.onCreate(savedInstanceState);
     }
 
+    /** {@inheritDoc } */
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         scope.injectViews();
     }
 
+    /** {@inheritDoc } */
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
         scope.injectViews();
     }
 
+    /** {@inheritDoc } */
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
         scope.injectViews();
     }
 
+    /** {@inheritDoc } */
     @Override
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
     }
 
+    /** {@inheritDoc } */
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
     }
 
+    /** {@inheritDoc } */
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
     }
 
+    /** {@inheritDoc } */
     @Override
     public Object onRetainNonConfigurationInstance() {
         return this;

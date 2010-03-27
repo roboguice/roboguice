@@ -21,20 +21,20 @@ import roboguice.inject.InjectorProvider;
 
 import com.google.inject.Injector;
 
-import android.app.TabActivity;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 /**
- * A {@link GuiceTabActivity} extends from {@link TabActivity} to provide
+ * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
  * dynamic injection of collaborators, using Google Guice.<br />
  * 
- * @see GuiceActivity
+ * @see RoboActivity
  * 
  * @author Toly Pochkin
  */
-public class GuiceTabActivity extends TabActivity implements InjectorProvider {
+public class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
     protected ContextScope scope;
 
     /** {@inheritDoc } */

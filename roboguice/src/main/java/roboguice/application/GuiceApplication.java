@@ -100,7 +100,7 @@ public class GuiceApplication extends Application implements InjectorProvider {
      * initialization), the same lazy initialization is applied to this
      * application instance members, which are not used until the injector is
      * first created. The main advantage is that roboguice footprint is close to
-     * zero if no GuiceActivity is used when running the application.
+     * zero if no RoboActivity is used when running the application.
      */
     protected void initInstanceMembers() {
         contextScope = new ContextScope();

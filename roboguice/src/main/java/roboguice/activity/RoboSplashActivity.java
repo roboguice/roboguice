@@ -19,7 +19,7 @@ import android.os.Bundle;
  * @author Mike Burton
  * 
  */
-public abstract class GuiceSplashActivity extends Activity {
+public abstract class RoboSplashActivity extends Activity {
     protected int minDisplayMs = (int) (2.5 * 1000);
 
     @Override

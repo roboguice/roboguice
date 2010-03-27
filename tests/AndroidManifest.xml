@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="roboguice.test">
+
+    <application android:label="RoboGuiceTests">
+
+        <uses-library android:name="android.test.runner" />
+        <!--uses-library android:name="com.google.android.maps" /-->
+
+    </application>
+
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:targetPackage="roboguice.test"
+        android:label="RoboGuice tests" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
+</manifest>

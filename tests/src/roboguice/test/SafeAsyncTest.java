@@ -182,11 +182,9 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
     }
 
 
-    /*
     @MediumTest
     public void testCancel() throws InterruptedException {
         throw new UnsupportedOperationException("not implemented yet");
     }
-    */
 
 }

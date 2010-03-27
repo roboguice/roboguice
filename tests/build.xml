@@ -89,7 +89,16 @@
         </exec>
     </target>
 
-    <target name="tests" depends="build-roboguice,copy-roboguice,debug,deploy">
+    <target name="run-emulator">
+        <exec executable="emulator" spawn="true" >
+            <arg line="-avd HVGA-20"/>
+        </exec>
+        <exec  executable="adb" failonerror="true">
+            <arg line="-e wait-for-device"/>
+        </exec>
+    </target>
+
+    <target name="tests" depends="build-roboguice,copy-roboguice,debug,run-emulator,deploy">
         <exec executable="adb" failonerror="true">
             <arg line="shell am instrument -w roboguice.test/android.test.InstrumentationTestRunner"/>
         </exec>

@@ -103,7 +103,7 @@
             <arg line="shell am instrument -w roboguice.test/android.test.InstrumentationTestRunner"/>
         </exec>
         <echo message="${instrumentation.out}"/>
-        <fail>
+        <fail message="${instrumentation.out}">
             <condition>
                 <contains string="${instrumentation.out}" substring="FAILURES!"/>
             </condition>

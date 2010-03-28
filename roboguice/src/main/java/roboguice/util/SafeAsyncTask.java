@@ -117,14 +117,13 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
      * @throws Exception on error
      */
     protected void postToUiThreadAndWait( final Callable c ) throws Exception {
-        final Semaphore semaphore = new Semaphore(1);
+        final CountDownLatch latch = new CountDownLatch(1);
         final Exception[] exceptions = new Exception[1];
 
         // Execute onSuccess in the UI thread, but wait
         // for it to complete.
         // If it throws an exception, capture that exception
         // and rethrow it later.
-        semaphore.acquire();
         handler.post( new Runnable() {
            public void run() {
                try {
@@ -132,14 +131,13 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
                } catch( Exception e ) {
                    exceptions[0] = e;
                } finally {
-                   semaphore.release();
+                   latch.countDown();
                }
            }
         });
 
         // Wait for onSuccess to finish
-        semaphore.acquire();
-        semaphore.release();
+        latch.await();
 
         if( exceptions[0] != null )
             throw exceptions[0];
@@ -147,7 +145,7 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
     }
 
     /*
-    // BUG this is illegal, because it creates a deadlock situation in most cases.
+    // This is illegal, because it creates a deadlock situation in most cases.
     // It blocks the main thread (usually the UI thread) until all the onXXX methods
     // are invoked, but the onXXX methods need to execute in the UI thread (which is
     // blocked)
@@ -192,14 +190,14 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
      * @param e the exception thrown from {@link #onPreExecute()}, {@link #doInBackground(Object)}, or {@link #onSuccess(Object)}
      * @throws RuntimeException, ignored
      */
-    protected void onException( Exception e ) {
+    protected void onException( Exception e ) throws RuntimeException {
         Log.e("roboguice", "Exception caught during background processing", e);
     }
 
     /**
      * @throws RuntimeException, ignored
      */
-    protected void onFinally() {}
+    protected void onFinally() throws RuntimeException {}
 
     /**
      * For if subclasses wish to do additional setup on background thread before {@link #doInBackground(Object)} is called

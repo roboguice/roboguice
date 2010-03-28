@@ -99,9 +99,15 @@
     </target>
 
     <target name="tests" depends="build-roboguice,copy-roboguice,debug,run-emulator,deploy">
-        <exec executable="adb" failonerror="true">
+        <exec executable="adb" failonerror="true" outputproperty="instrumentation.out">
             <arg line="shell am instrument -w roboguice.test/android.test.InstrumentationTestRunner"/>
         </exec>
+        <echo message="${instrumentation.out}"/>
+        <fail>
+            <condition>
+                <contains string="${instrumentation.out}" substring="FAILURES!"/>
+            </condition>
+        </fail>
     </target>
 
 

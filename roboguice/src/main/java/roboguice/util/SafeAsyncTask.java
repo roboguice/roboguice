@@ -46,7 +46,7 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
     }
 
 
-    public SafeAsyncTask<ArgumentT,ResultT> execute( final ArgumentT arg ) {
+    public void execute( final ArgumentT arg ) {
         future = new FutureTask<ResultT>( new Callable<ResultT>() {
             public ResultT call() throws Exception {
                 try {
@@ -101,8 +101,6 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
         });
 
         threadFactory.newThread( future ).start();
-
-        return this;
     }
 
     public boolean cancel( boolean mayInterruptIfRunning ) {

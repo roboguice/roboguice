@@ -39,10 +39,10 @@ public abstract class RoboAsyncTask<ArgumentT, ResultT> extends SafeAsyncTask<Ar
     }
 
     @Override
-    public SafeAsyncTask execute(ArgumentT arg) {
+    public void execute(ArgumentT arg) {
         context = contextProvider.get();
         scope = scopeProvider.get();
-        return super.execute(arg);
+        super.execute(arg);
     }
 
     @Override

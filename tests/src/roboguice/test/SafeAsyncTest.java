@@ -7,7 +7,6 @@ import roboguice.util.RoboLooperThread;
 import android.test.suitebuilder.annotation.MediumTest;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
     public enum State {
@@ -187,44 +186,50 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
     public void testCancel() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
         final String state[] = new String[]{"Task was never canceled"};
-        final RoboAsyncTask<Void,Void> task = new RoboAsyncTask<Void,Void>(){
-            @Override
-            protected Void doInBackground(Void ignored) throws Exception {
-                Thread.sleep(20000);
-                state[0] = "Shouldn't finish executing doInBackground";
-                return null;
-            }
-
-            @Override
-            protected void onSuccess(Void ignored) throws Exception {
-                state[0] = "onSuccess shouldn't be called";
-            }
-
-            @Override
-            protected void onException(Exception e) {
-                state[0] = null; // expected
-            }
-
-            @Override
-            protected void onFinally() {
-                latch.countDown();
-            }
-        };
 
         new RoboLooperThread() {
             public void run() {
+                final RoboAsyncTask<Void,Void> task = new RoboAsyncTask<Void,Void>(){
+                    @Override
+                    protected Void doInBackground(Void ignored) throws Exception {
+                        Thread.sleep(20000);
+                        state[0] = "Shouldn't finish executing doInBackground";
+                        return null;
+                    }
+
+                    @Override
+                    protected void onSuccess(Void ignored) throws Exception {
+                        state[0] = "onSuccess shouldn't be called";
+                    }
+
+                    @Override
+                    protected void onInterrupted(InterruptedException e) {
+                        state[0] = null; // expected
+                    }
+
+                    @Override
+                    protected void onException(Exception e){
+                        state[0] = "onException shouldn't be called";
+                    }
+
+
+                    @Override
+                    protected void onFinally() {
+                        latch.countDown();
+                    }
+                };
                 task.execute(null);
                 try {
                     Thread.sleep(1000);
                 } catch(InterruptedException e ) {
                     Thread.interrupted();
-                }                   
+                }
                 task.cancel(true);
             }
         }.start();
 
 
-        latch.await(10, TimeUnit.SECONDS);
+        latch.await();
         assertNull(state[0], state[0]);
     }
 

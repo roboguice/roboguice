@@ -81,28 +81,37 @@
     </target>
 
     <target name="deploy" depends="build-roboguice,copy-roboguice">
-        <exec executable="adb" failonerror="false">
+        <exec executable="${sdk.dir}/tools/adb" failonerror="false">
             <arg line="-e uninstall roboguice.test"/>
         </exec>
-        <exec executable="adb" failonerror="true">
+        <exec executable="${sdk.dir}/tools/adb" failonerror="true">
             <arg line="-e install bin/roboguice-tests-debug.apk"/>
         </exec>
     </target>
 
     <target name="run-emulator">
-        <exec executable="emulator" spawn="true" >
-            <arg line="-avd HVGA-20"/>
+        <!-- BUG not very friendly to other emulators running on system -->
+        <exec executable="killall">
+            <arg line="emulator"/>
         </exec>
-        <exec  executable="adb" failonerror="true">
+        <sleep seconds="5"/>
+        <exec executable="${sdk.dir}/tools/emulator" spawn="true" >
+            <arg line="-avd HVGA-20 -no-audio -no-window"/>
+        </exec>
+        <exec  executable="${sdk.dir}/tools/adb" failonerror="true">
             <arg line="-e wait-for-device"/>
         </exec>
     </target>
 
     <target name="tests" depends="build-roboguice,copy-roboguice,debug,run-emulator,deploy">
-        <exec executable="adb" failonerror="true" outputproperty="instrumentation.out">
+        <exec executable="${sdk.dir}/tools/adb" failonerror="true" outputproperty="instrumentation.out">
             <arg line="shell am instrument -w roboguice.test/android.test.InstrumentationTestRunner"/>
         </exec>
         <echo message="${instrumentation.out}"/>
+        <!-- BUG not very friendly to other emulators running on system -->
+        <exec executable="killall">
+            <arg line="emulator"/>
+        </exec>
         <fail message="${instrumentation.out}">
             <condition>
                 <contains string="${instrumentation.out}" substring="FAILURES!"/>

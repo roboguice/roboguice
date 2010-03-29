@@ -91,7 +91,7 @@
 
     <target name="run-emulator">
         <!-- BUG not very friendly to other emulators running on system -->
-        <exec executable="killall">
+        <exec executable="killall" failonerror="false">
             <arg line="emulator"/>
         </exec>
         <sleep seconds="5"/>
@@ -110,12 +110,14 @@
         </exec>
         <echo message="${instrumentation.out}"/>
         <!-- BUG not very friendly to other emulators running on system -->
-        <exec executable="killall">
+        <exec executable="killall" failonerror="false">
             <arg line="emulator"/>
         </exec>
         <fail message="${instrumentation.out}">
             <condition>
-                <contains string="${instrumentation.out}" substring="FAILURES!"/>
+                <not>
+                    <contains string="${instrumentation.out}" substring="OK ("/>
+                </not>
             </condition>
         </fail>
     </target>

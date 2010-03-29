@@ -101,6 +101,7 @@
         <exec  executable="${sdk.dir}/tools/adb" failonerror="true">
             <arg line="-e wait-for-device"/>
         </exec>
+        <sleep seconds="20"/>
     </target>
 
     <target name="tests" depends="build-roboguice,copy-roboguice,debug,run-emulator,deploy">

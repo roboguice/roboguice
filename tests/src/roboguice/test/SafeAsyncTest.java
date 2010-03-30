@@ -1,21 +1,17 @@
 package roboguice.test;
 
-import org.apache.http.client.HttpClient;
 import roboguice.test.config.RoboGuiceTestApplication;
 import roboguice.util.RoboAsyncTask;
 import roboguice.util.RoboLooperThread;
 
 import android.content.Context;
-import android.os.Handler;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.view.View;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import java.net.URI;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadFactory;
 
 
 public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
@@ -246,14 +242,14 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
 
 
     @MediumTest
-    public void testFakeHttp() throws InterruptedException {
+    public void testRoboAsyncTask() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
         final State state[] = new State[]{State.UNKNOWN};
 
         new RoboLooperThread() {
             public void run() {
 
-                new FakeHttpGet(new View(getInjector().getInstance(Context.class)), URI.create("http://google.com")){
+                final FakeHttpGet g = new FakeHttpGet(new View(getInjector().getInstance(Context.class)), "http://google.com" ){
                     @Override
                     protected void onSuccess(String s) throws Exception {
                         state[0] = s.contains("booga") ? SafeAsyncTest.State.TEST_SUCCESS : SafeAsyncTest.State.TEST_FAIL;
@@ -264,7 +260,9 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
                         latch.countDown();
                     }
 
-                }.execute();
+                };
+                getInjector().injectMembers(g);
+                g.execute();
 
             }
         }.start();
@@ -284,54 +282,31 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
 
 
 
-/**
- * Copied from another project, using here for test purposes
- */
 class FakeHttpGet extends RoboAsyncTask<String> {
-    // We use static injection here so that it's easy for users of HttpGet
-    // to instantiate instances without having to do injection themselves.
-    @Inject static protected Provider<HttpClient> client;
+    @Inject protected Provider<Context> context;
 
     protected View spinner;
-    protected URI uri;
+    protected String uri;
 
-    public FakeHttpGet( URI uri ) {
-        this.uri = uri;
-    }
-
-    public FakeHttpGet( View spinner, URI uri ) {
+    public FakeHttpGet( View spinner, String uri ) {
         this.spinner = spinner;
         this.uri = uri;
     }
-
-    public FakeHttpGet(Handler handler, View spinner, URI uri) {
-        super(handler);
-        this.spinner = spinner;
-        this.uri = uri;
-    }
-
-    public FakeHttpGet(ThreadFactory threadFactory, Handler handler, View spinner, URI uri) {
-        super(handler, threadFactory);
-        this.spinner = spinner;
-        this.uri = uri;
-    }
-
 
     public String call() throws Exception {
+        context.get();
         return "<html>booga</html>";
     }
 
 
     @Override
     protected void onPreExecute() throws Exception {
-        if( spinner != null )
-            spinner.setVisibility(View.VISIBLE);
+        spinner.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onFinally() {
-        if( spinner != null )
-            spinner.setVisibility(View.GONE);
+        spinner.setVisibility(View.GONE);
     }
 
 }

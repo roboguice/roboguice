@@ -22,58 +22,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     protected Handler handler;
     protected ThreadFactory threadFactory;
-    protected FutureTask<Void> future = new FutureTask<Void>( new Callable<Void>() {
-            public Void call() throws Exception {
-                try {
-                    postToUiThreadAndWait( new Callable<Object>() {
-                        public Object call() throws Exception {
-                            onPreExecute();
-                            return null;
-                        }
-                    });
-
-                    callSetup();
-                    final ResultT rtrn = SafeAsyncTask.this.call();
-                    callTearDown();
-
-                    postToUiThreadAndWait( new Callable<Object>() {
-                        public Object call() throws Exception {
-                            onSuccess(rtrn);
-                            return null;
-                        }
-                    });
-
-                    return null;
-
-                } catch( final Exception e ) {
-                    try {
-                        postToUiThreadAndWait( new Callable<Object>() {
-                            public Object call() throws Exception {
-                                if( e instanceof InterruptedException )
-                                    onInterrupted((InterruptedException)e);
-                                else
-                                    onException(e);
-                                return null;
-                            }
-                        });
-                    } catch( Exception f ) {
-                        // ignore this exception, throw the original instead
-                    }
-
-                    throw e;
-
-                } finally {
-                    postToUiThreadAndWait( new Callable<Object>() {
-                        public Object call() throws Exception {
-                            onFinally();
-                            return null;
-                        }
-                    });
-                }
-
-
-            }
-        });
+    protected FutureTask<Void> future = new FutureTask<Void>( newTask() );
 
 
 
@@ -104,41 +53,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     public boolean cancel( boolean mayInterruptIfRunning ) {
         return future != null && future.cancel(mayInterruptIfRunning);
-    }
-
-    /**
-     * Posts the specified runnable to the UI thread using a handler,
-     * and waits for operation to finish.  If there's an exception,
-     * it captures it and rethrows it.
-     * @param c the callable to post
-     * @throws Exception on error
-     */
-    protected void postToUiThreadAndWait( final Callable c ) throws Exception {
-        final CountDownLatch latch = new CountDownLatch(1);
-        final Exception[] exceptions = new Exception[1];
-
-        // Execute onSuccess in the UI thread, but wait
-        // for it to complete.
-        // If it throws an exception, capture that exception
-        // and rethrow it later.
-        handler.post( new Runnable() {
-           public void run() {
-               try {
-                   c.call();
-               } catch( Exception e ) {
-                   exceptions[0] = e;
-               } finally {
-                   latch.countDown();
-               }
-           }
-        });
-
-        // Wait for onSuccess to finish
-        latch.await();
-
-        if( exceptions[0] != null )
-            throw exceptions[0];
-
     }
 
 
@@ -184,14 +98,121 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      */
     protected void onFinally() throws RuntimeException {}
 
-    /**
-     * For if subclasses wish to do additional setup on background thread before {@link #call()} is called
-     */
-    protected void callSetup() {}
 
-    /**
-     * For if subclasses wish to do additional teardown on background thread after {@link #call()} is called
-     */
-    protected void callTearDown() {}
+    protected Task<ResultT> newTask() {
+        return new Task<ResultT>(this);
+    }
+
+
+    protected static class Task<ResultT> implements Callable<Void> {
+        protected SafeAsyncTask<ResultT> parent;
+
+        public Task(SafeAsyncTask parent) {
+            this.parent = parent;
+        }
+
+        public Void call() throws Exception {
+            try {
+                doPreExecute();
+                doSuccess(doCall());
+                return null;
+
+            } catch( final Exception e ) {
+                try {
+                    doException(e);
+                } catch( Exception f ) {
+                    // ignored, throw original instead
+                }
+                throw e;
+
+            } finally {
+                doFinally();
+            }
+
+
+        }
+
+        protected void doPreExecute() throws Exception {
+            postToUiThreadAndWait( new Callable<Object>() {
+                public Object call() throws Exception {
+                    parent.onPreExecute();
+                    return null;
+                }
+            });
+        }
+
+        protected ResultT doCall() throws Exception {
+            return parent.call();
+        }
+
+        protected void doSuccess( final ResultT r ) throws Exception {
+            postToUiThreadAndWait( new Callable<Object>() {
+                public Object call() throws Exception {
+                    parent.onSuccess(r);
+                    return null;
+                }
+            });
+        }
+
+        protected void doException( final Exception e ) throws Exception {
+            postToUiThreadAndWait( new Callable<Object>() {
+                public Object call() throws Exception {
+                    if( e instanceof InterruptedException )
+                        parent.onInterrupted((InterruptedException)e);
+                    else
+                        parent.onException(e);
+                    return null;
+                }
+            });
+        }
+
+        protected void doFinally() throws Exception {
+            postToUiThreadAndWait( new Callable<Object>() {
+                public Object call() throws Exception {
+                    parent.onFinally();
+                    return null;
+                }
+            });
+        }
+
+
+        /**
+         * Posts the specified runnable to the UI thread using a handler,
+         * and waits for operation to finish.  If there's an exception,
+         * it captures it and rethrows it.
+         * @param c the callable to post
+         * @throws Exception on error
+         */
+        protected void postToUiThreadAndWait( final Callable c ) throws Exception {
+            final CountDownLatch latch = new CountDownLatch(1);
+            final Exception[] exceptions = new Exception[1];
+
+            // Execute onSuccess in the UI thread, but wait
+            // for it to complete.
+            // If it throws an exception, capture that exception
+            // and rethrow it later.
+            parent.handler.post( new Runnable() {
+               public void run() {
+                   try {
+                       c.call();
+                   } catch( Exception e ) {
+                       exceptions[0] = e;
+                   } finally {
+                       latch.countDown();
+                   }
+               }
+            });
+
+            // Wait for onSuccess to finish
+            latch.await();
+
+            if( exceptions[0] != null )
+                throw exceptions[0];
+
+        }
+
+    }
+
+    
 
 }

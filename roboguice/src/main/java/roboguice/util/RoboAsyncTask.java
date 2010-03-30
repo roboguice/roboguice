@@ -38,12 +38,23 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
     }
 
     @Override
-    protected void callSetup() {
-        scope.enter(context);
+    protected Task<ResultT> newTask() {
+        return new RoboTask<ResultT>(this);
     }
 
-    @Override
-    protected void callTearDown() {
-        scope.exit(context);
+    protected class RoboTask<ResultT> extends SafeAsyncTask.Task<ResultT> {
+        public RoboTask(SafeAsyncTask parent) {
+            super(parent);
+        }
+
+        @Override
+        protected ResultT doCall() throws Exception {
+            try {
+                scope.enter(context);
+                return super.doCall();
+            } finally {
+                scope.exit(context);
+            }
+        }
     }
 }

@@ -6,49 +6,24 @@ import android.util.Log;
 import java.util.concurrent.*;
 
 /**
- * A class similar but unrelated to android's AsyncTask.
+ * A class similar but unrelated to android's {@link android.os.AsyncTask}.
  *
  * Unlike AsyncTask, this class properly propagates exceptions.
  *
+ * If you're familiar with AsyncTask and are looking for {@link android.os.AsyncTask#doInBackground(Object[])},
+ * we've named it {@link #call()} here to conform with java 1.5's {@link java.util.concurrent.Callable} interface.
+ *
  * Current limitations: does not yet handle progress, although it shouldn't be
- * hard to add.  Also, it doesn't support the ellipsis operator in execute(), but this can be
- * simulated with a collection
+ * hard to add.
  * 
- * @param <ArgumentT>
- * @param <ExceptionT>
  * @param <ResultT>
  */
-public abstract class SafeAsyncTask<ArgumentT,ResultT> {
+public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     protected Handler handler;
     protected ThreadFactory threadFactory;
-    protected FutureTask<ResultT> future;
-
-
-    public SafeAsyncTask() {
-        this.handler = new Handler();
-        this.threadFactory = Executors.defaultThreadFactory();
-    }
-
-    public SafeAsyncTask( Handler handler ) {
-        this.handler = handler;
-        this.threadFactory = Executors.defaultThreadFactory();
-    }
-
-    public SafeAsyncTask( ThreadFactory threadFactory ) {
-        this.handler = new Handler();
-        this.threadFactory = threadFactory;
-    }
-
-    public SafeAsyncTask( Handler handler, ThreadFactory threadFactory ) {
-        this.handler = handler;
-        this.threadFactory = threadFactory;
-    }
-
-
-    public void execute( final ArgumentT arg ) {
-        future = new FutureTask<ResultT>( new Callable<ResultT>() {
-            public ResultT call() throws Exception {
+    protected FutureTask<Void> future = new FutureTask<Void>( new Callable<Void>() {
+            public Void call() throws Exception {
                 try {
                     postToUiThreadAndWait( new Callable<Object>() {
                         public Object call() throws Exception {
@@ -57,9 +32,9 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
                         }
                     });
 
-                    doInBackgroundSetup();
-                    final ResultT rtrn = doInBackground(arg);
-                    doInBackgroundTearDown();
+                    callSetup();
+                    final ResultT rtrn = SafeAsyncTask.this.call();
+                    callTearDown();
 
                     postToUiThreadAndWait( new Callable<Object>() {
                         public Object call() throws Exception {
@@ -68,7 +43,7 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
                         }
                     });
 
-                    return rtrn;
+                    return null;
 
                 } catch( final Exception e ) {
                     try {
@@ -96,10 +71,34 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
                     });
                 }
 
-                
+
             }
         });
 
+
+
+    public SafeAsyncTask() {
+        this.handler = new Handler();
+        this.threadFactory = Executors.defaultThreadFactory();
+    }
+
+    public SafeAsyncTask( Handler handler ) {
+        this.handler = handler;
+        this.threadFactory = Executors.defaultThreadFactory();
+    }
+
+    public SafeAsyncTask( ThreadFactory threadFactory ) {
+        this.handler = new Handler();
+        this.threadFactory = threadFactory;
+    }
+
+    public SafeAsyncTask( Handler handler, ThreadFactory threadFactory ) {
+        this.handler = handler;
+        this.threadFactory = threadFactory;
+    }
+
+
+    public void execute() {
         threadFactory.newThread( future ).start();
     }
 
@@ -142,18 +141,6 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
 
     }
 
-    /*
-    // This is illegal, because it creates a deadlock situation in most cases.
-    // It blocks the main thread (usually the UI thread) until all the onXXX methods
-    // are invoked, but the onXXX methods need to execute in the UI thread (which is
-    // blocked)
-    public ResultT get() throws Exception {
-        return internalTask.get();
-    }
-    */
-
-
-    protected abstract ResultT doInBackground( ArgumentT arg ) throws Exception;
 
     /**
      * @throws Exception, captured on passed to onException() if present.
@@ -161,7 +148,7 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
     protected void onPreExecute() throws Exception {}
 
     /**
-     * @param t the result of {@link #doInBackground(Object)}
+     * @param t the result of {@link #call()}
      * @throws Exception, captured on passed to onException() if present.
      */
     @SuppressWarnings({"UnusedDeclaration"})
@@ -175,7 +162,7 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
      * may be overridden to handle interruptions differently than other
      * exceptions.
      *
-     * @param e the exception thrown from {@link #onPreExecute()}, {@link #doInBackground(Object)}, or {@link #onSuccess(Object)}
+     * @param e the exception thrown from {@link #onPreExecute()}, {@link #call()}, or {@link #onSuccess(Object)}
      */
     protected void onInterrupted( InterruptedException e ) {
         onException(e);
@@ -185,7 +172,7 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
      * Logs the exception as an Error by default, but this method may
      * be overridden by subclasses.
      *
-     * @param e the exception thrown from {@link #onPreExecute()}, {@link #doInBackground(Object)}, or {@link #onSuccess(Object)}
+     * @param e the exception thrown from {@link #onPreExecute()}, {@link #call()}, or {@link #onSuccess(Object)}
      * @throws RuntimeException, ignored
      */
     protected void onException( Exception e ) throws RuntimeException {
@@ -198,13 +185,13 @@ public abstract class SafeAsyncTask<ArgumentT,ResultT> {
     protected void onFinally() throws RuntimeException {}
 
     /**
-     * For if subclasses wish to do additional setup on background thread before {@link #doInBackground(Object)} is called
+     * For if subclasses wish to do additional setup on background thread before {@link #call()} is called
      */
-    protected void doInBackgroundSetup() {}
+    protected void callSetup() {}
 
     /**
-     * For if subclasses wish to do additional teardown on background thread after {@link #doInBackground(Object)} is called
+     * For if subclasses wish to do additional teardown on background thread after {@link #call()} is called
      */
-    protected void doInBackgroundTearDown() {}
+    protected void callTearDown() {}
 
 }

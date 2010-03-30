@@ -36,6 +36,7 @@ import java.lang.reflect.ParameterizedType;
  *                  constructor that accepts a Context argument and calls
  *                  {@link android.app.Application#attachBaseContext(android.content.Context)}
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class RoboUnitTestCase<AppType extends RoboApplication> extends InstrumentationTestCase {
     protected Injector injector;
 

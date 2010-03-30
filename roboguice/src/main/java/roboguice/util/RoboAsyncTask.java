@@ -13,15 +13,14 @@ import java.util.concurrent.ThreadFactory;
 /**
  * Allows injection to happen for tasks that execute in a background thread.
  * 
- * @param <ArgumentT>
  * @param <ResultT>
  */
-public abstract class RoboAsyncTask<ArgumentT, ResultT> extends SafeAsyncTask<ArgumentT, ResultT> {
+public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
     @Inject static protected Provider<Context> contextProvider;
     @Inject static protected Provider<ContextScope> scopeProvider;
     
-    protected ContextScope scope;
-    protected Context context;
+    protected ContextScope scope = scopeProvider.get();
+    protected Context context = contextProvider.get();
 
     protected RoboAsyncTask() {
     }
@@ -39,19 +38,12 @@ public abstract class RoboAsyncTask<ArgumentT, ResultT> extends SafeAsyncTask<Ar
     }
 
     @Override
-    public void execute(ArgumentT arg) {
-        context = contextProvider.get();
-        scope = scopeProvider.get();
-        super.execute(arg);
-    }
-
-    @Override
-    protected void doInBackgroundSetup() {
+    protected void callSetup() {
         scope.enter(context);
     }
 
     @Override
-    protected void doInBackgroundTearDown() {
+    protected void callTearDown() {
         scope.exit(context);
     }
 }

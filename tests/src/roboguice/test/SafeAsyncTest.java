@@ -21,14 +21,14 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
         new RoboLooperThread() {
             public void run() {
 
-                new RoboAsyncTask<Void,Void>(){
+                new RoboAsyncTask<Void>(){
                     @Override
                     protected void onPreExecute() throws Exception {
                         throw new NullPointerException();
                     }
 
                     @Override
-                    protected Void doInBackground(Void ignored) throws Exception {
+                    public Void call() throws Exception {
                         state[0] = SafeAsyncTest.State.TEST_FAIL;
                         return null;
                     }
@@ -48,7 +48,7 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
                         latch.countDown();
                     }
 
-                }.execute(null);
+                }.execute();
 
 
             }
@@ -68,9 +68,9 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
         new RoboLooperThread() {
             public void run() {
 
-                new RoboAsyncTask<Void,Void>(){
+                new RoboAsyncTask<Void>(){
                     @Override
-                    protected Void doInBackground(Void ignored) throws Exception {
+                    public Void call() throws Exception {
                         throw new NullPointerException();
                     }
 
@@ -89,7 +89,7 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
                         latch.countDown();
                     }
 
-                }.execute(null);
+                }.execute();
 
             }
         }.start();
@@ -107,9 +107,9 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
         new RoboLooperThread() {
             public void run() {
 
-                new RoboAsyncTask<Void,Void>(){
+                new RoboAsyncTask<Void>(){
                     @Override
-                    protected Void doInBackground(Void ignored) throws Exception {
+                    public Void call() throws Exception {
                         return null;
                     }
 
@@ -128,7 +128,7 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
                         latch.countDown();
                     }
 
-                }.execute(null);
+                }.execute();
 
             }
         }.start();
@@ -148,9 +148,9 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
         new RoboLooperThread() {
             public void run() {
 
-                new RoboAsyncTask<Void,Void>(){
+                new RoboAsyncTask<Void>(){
                     @Override
-                    protected Void doInBackground(Void ignored) throws Exception {
+                    public Void call() throws Exception {
                         return null;
                     }
 
@@ -171,7 +171,7 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
                         latch.countDown();
                     }
 
-                }.execute(null);
+                }.execute();
 
             }
         }.start();
@@ -189,9 +189,9 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
 
         new RoboLooperThread() {
             public void run() {
-                final RoboAsyncTask<Void,Void> task = new RoboAsyncTask<Void,Void>(){
+                final RoboAsyncTask<Void> task = new RoboAsyncTask<Void>(){
                     @Override
-                    protected Void doInBackground(Void ignored) throws Exception {
+                    public Void call() throws Exception {
                         Thread.sleep(20000);
                         state[0] = "Shouldn't finish executing doInBackground";
                         return null;
@@ -218,7 +218,7 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
                         latch.countDown();
                     }
                 };
-                task.execute(null);
+                task.execute();
                 try {
                     Thread.sleep(1000);
                 } catch(InterruptedException e ) {

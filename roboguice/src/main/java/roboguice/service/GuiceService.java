@@ -10,38 +10,33 @@
  */
 package roboguice.service;
 
+import roboguice.activity.GuiceActivity;
 import roboguice.application.GuiceApplication;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
-import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.IBinder;
 import com.google.inject.Injector;
 
 /**
- * A {@link GuiceService} extends from {@link Activity} to provide dynamic
+ * A {@link GuiceService} extends from {@link Service} to provide dynamic
  * injection of collaborators, using Google Guice.<br /> <br /> Your own
- * activities that usually extend from {@link Activity} should now extend from
- * {@link GuiceService}.<br /> <br /> If your activities extend from subclasses
- * of {@link Activity} provided by the Android SDK, we provided Guice versions
- * as well for the most used : see , , and other classes located in package
- * <strong>roboguice.activity</strong>.<br /> <br /> If we didn't provide what
- * you need, you have two options : either post an issue on <a
+ * services that usually extend from {@link Service} should now extend from
+ * {@link GuiceActivity}.<br /> <br /> If we didn't provide what you need, you
+ * have two options : either post an issue on <a
  * href="http://code.google.com/p/roboguice/issues/list">the bug tracker</a>, or
  * implement it yourself. Have a look at the source code of this class (
  * {@link GuiceService}), you won't have to write that much changes. And of
  * course, you are welcome to contribute and send your implementations to the
- * RoboGuice project.<br /> <br /> Please be aware that collaborators are not
- * injected into this until you call {@link #setContentView(int)} (calling any
- * of the overloads of this methods will work).<br /> <br /> You can have access
- * to the Guice {@link Injector} at any time, by calling {@link #getInjector()}
- * .<br /> However, you will not have access to Context scoped beans until
+ * RoboGuice project.<br /> <br /> You can have access to the Guice
+ * {@link Injector} at any time, by calling {@link #getInjector()}.<br />
+ * However, you will not have access to Context scoped beans until
  * {@link #onCreate(Bundle)} is called. <br /> <br />
  * @author Mike Burton
+ * @author Christine Karman
  */
-public class GuiceService extends Service implements InjectorProvider {
+public abstract class GuiceService extends Service implements InjectorProvider {
 
     protected ContextScope scope;
 
@@ -72,10 +67,4 @@ public class GuiceService extends Service implements InjectorProvider {
     public Injector getInjector() {
         return ((GuiceApplication) getApplication()).getInjector();
     }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
 }

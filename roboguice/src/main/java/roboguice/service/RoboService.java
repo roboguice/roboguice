@@ -10,33 +10,40 @@
  */
 package roboguice.service;
 
-import roboguice.activity.GuiceActivity;
-import roboguice.application.GuiceApplication;
+import roboguice.application.RoboApplication;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
+
 import com.google.inject.Injector;
 
 /**
- * A {@link GuiceService} extends from {@link Service} to provide dynamic
- * injection of collaborators, using Google Guice.<br /> <br /> Your own
- * services that usually extend from {@link Service} should now extend from
- * {@link GuiceActivity}.<br /> <br /> If we didn't provide what you need, you
- * have two options : either post an issue on <a
+ * A {@link RoboService} extends from {@link Service} to provide dynamic
+ * injection of collaborators, using Google Guice.<br /> <br />
+ * 
+ * Your own services that usually extend from {@link Service} should now extend from
+ * {@link GuiceActivity}.<br /> <br />
+ *
+ * If we didn't provide what you need, you have two options : either post an issue on <a
  * href="http://code.google.com/p/roboguice/issues/list">the bug tracker</a>, or
  * implement it yourself. Have a look at the source code of this class (
- * {@link GuiceService}), you won't have to write that much changes. And of
+ * {@link RoboService}), you won't have to write that much changes. And of
  * course, you are welcome to contribute and send your implementations to the
- * RoboGuice project.<br /> <br /> You can have access to the Guice
+ * RoboGuice project.<br /> <br />
+ *
+ * You can have access to the Guice
  * {@link Injector} at any time, by calling {@link #getInjector()}.<br />
+ *
  * However, you will not have access to Context scoped beans until
  * {@link #onCreate(Bundle)} is called. <br /> <br />
+ *
  * @author Mike Burton
  * @author Christine Karman
  */
-public abstract class GuiceService extends Service implements InjectorProvider {
+public abstract class RoboService extends Service implements InjectorProvider {
 
     protected ContextScope scope;
 
@@ -62,9 +69,9 @@ public abstract class GuiceService extends Service implements InjectorProvider {
     }
 
     /**
-     * @see GuiceApplication#getInjector()
+     * @see roboguice.application.RoboApplication#getInjector() 
      */
     public Injector getInjector() {
-        return ((GuiceApplication) getApplication()).getInjector();
+        return ((RoboApplication) getApplication()).getInjector();
     }
 }

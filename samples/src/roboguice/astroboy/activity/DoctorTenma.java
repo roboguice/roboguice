@@ -25,9 +25,12 @@ import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
@@ -128,6 +131,12 @@ public class DoctorTenma extends RoboActivity {
         // call setContentView()
 
         helloView.setText(hello + ", " + this.getClass().getSimpleName());
+        helloView.setOnClickListener(new OnClickListener() {
+          @Override
+          public void onClick(View arg0) {
+            startActivity(new Intent(DoctorTenma.this, AstroPrefActivity.class));
+          }
+        });
 
         assertEquals(prefs.getString("dummyPref", "la la la"), "la la la");
         assertNull(nullInjectedMember);

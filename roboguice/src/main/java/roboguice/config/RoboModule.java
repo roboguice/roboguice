@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
  * Used by {@link roboguice.application.RoboApplication}.
- * 
+ *
  * @author Mike Burton
  * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
@@ -41,16 +41,19 @@ public class RoboModule extends AbstractModule {
     protected final ResourceListener resourceListener;
     protected final ViewListener viewListener;
     protected final ExtrasListener extrasListener;
+    protected final PreferenceListener preferenceListener;
     protected final Application application;
 
     public RoboModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
-            ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener, Application application) {
+            ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener,
+            PreferenceListener preferenceListener, Application application) {
         this.contextScope = contextScope;
         this.throwingContextProvider = throwingContextProvider;
         this.contextProvider = contextProvider;
         this.resourceListener = resourceListener;
         this.viewListener = viewListener;
         this.extrasListener = extrasListener;
+        this.preferenceListener = preferenceListener;
         this.application = application;
     }
 
@@ -89,7 +92,7 @@ public class RoboModule extends AbstractModule {
         bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(Context.WIFI_SERVICE));
         bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
         bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
-        
+
         // Context Scope bindings
         bindScope(ContextScoped.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
@@ -101,9 +104,12 @@ public class RoboModule extends AbstractModule {
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
 
+        if (preferenceListener != null) {
+          bindListener(Matchers.any(), preferenceListener);
+        }
+
         requestStaticInjection( RoboThread.class );
         requestStaticInjection( RoboAsyncTask.class );
-        
     }
 
 }

@@ -17,6 +17,7 @@ package roboguice.activity;
 
 import roboguice.application.RoboApplication;
 import roboguice.inject.ContextScope;
+import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectorProvider;
 
 import com.google.inject.Injector;
@@ -33,6 +34,7 @@ import android.view.ViewGroup.LayoutParams;
  * @see RoboActivity
  * 
  * @author Toly Pochkin
+ * @author Rodrigo Damazio
  */
 public class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
     protected ContextScope scope;
@@ -40,32 +42,55 @@ public class RoboPreferenceActivity extends PreferenceActivity implements Inject
     /** {@inheritDoc } */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         final Injector injector = getInjector();
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
+
+        // Injecting the preferences requires that they've been loaded, so load them
+        onCreatePreferences();
+
+        // Only then inject everything
         injector.injectMembers(this);
-        super.onCreate(savedInstanceState);
+    }
+
+    /**
+     * Override this method to specify how your preferences will be loaded.
+     * This is called before injecting the preference member fields, and will
+     * usually contain a call to {@link #addPreferencesFromResource}. This
+     * method must load or create all preferences which will be injected by
+     * {@link InjectPreference} annotations.
+     */
+    protected void onCreatePreferences() {
+        // Do nothing by default
     }
 
     /** {@inheritDoc } */
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        scope.injectViews();
+
+        // Built-in preference views don't need injection
+        if (scope != null) scope.injectViews();
     }
 
     /** {@inheritDoc } */
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
-        scope.injectViews();
+
+        // Built-in preference views don't need injection
+        if (scope != null) scope.injectViews();
     }
 
     /** {@inheritDoc } */
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
-        scope.injectViews();
+
+        // Built-in preference views don't need injection
+        if (scope != null) scope.injectViews();
     }
 
     /** {@inheritDoc } */

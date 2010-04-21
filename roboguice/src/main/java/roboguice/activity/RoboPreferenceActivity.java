@@ -20,12 +20,12 @@ import roboguice.inject.ContextScope;
 import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectorProvider;
 
-import com.google.inject.Injector;
-
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+
+import com.google.inject.Injector;
 
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
@@ -36,7 +36,7 @@ import android.view.ViewGroup.LayoutParams;
  * @author Toly Pochkin
  * @author Rodrigo Damazio
  */
-public class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
+public abstract class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
     protected ContextScope scope;
 
     /** {@inheritDoc } */

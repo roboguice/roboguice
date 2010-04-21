@@ -15,15 +15,16 @@
  */
 package roboguice.astroboy.activity;
 
+import roboguice.activity.RoboPreferenceActivity;
+import roboguice.astroboy.R;
+import roboguice.inject.InjectPreference;
+
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.widget.Toast;
-import roboguice.activity.RoboPreferenceActivity;
-import roboguice.astroboy.R;
-import roboguice.inject.InjectPreference;
 
 /**
  * @author Rodrigo Damazio
@@ -45,11 +46,10 @@ public class AstroPrefActivity extends RoboPreferenceActivity {
     super.onCreate(savedInstanceState);
 
     boolPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-      @Override
-      public boolean onPreferenceChange(Preference arg0, Object arg1) {
-        Toast.makeText(AstroPrefActivity.this, "Meep.", Toast.LENGTH_LONG).show();
-        return true;
-      }
+        public boolean onPreferenceChange(Preference arg0, Object arg1) {
+            Toast.makeText(AstroPrefActivity.this, "Meep.", Toast.LENGTH_LONG).show();
+            return true;
+        }
     });
   }
 }

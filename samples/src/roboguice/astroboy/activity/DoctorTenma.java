@@ -132,10 +132,9 @@ public class DoctorTenma extends RoboActivity {
 
         helloView.setText(hello + ", " + this.getClass().getSimpleName());
         helloView.setOnClickListener(new OnClickListener() {
-          @Override
-          public void onClick(View arg0) {
-            startActivity(new Intent(DoctorTenma.this, AstroPrefActivity.class));
-          }
+            public void onClick(View arg0) {
+                startActivity(new Intent(DoctorTenma.this, AstroPrefActivity.class));
+            }
         });
 
         assertEquals(prefs.getString("dummyPref", "la la la"), "la la la");

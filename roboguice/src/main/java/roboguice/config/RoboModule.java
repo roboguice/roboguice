@@ -8,6 +8,7 @@ import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
@@ -98,6 +99,7 @@ public class RoboModule extends AbstractModule {
         bind(ContextScope.class).toInstance(contextScope);
         bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
         bind(Activity.class).toProvider(ActivityProvider.class);
+        bind(AssetManager.class).toProvider( AssetManagerProvider.class );
 
         // Android Resources, Views and extras require special handling
         bindListener(Matchers.any(), resourceListener);

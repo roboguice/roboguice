@@ -11,7 +11,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../goodrec/opentable/android/lib/guice-2.0-no_aop.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/guice-2.0-no_aop.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -69,6 +69,13 @@ public class RoboModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     protected void configure() {
+        // Context Scope bindings
+        bindScope(ContextScoped.class, contextScope);
+        bind(ContextScope.class).toInstance(contextScope);
+        bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
+        bind(Activity.class).toProvider(ActivityProvider.class);
+        bind(AssetManager.class).toProvider( AssetManagerProvider.class );
+
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         bind(Resources.class).toProvider(ResourcesProvider.class);
@@ -94,12 +101,6 @@ public class RoboModule extends AbstractModule {
         bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
         bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
 
-        // Context Scope bindings
-        bindScope(ContextScoped.class, contextScope);
-        bind(ContextScope.class).toInstance(contextScope);
-        bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
-        bind(Activity.class).toProvider(ActivityProvider.class);
-        bind(AssetManager.class).toProvider( AssetManagerProvider.class );
 
         // Android Resources, Views and extras require special handling
         bindListener(Matchers.any(), resourceListener);

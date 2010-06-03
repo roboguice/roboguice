@@ -15,28 +15,17 @@
  */
 package roboguice.application;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import roboguice.config.AbstractAndroidModule;
 import roboguice.config.RoboModule;
-import roboguice.inject.ContextScope;
-import roboguice.inject.ExtrasListener;
-import roboguice.inject.InjectorProvider;
-import roboguice.inject.ResourceListener;
-import roboguice.inject.PreferenceListener;
-import roboguice.inject.StaticTypeListener;
-import roboguice.inject.ViewListener;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Stage;
+import roboguice.inject.*;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.google.inject.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is in charge of starting the Guice configuration. When the
@@ -105,8 +94,12 @@ public class RoboApplication extends Application implements InjectorProvider {
      * zero if no RoboActivity is used when running the application.
      */
     protected void initInstanceMembers() {
-        contextScope = new ContextScope();
-        throwingContextProvider = ContextScope.<Context> seededKeyProvider();
+        contextScope = new ContextScope(this);
+        throwingContextProvider = new Provider<Context>() {
+            public Context get() {
+                return RoboApplication.this;
+            }
+        };
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
         resourceListener = new ResourceListener(this);
         viewListener = new ViewListener(contextProvider, this, contextScope);

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="ANDROID_MODULE" version="4">
+<module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
-        <option name="PLATFORM_NAME" value="Android 1.5 Google APIs" />
+        <option name="PLATFORM_NAME" value="Android 1.5 Platform" />
         <option name="USE_CUSTOM_GEN_FOLDER" value="false" />
         <option name="CUSTOM_GEN_FOLDER_RELATIVE_PATH" value="" />
       </configuration>
@@ -12,13 +12,14 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="true" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Android 1.5 Google APIs" level="application" />
-    <orderEntry type="module" module-name="roboguice" />
+    <orderEntry type="library" name="lib" level="project" />
+    <orderEntry type="module" module-name="Main" />
+    <orderEntry type="library" scope="PROVIDED" name="Android 1.5 Platform" level="application" />
   </component>
 </module>
 

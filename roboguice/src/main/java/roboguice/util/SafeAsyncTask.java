@@ -19,36 +19,46 @@ import java.util.concurrent.*;
  * @param <ResultT>
  */
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
+    public static final int DEFAULT_POOL_SIZE = 5;
 
     protected Handler handler;
-    protected ThreadFactory threadFactory;
+    protected Executor executor;
     protected FutureTask<Void> future = new FutureTask<Void>( newTask() );
 
 
-
+    /**
+     * Sets executor to Executors.newFixedThreadPool(DEFAULT_POOL_SIZE) and
+     * Handler to new Handler()
+     */
     public SafeAsyncTask() {
         this.handler = new Handler();
-        this.threadFactory = Executors.defaultThreadFactory();
+        this.executor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
     }
 
+    /**
+     * Sets executor to Executors.newFixedThreadPool(DEFAULT_POOL_SIZE)
+     */
     public SafeAsyncTask( Handler handler ) {
         this.handler = handler;
-        this.threadFactory = Executors.defaultThreadFactory();
+        this.executor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
     }
 
-    public SafeAsyncTask( ThreadFactory threadFactory ) {
+    /**
+     * Sets Handler to new Handler()
+     */
+    public SafeAsyncTask( Executor executor ) {
         this.handler = new Handler();
-        this.threadFactory = threadFactory;
+        this.executor = executor;
     }
 
-    public SafeAsyncTask( Handler handler, ThreadFactory threadFactory ) {
+    public SafeAsyncTask( Handler handler, Executor executor ) {
         this.handler = handler;
-        this.threadFactory = threadFactory;
+        this.executor = executor;
     }
 
 
     public void execute() {
-        threadFactory.newThread( future ).start();
+        executor.execute( future );
     }
 
     public boolean cancel( boolean mayInterruptIfRunning ) {

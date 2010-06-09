@@ -8,7 +8,7 @@ import android.os.Handler;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.Executor;
 
 /**
  * Allows injection to happen for tasks that execute in a background thread.
@@ -29,12 +29,12 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
         super(handler);
     }
 
-    protected RoboAsyncTask(Handler handler, ThreadFactory threadFactory) {
-        super(handler, threadFactory);
+    protected RoboAsyncTask(Handler handler, Executor executor) {
+        super(handler, executor);
     }
 
-    protected RoboAsyncTask(ThreadFactory threadFactory) {
-        super(threadFactory);
+    protected RoboAsyncTask(Executor executor) {
+        super(executor);
     }
 
     @Override

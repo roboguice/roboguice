@@ -50,16 +50,17 @@ package roboguice.inject;
  * From http://code.google.com/p/google-guice/wiki/CustomScopes
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import roboguice.application.RoboApplication;
+
+import android.content.Context;
 
 import com.google.inject.Key;
-import com.google.inject.OutOfScopeException;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
-import android.content.Context;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 
@@ -67,16 +68,13 @@ import android.content.Context;
  */
 public class ContextScope implements Scope {
 
-    protected static final Provider<Object> SEEDED_KEY_PROVIDER = new Provider<Object>() {
-        public Object get() {
-            throw new IllegalStateException(
-            "If you got here then it means that your code asked for scoped object which should have been explicitly seeded in this scope by calling ContextScope.seed(), but was not.");
-        }
-    };
-
     protected final ThreadLocal<Map<Key<?>, Object>> values = new ThreadLocal<Map<Key<?>, Object>>();
-
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
+    protected RoboApplication app;
+
+    public ContextScope( RoboApplication app ) {
+        this.app = app;
+    }
 
     /**
      * Scopes can be entered multiple times with no problems (eg. from
@@ -85,11 +83,13 @@ public class ContextScope implements Scope {
      * via enter().
      */
     public void enter(Context context) {
-        if (values.get() == null) {
-            values.set(new HashMap<Key<?>, Object>());
+        Map<Key<?>,Object> map = values.get();
+        if( map==null ) {
+            map = new HashMap<Key<?>,Object>();
+            values.set(map);
         }
 
-        values.get().put(Key.get(Context.class), context);
+        map.put(Key.get(Context.class), context);
     }
 
     public void exit(Context context) {
@@ -123,22 +123,14 @@ public class ContextScope implements Scope {
     }
 
     protected <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
-        final Map<Key<?>, Object> scopedObjects = values.get();
-        if (scopedObjects == null) {
-            throw new OutOfScopeException("Cannot access " + key + " outside of a scoping block");
-        }
-
-        return scopedObjects;
+        final Map<Key<?>,Object> map = values.get();
+        return map!=null ? map : defaultScopedObjectMap();
     }
 
-    /**
-     * Returns a provider that always throws exception complaining that the
-     * object in question must be seeded before it can be injected.
-     * 
-     * @return typed provider
-     */
-    @SuppressWarnings( { "unchecked" })
-    public static <T> Provider<T> seededKeyProvider() {
-        return (Provider<T>) SEEDED_KEY_PROVIDER;
+    protected Map<Key<?>,Object> defaultScopedObjectMap() {
+        final HashMap<Key<?>,Object> map = new HashMap<Key<?>,Object>();
+        map.put(Key.get(Context.class),app);
+        return map;
     }
+
 }

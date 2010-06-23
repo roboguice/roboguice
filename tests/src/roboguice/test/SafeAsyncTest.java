@@ -33,7 +33,6 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
                         throw new NullPointerException();
                     }
 
-                    @Override
                     public Void call() throws Exception {
                         state[0] = SafeAsyncTest.State.TEST_FAIL;
                         return null;
@@ -75,7 +74,6 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
             public void run() {
 
                 new RoboAsyncTask<Void>(){
-                    @Override
                     public Void call() throws Exception {
                         throw new NullPointerException();
                     }
@@ -114,7 +112,6 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
             public void run() {
 
                 new RoboAsyncTask<Void>(){
-                    @Override
                     public Void call() throws Exception {
                         return null;
                     }
@@ -155,7 +152,6 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
             public void run() {
 
                 new RoboAsyncTask<Void>(){
-                    @Override
                     public Void call() throws Exception {
                         return null;
                     }
@@ -196,7 +192,6 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
         new RoboLooperThread() {
             public void run() {
                 final RoboAsyncTask<Void> task = new RoboAsyncTask<Void>(){
-                    @Override
                     public Void call() throws Exception {
                         Thread.sleep(20000);
                         state[0] = "Shouldn't finish executing doInBackground";

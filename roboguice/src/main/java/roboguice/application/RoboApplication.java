@@ -15,27 +15,17 @@
  */
 package roboguice.application;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import roboguice.config.AbstractAndroidModule;
 import roboguice.config.RoboModule;
-import roboguice.inject.ContextScope;
-import roboguice.inject.ExtrasListener;
-import roboguice.inject.InjectorProvider;
-import roboguice.inject.ResourceListener;
-import roboguice.inject.StaticTypeListener;
-import roboguice.inject.ViewListener;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Stage;
+import roboguice.inject.*;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.google.inject.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is in charge of starting the Guice configuration. When the
@@ -53,9 +43,9 @@ import android.content.Context;
  * For instance : <br /> {@code <application android:icon="@drawable/icon"
  * android:label="@string/app_name"
  * android:name="roboguice.application.RoboApplication"> [...] </application> }
- * 
+ *
  * @see RoboInjectableApplication How to get your Application injected as well.
- * 
+ *
  * @author Mike Burton
  */
 public class RoboApplication extends Application implements InjectorProvider {
@@ -71,6 +61,7 @@ public class RoboApplication extends Application implements InjectorProvider {
     protected ResourceListener resourceListener;
     protected ViewListener viewListener;
     protected ExtrasListener extrasListener;
+    protected PreferenceListener preferenceListener;
     protected List<StaticTypeListener> staticTypeListeners;
 
     /**
@@ -103,12 +94,19 @@ public class RoboApplication extends Application implements InjectorProvider {
      * zero if no RoboActivity is used when running the application.
      */
     protected void initInstanceMembers() {
-        contextScope = new ContextScope();
-        throwingContextProvider = ContextScope.<Context> seededKeyProvider();
+        contextScope = new ContextScope(this);
+        throwingContextProvider = new Provider<Context>() {
+            public Context get() {
+                return RoboApplication.this;
+            }
+        };
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
         resourceListener = new ResourceListener(this);
         viewListener = new ViewListener(contextProvider, this, contextScope);
         extrasListener = new ExtrasListener(contextProvider);
+        if (allowPreferenceInjection()) {
+          preferenceListener = new PreferenceListener(contextProvider);
+        }
         staticTypeListeners = new ArrayList<StaticTypeListener>();
         staticTypeListeners.add(resourceListener);
     }
@@ -124,7 +122,8 @@ public class RoboApplication extends Application implements InjectorProvider {
      */
     protected Injector createInjector() {
         ArrayList<Module> modules = new ArrayList<Module>();
-        Module roboguiceModule = new RoboModule(contextScope, throwingContextProvider, contextProvider, resourceListener, viewListener, extrasListener,
+        Module roboguiceModule = new RoboModule(contextScope, throwingContextProvider,
+                contextProvider, resourceListener, viewListener, extrasListener, preferenceListener,
                 this);
         modules.add(roboguiceModule);
         addApplicationModules(modules);
@@ -147,13 +146,24 @@ public class RoboApplication extends Application implements InjectorProvider {
      * This method is called by {@link #createInjector()}.<br />
      * <br />
      * The default implementation is a no-op and does nothing.
-     * 
+     *
      * @param modules
      *            The list of modules to which you may add your own custom
      *            modules. Please notice that it already contains one module,
      *            which is this.
      */
     protected void addApplicationModules(List<Module> modules) {
+    }
+
+    /**
+     * Returns whether or not {@link roboguice.inject.InjectPreference} will be
+     * supported.
+     * It is supported by default, but applications that have no
+     * {@link roboguice.activity.RoboPreferenceActivity}'s may want to turn this
+     * off for a slight startup performance gain.
+     */
+    protected boolean allowPreferenceInjection() {
+      return true;
     }
 
     public List<StaticTypeListener> getStaticTypeListeners() {

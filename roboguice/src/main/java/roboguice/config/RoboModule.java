@@ -8,6 +8,7 @@ import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
@@ -29,7 +30,7 @@ import java.util.List;
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
  * Used by {@link roboguice.application.RoboApplication}.
- * 
+ *
  * @author Mike Burton
  * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
@@ -41,16 +42,19 @@ public class RoboModule extends AbstractModule {
     protected final ResourceListener resourceListener;
     protected final ViewListener viewListener;
     protected final ExtrasListener extrasListener;
+    protected final PreferenceListener preferenceListener;
     protected final Application application;
 
     public RoboModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
-            ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener, Application application) {
+            ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener,
+            PreferenceListener preferenceListener, Application application) {
         this.contextScope = contextScope;
         this.throwingContextProvider = throwingContextProvider;
         this.contextProvider = contextProvider;
         this.resourceListener = resourceListener;
         this.viewListener = viewListener;
         this.extrasListener = extrasListener;
+        this.preferenceListener = preferenceListener;
         this.application = application;
     }
 
@@ -65,6 +69,13 @@ public class RoboModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     protected void configure() {
+        // Context Scope bindings
+        bindScope(ContextScoped.class, contextScope);
+        bind(ContextScope.class).toInstance(contextScope);
+        bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
+        bind(Activity.class).toProvider(ActivityProvider.class);
+        bind(AssetManager.class).toProvider( AssetManagerProvider.class );
+
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         bind(Resources.class).toProvider(ResourcesProvider.class);
@@ -89,21 +100,19 @@ public class RoboModule extends AbstractModule {
         bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(Context.WIFI_SERVICE));
         bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
         bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
-        
-        // Context Scope bindings
-        bindScope(ContextScoped.class, contextScope);
-        bind(ContextScope.class).toInstance(contextScope);
-        bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
-        bind(Activity.class).toProvider(ActivityProvider.class);
+
 
         // Android Resources, Views and extras require special handling
         bindListener(Matchers.any(), resourceListener);
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
 
+        if (preferenceListener != null) {
+          bindListener(Matchers.any(), preferenceListener);
+        }
+
         requestStaticInjection( RoboThread.class );
         requestStaticInjection( RoboAsyncTask.class );
-        
     }
 
 }

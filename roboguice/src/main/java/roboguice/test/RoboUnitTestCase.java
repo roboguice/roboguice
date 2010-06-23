@@ -23,7 +23,7 @@ import java.lang.reflect.ParameterizedType;
  *
  *  // Make sure you use one of the @*Test annotations AND begin
  *  // your testcase's name with "test"
- *  @MediumTest
+ *  \@MediumTest
  *  public void test01() {
  *      // Make sure you're using com.mydomain.R, not com.mydomain.test.R
  *      assertEquals("Hello World, Lop!", getContext().getString(com.mydomain.R.string.hello));
@@ -31,6 +31,8 @@ import java.lang.reflect.ParameterizedType;
  *
  * }
  * </code>
+ *
+ * Also, see the notes about your Application class below.
  *
  * @param <AppType> The type of your Application class.  This class must have a
  *                  constructor that accepts a Context argument and calls

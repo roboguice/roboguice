@@ -15,11 +15,11 @@
  */
 package roboguice.config;
 
-import java.util.List;
-
 import roboguice.inject.StaticTypeListener;
 
 import com.google.inject.AbstractModule;
+
+import java.util.List;
 
 /**
  *
@@ -31,9 +31,10 @@ public abstract class AbstractAndroidModule extends AbstractModule {
     @Override
     protected void requestStaticInjection(Class<?>... types) {
         super.requestStaticInjection(types);
-        for (StaticTypeListener l : listeners) {
-            l.requestStaticInjection(types);
-        }
+        if( listeners!=null )
+            for (StaticTypeListener l : listeners)
+                l.requestStaticInjection(types);
+
     }
 
     public void setStaticTypeListeners(List<StaticTypeListener> listeners) {

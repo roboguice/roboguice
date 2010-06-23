@@ -13,13 +13,13 @@
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-            <version>1.5r3</version>
+            <version>1.5_r4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android-test</artifactId>
-            <version>1.5r3</version>
+            <version>1.5_r4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -27,12 +27,6 @@
             <artifactId>roboguice</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.1</version>
-        </dependency>
-
         <!-- this artifact has to be installed into your repository manually, no public repo has it-->
         <dependency>
             <groupId>com.google.inject</groupId>

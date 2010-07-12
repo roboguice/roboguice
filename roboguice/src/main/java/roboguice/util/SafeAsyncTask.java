@@ -21,7 +21,7 @@ import java.util.concurrent.*;
  * @param <ResultT>
  */
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
-    public static final int DEFAULT_POOL_SIZE = 5;
+    public static final int DEFAULT_POOL_SIZE = 25;
 
     protected Handler handler;
     protected Executor executor;

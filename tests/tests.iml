@@ -3,7 +3,7 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
-        <option name="PLATFORM_NAME" value="Android 1.5 Google APIs" />
+        <option name="PLATFORM_NAME" value="Android 1.5 Platform" />
         <option name="USE_CUSTOM_GEN_FOLDER" value="false" />
         <option name="CUSTOM_GEN_FOLDER_RELATIVE_PATH" value="" />
       </configuration>
@@ -17,8 +17,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="PROVIDED" name="Android 1.5 Google APIs" level="application" />
-    <orderEntry type="module" module-name="roboguice" />
+    <orderEntry type="library" scope="PROVIDED" name="Android 1.5 Platform" level="application" />
   </component>
 </module>
 

@@ -72,7 +72,7 @@
             <extension>
                 <groupId>org.jvnet.wagon-svn</groupId>
                 <artifactId>wagon-svn</artifactId>
-                <version>RELEASE</version>
+                <version>1.9</version>
             </extension>
         </extensions>
 
@@ -85,15 +85,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>android</groupId>
+            <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-            <version>1.5_r3</version>
+            <version>1.5_r4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>add-ons</groupId>
+            <groupId>com.google.android</groupId>
+            <artifactId>android-test</artifactId>
+            <version>1.5_r4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.android.maps</groupId>
             <artifactId>maps</artifactId>
-            <version>3</version>
+            <version>3_r3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

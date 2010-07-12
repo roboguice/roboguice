@@ -3,6 +3,8 @@ package roboguice.util;
 import android.os.Handler;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
@@ -23,6 +25,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     protected Handler handler;
     protected Executor executor;
+    protected StackTraceElement[] launchLocation;
     protected FutureTask<Void> future = new FutureTask<Void>( newTask() );
 
 
@@ -58,6 +61,11 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
 
     public void execute() {
+        execute(Thread.currentThread().getStackTrace());
+    }
+
+    protected void execute( StackTraceElement[] launchLocation ) {
+        this.launchLocation = launchLocation;
         executor.execute( future );
     }
 
@@ -165,6 +173,11 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
         }
 
         protected void doException( final Exception e ) throws Exception {
+            if( parent.launchLocation!=null ) {
+                final ArrayList<StackTraceElement> stack = new ArrayList<StackTraceElement>(Arrays.asList(e.getStackTrace()));
+                stack.addAll(Arrays.asList(parent.launchLocation));
+                e.setStackTrace(stack.toArray(new StackTraceElement[stack.size()]));
+            }
             postToUiThreadAndWait( new Callable<Object>() {
                 public Object call() throws Exception {
                     if( e instanceof InterruptedException )

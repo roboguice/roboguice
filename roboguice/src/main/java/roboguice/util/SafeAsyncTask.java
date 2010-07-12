@@ -35,7 +35,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      */
     public SafeAsyncTask() {
         this.handler = new Handler();
-        this.executor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
+        this.executor = defaultExecutor();
     }
 
     /**
@@ -43,7 +43,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      */
     public SafeAsyncTask( Handler handler ) {
         this.handler = handler;
-        this.executor = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
+        this.executor = defaultExecutor();
     }
 
     /**
@@ -236,6 +236,8 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     }
 
-    
+    protected Executor defaultExecutor() {
+        return Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
+    }
 
 }

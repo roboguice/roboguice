@@ -22,6 +22,7 @@ import java.util.concurrent.*;
  */
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     public static final int DEFAULT_POOL_SIZE = 25;
+    protected static final Executor DEFAULT_EXECUTOR = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
 
     protected Handler handler;
     protected Executor executor;
@@ -35,7 +36,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      */
     public SafeAsyncTask() {
         this.handler = new Handler();
-        this.executor = defaultExecutor();
+        this.executor = DEFAULT_EXECUTOR;
     }
 
     /**
@@ -43,7 +44,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      */
     public SafeAsyncTask( Handler handler ) {
         this.handler = handler;
-        this.executor = defaultExecutor();
+        this.executor = DEFAULT_EXECUTOR;
     }
 
     /**
@@ -234,10 +235,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
         }
 
-    }
-
-    protected Executor defaultExecutor() {
-        return Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
     }
 
 }

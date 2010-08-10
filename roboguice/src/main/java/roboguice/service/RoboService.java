@@ -25,7 +25,7 @@ import com.google.inject.Injector;
  * injection of collaborators, using Google Guice.<br /> <br />
  * 
  * Your own services that usually extend from {@link Service} should now extend from
- * {@link GuiceActivity}.<br /> <br />
+ * {@link RoboService}.<br /> <br />
  *
  * If we didn't provide what you need, you have two options : either post an issue on <a
  * href="http://code.google.com/p/roboguice/issues/list">the bug tracker</a>, or

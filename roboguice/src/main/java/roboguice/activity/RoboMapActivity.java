@@ -25,6 +25,8 @@ import com.google.inject.Injector;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.content.Intent;
+import android.content.Intent;
 
 /**
  * A {@link RoboMapActivity} extends from {@link MapActivity} to provide
@@ -91,6 +93,12 @@ public abstract class RoboMapActivity extends MapActivity implements InjectorPro
     protected void onPause() {
         super.onPause();
         scope.exit(this);
+    }
+
+    @Override
+    public void onNewIntent( Intent intent ) {
+        super.onNewIntent(intent);
+        scope.enter(this);
     }
 
     /**

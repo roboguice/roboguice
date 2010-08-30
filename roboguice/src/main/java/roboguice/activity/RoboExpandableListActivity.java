@@ -25,6 +25,7 @@ import android.app.ExpandableListActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.content.Intent;
 
 /**
  * A {@link RoboExpandableListActivity} extends from
@@ -92,6 +93,12 @@ public class RoboExpandableListActivity extends ExpandableListActivity implement
     protected void onPause() {
         super.onPause();
         scope.exit(this);
+    }
+
+    @Override
+    protected void onNewIntent( Intent intent ) {
+        super.onNewIntent(intent);
+        scope.enter(this);
     }
 
     /**

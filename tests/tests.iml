@@ -4,8 +4,18 @@
     <facet type="android" name="Android">
       <configuration>
         <option name="PLATFORM_NAME" value="Android 1.5 Platform" />
-        <option name="USE_CUSTOM_GEN_FOLDER" value="false" />
-        <option name="CUSTOM_GEN_FOLDER_RELATIVE_PATH" value="" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/gen" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/res" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/assets" />
+        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/libs" />
+        <option name="REGENERATE_R_JAVA" value="true" />
+        <option name="REGENERATE_JAVA_BY_AIDL" value="true" />
+        <option name="USE_CUSTOM_APT_SOURCE_FOLDER" value="false" />
+        <option name="CUSTOM_APT_SOURCE_FOLDER" value="" />
+        <option name="ADD_ANDROID_LIBRARY" value="true" />
+        <option name="LIBRARY_PROJECT" value="false" />
       </configuration>
     </facet>
   </component>

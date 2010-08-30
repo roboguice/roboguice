@@ -25,6 +25,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.content.Intent;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -114,6 +115,12 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onPause() {
         super.onPause();
         scope.exit(this);
+    }
+
+    @Override
+    protected void onNewIntent( Intent intent ) {
+        super.onNewIntent(intent);
+        scope.enter(this);
     }
 
     /**

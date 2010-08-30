@@ -25,6 +25,7 @@ import android.accounts.AccountAuthenticatorActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.content.Intent;
 
 /**
  * A subclass of {@link AccountAuthenticatorActivity} that provides dependency injection
@@ -92,6 +93,12 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
         scope.exit(this);
     }
 
+    @Override
+    protected void onNewIntent( Intent intent ) {
+        super.onNewIntent(intent);
+        scope.enter(this);
+    }
+    
     /**
      * @see roboguice.application.GuiceApplication#getInjector()
      */

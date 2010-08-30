@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 import com.google.inject.Injector;
+import android.content.Intent;
 
 /**
  * A {@link RoboLauncherActivity} extends from {@link LauncherActivity} to provide
@@ -99,6 +100,12 @@ public class RoboLauncherActivity extends LauncherActivity implements InjectorPr
     protected void onPause() {
         super.onPause();
         scope.exit(this);
+    }
+
+    @Override
+    protected void onNewIntent( Intent intent ) {
+        super.onNewIntent(intent);
+        scope.enter(this);
     }
 
     /**

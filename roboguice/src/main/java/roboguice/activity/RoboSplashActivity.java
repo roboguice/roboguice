@@ -5,6 +5,7 @@ import roboguice.inject.ContextScope;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.content.Intent;
 
 /**
  * An activity that can be used to display a splash page while initializing the

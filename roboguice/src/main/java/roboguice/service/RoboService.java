@@ -38,7 +38,7 @@ import com.google.inject.Injector;
  * {@link Injector} at any time, by calling {@link #getInjector()}.<br />
  *
  * However, you will not have access to Context scoped beans until
- * {@link #onCreate(Bundle)} is called. <br /> <br />
+ * {@link #onCreate()} is called. <br /> <br />
  *
  * @author Mike Burton
  * @author Christine Karman

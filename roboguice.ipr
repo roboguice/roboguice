@@ -37,6 +37,9 @@
     <option name="DEPRECATION" value="false" />
   </component>
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
   <component name="InspectionProjectProfileManager">
     <profiles>
       <profile version="1.0" is_locked="false">
@@ -58,13 +61,6 @@
           <option name="ADD_APPLET_TO_ENTRIES" value="true" />
           <option name="ADD_SERVLET_TO_ENTRIES" value="true" />
           <option name="ADD_NONJAVA_TO_ENTRIES" value="true" />
-          <option name="ADDITIONAL_ANNOTATIONS">
-            <value>
-              <list size="1">
-                <item index="0" class="java.lang.String" itemvalue="javax.ws.rs.*" />
-              </list>
-            </value>
-          </option>
         </inspection_tool>
       </profile>
     </profiles>
@@ -114,6 +110,7 @@
       <module name="astroboy" />
       <option name="ACTIVITY_CLASS" value="" />
       <option name="MODE" value="default_activity" />
+      <option name="DEPLOY" value="true" />
       <option name="CHOOSE_DEVICE_MANUALLY" value="true" />
       <option name="PREFERRED_AVD" value="" />
       <option name="COMMAND_LINE" value="" />

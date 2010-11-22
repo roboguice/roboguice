@@ -12,10 +12,16 @@
         <option name="LIBS_FOLDER_RELATIVE_PATH" value="/libs" />
         <option name="REGENERATE_R_JAVA" value="true" />
         <option name="REGENERATE_JAVA_BY_AIDL" value="true" />
-        <option name="USE_CUSTOM_APT_SOURCE_FOLDER" value="false" />
-        <option name="CUSTOM_APT_SOURCE_FOLDER" value="" />
+        <option name="USE_CUSTOM_APK_RESOURCE_FOLDER" value="false" />
+        <option name="CUSTOM_APK_RESOURCE_FOLDER" value="" />
+        <option name="USE_CUSTOM_COMPILER_MANIFEST" value="false" />
+        <option name="CUSTOM_COMPILER_MANIFEST" value="" />
+        <option name="APK_PATH" value="" />
         <option name="ADD_ANDROID_LIBRARY" value="true" />
         <option name="LIBRARY_PROJECT" value="false" />
+        <option name="COPY_RESOURCES_FROM_ARTIFACTS" value="true" />
+        <option name="ENABLE_AAPT_COMPILER" value="true" />
+        <option name="GENERATE_UNSIGNED_APK" value="false" />
       </configuration>
     </facet>
   </component>

@@ -2,6 +2,7 @@ roboguice.activity
 roboguice.application
 roboguice.config
 roboguice.inject
+roboguice.receiver
 roboguice.service
 roboguice.test
 roboguice.util

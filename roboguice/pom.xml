@@ -135,6 +135,7 @@
                 <configuration>
                     <reportOutputDirectory>docs</reportOutputDirectory>
                     <destDir>apidocs</destDir>
+                    <notimestamp>true</notimestamp>
                 </configuration>
             </plugin>
         </plugins>

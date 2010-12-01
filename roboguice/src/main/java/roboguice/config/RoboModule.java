@@ -1,9 +1,5 @@
 package roboguice.config;
 
-import roboguice.inject.*;
-import roboguice.util.RoboAsyncTask;
-import roboguice.util.RoboThread;
-
 import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -19,11 +15,14 @@ import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
+import roboguice.inject.*;
+import roboguice.util.Ln;
+import roboguice.util.RoboAsyncTask;
+import roboguice.util.RoboThread;
 
 import java.util.List;
 
@@ -111,6 +110,7 @@ public class RoboModule extends AbstractModule {
           bindListener(Matchers.any(), preferenceListener);
         }
 
+        requestStaticInjection( Ln.class );
         requestStaticInjection( RoboThread.class );
         requestStaticInjection( RoboAsyncTask.class );
     }

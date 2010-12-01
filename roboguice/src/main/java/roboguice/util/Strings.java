@@ -1,11 +1,10 @@
 package roboguice.util;
 
 import java.io.*;
+import java.security.InvalidParameterException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class Strings {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
@@ -150,6 +149,24 @@ public class Strings {
             array[i] = str.substring(i*chunkSize,(i*chunkSize)+chunkSize<len ? (i*chunkSize)+chunkSize : len);
 
         return array;
+    }
+
+    public static String namedFormat(String str, Map<String, String> substitutions) {
+        for( String key : substitutions.keySet() )
+            str = str.replace('$'+key,substitutions.get(key));
+
+        return str;
+    }
+
+    public static String namedFormat( String str, Object... nameValuePairs ) {
+        if( nameValuePairs.length%2 != 0 )
+            throw new InvalidParameterException("You must include one value for each parameter");
+
+        final HashMap<String,String> map = new HashMap<String, String>(nameValuePairs.length/2);
+        for( int i=0; i<nameValuePairs.length; i+=2 )
+            map.put( Strings.toString(nameValuePairs[i]), Strings.toString(nameValuePairs[i+1]));
+
+        return namedFormat(str,map);
     }
 
 }

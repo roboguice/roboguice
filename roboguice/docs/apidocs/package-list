@@ -1,4 +1,5 @@
 roboguice.activity
+roboguice.adapter
 roboguice.application
 roboguice.config
 roboguice.inject

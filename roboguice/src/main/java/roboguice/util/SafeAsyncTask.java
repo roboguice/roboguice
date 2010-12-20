@@ -35,6 +35,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * Handler to new Handler()
      */
     public SafeAsyncTask() {
+        this.handler = new Handler();
         this.executor = DEFAULT_EXECUTOR;
     }
 
@@ -50,6 +51,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * Sets Handler to new Handler()
      */
     public SafeAsyncTask( Executor executor ) {
+        this.handler = new Handler();
         this.executor = executor;
     }
 
@@ -67,8 +69,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     }
 
     public Handler handler() {
-        if(handler==null)
-            handler = new Handler();
         return handler;
     }
 

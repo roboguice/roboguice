@@ -35,7 +35,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * Handler to new Handler()
      */
     public SafeAsyncTask() {
-        this.handler = new Handler();
         this.executor = DEFAULT_EXECUTOR;
     }
 
@@ -51,7 +50,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * Sets Handler to new Handler()
      */
     public SafeAsyncTask( Executor executor ) {
-        this.handler = new Handler();
         this.executor = executor;
     }
 
@@ -60,6 +58,19 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
         this.executor = executor;
     }
 
+
+
+
+    public SafeAsyncTask<ResultT> handler( Handler handler ) {
+        this.handler = handler;
+        return this;
+    }
+
+    public Handler handler() {
+        if(handler==null)
+            handler = new Handler();
+        return handler;
+    }
 
     public void execute() {
         execute(Thread.currentThread().getStackTrace());
@@ -215,7 +226,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
             // for it to complete.
             // If it throws an exception, capture that exception
             // and rethrow it later.
-            parent.handler.post( new Runnable() {
+            parent.handler().post( new Runnable() {
                public void run() {
                    try {
                        c.call();

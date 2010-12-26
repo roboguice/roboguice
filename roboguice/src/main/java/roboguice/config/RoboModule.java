@@ -43,10 +43,11 @@ public class RoboModule extends AbstractModule {
     protected final ExtrasListener extrasListener;
     protected final PreferenceListener preferenceListener;
     protected final Application application;
+    protected final ContextObservationManager observationManager;
 
     public RoboModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
             ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener,
-            PreferenceListener preferenceListener, Application application) {
+            PreferenceListener preferenceListener, ContextObservationManager observationManager, Application application) {
         this.contextScope = contextScope;
         this.throwingContextProvider = throwingContextProvider;
         this.contextProvider = contextProvider;
@@ -54,6 +55,7 @@ public class RoboModule extends AbstractModule {
         this.viewListener = viewListener;
         this.extrasListener = extrasListener;
         this.preferenceListener = preferenceListener;
+        this.observationManager = observationManager;
         this.application = application;
     }
 
@@ -79,6 +81,9 @@ public class RoboModule extends AbstractModule {
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         bind(Resources.class).toProvider(ResourcesProvider.class);
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
+
+        // Context observers
+        bind(ContextObservationManager.class).toInstance(observationManager);
 
         for (Class<? extends Object> c = application.getClass(); c != null && Application.class.isAssignableFrom(c); c = c.getSuperclass()) {
             bind((Class<Object>) c).toInstance(application);
@@ -108,6 +113,10 @@ public class RoboModule extends AbstractModule {
 
         if (preferenceListener != null) {
           bindListener(Matchers.any(), preferenceListener);
+        }
+
+        if (observationManager.isEnabled()) {
+            bindListener(Matchers.any(), new ContextObserverTypeListener(contextProvider, observationManager));
         }
 
         requestStaticInjection( Ln.class );

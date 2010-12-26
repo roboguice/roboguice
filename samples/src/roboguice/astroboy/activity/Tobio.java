@@ -15,11 +15,11 @@
  */
 package roboguice.astroboy.activity;
 
-import java.io.Serializable;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import java.io.Serializable;
 
 /**
  * This activity was created to execute {@link DoctorTenma} activity with extra

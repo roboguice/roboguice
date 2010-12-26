@@ -15,14 +15,12 @@
  */
 package roboguice.application;
 
+import android.app.Application;
+import android.content.Context;
+import com.google.inject.*;
 import roboguice.config.AbstractAndroidModule;
 import roboguice.config.RoboModule;
 import roboguice.inject.*;
-
-import android.app.Application;
-import android.content.Context;
-
-import com.google.inject.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +61,7 @@ public class RoboApplication extends Application implements InjectorProvider {
     protected ExtrasListener extrasListener;
     protected PreferenceListener preferenceListener;
     protected List<StaticTypeListener> staticTypeListeners;
+    protected ContextObservationManager observationManager;
 
     /**
      * Returns the {@link Injector} of your application. If none exists yet,
@@ -107,6 +106,12 @@ public class RoboApplication extends Application implements InjectorProvider {
         if (allowPreferenceInjection()) {
           preferenceListener = new PreferenceListener(contextProvider);
         }
+        if (allowContextObservers()) {
+            observationManager = new ContextObservationManager();
+        } else {
+            observationManager = new ContextObservationManager.NullContextObservationManager();
+        }
+
         staticTypeListeners = new ArrayList<StaticTypeListener>();
         staticTypeListeners.add(resourceListener);
     }
@@ -124,7 +129,7 @@ public class RoboApplication extends Application implements InjectorProvider {
         ArrayList<Module> modules = new ArrayList<Module>();
         Module roboguiceModule = new RoboModule(contextScope, throwingContextProvider,
                 contextProvider, resourceListener, viewListener, extrasListener, preferenceListener,
-                this);
+                observationManager, this);
         modules.add(roboguiceModule);
         addApplicationModules(modules);
         for (Module m : modules) {
@@ -164,6 +169,10 @@ public class RoboApplication extends Application implements InjectorProvider {
      */
     protected boolean allowPreferenceInjection() {
       return true;
+    }
+
+    protected boolean allowContextObservers() {
+        return true;
     }
 
     public List<StaticTypeListener> getStaticTypeListeners() {

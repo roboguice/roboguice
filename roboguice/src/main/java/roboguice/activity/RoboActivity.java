@@ -15,17 +15,19 @@
  */
 package roboguice.activity;
 
-import roboguice.application.RoboApplication;
-import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
-
-import com.google.inject.Injector;
-
 import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.content.Intent;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import roboguice.application.RoboApplication;
+import roboguice.inject.ContextObservationManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -60,6 +62,7 @@ import android.content.Intent;
  */
 public class RoboActivity extends Activity implements InjectorProvider {
     protected ContextScope scope;
+    @Inject protected ContextObservationManager contextObservationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class RoboActivity extends Activity implements InjectorProvider {
         scope.enter(this);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
+        contextObservationManager.notify(this, "onCreate", savedInstanceState);
     }
 
     @Override
@@ -97,23 +101,27 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
+        contextObservationManager.notify(this, "onRestart");
     }
 
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
+        contextObservationManager.notify(this, "onStart");
     }
 
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
+        contextObservationManager.notify(this, "onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        contextObservationManager.notify(this, "onPause");
         scope.exit(this);
     }
 
@@ -121,6 +129,53 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onNewIntent( Intent intent ) {
         super.onNewIntent(intent);
         scope.enter(this);
+        contextObservationManager.notify(this, "onNewIntent", intent);
+    }
+
+    @Override
+    protected void onStop() {
+        contextObservationManager.notify(this, "onStop");
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        contextObservationManager.notify(this, "onDestroy");
+        contextObservationManager.clear(this);
+        super.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        contextObservationManager.notify(this, "onConfigurationChanged", newConfig);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Object result = contextObservationManager.notifyWithResult(this, "onKeyDown", false, keyCode, event);
+        if (result != null && Boolean.TRUE.equals(result)) return true;
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Object result = contextObservationManager.notifyWithResult(this, "onKeyUp", false, keyCode, event);
+        if (result != null && Boolean.TRUE.equals(result)) return true;
+        return super.onKeyUp(keyCode, event);
+
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        contextObservationManager.notify(this, "onContentChanged");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        contextObservationManager.notify(this, "onActivityResult", requestCode, resultCode, data);
     }
 
     /**
@@ -129,5 +184,4 @@ public class RoboActivity extends Activity implements InjectorProvider {
     public Injector getInjector() {
         return ((RoboApplication) getApplication()).getInjector();
     }
-
 }

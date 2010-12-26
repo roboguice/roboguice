@@ -11,10 +11,10 @@ import java.util.*;
 @Singleton
 public class ContextObservationManager {
 
-    private final Map<Context, Map<String, Set<ActivityObserverMethod>>> mRegistrations;
+    private final Map<Context, Map<String, Set<ContextObserverMethod>>> mRegistrations;
 
     public ContextObservationManager() {
-        mRegistrations  = new WeakHashMap<Context, Map<String, Set<ActivityObserverMethod>>>();
+        mRegistrations  = new WeakHashMap<Context, Map<String, Set<ContextObserverMethod>>>();
     }
 
     public boolean isEnabled() {
@@ -24,25 +24,25 @@ public class ContextObservationManager {
     public void registerObserver(Context context, Object instance, Method method) {
         if (!isEnabled()) return;
 
-        Map<String, Set<ActivityObserverMethod>> methods = mRegistrations.get(context);
+        Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) {
-            methods = new HashMap<String, Set<ActivityObserverMethod>>();
+            methods = new HashMap<String, Set<ContextObserverMethod>>();
             mRegistrations.put(context, methods);
         }
 
-        Set<ActivityObserverMethod> observers = methods.get(method.getName());
+        Set<ContextObserverMethod> observers = methods.get(method.getName());
         if (observers == null) {
-            observers = new HashSet<ActivityObserverMethod>();
+            observers = new HashSet<ContextObserverMethod>();
             methods.put(method.getName(), observers);
         }
 
-        observers.add(new ActivityObserverMethod(instance, method));
+        observers.add(new ContextObserverMethod(instance, method));
     }
 
     public void clear(Context context) {
         if (!isEnabled()) return;
 
-        final Map<String, Set<ActivityObserverMethod>> methods = mRegistrations.get(context);
+        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return;
 
         mRegistrations.remove(context);
@@ -52,13 +52,13 @@ public class ContextObservationManager {
     public void notify(Context context, String methodName, Object... args) {
         if (!isEnabled()) return;
 
-        final Map<String, Set<ActivityObserverMethod>> methods = mRegistrations.get(context);
+        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return;
 
-        final Set<ActivityObserverMethod> observers = methods.get(methodName);
+        final Set<ContextObserverMethod> observers = methods.get(methodName);
         if (observers == null) return;
 
-        for (ActivityObserverMethod observerMethod : observers) {
+        for (ContextObserverMethod observerMethod : observers) {
             try {
                 observerMethod.invoke(null, args);
             } catch (InvocationTargetException e) {
@@ -72,13 +72,13 @@ public class ContextObservationManager {
     public Object notifyWithResult(Context context, String methodName, Object defaultReturn, Object... args) {
         if (!isEnabled()) return defaultReturn;
 
-        final Map<String, Set<ActivityObserverMethod>> methods = mRegistrations.get(context);
+        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return defaultReturn;
 
-        final Set<ActivityObserverMethod> observers = methods.get(methodName);
+        final Set<ContextObserverMethod> observers = methods.get(methodName);
         if (observers == null) return defaultReturn;
 
-        for (ActivityObserverMethod observerMethod : observers) {
+        for (ContextObserverMethod observerMethod : observers) {
             Object result = null;
             try {
                 result = observerMethod.invoke(defaultReturn, args);
@@ -100,11 +100,11 @@ public class ContextObservationManager {
         }
     }
 
-    static class ActivityObserverMethod {
+    static class ContextObserverMethod {
         Method method;
         WeakReference<Object> instanceReference;
 
-        public ActivityObserverMethod(Object instance, Method method) {
+        public ContextObserverMethod(Object instance, Method method) {
             this.instanceReference = new WeakReference<Object>(instance);
             this.method = method;
         }

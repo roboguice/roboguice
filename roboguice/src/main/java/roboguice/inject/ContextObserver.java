@@ -27,25 +27,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Indicates that a method observes the same method in context that the component
  * is instantiated in.
  *
- * When injecting a component into a context i.e. Activity or Service value annotated
- * will be called when the corresponding method is executed on the activity.
+ * When injecting a component into a context i.e. Activity or Service methods annotated
+ * will be called when the corresponding event is raised on the activity.
  *
- * Very lightweight and useful for getting hooks into Activity value
+ * Very lightweight and useful for getting hooks into Activity methods
  * like onCreate(), onDestroy(), etc.
  *
- * Ensure that when using the annotation the signature of method matches the signature of
- * parent method exactly.  This will also not currently handle overloaded value.
- *
  * You can easily extend the base RoboContext classes to provide the same functionality
- * for any value.
+ * for any methods.
  *
  * @code
- * {id best practices enums are bad, use integer or string
-constants instead.
-
-I am all for trying to eliminate the method name matching problem but lets
-just use string constants instead of a type... The enum seems to me like it
-hurts more than it helps.
+ * {
  * public class MyBaseActivity extends RoboActivity implements SomethingHappened {
  *   protected void onSomethingHappened() {
  *     contextObservationManager.notify(this, "onSomethingHappened");
@@ -65,7 +57,7 @@ hurts more than it helps.
  * }
  *
  * public class CustomComponent {
- *   @ContextObserver
+ *   @ContextObserver("onSomethingHappened")
  *   public void onSomethingHappened() {
  *     // Handle something happened in this component
  *   }

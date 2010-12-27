@@ -33,14 +33,19 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Very lightweight and useful for getting hooks into Activity value
  * like onCreate(), onDestroy(), etc.
  *
- * Ensure that when using the annotation the signiture of method matches the signiture of
+ * Ensure that when using the annotation the signature of method matches the signature of
  * parent method exactly.  This will also not currently handle overloaded value.
  *
  * You can easily extend the base RoboContext classes to provide the same functionality
  * for any value.
  *
  * @code
- * {
+ * {id best practices enums are bad, use integer or string
+constants instead.
+
+I am all for trying to eliminate the method name matching problem but lets
+just use string constants instead of a type... The enum seems to me like it
+hurts more than it helps.
  * public class MyBaseActivity extends RoboActivity implements SomethingHappened {
  *   protected void onSomethingHappened() {
  *     contextObservationManager.notify(this, "onSomethingHappened");
@@ -72,5 +77,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target( { ElementType.METHOD })
 @BindingAnnotation
 public @interface ContextObserver {
-    String[] value() default {};
+    String value();
 }

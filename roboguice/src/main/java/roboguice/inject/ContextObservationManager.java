@@ -21,11 +21,7 @@ public class ContextObservationManager {
         return true;
     }
 
-    public void registerObserver(Context context, Object instance, Method method) {
-        registerObserver(context, instance, method, method.getName());
-    }
-
-    public void registerObserver(Context context, Object instance, Method method, String methodName) {
+    public void registerObserver(Context context, Object instance, Method method, String event) {
         if (!isEnabled()) return;
 
         Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
@@ -34,22 +30,22 @@ public class ContextObservationManager {
             mRegistrations.put(context, methods);
         }
 
-        Set<ContextObserverMethod> observers = methods.get(methodName);
+        Set<ContextObserverMethod> observers = methods.get(event);
         if (observers == null) {
             observers = new HashSet<ContextObserverMethod>();
-            methods.put(methodName, observers);
+            methods.put(event, observers);
         }
 
-        observers.add(new ContextObserverMethod(instance, method, methodName));
+        observers.add(new ContextObserverMethod(instance, method, event));
     }
 
-    public void unregisterObserver(Context context, Object instance, String method) {
+    public void unregisterObserver(Context context, Object instance, String event) {
         if (!isEnabled()) return;
 
         final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return;
 
-        final Set<ContextObserverMethod> observers = methods.get(method);
+        final Set<ContextObserverMethod> observers = methods.get(event);
         if (observers == null) return;
 
         for (Iterator<ContextObserverMethod> iterator = observers.iterator(); iterator.hasNext();) {
@@ -74,13 +70,13 @@ public class ContextObservationManager {
         methods.clear();
     }
 
-    public void notify(Context context, String methodName, Object... args) {
+    public void notify(Context context, String event, Object... args) {
         if (!isEnabled()) return;
 
         final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return;
 
-        final Set<ContextObserverMethod> observers = methods.get(methodName);
+        final Set<ContextObserverMethod> observers = methods.get(event);
         if (observers == null) return;
 
         for (ContextObserverMethod observerMethod : observers) {
@@ -94,13 +90,13 @@ public class ContextObservationManager {
         }
     }
 
-    public Object notifyWithResult(Context context, String methodName, Object defaultReturn, Object... args) {
+    public Object notifyWithResult(Context context, String event, Object defaultReturn, Object... args) {
         if (!isEnabled()) return defaultReturn;
 
         final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return defaultReturn;
 
-        final Set<ContextObserverMethod> observers = methods.get(methodName);
+        final Set<ContextObserverMethod> observers = methods.get(event);
         if (observers == null) return defaultReturn;
 
         for (ContextObserverMethod observerMethod : observers) {
@@ -126,14 +122,14 @@ public class ContextObservationManager {
     }
 
     static class ContextObserverMethod {
-        String contextMethodName;
+        String event;
         Method method;
         WeakReference<Object> instanceReference;
 
-        public ContextObserverMethod(Object instance, Method method, String contextMethodName) {
+        public ContextObserverMethod(Object instance, Method method, String event) {
             this.instanceReference = new WeakReference<Object>(instance);
             this.method = method;
-            this.contextMethodName = contextMethodName;
+            this.event = event;
         }
 
         public Object invoke(Object defaultReturn, Object... args) throws InvocationTargetException, IllegalAccessException {

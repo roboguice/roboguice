@@ -71,7 +71,7 @@ public class RoboActivity extends Activity implements InjectorProvider {
         scope.enter(this);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
-        contextObservationManager.notify(this, "onCreate", savedInstanceState);
+        contextObservationManager.notify(this, ActivityEvent.ON_CREATE, savedInstanceState);
     }
 
     @Override
@@ -101,27 +101,27 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
-        contextObservationManager.notify(this, "onRestart");
+        contextObservationManager.notify(this, ActivityEvent.ON_RESTART);
     }
 
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
-        contextObservationManager.notify(this, "onStart");
+        contextObservationManager.notify(this, ActivityEvent.ON_START);
     }
 
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
-        contextObservationManager.notify(this, "onResume");
+        contextObservationManager.notify(this, ActivityEvent.ON_RESUME);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        contextObservationManager.notify(this, "onPause");
+        contextObservationManager.notify(this,  ActivityEvent.ON_PAUSE);
         scope.exit(this);
     }
 
@@ -129,18 +129,18 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onNewIntent( Intent intent ) {
         super.onNewIntent(intent);
         scope.enter(this);
-        contextObservationManager.notify(this, "onNewIntent", intent);
+        contextObservationManager.notify(this,  ActivityEvent.ON_NEW_INTENT, intent);
     }
 
     @Override
     protected void onStop() {
-        contextObservationManager.notify(this, "onStop");
+        contextObservationManager.notify(this,  ActivityEvent.ON_STOP);
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        contextObservationManager.notify(this, "onDestroy");
+        contextObservationManager.notify(this,  ActivityEvent.ON_DESTROY);
         contextObservationManager.clear(this);
         super.onDestroy();
     }
@@ -148,19 +148,19 @@ public class RoboActivity extends Activity implements InjectorProvider {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        contextObservationManager.notify(this, "onConfigurationChanged", newConfig);
+        contextObservationManager.notify(this,  ActivityEvent.ON_CONFIGURATION_CHANGED, newConfig);
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Object result = contextObservationManager.notifyWithResult(this, "onKeyDown", false, keyCode, event);
+        Object result = contextObservationManager.notifyWithResult(this,  ActivityEvent.ON_KEY_DOWN, false, keyCode, event);
         if (result != null && Boolean.TRUE.equals(result)) return true;
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Object result = contextObservationManager.notifyWithResult(this, "onKeyUp", false, keyCode, event);
+        Object result = contextObservationManager.notifyWithResult(this,  ActivityEvent.ON_KEY_UP, false, keyCode, event);
         if (result != null && Boolean.TRUE.equals(result)) return true;
         return super.onKeyUp(keyCode, event);
 
@@ -169,13 +169,13 @@ public class RoboActivity extends Activity implements InjectorProvider {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        contextObservationManager.notify(this, "onContentChanged");
+        contextObservationManager.notify(this,  ActivityEvent.ON_CONTENT_CHANGED);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        contextObservationManager.notify(this, "onActivityResult", requestCode, resultCode, data);
+        contextObservationManager.notify(this,  ActivityEvent.ON_ACTIVITY_RESULT, requestCode, resultCode, data);
     }
 
     /**

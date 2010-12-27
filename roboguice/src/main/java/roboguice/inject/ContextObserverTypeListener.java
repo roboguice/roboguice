@@ -22,11 +22,14 @@ public class ContextObserverTypeListener implements TypeListener {
         for (Method method : iTypeLiteral.getRawType().getMethods()) {
             if (method.isAnnotationPresent(ContextObserver.class)) {
                 final ContextObserver annotation = method.getAnnotation(ContextObserver.class);
-                String[] methodNames = annotation.value();
-                if (methodNames == null || methodNames.length == 0) {
-                    methodNames = new String[]{method.getName()};
+                iTypeEncounter.register(new ContextObserverMethodInjector<I>(mContextProvider, mObservationManager, method, annotation.value()));
+            }
+
+            if (method.isAnnotationPresent(ContextObservers.class)) {
+                final ContextObservers annotation = method.getAnnotation(ContextObservers.class);
+                for(ContextObserver observerAnnotation : annotation.value()){
+                    iTypeEncounter.register(new ContextObserverMethodInjector<I>(mContextProvider, mObservationManager, method, observerAnnotation.value()));
                 }
-                iTypeEncounter.register(new ContextObserverMethodInjector<I>(mContextProvider, mObservationManager, method, methodNames));
             }
         }
     }
@@ -35,19 +38,17 @@ public class ContextObserverTypeListener implements TypeListener {
         private final Provider<Context> mContextProvider;
         private final ContextObservationManager mObservationManager;
         private final Method mMethod;
-        private final String[] mMethodNames;
+        private final String event;
 
-        public ContextObserverMethodInjector(Provider<Context> contextProvider, ContextObservationManager observationManager, Method method, String[] methodNames) {
-            mContextProvider = contextProvider;
-            mObservationManager = observationManager;
-            mMethod = method;
-            mMethodNames = methodNames;
+        public ContextObserverMethodInjector(Provider<Context> contextProvider, ContextObservationManager observationManager, Method method, String event) {
+            this.mContextProvider = contextProvider;
+            this.mObservationManager = observationManager;
+            this.mMethod = method;
+            this.event = event;
         }
 
         public void afterInjection(I i) {
-            for (String name : mMethodNames) {
-                mObservationManager.registerObserver(mContextProvider.get(), i, mMethod, name);
-            }
+            mObservationManager.registerObserver(mContextProvider.get(), i, mMethod, event);
         }
     }
 }

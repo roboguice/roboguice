@@ -21,7 +21,12 @@ public class ContextObserverTypeListener implements TypeListener {
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
         for (Method method : iTypeLiteral.getRawType().getMethods()) {
             if (method.isAnnotationPresent(ContextObserver.class)) {
-                iTypeEncounter.register(new ContextObserverMethodInjector<I>(mContextProvider, mObservationManager, method));
+                final ContextObserver annotation = method.getAnnotation(ContextObserver.class);
+                String[] methodNames = annotation.value();
+                if (methodNames == null || methodNames.length == 0) {
+                    methodNames = new String[]{method.getName()};
+                }
+                iTypeEncounter.register(new ContextObserverMethodInjector<I>(mContextProvider, mObservationManager, method, methodNames));
             }
         }
     }
@@ -30,15 +35,19 @@ public class ContextObserverTypeListener implements TypeListener {
         private final Provider<Context> mContextProvider;
         private final ContextObservationManager mObservationManager;
         private final Method mMethod;
+        private final String[] mMethodNames;
 
-        public ContextObserverMethodInjector(Provider<Context> contextProvider, ContextObservationManager observationManager, Method method) {
+        public ContextObserverMethodInjector(Provider<Context> contextProvider, ContextObservationManager observationManager, Method method, String[] methodNames) {
             mContextProvider = contextProvider;
             mObservationManager = observationManager;
             mMethod = method;
+            mMethodNames = methodNames;
         }
 
         public void afterInjection(I i) {
-            mObservationManager.registerObserver(mContextProvider.get(), i, mMethod);
+            for (String name : mMethodNames) {
+                mObservationManager.registerObserver(mContextProvider.get(), i, mMethod, name);
+            }
         }
     }
 }

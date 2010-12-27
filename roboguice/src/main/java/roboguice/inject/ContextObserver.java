@@ -27,17 +27,17 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Indicates that a method observes the same method in context that the component
  * is instantiated in.
  *
- * When injecting a component into a context i.e. Activity or Service methods annotated
+ * When injecting a component into a context i.e. Activity or Service value annotated
  * will be called when the corresponding method is executed on the activity.
  *
- * Very lightweight and useful for getting hooks into Activity methods
+ * Very lightweight and useful for getting hooks into Activity value
  * like onCreate(), onDestroy(), etc.
  *
  * Ensure that when using the annotation the signiture of method matches the signiture of
- * parent method exactly.  This will also not currently handle overloaded methods.
+ * parent method exactly.  This will also not currently handle overloaded value.
  *
  * You can easily extend the base RoboContext classes to provide the same functionality
- * for any methods.
+ * for any value.
  *
  * @code
  * {
@@ -72,4 +72,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target( { ElementType.METHOD })
 @BindingAnnotation
 public @interface ContextObserver {
+    String[] value() default {};
 }

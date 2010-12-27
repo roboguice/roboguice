@@ -22,6 +22,10 @@ public class ContextObservationManager {
     }
 
     public void registerObserver(Context context, Object instance, Method method) {
+        registerObserver(context, instance, method, method.getName());
+    }
+
+    public void registerObserver(Context context, Object instance, Method method, String methodName) {
         if (!isEnabled()) return;
 
         Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
@@ -30,13 +34,13 @@ public class ContextObservationManager {
             mRegistrations.put(context, methods);
         }
 
-        Set<ContextObserverMethod> observers = methods.get(method.getName());
+        Set<ContextObserverMethod> observers = methods.get(methodName);
         if (observers == null) {
             observers = new HashSet<ContextObserverMethod>();
-            methods.put(method.getName(), observers);
+            methods.put(methodName, observers);
         }
 
-        observers.add(new ContextObserverMethod(instance, method));
+        observers.add(new ContextObserverMethod(instance, method, methodName));
     }
 
     public void unregisterObserver(Context context, Object instance, String method) {
@@ -122,12 +126,14 @@ public class ContextObservationManager {
     }
 
     static class ContextObserverMethod {
+        String contextMethodName;
         Method method;
         WeakReference<Object> instanceReference;
 
-        public ContextObserverMethod(Object instance, Method method) {
+        public ContextObserverMethod(Object instance, Method method, String contextMethodName) {
             this.instanceReference = new WeakReference<Object>(instance);
             this.method = method;
+            this.contextMethodName = contextMethodName;
         }
 
         public Object invoke(Object defaultReturn, Object... args) throws InvocationTargetException, IllegalAccessException {

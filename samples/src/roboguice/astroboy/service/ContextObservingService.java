@@ -16,9 +16,9 @@ public class ContextObservingService {
         Ln.v("onCreate");
     }
 
-    @ContextObserver
-    public void onPause() {
-        Ln.v("onPause");
+    @ContextObserver({"onPause", "onStop", "onDestroy"})
+    public void onOutOfScopeLogger() {
+        Ln.v("onOutOfScope; No idea which method was called");
     }
 
     @ContextObserver

@@ -39,6 +39,27 @@ public class ContextObservationManager {
         observers.add(new ContextObserverMethod(instance, method));
     }
 
+    public void unregisterObserver(Context context, Object instance, String method) {
+        if (!isEnabled()) return;
+
+        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
+        if (methods == null) return;
+
+        final Set<ContextObserverMethod> observers = methods.get(method);
+        if (observers == null) return;
+
+        for (Iterator<ContextObserverMethod> iterator = observers.iterator(); iterator.hasNext();) {
+            ContextObserverMethod observer = iterator.next();
+            if (observer != null) {
+                final Object registeredInstance = observer.instanceReference.get();
+                if (registeredInstance == instance) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
     public void clear(Context context) {
         if (!isEnabled()) return;
 

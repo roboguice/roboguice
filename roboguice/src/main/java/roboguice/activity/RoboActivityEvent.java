@@ -1,11 +1,11 @@
 package roboguice.activity;
 
 /**
- * Defined Events called by the RoboActivity Class
+ * Defined @ContextObserver Events called by the RoboActivity Class
  *
  * @author John Ericksen
  */
-public class ActivityEvent {
+public class RoboActivityEvent {
     public static final String ON_CREATE = "roboguice.activity.RoboActivity.onCreate";
     public static final String ON_RESTART = "roboguice.activity.RoboActivity.onRestart";
     public static final String ON_START = "roboguice.activity.RoboActivity.onStart";

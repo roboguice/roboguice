@@ -62,6 +62,7 @@ public class RoboApplication extends Application implements InjectorProvider {
     protected PreferenceListener preferenceListener;
     protected List<StaticTypeListener> staticTypeListeners;
     protected ContextObservationManager observationManager;
+    protected ContextObserverClassEventManager classEventObserverManager;
 
     /**
      * Returns the {@link Injector} of your application. If none exists yet,
@@ -108,8 +109,10 @@ public class RoboApplication extends Application implements InjectorProvider {
         }
         if (allowContextObservers()) {
             observationManager = new ContextObservationManager();
+            classEventObserverManager = new ContextObserverClassEventManager();
         } else {
             observationManager = new ContextObservationManager.NullContextObservationManager();
+            classEventObserverManager = new ContextObserverClassEventManager.NullContextObservationManager();
         }
 
         staticTypeListeners = new ArrayList<StaticTypeListener>();
@@ -129,8 +132,9 @@ public class RoboApplication extends Application implements InjectorProvider {
         ArrayList<Module> modules = new ArrayList<Module>();
         Module roboguiceModule = new RoboModule(contextScope, throwingContextProvider,
                 contextProvider, resourceListener, viewListener, extrasListener, preferenceListener,
-                observationManager, this);
+                observationManager, classEventObserverManager, this);
         modules.add(roboguiceModule);
+        //context observer manager module
         addApplicationModules(modules);
         for (Module m : modules) {
             if (m instanceof AbstractAndroidModule) {

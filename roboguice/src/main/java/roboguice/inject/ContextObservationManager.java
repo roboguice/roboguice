@@ -2,6 +2,7 @@ package roboguice.inject;
 
 import android.content.Context;
 import com.google.inject.Singleton;
+import roboguice.util.Ln;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
@@ -34,6 +35,11 @@ public class ContextObservationManager {
         if (observers == null) {
             observers = new HashSet<ContextObserverMethod>();
             methods.put(event, observers);
+        }
+
+        if(method.getReturnType() != void.class){
+            Ln.i("ContextObserver method: " + method.getDeclaringClass() + "." + method.getName() +
+                    " has non-void return type. Return value will be ignored during observer call.");
         }
 
         observers.add(new ContextObserverMethod(instance, method, event));
@@ -81,37 +87,13 @@ public class ContextObservationManager {
 
         for (ContextObserverMethod observerMethod : observers) {
             try {
-                observerMethod.invoke(null, args);
+                observerMethod.invoke(args);
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-    }
-
-    public Object notifyWithResult(Context context, String event, Object defaultReturn, Object... args) {
-        if (!isEnabled()) return defaultReturn;
-
-        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
-        if (methods == null) return defaultReturn;
-
-        final Set<ContextObserverMethod> observers = methods.get(event);
-        if (observers == null) return defaultReturn;
-
-        for (ContextObserverMethod observerMethod : observers) {
-            Object result = null;
-            try {
-                result = observerMethod.invoke(defaultReturn, args);
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            if (result != null && !result.equals(defaultReturn)) return result;
-        }
-
-        return defaultReturn;
     }
 
     public static class NullContextObservationManager extends ContextObservationManager {
@@ -121,23 +103,29 @@ public class ContextObservationManager {
         }
     }
 
-    static class ContextObserverMethod {
-        String event;
-        Method method;
-        WeakReference<Object> instanceReference;
+    private static class ContextObserverMethod {
+        private Method method;
+        private WeakReference<Object> instanceReference;
 
         public ContextObserverMethod(Object instance, Method method, String event) {
             this.instanceReference = new WeakReference<Object>(instance);
             this.method = method;
-            this.event = event;
         }
 
-        public Object invoke(Object defaultReturn, Object... args) throws InvocationTargetException, IllegalAccessException {
+        public void invoke(Object... args) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
             if (instance != null) {
-                return method.invoke(instance, args);
+                Class[] paramTypes = method.getParameterTypes();
+
+                if(paramTypes.length == 0){
+                    //empty parameters
+                    method.invoke(instance);
+                }
+                else{
+                    //exact matching parameters
+                    method.invoke(instance, args);
+                }
             }
-            return defaultReturn;
         }
     }
 }

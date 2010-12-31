@@ -19,19 +19,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import com.google.inject.Inject;
 import com.google.inject.internal.Nullable;
 import roboguice.activity.RoboActivity;
+import roboguice.activity.RoboActivityEvent;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
 import roboguice.astroboy.bean.*;
-import roboguice.astroboy.service.ContextObservingClassEventService;
-import roboguice.astroboy.service.ContextObservingService;
-import roboguice.astroboy.service.HybridObservingService;
-import roboguice.astroboy.service.TalkingThing;
+import roboguice.astroboy.service.*;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
@@ -154,5 +153,15 @@ public class DoctorTenma extends RoboActivity {
 
         Log.d("DoctorTenma", talker.talk());
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        BooleanResultHandler booleanReturnHandler = new BooleanResultHandler();
+
+        contextObservationManager.notifyWithResult(this, RoboActivityEvent.ON_KEY_DOWN, booleanReturnHandler, keyCode, event);
+        contextObserverClassEventManager.notifyWithResult(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event), booleanReturnHandler);
+
+        return booleanReturnHandler.isSuccess();
     }
 }

@@ -11,7 +11,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * Injection type listener to bind the @ContextParameterObserver annotated methods to the
+ * Injection type listener to bind the @ContextObserves annotated methods to the
  * ContextObserverClassEventManager events.
  *
  * @author John Ericksen
@@ -32,9 +32,9 @@ public class ContextObserverClassEventTypeListener implements TypeListener {
                 Class<?>[] parameterTypes = method.getParameterTypes();
                 Class parameterType = parameterTypes[i];
                 for(Annotation annotation : annotationArray){
-                    if(annotation.annotationType().equals(ContextParameterObserver.class)){
+                    if(annotation.annotationType().equals(ContextObserves.class)){
                         if(parameterTypes.length > 1){
-                            throw new RuntimeException("Annotation @ContextParameterObserver must only annotate one parameter," +
+                            throw new RuntimeException("Annotation @ContextObserves must only annotate one parameter," +
                                     " which must be the only parameter in the listener method.");
                         }
                         iTypeEncounter.register(new ContextObserverClassEventMethodInjector<I>(contextProvider, observationManager, method, parameterType));;

@@ -2,7 +2,6 @@ package roboguice.inject;
 
 import android.content.Context;
 import com.google.inject.Singleton;
-import roboguice.util.Ln;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
@@ -35,11 +34,6 @@ public class ContextObservationManager {
         if (observers == null) {
             observers = new HashSet<ContextObserverMethod>();
             methods.put(event, observers);
-        }
-
-        if(method.getReturnType() != void.class){
-            Ln.i("ContextObserver method: " + method.getDeclaringClass() + "." + method.getName() +
-                    " has non-void return type. Return value will be ignored during observer call.");
         }
 
         observers.add(new ContextObserverMethod(instance, method, event));
@@ -87,7 +81,27 @@ public class ContextObservationManager {
 
         for (ContextObserverMethod observerMethod : observers) {
             try {
-                observerMethod.invoke(args);
+                observerMethod.invoke(null, args);
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void notifyWithResult(Context context, String event, EventResultHandler resultHander, Object... args) {
+        if (!isEnabled()) return;
+
+        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
+        if (methods == null) return;
+
+        final Set<ContextObserverMethod> observers = methods.get(event);
+        if (observers == null) return;
+
+        for (ContextObserverMethod observerMethod : observers) {
+            try {
+                observerMethod.invoke(resultHander, args);
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -112,20 +126,22 @@ public class ContextObservationManager {
             this.method = method;
         }
 
-        public void invoke(Object... args) throws InvocationTargetException, IllegalAccessException {
+        public void invoke(EventResultHandler resultHandler, Object... args) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
             if (instance != null) {
                 Class[] paramTypes = method.getParameterTypes();
 
+                EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
+
                 if(paramTypes.length == 0){
                     //empty parameters
-                    method.invoke(instance);
+                    innerResultHandler.handleReturn(method.invoke(instance));
                 }
                 else{
                     //exact matching parameters
-                    method.invoke(instance, args);
+                    innerResultHandler.handleReturn(method.invoke(instance, args));
                 }
             }
-        }
+       }
     }
 }

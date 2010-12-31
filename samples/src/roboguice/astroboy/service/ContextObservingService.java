@@ -33,10 +33,12 @@ public class ContextObservingService {
     }
 
     @ContextObserver(RoboActivityEvent.ON_KEY_DOWN)
-    public void onKeyDown(int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         Ln.v("onKeyDown %1$s", event);
         if (keyCode == KeyEvent.KEYCODE_SEARCH) {
             Toast.makeText(context, "You pressed the search button", Toast.LENGTH_SHORT).show();
+            return true;
         }
+        return false;
     }
 }

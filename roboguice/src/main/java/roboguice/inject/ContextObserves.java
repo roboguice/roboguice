@@ -21,7 +21,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * triggers:
  *
- * public void handleEvent(@ContextParameterObserver EventParameter event){
+ * public void handleEvent(@ContextObserves EventParameter event){
  *     String data = event.getData() // "data"
  * }
  *
@@ -29,5 +29,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Retention(RUNTIME)
 @Target( { ElementType.PARAMETER })
-public @interface ContextParameterObserver {
+public @interface ContextObserves {
 }

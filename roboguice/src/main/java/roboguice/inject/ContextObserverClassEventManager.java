@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * Context Observer manager dealing with the events handled by the @ContextParameterObserver parameter annotation
+ * Context Observer manager dealing with the events handled by the @ContextObserves parameter annotation
  *
  * @author John Ericksen
  */
@@ -92,7 +92,27 @@ public class ContextObserverClassEventManager {
 
         for (ContextObserverMethod observerMethod : observers) {
             try {
-                observerMethod.invoke(event);
+                observerMethod.invoke(null, event);
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void notifyWithResult(Context context, Object event, EventResultHandler resultHandler) {
+        if (!isEnabled()) return;
+
+        final Map<Class, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
+        if (methods == null) return;
+        
+        final Set<ContextObserverMethod> observers = methods.get(event.getClass());
+        if (observers == null) return;
+
+        for (ContextObserverMethod observerMethod : observers) {
+            try {
+                observerMethod.invoke(resultHandler, event);
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -117,11 +137,11 @@ public class ContextObserverClassEventManager {
             this.method = method;
         }
 
-        public void invoke(Object event) throws InvocationTargetException, IllegalAccessException {
+        public void invoke(EventResultHandler resultHandler, Object event) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
+            EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
             if (instance != null) {
-                //empty parameters
-                method.invoke(instance, event);
+                innerResultHandler.handleReturn(method.invoke(instance, event));
             }
         }
     }

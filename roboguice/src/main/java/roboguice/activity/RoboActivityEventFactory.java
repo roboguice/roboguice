@@ -7,21 +7,21 @@ import android.view.KeyEvent;
 import com.google.inject.Singleton;
 
 /**
- * Defined @ContextParameterObserver Events called by the RoboActivity Class
+ * Defined @ContextObserves Events called by the RoboActivity Class
  *
  * @author John Ericksen
  */
 @Singleton
 public class RoboActivityEventFactory {
 
-    //Non-parameter class static class instance definitions;
+    //Non-parameter static class instance definitions;
     private static final OnRestartEvent ON_RESTART_INSTANCE = new OnRestartEvent();
     private static final OnStartEvent ON_START_INSTANCE = new OnStartEvent();
     private static final OnResumeEvent ON_RESUME_INSTANCE = new OnResumeEvent();
     private static final OnPauseEvent ON_PAUSE_INSTANCE = new OnPauseEvent();
     private static final OnNewIntentEvent ON_NEW_INTENT_INSTANCE = new OnNewIntentEvent();
     private static final OnStopEvent ON_STOP_INSTANCE = new OnStopEvent();
-    private static final onDestroyEvent ON_DESTROY_INSTANCE = new onDestroyEvent();
+    private static final OnDestroyEvent ON_DESTROY_INSTANCE = new OnDestroyEvent();
     private static final OnContentChangedEvent ON_CONTENT_CHANGED_INSTANCE = new OnContentChangedEvent();
 
     //Event class definitions
@@ -32,7 +32,7 @@ public class RoboActivityEventFactory {
     public static class OnNewIntentEvent {}
     public static class OnStopEvent {}
     public static class OnContentChangedEvent {}
-    public static class onDestroyEvent {}
+    public static class OnDestroyEvent {}
 
     public class OnCreateEvent{
         private Bundle savedInstanceState;
@@ -147,7 +147,7 @@ public class RoboActivityEventFactory {
         return ON_STOP_INSTANCE;
     }
 
-    public onDestroyEvent buildOnDestroyEvent() {
+    public OnDestroyEvent buildOnDestroyEvent() {
         return ON_DESTROY_INSTANCE;
     }
 

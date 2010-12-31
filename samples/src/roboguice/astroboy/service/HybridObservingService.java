@@ -8,7 +8,7 @@ import roboguice.activity.RoboActivityEvent;
 import roboguice.activity.RoboActivityEventFactory;
 import roboguice.inject.ContextObserver;
 import roboguice.inject.ContextObservers;
-import roboguice.inject.ContextParameterObserver;
+import roboguice.inject.ContextObserves;
 import roboguice.util.Ln;
 
 /**
@@ -32,7 +32,7 @@ public class HybridObservingService {
         Ln.v("onOutOfScope; No idea which method was called");
     }
 
-    public void onKeyDown(@ContextParameterObserver RoboActivityEventFactory.OnKeyDownEvent onKeyDownEvent) {
+    public void onKeyDown(@ContextObserves RoboActivityEventFactory.OnKeyDownEvent onKeyDownEvent) {
         Ln.v("onKeyDown %1$s", onKeyDownEvent.getEvent());
         if (onKeyDownEvent.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
             Toast.makeText(context, "You pressed the search button", Toast.LENGTH_SHORT).show();

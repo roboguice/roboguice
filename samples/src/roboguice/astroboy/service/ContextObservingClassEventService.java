@@ -5,11 +5,11 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 import com.google.inject.Inject;
 import roboguice.activity.RoboActivityEventFactory;
-import roboguice.inject.ContextParameterObserver;
+import roboguice.inject.ContextObserves;
 import roboguice.util.Ln;
 
 /**
- * Example of the ContextParameterObserver usage with the defined RoboActivity Events
+ * Example of the ContextObserves usage with the defined RoboActivity Events
  *
  * @author John Ericksen
  */
@@ -18,18 +18,20 @@ public class ContextObservingClassEventService {
     @Inject
     private Context context;
 
-    public void logOnCreate(@ContextParameterObserver RoboActivityEventFactory.OnCreateEvent event) {
+    public void logOnCreate(@ContextObserves RoboActivityEventFactory.OnCreateEvent event) {
         Ln.v("onCreate");
     }
 
-    public void logOnDestroy(@ContextParameterObserver RoboActivityEventFactory.onDestroyEvent event){
+    public void logOnDestroy(@ContextObserves RoboActivityEventFactory.OnDestroyEvent event){
         Ln.v("onDestroy");
     }
     
-    public void toastKeyDown(@ContextParameterObserver RoboActivityEventFactory.OnKeyDownEvent onKeyDownEvent) {
+    public boolean toastKeyDown(@ContextObserves RoboActivityEventFactory.OnKeyDownEvent onKeyDownEvent) {
         Ln.v("onKeyDown %1$s", onKeyDownEvent.getEvent());
         if (onKeyDownEvent.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {
             Toast.makeText(context, "You pressed the search button", Toast.LENGTH_SHORT).show();
+            return true;
         }
+        return false;
     }
 }

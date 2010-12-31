@@ -15,25 +15,18 @@
  */
 package roboguice.inject;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Map;
+import android.content.Context;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
 
-import com.google.inject.Binding;
-import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import com.google.inject.util.Types;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import java.lang.reflect.Field;
 
 /**
  * Listener for preference injection.
@@ -62,9 +55,9 @@ public class PreferenceListener implements TypeListener {
 }
 
 class PreferenceMembersInjector<T> implements MembersInjector<T> {
-    private final Field field;
-    private final Provider<Context> contextProvider;
-    private final InjectPreference annotation;
+    protected final Field field;
+    protected final Provider<Context> contextProvider;
+    protected final InjectPreference annotation;
 
     public PreferenceMembersInjector(Field field, Provider<Context> contextProvider,
                                      InjectPreference annotation) {

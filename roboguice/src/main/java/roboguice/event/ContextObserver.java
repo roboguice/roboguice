@@ -1,43 +1,30 @@
 /*
- * Copyright 2009 Michael Burton
- * 
+ * Copyright 2010 Adam Tybor
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package roboguice.astroboy.bean;
+package roboguice.event;
 
-import java.util.Date;
+import com.google.inject.BindingAnnotation;
 
-public class Person {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-    protected final String name;
-    protected final Date   age;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-    public Person(String name) {
-        this.name = name;
-        age = new Date();
-    }
-
-    public Person(String name, Date age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Date getAge() {
-        return age;
-    }
-
+@Retention(RUNTIME)
+@Target( { ElementType.METHOD })
+@BindingAnnotation
+public @interface ContextObserver {
 }

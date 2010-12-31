@@ -12,38 +12,38 @@ import java.util.*;
 @Singleton
 public class ContextObservationManager {
 
-    private final Map<Context, Map<String, Set<ContextObserverMethod>>> mRegistrations;
+    protected final Map<Context, Map<Class<?>, Set<ContextObserverMethod>>> mRegistrations;
 
     public ContextObservationManager() {
-        mRegistrations  = new WeakHashMap<Context, Map<String, Set<ContextObserverMethod>>>();
+        mRegistrations  = new WeakHashMap<Context, Map<Class<?>, Set<ContextObserverMethod>>>();
     }
 
     public boolean isEnabled() {
         return true;
     }
 
-    public void registerObserver(Context context, Object instance, Method method, String event) {
+    public void registerObserver(Context context, Object instance, Method method, Class<?> type ) {
         if (!isEnabled()) return;
 
-        Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
+        Map<Class<?>, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) {
-            methods = new HashMap<String, Set<ContextObserverMethod>>();
+            methods = new HashMap<Class<?>, Set<ContextObserverMethod>>();
             mRegistrations.put(context, methods);
         }
 
-        Set<ContextObserverMethod> observers = methods.get(event);
+        Set<ContextObserverMethod> observers = methods.get(type);
         if (observers == null) {
             observers = new HashSet<ContextObserverMethod>();
-            methods.put(event, observers);
+            methods.put(type, observers);
         }
 
-        observers.add(new ContextObserverMethod(instance, method, event));
+        observers.add(new ContextObserverMethod(instance, method, type));
     }
 
     public void unregisterObserver(Context context, Object instance, String event) {
         if (!isEnabled()) return;
 
-        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
+        final Map<Class<?>, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return;
 
         final Set<ContextObserverMethod> observers = methods.get(event);
@@ -64,7 +64,7 @@ public class ContextObservationManager {
     public void clear(Context context) {
         if (!isEnabled()) return;
 
-        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
+        final Map<Class<?>, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return;
 
         mRegistrations.remove(context);
@@ -74,7 +74,7 @@ public class ContextObservationManager {
     public void notify(Context context, String event, Object... args) {
         if (!isEnabled()) return;
 
-        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
+        final Map<Class<?>, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
         if (methods == null) return;
 
         final Set<ContextObserverMethod> observers = methods.get(event);
@@ -98,23 +98,20 @@ public class ContextObservationManager {
         }
     }
 
-    static class ContextObserverMethod {
-        String event;
-        Method method;
-        WeakReference<Object> instanceReference;
+    protected static class ContextObserverMethod {
+        protected Class<?> eventType;
+        protected Method method;
+        protected WeakReference<Object> instanceReference;
 
-        public ContextObserverMethod(Object instance, Method method, String event) {
+        public ContextObserverMethod(Object instance, Method method, Class<?> eventType ) {
             this.instanceReference = new WeakReference<Object>(instance);
             this.method = method;
-            this.event = event;
+            this.eventType = eventType;
         }
 
         public Object invoke(Object defaultReturn, Object... args) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
-            if (instance != null) {
-                return method.invoke(instance, args);
-            }
-            return defaultReturn;
+            return instance!=null ? method.invoke(instance,args) : defaultReturn;
         }
     }
 }

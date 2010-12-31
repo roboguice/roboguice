@@ -43,6 +43,12 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 public class DoctorTenma extends RoboActivity {
+
+    /**
+     * You can inject arbitrary objects that watch for events that occur
+     * in this activity and synchronously perform actions based on
+     * those events
+     */
     @Inject ContextObservingService mContextObservingService;
 
     // You can inject arbitrary View, String, and other types of resources.

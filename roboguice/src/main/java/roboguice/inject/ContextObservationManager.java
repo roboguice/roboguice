@@ -1,6 +1,7 @@
 package roboguice.inject;
 
 import android.content.Context;
+
 import com.google.inject.Singleton;
 
 import java.lang.ref.WeakReference;
@@ -88,30 +89,6 @@ public class ContextObservationManager {
                 e.printStackTrace();
             }
         }
-    }
-
-    public Object notifyWithResult(Context context, String event, Object defaultReturn, Object... args) {
-        if (!isEnabled()) return defaultReturn;
-
-        final Map<String, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
-        if (methods == null) return defaultReturn;
-
-        final Set<ContextObserverMethod> observers = methods.get(event);
-        if (observers == null) return defaultReturn;
-
-        for (ContextObserverMethod observerMethod : observers) {
-            Object result = null;
-            try {
-                result = observerMethod.invoke(defaultReturn, args);
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            if (result != null && !result.equals(defaultReturn)) return result;
-        }
-
-        return defaultReturn;
     }
 
     public static class NullContextObservationManager extends ContextObservationManager {

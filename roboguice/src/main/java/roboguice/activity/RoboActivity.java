@@ -15,19 +15,20 @@
  */
 package roboguice.activity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
 import roboguice.application.RoboApplication;
 import roboguice.inject.ContextObservationManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -149,21 +150,6 @@ public class RoboActivity extends Activity implements InjectorProvider {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         contextObservationManager.notify(this,  ActivityEvent.ON_CONFIGURATION_CHANGED, newConfig);
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        Object result = contextObservationManager.notifyWithResult(this,  ActivityEvent.ON_KEY_DOWN, false, keyCode, event);
-        if (result != null && Boolean.TRUE.equals(result)) return true;
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        Object result = contextObservationManager.notifyWithResult(this,  ActivityEvent.ON_KEY_UP, false, keyCode, event);
-        if (result != null && Boolean.TRUE.equals(result)) return true;
-        return super.onKeyUp(keyCode, event);
-
     }
 
     @Override

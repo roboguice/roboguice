@@ -30,6 +30,7 @@ import roboguice.astroboy.R;
 import roboguice.astroboy.bean.*;
 import roboguice.astroboy.service.ContextObservingClassEventService;
 import roboguice.astroboy.service.ContextObservingService;
+import roboguice.astroboy.service.HybridObservingService;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectExtra;
@@ -44,6 +45,7 @@ import static junit.framework.Assert.assertNull;
 public class DoctorTenma extends RoboActivity {
     @Inject ContextObservingService mContextObservingService;
     @Inject ContextObservingClassEventService contextObservingClassEventService;
+    @Inject HybridObservingService hybridObservingService;
 
     // You can inject arbitrary View, String, and other types of resources.
     // See ResourceListener for details.

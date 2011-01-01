@@ -3,8 +3,8 @@ package roboguice.astroboy.service;
 import android.content.Context;
 import android.preference.Preference;
 import com.google.inject.Inject;
-import roboguice.activity.RoboActivityEventFactory;
-import roboguice.inject.ContextObserverClassEventManager;
+import roboguice.activity.event.RoboActivityEventFactory;
+import roboguice.inject.ContextObservationManager;
 
 /**
  * @author John Ericksen
@@ -12,7 +12,7 @@ import roboguice.inject.ContextObserverClassEventManager;
 public class PreferenceChangeEventToastListener implements Preference.OnPreferenceChangeListener {
 
     @Inject
-    private ContextObserverClassEventManager contextObserverClassEventManager;
+    private ContextObservationManager contextObserverManager;
     @Inject
     private RoboActivityEventFactory roboActivityEventFactory;
     @Inject
@@ -22,7 +22,7 @@ public class PreferenceChangeEventToastListener implements Preference.OnPreferen
 
     public boolean onPreferenceChange(Preference preference, Object o) {
         //raise the ToastEvent
-        contextObserverClassEventManager.notify(context, toastService.buildToastEvent("hello toast"));
+        contextObserverManager.notify(context, toastService.buildToastEvent("hello toast"));
         return true;
     }
 }

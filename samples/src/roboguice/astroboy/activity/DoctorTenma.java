@@ -26,7 +26,6 @@ import android.widget.TextView;
 import com.google.inject.Inject;
 import com.google.inject.internal.Nullable;
 import roboguice.activity.RoboActivity;
-import roboguice.activity.RoboActivityEvent;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
 import roboguice.astroboy.bean.*;
@@ -159,8 +158,7 @@ public class DoctorTenma extends RoboActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         BooleanResultHandler booleanReturnHandler = new BooleanResultHandler();
 
-        contextObservationManager.notifyWithResult(this, RoboActivityEvent.ON_KEY_DOWN, booleanReturnHandler, keyCode, event);
-        contextObserverClassEventManager.notifyWithResult(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event), booleanReturnHandler);
+        contextObservationManager.notifyWithResult(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event), booleanReturnHandler);
 
         return booleanReturnHandler.isSuccess();
     }

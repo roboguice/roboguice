@@ -40,7 +40,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * {
  * public class MyBaseActivity extends RoboActivity implements SomethingHappened {
  *   protected void onSomethingHappened() {
- *     contextObservationManager.notify(this, "onSomethingHappened");
+ *     contextObservationManager.notify(this, new OnSomethingHappened("value");
  *   }
  *
  *   protected void doSomething() {
@@ -57,7 +57,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * }
  *
  * public class CustomComponent {
- *   @ContextObserver("onSomethingHappened")
+ *   @ContextObserver(OnSomethingHappened.class)
  *   public void onSomethingHappened() {
  *     // Handle something happened in this component
  *   }
@@ -69,5 +69,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target( { ElementType.METHOD })
 @BindingAnnotation
 public @interface ContextObserver {
-    String value();
+    Class value();
 }

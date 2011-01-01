@@ -10,6 +10,13 @@ import com.google.inject.spi.TypeListener;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+/**
+ * Guice driven type listener which scans for the ContextObserver, ContextObservers, and ContextObserves annotations.
+ * Registers these methods with the ContextObservationManager.
+ *
+ * @author Adam Tabor
+ * @author John Ericksen
+ */
 public class ContextObserverTypeListener implements TypeListener {
     final Provider<Context> mContextProvider;
     final ContextObservationManager mObservationManager;
@@ -21,17 +28,19 @@ public class ContextObserverTypeListener implements TypeListener {
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
         for (Method method : iTypeLiteral.getRawType().getMethods()) {
+            //ContextObserver scan
             if (method.isAnnotationPresent(ContextObserver.class)) {
                 final ContextObserver annotation = method.getAnnotation(ContextObserver.class);
                 registerContextObserver(iTypeEncounter, method, annotation.value());
             }
-
+            //ContextObservers scan
             if (method.isAnnotationPresent(ContextObservers.class)) {
                 final ContextObservers annotation = method.getAnnotation(ContextObservers.class);
                 for(ContextObserver observerAnnotation : annotation.value()){
                     registerContextObserver(iTypeEncounter, method, observerAnnotation.value());
                 }
             }
+            //ContextObserves scan
             for(int i = 0; i < method.getParameterAnnotations().length; i++){
                 Annotation[] annotationArray = method.getParameterAnnotations()[i];
                 Class<?>[] parameterTypes = method.getParameterTypes();
@@ -45,11 +54,28 @@ public class ContextObserverTypeListener implements TypeListener {
         }
     }
 
+    /**
+     * Error checks the observed method and registers method with typeEncounter
+     *
+     * @param iTypeEncounter
+     * @param method
+     * @param parameterType
+     * @param <I>
+     */
     private <I> void registerContextObserver(TypeEncounter<I> iTypeEncounter, Method method, Class parameterType) {
         checkMethodParameters(method, parameterType);
         iTypeEncounter.register(new ContextObserverMethodInjector<I>(mContextProvider, mObservationManager, method, parameterType));
     }
 
+    /**
+     * Error checking method, verifies:
+     *
+     * 1.  The method has the correct number of parameters, 0 or 1
+     * 2.  If the method has a parameter, it is of the proper type.
+     *
+     * @param method
+     * @param parameterType
+     */
     private void checkMethodParameters(Method method, Class parameterType) {
         if(method.getParameterTypes().length > 1){
             throw new RuntimeException("Annotation @ContextObserves must only annotate one parameter," +
@@ -62,7 +88,12 @@ public class ContextObserverTypeListener implements TypeListener {
         }
     }
 
-    static class ContextObserverMethodInjector<I> implements InjectionListener<I> {
+    /**
+     * Injection listener to handle the observation manager registration.
+     * 
+     * @param <I>
+     */
+    private static class ContextObserverMethodInjector<I> implements InjectionListener<I> {
         private final Provider<Context> mContextProvider;
         private final ContextObservationManager mObservationManager;
         private final Method mMethod;

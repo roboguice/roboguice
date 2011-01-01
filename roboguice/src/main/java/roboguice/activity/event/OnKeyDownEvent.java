@@ -2,6 +2,11 @@ package roboguice.activity.event;
 
 import android.view.KeyEvent;
 
+/**
+ * Class representing the event raised by RoboActivity.onKeyDown()
+ *
+ * @author John Ericksen
+ */
 public class OnKeyDownEvent {
         private int keyCode;
         private KeyEvent event;

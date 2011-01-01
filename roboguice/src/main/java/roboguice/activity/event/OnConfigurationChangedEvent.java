@@ -2,6 +2,11 @@ package roboguice.activity.event;
 
 import android.content.res.Configuration;
 
+/**
+ * Class representing the event raised by RoboActivity.onConfigurationChanged()
+ *
+ * @author John Ericksen
+ */
 public class OnConfigurationChangedEvent {
 
         private Configuration config;

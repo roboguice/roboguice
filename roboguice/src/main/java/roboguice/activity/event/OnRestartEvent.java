@@ -1,6 +1,8 @@
 package roboguice.activity.event;
 
 /**
-* @author John Ericksen
-*/ //Event class definitions
+ * Class representing the event raised by RoboActivity.onRestart()
+ *
+ * @author John Ericksen
+ */
 public class OnRestartEvent {}

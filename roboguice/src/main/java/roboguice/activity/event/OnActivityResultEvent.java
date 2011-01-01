@@ -2,6 +2,11 @@ package roboguice.activity.event;
 
 import android.content.Intent;
 
+/**
+ * Class representing the event raised by RoboActivity.onActivityResult()
+ *
+ * @author John Ericksen
+ */
 public class OnActivityResultEvent {
         private int requestCode;
         private int resultCode;

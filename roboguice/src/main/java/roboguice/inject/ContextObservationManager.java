@@ -8,6 +8,20 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * Manager class handling the following:
+ *
+ *   Registration of event observing methods:
+ *      registerObserver()
+ *      unregisterObserver()
+ *      clear()
+ *   Raising Events:
+ *      notify()
+ *      notifyWithResult()
+ *
+ * @author Adam Tabor
+ * @author John Ericksen
+ */
 @Singleton
 public class ContextObservationManager {
 
@@ -21,6 +35,14 @@ public class ContextObservationManager {
         return true;
     }
 
+    /**
+     * Registers given method with provided context and event.
+     *
+     * @param context
+     * @param instance
+     * @param method
+     * @param event
+     */
     public void registerObserver(Context context, Object instance, Method method, Class event) {
         if (!isEnabled()) return;
 
@@ -39,7 +61,14 @@ public class ContextObservationManager {
         observers.add(new ContextObserverReference(instance, method));
     }
 
-    public void unregisterObserver(Context context, Object instance, String event) {
+    /**
+     * UnRegisters all methods observing the given event from the provided context.
+     *
+     * @param context
+     * @param instance
+     * @param event
+     */
+    public void unregisterObserver(Context context, Object instance, Class event) {
         if (!isEnabled()) return;
 
         final Map<Class, Set<ContextObserverReference>> methods = mRegistrations.get(context);
@@ -60,6 +89,10 @@ public class ContextObservationManager {
         }
     }
 
+    /**
+     * Clears all observers of the given context.
+     * @param context
+     */
     public void clear(Context context) {
         if (!isEnabled()) return;
 
@@ -70,6 +103,13 @@ public class ContextObservationManager {
         methods.clear();
     }
 
+    /**
+     * Raises the event's class' event on the given context.  This event object is passed (if configured) to the
+     * registered observer's method.
+     *
+     * @param context
+     * @param event
+     */
     public void notify(Context context, Object event) {
         if (!isEnabled()) return;
 
@@ -90,6 +130,15 @@ public class ContextObservationManager {
         }
     }
 
+    /**
+     * Raises the event's class' event on the given context.  This event object is passed (if configured) to the
+     * registered observer's method.
+     *
+     * A result handler can be provided to deal with the return values from the invoked observer methods.
+     *
+     * @param context
+     * @param event
+     */
     public void notifyWithResult(Context context, Object event, EventResultHandler resultHandler) {
         if (!isEnabled()) return;
 

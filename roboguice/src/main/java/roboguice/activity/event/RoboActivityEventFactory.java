@@ -7,8 +7,8 @@ import android.view.KeyEvent;
 import com.google.inject.Singleton;
 
 /**
- * Defined @ContextObserves Events called by the RoboActivity Class
- *
+ * Factory for the @ContextObserves pre-defined RoboActivy Events.
+ * 
  * @author John Ericksen
  */
 @Singleton
@@ -23,10 +23,6 @@ public class RoboActivityEventFactory {
     private static final OnStopEvent ON_STOP_INSTANCE = new OnStopEvent();
     private static final OnDestroyEvent ON_DESTROY_INSTANCE = new OnDestroyEvent();
     private static final OnContentChangedEvent ON_CONTENT_CHANGED_INSTANCE = new OnContentChangedEvent();
-
-    public OnCreateEvent buildOnCreateEvent(Bundle savedInstanceState){
-        return new OnCreateEvent(savedInstanceState);
-    }
 
     public OnRestartEvent buildOnRestartEvent() {
         return ON_RESTART_INSTANCE;
@@ -55,6 +51,13 @@ public class RoboActivityEventFactory {
     public OnDestroyEvent buildOnDestroyEvent() {
         return ON_DESTROY_INSTANCE;
     }
+    public OnContentChangedEvent buildOnContentChangedEvent() {
+        return ON_CONTENT_CHANGED_INSTANCE;
+    }
+
+    public OnCreateEvent buildOnCreateEvent(Bundle savedInstanceState){
+        return new OnCreateEvent(savedInstanceState);
+    }
 
     public OnConfigurationChangedEvent buildOnConfigurationChangedEvent(Configuration newConfig) {
         return new OnConfigurationChangedEvent(newConfig);
@@ -66,10 +69,6 @@ public class RoboActivityEventFactory {
 
     public OnKeyUpEvent buildOnKeyUpEvent(int keyCode, KeyEvent event) {
         return new OnKeyUpEvent(keyCode, event);
-    }
-
-    public OnContentChangedEvent buildOnContentChangedEvent() {
-        return ON_CONTENT_CHANGED_INSTANCE;
     }
 
     public OnActivityResultEvent buildOnActivityResultEvent(int requestCode, int resultCode, Intent data) {

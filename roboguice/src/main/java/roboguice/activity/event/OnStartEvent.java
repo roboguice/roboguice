@@ -1,6 +1,8 @@
 package roboguice.activity.event;
 
 /**
-* @author John Ericksen
-*/
+ * Class representing the event raised by RoboActivity.onStart()
+ *
+ * @author John Ericksen
+ */
 public class OnStartEvent {}

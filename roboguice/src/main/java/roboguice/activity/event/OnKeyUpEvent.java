@@ -5,11 +5,13 @@ import android.view.KeyEvent;
 /**
  * Class representing the event raised by RoboActivity.onKeyUp()
  *
+ * @author Adam Tabor
  * @author John Ericksen
  */
 public class OnKeyUpEvent {
-        private int keyCode;
-        private KeyEvent event;
+
+        protected final int keyCode;
+        protected final KeyEvent event;
 
         public OnKeyUpEvent(int keyCode, KeyEvent event) {
             this.keyCode = keyCode;

@@ -17,15 +17,17 @@
 
 package roboguice.activity;
 
-import com.google.inject.Injector;
-
-import roboguice.application.RoboApplication;
-import roboguice.inject.ContextScope;
 import android.accounts.AccountAuthenticatorActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.content.Intent;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import roboguice.activity.event.RoboActivityEventFactory;
+import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
 
 /**
  * A subclass of {@link AccountAuthenticatorActivity} that provides dependency injection
@@ -36,6 +38,10 @@ import android.content.Intent;
 public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivity
 {
     protected ContextScope scope;
+    @Inject
+    protected EventManager eventManager;
+    @Inject
+    protected RoboActivityEventFactory roboActivityEventFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

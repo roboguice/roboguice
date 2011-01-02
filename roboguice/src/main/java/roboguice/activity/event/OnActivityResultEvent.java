@@ -5,12 +5,14 @@ import android.content.Intent;
 /**
  * Class representing the event raised by RoboActivity.onActivityResult()
  *
+ * @author Adam Tabor
  * @author John Ericksen
  */
 public class OnActivityResultEvent {
-        private int requestCode;
-        private int resultCode;
-        private Intent data;
+    
+        protected final int requestCode;
+        protected final int resultCode;
+        protected final Intent data;
 
         public OnActivityResultEvent(int requestCode, int resultCode, Intent data) {
             this.requestCode = requestCode;

@@ -5,33 +5,34 @@ import android.view.KeyEvent;
 import android.widget.Toast;
 import com.google.inject.Inject;
 import roboguice.activity.event.*;
-import roboguice.inject.ContextObserver;
-import roboguice.inject.ContextObservers;
+import roboguice.event.Observer;
+import roboguice.event.Observers;
 import roboguice.util.Ln;
 
 public class ContextObservingService {
-    @Inject Context context;
+    @Inject
+    protected Context context;
 
-    @ContextObserver(OnCreateEvent.class)
+    @Observer(OnCreateEvent.class)
     public void onCreate() {
         Ln.v("onCreate");
     }
 
-    @ContextObservers({
-            @ContextObserver(OnPauseEvent.class),
-            @ContextObserver(OnStopEvent.class),
-            @ContextObserver(OnDestroyEvent.class)
+    @Observers({
+            @Observer(OnPauseEvent.class),
+            @Observer(OnStopEvent.class),
+            @Observer(OnDestroyEvent.class)
     })
     public void onOutOfScopeLogger() {
         Ln.v("onOutOfScope; No idea which method was called");
     }
 
-    @ContextObserver(OnKeyDownEvent.class)
+    @Observer(OnKeyDownEvent.class)
     public void onKeyDown(){
          Ln.v("onKeyDownCalled");
     }
 
-    @ContextObserver(OnKeyDownEvent.class)
+    @Observer(OnKeyDownEvent.class)
     public boolean onKeyDown(OnKeyDownEvent onKeyDownEvent) {
         Ln.v("onKeyDown %1$s", onKeyDownEvent.getEvent());
         if (onKeyDownEvent.getKeyCode() == KeyEvent.KEYCODE_SEARCH) {

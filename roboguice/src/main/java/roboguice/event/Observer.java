@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions
  * and limitations under the License.
  */
-package roboguice.inject;
+package roboguice.event;
 
 import com.google.inject.BindingAnnotation;
 
@@ -40,7 +40,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * {
  * public class MyBaseActivity extends RoboActivity implements SomethingHappened {
  *   protected void onSomethingHappened() {
- *     contextObservationManager.notify(this, new OnSomethingHappened("value");
+ *     eventManager.notify(this, new OnSomethingHappened("value");
  *   }
  *
  *   protected void doSomething() {
@@ -57,17 +57,18 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * }
  *
  * public class CustomComponent {
- *   @ContextObserver(OnSomethingHappened.class)
+ *   @Observer(OnSomethingHappened.class)
  *   public void onSomethingHappened() {
  *     // Handle something happened in this component
  *   }
  * }
  * }
- * @author Adam Tybor
+ * @author Adam Tabor
+ * @author John Ericksen
  */
 @Retention(RUNTIME)
 @Target( { ElementType.METHOD })
 @BindingAnnotation
-public @interface ContextObserver {
+public @interface Observer {
     Class value();
 }

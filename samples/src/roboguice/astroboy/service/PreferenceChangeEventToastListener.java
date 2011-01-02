@@ -4,7 +4,7 @@ import android.content.Context;
 import android.preference.Preference;
 import com.google.inject.Inject;
 import roboguice.activity.event.RoboActivityEventFactory;
-import roboguice.inject.ContextObservationManager;
+import roboguice.event.EventManager;
 
 /**
  * @author John Ericksen
@@ -12,13 +12,13 @@ import roboguice.inject.ContextObservationManager;
 public class PreferenceChangeEventToastListener implements Preference.OnPreferenceChangeListener {
 
     @Inject
-    private ContextObservationManager contextObserverManager;
+    protected EventManager contextObserverManager;
     @Inject
-    private RoboActivityEventFactory roboActivityEventFactory;
+    protected RoboActivityEventFactory roboActivityEventFactory;
     @Inject
-    private Context context;
+    protected Context context;
     @Inject
-    private ToastContextObserverService toastService;
+    protected ToastContextObserverService toastService;
 
     public boolean onPreferenceChange(Preference preference, Object o) {
         //raise the ToastEvent

@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.internal.Nullable;
 import roboguice.activity.RoboActivity;
 import roboguice.astroboy.AstroboyModule;
@@ -42,7 +43,7 @@ import static junit.framework.Assert.assertNull;
 
 public class DoctorTenma extends RoboActivity {
     @Inject ContextObservingService mContextObservingService;
-    @Inject ContextObservingClassEventService contextObservingClassEventService;
+    @Inject ExtendedContextObservingService contextObservingClassEventService;
     @Inject HybridObservingService hybridObservingService;
 
     // You can inject arbitrary View, String, and other types of resources.
@@ -127,6 +128,9 @@ public class DoctorTenma extends RoboActivity {
     @Inject
     protected TalkingThing      talker;
 
+    @Inject
+    protected Provider<RoboAsyncTaskBackgroundJunk> backgroundJunkProvider;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,14 +156,22 @@ public class DoctorTenma extends RoboActivity {
 
         Log.d("DoctorTenma", talker.talk());
 
+        backgroundJunkProvider.get().execute();
+
+
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         BooleanResultHandler booleanReturnHandler = new BooleanResultHandler();
 
-        contextObservationManager.notifyWithResult(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event), booleanReturnHandler);
+        eventManager.notifyWithResult(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event), booleanReturnHandler);
 
-        return booleanReturnHandler.isSuccess();
+        if(booleanReturnHandler.isSuccess()){
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
+
+
 }

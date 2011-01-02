@@ -7,22 +7,23 @@ import android.view.KeyEvent;
 import com.google.inject.Singleton;
 
 /**
- * Factory for the @ContextObserves pre-defined RoboActivy Events.
+ * Factory for the @Observes and @Observer pre-defined RoboActivy Events.
  * 
+ * @author Adam Tabor
  * @author John Ericksen
  */
 @Singleton
 public class RoboActivityEventFactory {
 
     //Non-parameter static class instance definitions;
-    private static final OnRestartEvent ON_RESTART_INSTANCE = new OnRestartEvent();
-    private static final OnStartEvent ON_START_INSTANCE = new OnStartEvent();
-    private static final OnResumeEvent ON_RESUME_INSTANCE = new OnResumeEvent();
-    private static final OnPauseEvent ON_PAUSE_INSTANCE = new OnPauseEvent();
-    private static final OnNewIntentEvent ON_NEW_INTENT_INSTANCE = new OnNewIntentEvent();
-    private static final OnStopEvent ON_STOP_INSTANCE = new OnStopEvent();
-    private static final OnDestroyEvent ON_DESTROY_INSTANCE = new OnDestroyEvent();
-    private static final OnContentChangedEvent ON_CONTENT_CHANGED_INSTANCE = new OnContentChangedEvent();
+    protected static final OnRestartEvent ON_RESTART_INSTANCE = new OnRestartEvent();
+    protected static final OnStartEvent ON_START_INSTANCE = new OnStartEvent();
+    protected static final OnResumeEvent ON_RESUME_INSTANCE = new OnResumeEvent();
+    protected static final OnPauseEvent ON_PAUSE_INSTANCE = new OnPauseEvent();
+    protected static final OnNewIntentEvent ON_NEW_INTENT_INSTANCE = new OnNewIntentEvent();
+    protected static final OnStopEvent ON_STOP_INSTANCE = new OnStopEvent();
+    protected static final OnDestroyEvent ON_DESTROY_INSTANCE = new OnDestroyEvent();
+    protected static final OnContentChangedEvent ON_CONTENT_CHANGED_INSTANCE = new OnContentChangedEvent();
 
     public OnRestartEvent buildOnRestartEvent() {
         return ON_RESTART_INSTANCE;

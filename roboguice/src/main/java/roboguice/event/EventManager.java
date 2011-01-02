@@ -1,4 +1,4 @@
-package roboguice.inject;
+package roboguice.event;
 
 import android.content.Context;
 import com.google.inject.Singleton;
@@ -23,12 +23,12 @@ import java.util.*;
  * @author John Ericksen
  */
 @Singleton
-public class ContextObservationManager {
+public class EventManager {
 
-    private final Map<Context, Map<Class, Set<ContextObserverReference>>> mRegistrations;
+    protected final Map<Context, Map<Class, Set<ContextObserverReference>>> registrations;
 
-    public ContextObservationManager() {
-        mRegistrations  = new WeakHashMap<Context, Map<Class, Set<ContextObserverReference>>>();
+    public EventManager() {
+        registrations = new WeakHashMap<Context, Map<Class, Set<ContextObserverReference>>>();
     }
 
     public boolean isEnabled() {
@@ -46,10 +46,10 @@ public class ContextObservationManager {
     public void registerObserver(Context context, Object instance, Method method, Class event) {
         if (!isEnabled()) return;
 
-        Map<Class, Set<ContextObserverReference>> methods = mRegistrations.get(context);
+        Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
         if (methods == null) {
             methods = new HashMap<Class, Set<ContextObserverReference>>();
-            mRegistrations.put(context, methods);
+            registrations.put(context, methods);
         }
 
         Set<ContextObserverReference> observers = methods.get(event);
@@ -57,7 +57,6 @@ public class ContextObservationManager {
             observers = new HashSet<ContextObserverReference>();
             methods.put(event, observers);
         }
-
         observers.add(new ContextObserverReference(instance, method));
     }
 
@@ -71,7 +70,7 @@ public class ContextObservationManager {
     public void unregisterObserver(Context context, Object instance, Class event) {
         if (!isEnabled()) return;
 
-        final Map<Class, Set<ContextObserverReference>> methods = mRegistrations.get(context);
+        final Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
         if (methods == null) return;
 
         final Set<ContextObserverReference> observers = methods.get(event);
@@ -96,10 +95,10 @@ public class ContextObservationManager {
     public void clear(Context context) {
         if (!isEnabled()) return;
 
-        final Map<Class, Set<ContextObserverReference>> methods = mRegistrations.get(context);
+        final Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
         if (methods == null) return;
 
-        mRegistrations.remove(context);
+        registrations.remove(context);
         methods.clear();
     }
 
@@ -113,19 +112,22 @@ public class ContextObservationManager {
     public void notify(Context context, Object event) {
         if (!isEnabled()) return;
 
-        final Map<Class, Set<ContextObserverReference>> methods = mRegistrations.get(context);
+        final Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
         if (methods == null) return;
 
-        final Set<ContextObserverReference> observers = methods.get(event.getClass());
-        if (observers == null) return;
+        for(Class subClassLoop = event.getClass(); subClassLoop != null; subClassLoop = subClassLoop.getSuperclass()){
+            //register class and all super classes, for inheritance based event handling.
+            final Set<ContextObserverReference> observers = methods.get(subClassLoop);
+            if (observers == null) return;
 
-        for (ContextObserverReference observerMethod : observers) {
-            try {
-                observerMethod.invoke(null, event);
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            for (ContextObserverReference observerMethod : observers) {
+                try {
+                    observerMethod.invoke(null, event);
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -142,7 +144,7 @@ public class ContextObservationManager {
     public void notifyWithResult(Context context, Object event, EventResultHandler resultHandler) {
         if (!isEnabled()) return;
 
-        final Map<Class, Set<ContextObserverReference>> methods = mRegistrations.get(context);
+        final Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
         if (methods == null) return;
 
         final Set<ContextObserverReference> observers = methods.get(event.getClass());
@@ -159,7 +161,7 @@ public class ContextObservationManager {
         }
     }
 
-    public static class NullContextObservationManager extends ContextObservationManager {
+    public static class NullEventManager extends EventManager {
         @Override
         public boolean isEnabled() {
             return false;
@@ -167,8 +169,8 @@ public class ContextObservationManager {
     }
     
     private static class ContextObserverReference {
-        private Method method;
-        private WeakReference<Object> instanceReference;
+        protected final Method method;
+        protected final WeakReference<Object> instanceReference;
 
         public ContextObserverReference(Object instance, Method method) {
             this.instanceReference = new WeakReference<Object>(instance);
@@ -177,7 +179,7 @@ public class ContextObservationManager {
 
         public void invoke(EventResultHandler resultHandler, Object event) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
-            EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
+            final EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
             if (instance != null) {
                 Class[] paramTypes = method.getParameterTypes();
                 if(paramTypes.length == 0){

@@ -3,7 +3,7 @@ package roboguice.astroboy.service;
 import android.content.Context;
 import android.widget.Toast;
 import com.google.inject.Inject;
-import roboguice.inject.ContextObserves;
+import roboguice.event.Observes;
 
 /**
  *@author John Ericksen
@@ -11,7 +11,7 @@ import roboguice.inject.ContextObserves;
 public class ToastContextObserverService {
     @Inject Context context;
 
-    public void toast(@ContextObserves ToastEvent event){
+    public void toast(@Observes ToastEvent event){
         Toast.makeText(context, event.getMessage(), Toast.LENGTH_LONG).show();
     }
 

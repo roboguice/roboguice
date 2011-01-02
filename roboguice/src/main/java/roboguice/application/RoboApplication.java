@@ -20,6 +20,7 @@ import android.content.Context;
 import com.google.inject.*;
 import roboguice.config.AbstractAndroidModule;
 import roboguice.config.RoboModule;
+import roboguice.event.EventManager;
 import roboguice.inject.*;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class RoboApplication extends Application implements InjectorProvider {
     protected ExtrasListener extrasListener;
     protected PreferenceListener preferenceListener;
     protected List<StaticTypeListener> staticTypeListeners;
-    protected ContextObservationManager observationManager;
+    protected EventManager observationManager;
 
     /**
      * Returns the {@link Injector} of your application. If none exists yet,
@@ -107,9 +108,9 @@ public class RoboApplication extends Application implements InjectorProvider {
           preferenceListener = new PreferenceListener(contextProvider);
         }
         if (allowContextObservers()) {
-            observationManager = new ContextObservationManager();
+            observationManager = new EventManager();
         } else {
-            observationManager = new ContextObservationManager.NullContextObservationManager();
+            observationManager = new EventManager.NullEventManager();
         }
 
         staticTypeListeners = new ArrayList<StaticTypeListener>();

@@ -5,10 +5,12 @@ import android.os.Bundle;
 /**
  * Class representing the event raised by RoboActivity.onCreate()
  *
+ * @author Adam Tabor
  * @author John Ericksen
  */
 public class OnCreateEvent{
-        private Bundle savedInstanceState;
+
+        protected final Bundle savedInstanceState;
 
         public OnCreateEvent(Bundle savedInstanceState) {
             this.savedInstanceState = savedInstanceState;

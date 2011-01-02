@@ -5,7 +5,7 @@ import android.content.Intent;
 /**
  * Class representing the event raised by RoboActivity.onActivityResult()
  *
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 public class OnActivityResultEvent {

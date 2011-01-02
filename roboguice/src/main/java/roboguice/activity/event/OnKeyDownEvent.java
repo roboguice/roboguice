@@ -5,7 +5,7 @@ import android.view.KeyEvent;
 /**
  * Class representing the event raised by RoboActivity.onKeyDown()
  *
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 public class OnKeyDownEvent {

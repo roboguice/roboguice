@@ -5,7 +5,7 @@ import android.view.KeyEvent;
 /**
  * Class representing the event raised by RoboActivity.onKeyUp()
  *
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 public class OnKeyUpEvent {

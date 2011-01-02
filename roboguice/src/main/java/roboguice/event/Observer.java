@@ -63,7 +63,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *   }
  * }
  * }
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 @Retention(RUNTIME)

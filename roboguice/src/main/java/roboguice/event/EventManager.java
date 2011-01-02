@@ -19,7 +19,7 @@ import java.util.*;
  *      notify()
  *      notifyWithResult()
  *
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 @Singleton

@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
  * Guice driven type listener which scans for the @Observer, @Observers, and @Observes annotations.
  * Registers these methods with the EventManager.
  *
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 public class ObserverTypeListener implements TypeListener {

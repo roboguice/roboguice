@@ -9,7 +9,7 @@ import com.google.inject.Singleton;
 /**
  * Factory for the @Observes and @Observer pre-defined RoboActivy Events.
  * 
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 @Singleton

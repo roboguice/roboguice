@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 /**
  * Class representing the event raised by RoboActivity.onConfigurationChanged()
  *
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 public class OnConfigurationChangedEvent {

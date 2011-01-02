@@ -9,7 +9,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Annotation to allow a method to accept multiple @Observer annotations
  *
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 @Retention(RUNTIME)

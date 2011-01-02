@@ -1,7 +1,7 @@
 package roboguice.event;
 
 /**
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 public interface EventResultHandler {

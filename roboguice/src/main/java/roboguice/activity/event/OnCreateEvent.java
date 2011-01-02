@@ -5,7 +5,7 @@ import android.os.Bundle;
 /**
  * Class representing the event raised by RoboActivity.onCreate()
  *
- * @author Adam Tabor
+ * @author Adam Tybor
  * @author John Ericksen
  */
 public class OnCreateEvent{

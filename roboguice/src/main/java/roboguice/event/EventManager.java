@@ -93,9 +93,9 @@ public class EventManager {
     public void notify(Object event) {
         if (!isEnabled()) return;
 
-        for(Class subClassLoop = event.getClass(); subClassLoop != null; subClassLoop = subClassLoop.getSuperclass()){
-            //register class and all super classes, for inheritance based event handling.
-            final Set<ContextObserverReference> observers = methods.get(subClassLoop);
+        for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
+
+            final Set<ContextObserverReference> observers = methods.get(aClass);
             if (observers == null) return;
 
             for (ContextObserverReference observerMethod : observers) {
@@ -122,16 +122,19 @@ public class EventManager {
     public void notifyWithResult(Object event, EventResultHandler resultHandler) {
         if (!isEnabled()) return;
 
-        final Set<ContextObserverReference> observers = methods.get(event.getClass());
-        if (observers == null) return;
+        for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
 
-        for (ContextObserverReference observerMethod : observers) {
-            try {
-                observerMethod.invoke(resultHandler, event);
-            } catch (InvocationTargetException e) {
-                Ln.e(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
+            final Set<ContextObserverReference> observers = methods.get(aClass);
+            if (observers == null) return;
+
+            for (ContextObserverReference observerMethod : observers) {
+                try {
+                    observerMethod.invoke(resultHandler, event);
+                } catch (InvocationTargetException e) {
+                    Ln.e(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

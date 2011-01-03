@@ -15,17 +15,17 @@
  */
 package roboguice.inject;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import android.app.Application;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 
-import android.app.Application;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 
 /**
@@ -65,54 +65,63 @@ public class ResourceListener implements StaticTypeListener {
         }
 
     }
-}
 
-class ResourceMembersInjector<T> implements MembersInjector<T> {
 
-    protected Field field;
-    protected Application application;
-    protected InjectResource annotation;
 
-    public ResourceMembersInjector(Field field, Application application, InjectResource annotation) {
-        this.field = field;
-        this.application = application;
-        this.annotation = annotation;
-    }
 
-    public void injectMembers(T instance) {
 
-        Object value = null;
 
-        try {
 
-            final int id = annotation.value();
-            final Class<?> t = field.getType();
-            final Resources resources = application.getResources();
 
-            if (String.class.isAssignableFrom(t)) {
-                value = resources.getString(id);
-            } else if (Drawable.class.isAssignableFrom(t)) {
-                value = resources.getDrawable(id);
-            } else if (String[].class.isAssignableFrom(t)) {
-                value = resources.getStringArray(id);
-            } else if (int[].class.isAssignableFrom(t) || Integer[].class.isAssignableFrom(t)) {
-                value = resources.getIntArray(id);
+    
+    protected static class ResourceMembersInjector<T> implements MembersInjector<T> {
+
+        protected Field field;
+        protected Application application;
+        protected InjectResource annotation;
+
+        public ResourceMembersInjector(Field field, Application application, InjectResource annotation) {
+            this.field = field;
+            this.application = application;
+            this.annotation = annotation;
+        }
+
+        public void injectMembers(T instance) {
+
+            Object value = null;
+
+            try {
+
+                final int id = annotation.value();
+                final Class<?> t = field.getType();
+                final Resources resources = application.getResources();
+
+                if (String.class.isAssignableFrom(t)) {
+                    value = resources.getString(id);
+                } else if (Drawable.class.isAssignableFrom(t)) {
+                    value = resources.getDrawable(id);
+                } else if (String[].class.isAssignableFrom(t)) {
+                    value = resources.getStringArray(id);
+                } else if (int[].class.isAssignableFrom(t) || Integer[].class.isAssignableFrom(t)) {
+                    value = resources.getIntArray(id);
+                }
+
+                if (value == null && field.getAnnotation(Nullable.class) == null) {
+                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
+                            .getName()));
+                }
+
+                field.setAccessible(true);
+                field.set(instance, value);
+
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+
+            } catch (IllegalArgumentException f) {
+                throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
+                        field.getType(), field.getName()));
             }
-
-            if (value == null && field.getAnnotation(Nullable.class) == null) {
-                throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
-                        .getName()));
-            }
-
-            field.setAccessible(true);
-            field.set(instance, value);
-
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-
-        } catch (IllegalArgumentException f) {
-            throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
-                    field.getType(), field.getName()));
         }
     }
 }
+

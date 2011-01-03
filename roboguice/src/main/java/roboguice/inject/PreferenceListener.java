@@ -15,25 +15,18 @@
  */
 package roboguice.inject;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.util.Map;
+import android.content.Context;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
 
-import com.google.inject.Binding;
-import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import com.google.inject.util.Types;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import java.lang.reflect.Field;
 
 /**
  * Listener for preference injection.
@@ -59,50 +52,56 @@ public class PreferenceListener implements TypeListener {
             c = c.getSuperclass();
         }
     }
+
+
+
+
+
+
+    protected static class PreferenceMembersInjector<T> implements MembersInjector<T> {
+        protected final Field field;
+        protected Provider<Context> contextProvider;
+        protected InjectPreference annotation;
+
+        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider,
+                                         InjectPreference annotation) {
+            this.field = field;
+            this.contextProvider = contextProvider;
+            this.annotation = annotation;
+        }
+
+        public void injectMembers(T instance) {
+            final Context context = contextProvider.get();
+
+            if (!(context instanceof PreferenceActivity)) {
+                throw new IllegalArgumentException(String.format(
+                    "Can't inject a preference into a non-subclass of PreferenceAcvitity (%s)",
+                    field.getDeclaringClass()));
+            }
+
+            final PreferenceActivity activity = (PreferenceActivity) context;
+            final String key = annotation.value();
+
+            Preference value = activity.findPreference(key);
+
+            if (value == null && !field.isAnnotationPresent(Nullable.class)) {
+                throw new NullPointerException(
+                    String.format("Can't inject null value into %s.%s when field is not @Nullable",
+                                  field.getDeclaringClass(), field.getName()));
+            }
+
+            try {
+                field.setAccessible(true);
+                field.set(instance, value);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalArgumentException f) {
+                throw new IllegalArgumentException(
+                    String.format("Can't assign %s value %s to %s field %s",
+                                  value != null ? value.getClass() : "(null)",
+                                  value, field.getType(), field.getName()));
+            }
+        }
+    }
 }
 
-class PreferenceMembersInjector<T> implements MembersInjector<T> {
-    private final Field field;
-    private final Provider<Context> contextProvider;
-    private final InjectPreference annotation;
-
-    public PreferenceMembersInjector(Field field, Provider<Context> contextProvider,
-                                     InjectPreference annotation) {
-        this.field = field;
-        this.contextProvider = contextProvider;
-        this.annotation = annotation;
-    }
-
-    public void injectMembers(T instance) {
-        final Context context = contextProvider.get();
-
-        if (!(context instanceof PreferenceActivity)) {
-            throw new IllegalArgumentException(String.format(
-                "Can't inject a preference into a non-subclass of PreferenceAcvitity (%s)",
-                field.getDeclaringClass()));
-        }
-
-        final PreferenceActivity activity = (PreferenceActivity) context;
-        final String key = annotation.value();
-
-        Preference value = activity.findPreference(key);
-
-        if (value == null && !field.isAnnotationPresent(Nullable.class)) {
-            throw new NullPointerException(
-                String.format("Can't inject null value into %s.%s when field is not @Nullable",
-                              field.getDeclaringClass(), field.getName()));
-        }
-
-        try {
-            field.setAccessible(true);
-            field.set(instance, value);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException f) {
-            throw new IllegalArgumentException(
-                String.format("Can't assign %s value %s to %s field %s",
-                              value != null ? value.getClass() : "(null)",
-                              value, field.getType(), field.getName()));
-        }
-    }
-}

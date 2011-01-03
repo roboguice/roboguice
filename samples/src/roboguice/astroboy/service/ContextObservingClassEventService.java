@@ -1,14 +1,16 @@
 package roboguice.astroboy.service;
 
-import android.content.Context;
-import android.view.KeyEvent;
-import android.widget.Toast;
-import com.google.inject.Inject;
 import roboguice.activity.event.OnCreateEvent;
 import roboguice.activity.event.OnDestroyEvent;
 import roboguice.activity.event.OnKeyDownEvent;
 import roboguice.inject.ContextObserves;
 import roboguice.util.Ln;
+
+import android.content.Context;
+import android.view.KeyEvent;
+import android.widget.Toast;
+
+import com.google.inject.Inject;
 
 /**
  * Example of the ContextObserves usage with the defined RoboActivity Events
@@ -17,8 +19,7 @@ import roboguice.util.Ln;
  */
 public class ContextObservingClassEventService {
 
-    @Inject
-    private Context context;
+    @Inject protected Context context;
 
     public void logOnCreate(@ContextObserves OnCreateEvent event) {
         Ln.v("onCreate");

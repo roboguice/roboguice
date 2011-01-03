@@ -28,19 +28,6 @@ public class ContextObserverTypeListener implements TypeListener {
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
         for (Method method : iTypeLiteral.getRawType().getMethods()) {
-            //ContextObserver scan
-            if (method.isAnnotationPresent(ContextObserver.class)) {
-                final ContextObserver annotation = method.getAnnotation(ContextObserver.class);
-                registerContextObserver(iTypeEncounter, method, annotation.value());
-            }
-            //ContextObservers scan
-            if (method.isAnnotationPresent(ContextObservers.class)) {
-                final ContextObservers annotation = method.getAnnotation(ContextObservers.class);
-                for(ContextObserver observerAnnotation : annotation.value()){
-                    registerContextObserver(iTypeEncounter, method, observerAnnotation.value());
-                }
-            }
-            //ContextObserves scan
             for(int i = 0; i < method.getParameterAnnotations().length; i++){
                 Annotation[] annotationArray = method.getParameterAnnotations()[i];
                 Class<?>[] parameterTypes = method.getParameterTypes();
@@ -62,7 +49,7 @@ public class ContextObserverTypeListener implements TypeListener {
      * @param parameterType
      * @param <I>
      */
-    private <I> void registerContextObserver(TypeEncounter<I> iTypeEncounter, Method method, Class parameterType) {
+    protected <I> void registerContextObserver(TypeEncounter<I> iTypeEncounter, Method method, Class parameterType) {
         checkMethodParameters(method, parameterType);
         iTypeEncounter.register(new ContextObserverMethodInjector<I>(mContextProvider, mObservationManager, method, parameterType));
     }
@@ -76,16 +63,15 @@ public class ContextObserverTypeListener implements TypeListener {
      * @param method
      * @param parameterType
      */
-    private void checkMethodParameters(Method method, Class parameterType) {
-        if(method.getParameterTypes().length > 1){
-            throw new RuntimeException("Annotation @ContextObserves must only annotate one parameter," +
-                    " which must be the only parameter in the listener method.");
-        }
-        if(method.getParameterTypes().length == 1 && !method.getParameterTypes()[0].equals(parameterType)){
-            throw new RuntimeException("Value injected by ContextObserver or ContextObserves in method " +
+    protected void checkMethodParameters(Method method, Class parameterType) {
+        if(method.getParameterTypes().length != 1)
+            throw new RuntimeException("Annotation @ContextObserves must only annotate one parameter, which must be the only parameter in the listener method.");
+
+        if( !method.getParameterTypes()[0].equals(parameterType) )
+            throw new RuntimeException("Value injected by ContextObserves in method " +
                     method.getDeclaringClass().getCanonicalName() + "." + method.getName() +
-                    " must match annotated type " + parameterType.getName() + " or have no parameters.");
-        }
+                    " must match annotated type " + parameterType.getName() + " .");
+        
     }
 
     /**
@@ -93,11 +79,11 @@ public class ContextObserverTypeListener implements TypeListener {
      * 
      * @param <I>
      */
-    private static class ContextObserverMethodInjector<I> implements InjectionListener<I> {
-        private final Provider<Context> mContextProvider;
-        private final ContextObservationManager mObservationManager;
-        private final Method mMethod;
-        private final Class event;
+    protected static class ContextObserverMethodInjector<I> implements InjectionListener<I> {
+        protected final Provider<Context> mContextProvider;
+        protected final ContextObservationManager mObservationManager;
+        protected final Method mMethod;
+        protected final Class event;
 
         public ContextObserverMethodInjector(Provider<Context> contextProvider, ContextObservationManager observationManager, Method method, Class event) {
             this.mContextProvider = contextProvider;

@@ -40,6 +40,25 @@
       </facet-type>
     </autodetection-disabled>
   </component>
+  <component name="InspectionProjectProfileManager">
+    <profiles>
+      <profile version="1.0" is_locked="false">
+        <option name="myName" value="Project Default" />
+        <option name="myLocal" value="false" />
+        <inspection_tool class="AutowiredDependenciesInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+        <inspection_tool class="CheckTagEmptyBody" enabled="false" level="WARNING" enabled_by_default="false" />
+        <inspection_tool class="Fix shebang" enabled="true" level="WARNING" enabled_by_default="true">/bin/sh#/bin/bash</inspection_tool>
+        <inspection_tool class="JavadocReference" enabled="false" level="ERROR" enabled_by_default="false" />
+        <inspection_tool class="MissingOverrideAnnotation" enabled="true" level="WARNING" enabled_by_default="true">
+          <option name="ignoreObjectMethods" value="true" />
+        </inspection_tool>
+        <inspection_tool class="UNCHECKED_WARNING" enabled="true" level="INFO" enabled_by_default="true" />
+      </profile>
+    </profiles>
+    <option name="PROJECT_PROFILE" value="Project Default" />
+    <option name="USE_PROJECT_PROFILE" value="true" />
+    <version value="1.0" />
+  </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_STRING" value="-target 1.6" />
   </component>
@@ -206,6 +225,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="" />
   </component>
+  <component name="WebServicesPlugin" addRequiredLibraries="true" />
   <component name="libraryTable">
     <library name="Maven: aopalliance:aopalliance:1.0">
       <CLASSES>

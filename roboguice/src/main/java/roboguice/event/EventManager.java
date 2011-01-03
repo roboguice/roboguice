@@ -1,6 +1,7 @@
 package roboguice.event;
 
 import roboguice.inject.ContextScoped;
+import roboguice.util.Ln;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
@@ -101,9 +102,9 @@ public class EventManager {
                 try {
                     observerMethod.invoke(null, event);
                 } catch (InvocationTargetException e) {
-                    e.printStackTrace();
+                    Ln.e(e);
                 } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
             }
         }
@@ -128,9 +129,9 @@ public class EventManager {
             try {
                 observerMethod.invoke(resultHandler, event);
             } catch (InvocationTargetException e) {
-                e.printStackTrace();
+                Ln.e(e);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
     }

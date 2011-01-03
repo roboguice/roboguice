@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * Guice driven type listener which scans for the @Observer, @Observers, and @Observes annotations.
+ * Guice driven type listener which scans for the @Observes annotations.
  * Registers these methods with the EventManager.
  *
  * @author Adam Tybor
@@ -24,15 +24,15 @@ public class ObserverTypeListener implements TypeListener {
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
         for (Method method : iTypeLiteral.getRawType().getMethods()) {
-            for(int i = 0; i < method.getParameterAnnotations().length; i++){
-                final Annotation[] annotationArray = method.getParameterAnnotations()[i];
+            final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+            for(int i = 0; i < parameterAnnotations.length; i++){
+                final Annotation[] annotationArray = parameterAnnotations[i];
                 final Class<?>[] parameterTypes = method.getParameterTypes();
-                final Class parameterType = parameterTypes[i];
-                for(Annotation annotation : annotationArray){
-                    if(annotation.annotationType().equals(Observes.class)){
-                        registerContextObserver(iTypeEncounter, method, parameterType);
-                    }
-                }
+                final Class<?> parameterType = parameterTypes[i];
+
+                for(Annotation annotation : annotationArray)
+                    if(annotation.annotationType().equals(Observes.class))
+                        registerContextObserver(iTypeEncounter, method, parameterType);                                    
             }
         }
     }

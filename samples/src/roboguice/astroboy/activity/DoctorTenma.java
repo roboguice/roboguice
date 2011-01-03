@@ -38,6 +38,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.internal.Nullable;
 
 import java.util.Date;
@@ -46,7 +47,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 public class DoctorTenma extends RoboActivity {
-    @Inject protected ContextObservingClassEventService contextObservingClassEventService;
+    @Inject ContextObservingService mContextObservingService;
 
     // You can inject arbitrary View, String, and other types of resources.
     // See ResourceListener for details.
@@ -130,6 +131,9 @@ public class DoctorTenma extends RoboActivity {
     @Inject
     protected TalkingThing      talker;
 
+    @Inject
+    protected Provider<RoboAsyncTaskBackgroundJunk> backgroundJunkProvider;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -155,25 +159,8 @@ public class DoctorTenma extends RoboActivity {
 
         Log.d("DoctorTenma", talker.talk());
 
+        backgroundJunkProvider.get().execute();
 
-        for( int i=0; i<10; ++i ) {
-            final RoboAsyncTask<Void> t = new RoboAsyncTask<Void>() {
-
-                public Void call() throws Exception {
-                    Ln.d("Doing some junk in background thread %s", this);
-                    Thread.sleep(10*1000);
-                    return null;
-                }
-
-                protected void onActivityDestroy( @ContextObserves OnDestroyEvent ignored ) {
-                    Ln.d("Killing background thread %s", this);
-                    cancel(true);
-                }
-
-            };
-            getInjector().injectMembers(t);
-            t.execute();
-        }
 
     }
 
@@ -181,8 +168,13 @@ public class DoctorTenma extends RoboActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         final BooleanResultHandler booleanReturnHandler = new BooleanResultHandler();
 
-        contextObservationManager.notifyWithResult(new OnKeyDownEvent(keyCode, event), booleanReturnHandler);
+        eventManager.notifyWithResult(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event), booleanReturnHandler);
 
-        return booleanReturnHandler.isSuccess();
+        if(booleanReturnHandler.isSuccess()){
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
+
+
 }

@@ -31,6 +31,11 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import roboguice.activity.event.RoboActivityEventFactory;
+import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -64,7 +69,11 @@ import com.google.inject.Injector;
  * @author Mike Burton
  */
 public class RoboActivity extends Activity implements InjectorProvider {
-    @Inject protected ContextObservationManager contextObservationManager;
+    protected ContextScope scope;
+    @Inject
+    protected EventManager eventManager;
+    @Inject
+    protected RoboActivityEventFactory roboActivityEventFactory;
 
     protected ContextScope scope;
 

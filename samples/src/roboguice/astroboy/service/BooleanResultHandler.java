@@ -1,13 +1,13 @@
 package roboguice.astroboy.service;
 
-import roboguice.inject.EventResultHandler;
+import roboguice.event.EventResultHandler;
 
 /**
  * @author John Ericksen
  */
 public class BooleanResultHandler implements EventResultHandler {
 
-    boolean success;
+    protected boolean success;
 
     public void handleReturn(Object value) {
         if(value instanceof Boolean && (Boolean) value){

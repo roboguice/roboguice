@@ -15,17 +15,18 @@
  */
 package roboguice.activity;
 
-import roboguice.application.RoboApplication;
-import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
-
-import com.google.inject.Injector;
-
 import android.app.TabActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.content.Intent;
 import android.view.ViewGroup.LayoutParams;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import roboguice.activity.event.RoboActivityEventFactory;
+import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboTabActivity} extends from {@link TabActivity} to provide
@@ -37,6 +38,10 @@ import android.view.ViewGroup.LayoutParams;
  */
 public class RoboTabActivity extends TabActivity implements InjectorProvider {
     protected ContextScope scope;
+    @Inject
+    protected EventManager eventManager;
+    @Inject
+    protected RoboActivityEventFactory roboActivityEventFactory;
 
     /** {@inheritDoc } */
     @Override

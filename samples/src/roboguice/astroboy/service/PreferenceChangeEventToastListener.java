@@ -5,6 +5,8 @@ import roboguice.inject.ContextObservationManager;
 import android.preference.Preference;
 
 import com.google.inject.Inject;
+import roboguice.activity.event.RoboActivityEventFactory;
+import roboguice.event.EventManager;
 
 /**
  * @author John Ericksen

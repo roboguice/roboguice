@@ -15,18 +15,18 @@
  */
 package roboguice.activity;
 
-import roboguice.application.RoboApplication;
-import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
-
-import com.google.android.maps.MapActivity;
-import com.google.inject.Injector;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.content.Intent;
-import android.content.Intent;
+import com.google.android.maps.MapActivity;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import roboguice.activity.event.RoboActivityEventFactory;
+import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboMapActivity} extends from {@link MapActivity} to provide
@@ -37,7 +37,12 @@ import android.content.Intent;
  * @author Mike Burton
  */
 public abstract class RoboMapActivity extends MapActivity implements InjectorProvider {
+
     protected ContextScope scope;
+    @Inject
+    protected EventManager eventManager;
+    @Inject
+    protected RoboActivityEventFactory roboActivityEventFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

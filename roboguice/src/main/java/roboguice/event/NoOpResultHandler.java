@@ -1,6 +1,7 @@
-package roboguice.inject;
+package roboguice.event;
 
 /**
+ * @author Adam Tybor
  * @author John Ericksen
  */
 public class NoOpResultHandler implements EventResultHandler {

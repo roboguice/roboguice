@@ -1,5 +1,7 @@
 package roboguice.config;
 
+import roboguice.event.EventManager;
+import roboguice.event.ObserverTypeListener;
 import roboguice.inject.*;
 import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
@@ -25,12 +27,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
-import roboguice.event.EventManager;
-import roboguice.event.ObserverTypeListener;
-import roboguice.inject.*;
-import roboguice.util.Ln;
-import roboguice.util.RoboAsyncTask;
-import roboguice.util.RoboThread;
 
 import java.util.List;
 
@@ -122,13 +118,8 @@ public class RoboModule extends AbstractModule {
         if (preferenceListener != null)
           bindListener(Matchers.any(), preferenceListener);
 
-        if (observationManager.isEnabled()) {
-            bindListener(Matchers.any(), new ObserverTypeListener(contextProvider, observationManager));
-        }
-
         if (observationManager.isEnabled())
-            bindListener(Matchers.any(), new ContextObserverTypeListener(observationManager));
-
+            bindListener(Matchers.any(), new ObserverTypeListener(observationManager));
 
         requestStaticInjection( Ln.class );
         requestStaticInjection( RoboThread.class );

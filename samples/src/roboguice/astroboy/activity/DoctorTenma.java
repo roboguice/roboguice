@@ -47,7 +47,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 public class DoctorTenma extends RoboActivity {
-    @Inject ContextObservingService mContextObservingService;
+    @Inject protected ContextObservingClassEventService mContextObservingService;
 
     // You can inject arbitrary View, String, and other types of resources.
     // See ResourceListener for details.
@@ -168,7 +168,7 @@ public class DoctorTenma extends RoboActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         final BooleanResultHandler booleanReturnHandler = new BooleanResultHandler();
 
-        eventManager.notifyWithResult(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event), booleanReturnHandler);
+        eventManager.notifyWithResult(new OnKeyDownEvent(keyCode, event), booleanReturnHandler);
 
         if(booleanReturnHandler.isSuccess()){
             return true;

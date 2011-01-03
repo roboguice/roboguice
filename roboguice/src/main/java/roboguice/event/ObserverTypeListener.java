@@ -60,11 +60,11 @@ public class ObserverTypeListener implements TypeListener {
      * @param parameterType
      */
     protected void checkMethodParameters(Method method, Class parameterType) {
-        if(method.getParameterTypes().length > 1){
+        if(method.getParameterTypes().length > 1)
             throw new RuntimeException("Annotation @Observes must only annotate one parameter," +
                     " which must be the only parameter in the listener method.");
-        }
-        if(method.getParameterTypes().length == 1 && !method.getParameterTypes()[0].isAssignableFrom(parameterType)){
+
+        if(method.getParameterTypes().length == 1 && !method.getParameterTypes()[0].isAssignableFrom(parameterType))
             throw new RuntimeException("Value injected by Observer or Observes in method " +
                     method.getDeclaringClass().getCanonicalName() + "." + method.getName() +
                     " must match annotated type " + parameterType.getName() + " .");
@@ -77,7 +77,6 @@ public class ObserverTypeListener implements TypeListener {
      * @param <I>
      */
     protected static class ContextObserverMethodInjector<I> implements InjectionListener<I> {
-        protected final Provider<Context> mContextProvider;
         protected final EventManager mObservationManager;
         protected final Method mMethod;
         protected final Class event;

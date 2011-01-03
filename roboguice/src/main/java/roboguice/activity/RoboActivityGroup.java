@@ -15,18 +15,19 @@
  */
 package roboguice.activity;
 
+import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
+
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import roboguice.activity.event.RoboActivityEventFactory;
-import roboguice.application.RoboApplication;
-import roboguice.event.EventManager;
-import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboActivityGroup} extends from {@link ActivityGroup} to provide
@@ -38,11 +39,9 @@ import roboguice.inject.InjectorProvider;
  */
 public class RoboActivityGroup extends ActivityGroup implements InjectorProvider {
 
+    @Inject protected EventManager eventManager;
+
     protected ContextScope scope;
-    @Inject
-    protected EventManager eventManager;
-    @Inject
-    protected RoboActivityEventFactory roboActivityEventFactory;
 
     /** {@inheritDoc } */
     @Override

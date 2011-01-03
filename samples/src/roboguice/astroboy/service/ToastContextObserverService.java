@@ -19,7 +19,7 @@ public class ToastContextObserverService {
         return new ToastEvent(message);
     }
 
-    public class ToastEvent{
+    public static class ToastEvent{
         String message;
 
         public ToastEvent(String message) {

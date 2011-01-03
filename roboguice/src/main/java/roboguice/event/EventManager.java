@@ -1,8 +1,8 @@
 package roboguice.event;
 
-import android.content.Context;
+import roboguice.inject.ContextScoped;
 
-import com.google.inject.Inject;
+import android.content.Context;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;

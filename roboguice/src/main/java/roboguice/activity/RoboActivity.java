@@ -17,7 +17,6 @@ package roboguice.activity;
 
 import roboguice.activity.event.*;
 import roboguice.application.RoboApplication;
-import roboguice.inject.ContextObservationManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
 
@@ -31,7 +30,6 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import roboguice.activity.event.RoboActivityEventFactory;
 import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
@@ -69,11 +67,7 @@ import roboguice.inject.InjectorProvider;
  * @author Mike Burton
  */
 public class RoboActivity extends Activity implements InjectorProvider {
-    protected ContextScope scope;
-    @Inject
-    protected EventManager eventManager;
-    @Inject
-    protected RoboActivityEventFactory roboActivityEventFactory;
+    @Inject protected EventManager eventManager;
 
     protected ContextScope scope;
 
@@ -84,7 +78,7 @@ public class RoboActivity extends Activity implements InjectorProvider {
         scope.enter(this);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
-        contextObservationManager.notify(new OnCreateEvent(savedInstanceState));
+        eventManager.notify(new OnCreateEvent(savedInstanceState));
     }
 
     @Override
@@ -114,27 +108,27 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
-        contextObservationManager.notify(new OnRestartEvent());
+        eventManager.notify(new OnRestartEvent());
     }
 
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
-        contextObservationManager.notify(new OnStartEvent());
+        eventManager.notify(new OnStartEvent());
     }
 
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
-        contextObservationManager.notify(new OnResumeEvent());
+        eventManager.notify(new OnResumeEvent());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        contextObservationManager.notify(new OnPauseEvent());
+        eventManager.notify(new OnPauseEvent());
         scope.exit(this);
     }
 
@@ -142,50 +136,50 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onNewIntent( Intent intent ) {
         super.onNewIntent(intent);
         scope.enter(this);
-        contextObservationManager.notify(new OnNewIntentEvent());
+        eventManager.notify(new OnNewIntentEvent());
     }
 
     @Override
     protected void onStop() {
-        contextObservationManager.notify(new OnStopEvent());
+        eventManager.notify(new OnStopEvent());
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        contextObservationManager.notify(new OnDestroyEvent());
-        contextObservationManager.clear();
+        eventManager.notify(new OnDestroyEvent());
+        eventManager.clear();
         super.onDestroy();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        contextObservationManager.notify(new OnConfigurationChangedEvent(newConfig));
+        eventManager.notify(new OnConfigurationChangedEvent(newConfig));
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        contextObservationManager.notify(new OnKeyDownEvent(keyCode, event));
+        eventManager.notify(new OnKeyDownEvent(keyCode, event));
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        contextObservationManager.notify(new OnKeyUpEvent(keyCode, event));
+        eventManager.notify(new OnKeyUpEvent(keyCode, event));
         return super.onKeyUp(keyCode, event);
     }
 
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        contextObservationManager.notify(new OnContentChangedEvent());
+        eventManager.notify(new OnContentChangedEvent());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        contextObservationManager.notify(new OnActivityResultEvent(requestCode, resultCode, data));
+        eventManager.notify(new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
     /**

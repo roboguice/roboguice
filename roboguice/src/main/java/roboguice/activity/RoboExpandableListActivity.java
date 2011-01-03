@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import roboguice.activity.event.RoboActivityEventFactory;
 import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
@@ -39,11 +38,9 @@ import roboguice.inject.InjectorProvider;
  */
 public class RoboExpandableListActivity extends ExpandableListActivity implements InjectorProvider {
 
+    @Inject protected EventManager eventManager;
+
     protected ContextScope scope;
-    @Inject
-    protected EventManager eventManager;
-    @Inject
-    protected RoboActivityEventFactory roboActivityEventFactory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,8 +2,6 @@ package roboguice.event;
 
 import roboguice.inject.ContextScoped;
 
-import android.content.Context;
-
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -58,7 +56,7 @@ public class EventManager {
      * @param instance
      * @param event
      */
-    public void unregisterObserver(Context context, Object instance, Class event) {
+    public void unregisterObserver(Object instance, Class event) {
         if (!isEnabled()) return;
 
         final Set<ContextObserverReference> observers = methods.get(event);
@@ -145,8 +143,8 @@ public class EventManager {
     }
     
     private static class ContextObserverReference {
-        protected final Method method;
-        protected final WeakReference<Object> instanceReference;
+        protected Method method;
+        protected WeakReference<Object> instanceReference;
 
         public ContextObserverReference(Object instance, Method method) {
             this.instanceReference = new WeakReference<Object>(instance);
@@ -157,7 +155,7 @@ public class EventManager {
             final Object instance = instanceReference.get();
             final EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
             if (instance != null) {
-                Class[] paramTypes = method.getParameterTypes();
+                final Class[] paramTypes = method.getParameterTypes();
                 if(paramTypes.length == 0){
                     //empty parameters
                     innerResultHandler.handleReturn(method.invoke(instance));

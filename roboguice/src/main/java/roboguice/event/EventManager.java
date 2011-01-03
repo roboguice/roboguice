@@ -142,7 +142,7 @@ public class EventManager {
         }
     }
     
-    private static class ContextObserverReference {
+    protected static class ContextObserverReference {
         protected Method method;
         protected WeakReference<Object> instanceReference;
 
@@ -154,16 +154,10 @@ public class EventManager {
         public void invoke(EventResultHandler resultHandler, Object event) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
             final EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
-            if (instance != null) {
-                final Class[] paramTypes = method.getParameterTypes();
-                if(paramTypes.length == 0){
-                    //empty parameters
-                    innerResultHandler.handleReturn(method.invoke(instance));
-                }
-                else{
-                    innerResultHandler.handleReturn(method.invoke(instance, event));
-                }
-            }
+
+            if (instance != null)
+                innerResultHandler.handleReturn( method.getParameterTypes().length==0 ? method.invoke(instance) : method.invoke(instance, event));
+            
         }
     }
 }

@@ -15,13 +15,16 @@
  */
 package roboguice.application;
 
-import android.app.Application;
-import android.content.Context;
-import com.google.inject.*;
 import roboguice.config.AbstractAndroidModule;
 import roboguice.config.RoboModule;
 import roboguice.event.EventManager;
+import roboguice.event.EventManager.NullEventManager;
 import roboguice.inject.*;
+
+import android.app.Application;
+import android.content.Context;
+
+import com.google.inject.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,18 +103,16 @@ public class RoboApplication extends Application implements InjectorProvider {
                 return RoboApplication.this;
             }
         };
+        
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
         resourceListener = new ResourceListener(this);
         viewListener = new ViewListener(contextProvider, this, contextScope);
         extrasListener = new ExtrasListener(contextProvider);
-        if (allowPreferenceInjection()) {
+        observationManager = allowContextObservers() ? new EventManager() : new NullEventManager();
+
+        if (allowPreferenceInjection())
           preferenceListener = new PreferenceListener(contextProvider);
-        }
-        if (allowContextObservers()) {
-            observationManager = new EventManager();
-        } else {
-            observationManager = new EventManager.NullEventManager();
-        }
+
 
         staticTypeListeners = new ArrayList<StaticTypeListener>();
         staticTypeListeners.add(resourceListener);

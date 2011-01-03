@@ -1,5 +1,10 @@
 package roboguice.config;
 
+import roboguice.inject.*;
+import roboguice.util.Ln;
+import roboguice.util.RoboAsyncTask;
+import roboguice.util.RoboThread;
+
 import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -15,14 +20,11 @@ import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
-import roboguice.inject.*;
-import roboguice.util.Ln;
-import roboguice.util.RoboAsyncTask;
-import roboguice.util.RoboThread;
 
 import java.util.List;
 
@@ -85,9 +87,9 @@ public class RoboModule extends AbstractModule {
         // Context observers
         bind(ContextObservationManager.class).toInstance(observationManager);
 
-        for (Class<? extends Object> c = application.getClass(); c != null && Application.class.isAssignableFrom(c); c = c.getSuperclass()) {
+        for (Class<?> c = application.getClass(); c != null && Application.class.isAssignableFrom(c); c = c.getSuperclass())
             bind((Class<Object>) c).toInstance(application);
-        }
+
 
         // System Services
         bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));
@@ -116,7 +118,7 @@ public class RoboModule extends AbstractModule {
         }
 
         if (observationManager.isEnabled()) {
-            bindListener(Matchers.any(), new ContextObserverTypeListener(contextProvider, observationManager));
+            bindListener(Matchers.any(), new ContextObserverTypeListener(observationManager));
         }
 
         requestStaticInjection( Ln.class );

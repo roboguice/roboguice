@@ -17,6 +17,7 @@ package roboguice.astroboy.activity;
 
 import roboguice.activity.RoboActivity;
 import roboguice.activity.event.OnDestroyEvent;
+import roboguice.activity.event.OnKeyDownEvent;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
 import roboguice.astroboy.bean.*;
@@ -178,9 +179,9 @@ public class DoctorTenma extends RoboActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        BooleanResultHandler booleanReturnHandler = new BooleanResultHandler();
+        final BooleanResultHandler booleanReturnHandler = new BooleanResultHandler();
 
-        contextObservationManager.notifyWithResult(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event), booleanReturnHandler);
+        contextObservationManager.notifyWithResult(new OnKeyDownEvent(keyCode, event), booleanReturnHandler);
 
         return booleanReturnHandler.isSuccess();
     }

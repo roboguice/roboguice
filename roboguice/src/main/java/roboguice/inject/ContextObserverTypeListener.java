@@ -1,7 +1,5 @@
 package roboguice.inject;
 
-import android.content.Context;
-import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
@@ -18,11 +16,9 @@ import java.lang.reflect.Method;
  * @author John Ericksen
  */
 public class ContextObserverTypeListener implements TypeListener {
-    final Provider<Context> mContextProvider;
     final ContextObservationManager mObservationManager;
 
-    public ContextObserverTypeListener(Provider<Context> contextProvider, ContextObservationManager observationManager) {
-        this.mContextProvider = contextProvider;
+    public ContextObserverTypeListener(ContextObservationManager observationManager) {
         this.mObservationManager = observationManager;
     }
 
@@ -51,7 +47,7 @@ public class ContextObserverTypeListener implements TypeListener {
      */
     protected <I> void registerContextObserver(TypeEncounter<I> iTypeEncounter, Method method, Class parameterType) {
         checkMethodParameters(method, parameterType);
-        iTypeEncounter.register(new ContextObserverMethodInjector<I>(mContextProvider, mObservationManager, method, parameterType));
+        iTypeEncounter.register(new ContextObserverMethodInjector<I>(mObservationManager, method, parameterType));
     }
 
     /**
@@ -80,20 +76,18 @@ public class ContextObserverTypeListener implements TypeListener {
      * @param <I>
      */
     protected static class ContextObserverMethodInjector<I> implements InjectionListener<I> {
-        protected final Provider<Context> mContextProvider;
         protected final ContextObservationManager mObservationManager;
         protected final Method mMethod;
         protected final Class event;
 
-        public ContextObserverMethodInjector(Provider<Context> contextProvider, ContextObservationManager observationManager, Method method, Class event) {
-            this.mContextProvider = contextProvider;
+        public ContextObserverMethodInjector(ContextObservationManager observationManager, Method method, Class event) {
             this.mObservationManager = observationManager;
             this.mMethod = method;
             this.event = event;
         }
 
         public void afterInjection(I i) {
-            mObservationManager.registerObserver(mContextProvider.get(), i, mMethod, event);
+            mObservationManager.registerObserver(i, mMethod, event);
         }
     }
 }

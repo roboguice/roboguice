@@ -15,6 +15,12 @@
  */
 package roboguice.activity;
 
+import roboguice.activity.event.*;
+import roboguice.application.RoboApplication;
+import roboguice.inject.ContextObservationManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -22,13 +28,9 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import roboguice.activity.event.RoboActivityEventFactory;
-import roboguice.application.RoboApplication;
-import roboguice.inject.ContextObservationManager;
-import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -62,9 +64,9 @@ import roboguice.inject.InjectorProvider;
  * @author Mike Burton
  */
 public class RoboActivity extends Activity implements InjectorProvider {
-    protected ContextScope scope;
     @Inject protected ContextObservationManager contextObservationManager;
-    @Inject protected RoboActivityEventFactory roboActivityEventFactory;
+
+    protected ContextScope scope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class RoboActivity extends Activity implements InjectorProvider {
         scope.enter(this);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnCreateEvent(savedInstanceState));
+        contextObservationManager.notify(new OnCreateEvent(savedInstanceState));
     }
 
     @Override
@@ -103,27 +105,27 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnRestartEvent());
+        contextObservationManager.notify(new OnRestartEvent());
     }
 
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnStartEvent());
+        contextObservationManager.notify(new OnStartEvent());
     }
 
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnResumeEvent());
+        contextObservationManager.notify(new OnResumeEvent());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnPauseEvent());
+        contextObservationManager.notify(new OnPauseEvent());
         scope.exit(this);
     }
 
@@ -131,56 +133,56 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onNewIntent( Intent intent ) {
         super.onNewIntent(intent);
         scope.enter(this);
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnNewIntentEvent());
+        contextObservationManager.notify(new OnNewIntentEvent());
     }
 
     @Override
     protected void onStop() {
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnStopEvent());
+        contextObservationManager.notify(new OnStopEvent());
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnDestroyEvent());
-        contextObservationManager.clear(this);
-        contextObservationManager.clear(this);
+        contextObservationManager.notify(new OnDestroyEvent());
+        contextObservationManager.clear();
         super.onDestroy();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnConfigurationChangedEvent(newConfig));
+        contextObservationManager.notify(new OnConfigurationChangedEvent(newConfig));
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnKeyDownEvent(keyCode, event));
+        contextObservationManager.notify(new OnKeyDownEvent(keyCode, event));
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnKeyUpEvent(keyCode, event));
+        contextObservationManager.notify(new OnKeyUpEvent(keyCode, event));
         return super.onKeyUp(keyCode, event);
     }
 
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnContentChangedEvent());
+        contextObservationManager.notify(new OnContentChangedEvent());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        contextObservationManager.notify(this, roboActivityEventFactory.buildOnActivityResultEvent(requestCode, resultCode, data));
+        contextObservationManager.notify(new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
     /**
      * @see roboguice.application.RoboApplication#getInjector()
      */
+    @Override
     public Injector getInjector() {
         return ((RoboApplication) getApplication()).getInjector();
     }

@@ -23,7 +23,7 @@ public class ObserverTypeListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
-        for (Method method : iTypeLiteral.getRawType().getMethods()) {
+        for (Method method : iTypeLiteral.getRawType().getDeclaredMethods()) {
             final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
             for(int i = 0; i < parameterAnnotations.length; i++){
                 final Annotation[] annotationArray = parameterAnnotations[i];

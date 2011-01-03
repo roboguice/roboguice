@@ -21,7 +21,7 @@ public class RoboAsyncTaskBackgroundJunk extends RoboAsyncTask<Void> {
         Ln.v("onKeyDown");
     }
 
-    public void onActivityDestroy(@Observes OnDestroyEvent ignored ) {
+    protected void onActivityDestroy(@Observes OnDestroyEvent ignored ) {
         Ln.d("Killing background thread %s", this);
         cancel(true);
     }

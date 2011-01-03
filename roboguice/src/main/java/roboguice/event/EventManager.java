@@ -155,6 +155,8 @@ public class EventManager {
             final Object instance = instanceReference.get();
             final EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
 
+            method.setAccessible(true);
+
             if (instance != null)
                 innerResultHandler.handleReturn( method.getParameterTypes().length==0 ? method.invoke(instance) : method.invoke(instance, event));
             

@@ -4,6 +4,8 @@ package roboguice.astroboy.service;
 import android.preference.Preference;
 
 import com.google.inject.Inject;
+
+import roboguice.astroboy.service.ToastContextObserverService.ToastEvent;
 import roboguice.event.EventManager;
 
 /**
@@ -16,7 +18,7 @@ public class PreferenceChangeEventToastListener implements Preference.OnPreferen
 
     public boolean onPreferenceChange(Preference preference, Object o) {
         //raise the ToastEvent
-        eventManager.notify(toastService.buildToastEvent("hello toast"));
+        eventManager.notify(new ToastEvent("hello toast"));
         return true;
     }
 }

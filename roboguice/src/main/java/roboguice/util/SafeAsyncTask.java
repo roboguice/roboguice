@@ -69,6 +69,14 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
         return future;
     }
 
+    public SafeAsyncTask<ResultT> executor( Executor executor ) {
+        this.executor = executor;
+        return this;
+    }
+
+    public Executor executor() {
+        return executor;
+    }
 
     public SafeAsyncTask<ResultT> handler( Handler handler ) {
         this.handler = handler;

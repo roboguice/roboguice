@@ -117,6 +117,8 @@ A class similar but unrelated to android's <CODE>AsyncTask</CODE>.
 
  Current limitations: does not yet handle progress, although it shouldn't be
  hard to add.
+
+ If using your own executor, you must call future() to get a runnable you can execute.
 <P>
 
 <P>
@@ -262,6 +264,14 @@ A class similar but unrelated to android's <CODE>AsyncTask</CODE>.
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#execute(java.lang.StackTraceElement[])">execute</A></B>(java.lang.StackTraceElement[]&nbsp;launchLocation)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;java.util.concurrent.FutureTask&lt;java.lang.Void&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#future()">future</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -481,6 +491,20 @@ public <B>SafeAsyncTask</B>(android.os.Handler&nbsp;handler,
 <B>Method Detail</B></FONT></TH>
 </TR>
 </TABLE>
+
+<A NAME="future()"><!-- --></A><H3>
+future</H3>
+<PRE>
+public java.util.concurrent.FutureTask&lt;java.lang.Void&gt; <B>future</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
 
 <A NAME="handler(android.os.Handler)"><!-- --></A><H3>
 handler</H3>
@@ -721,6 +745,6 @@ DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor
 <!-- ======== END OF BOTTOM NAVBAR ======= -->
 
 <HR>
-Copyright &#169; 2010. All Rights Reserved.
+Copyright &#169; 2011. All Rights Reserved.
 </BODY>
 </HTML>

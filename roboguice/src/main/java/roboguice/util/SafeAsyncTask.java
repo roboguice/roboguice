@@ -62,9 +62,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
 
     public FutureTask<Void> future() {
-        if( future!=null )
-            throw new UnsupportedOperationException("You cannot call future() twice");
-
         future = new FutureTask<Void>( newTask() );
         return future;
     }

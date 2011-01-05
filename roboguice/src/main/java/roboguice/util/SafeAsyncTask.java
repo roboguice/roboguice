@@ -17,6 +17,8 @@ import java.util.concurrent.*;
  *
  * Current limitations: does not yet handle progress, although it shouldn't be
  * hard to add.
+ *
+ * If using your own executor, you must call future() to get a runnable you can execute.
  * 
  * @param <ResultT>
  */
@@ -27,7 +29,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     protected Handler handler;
     protected Executor executor;
     protected StackTraceElement[] launchLocation;
-    protected FutureTask<Void> future = new FutureTask<Void>( newTask() );
+    protected FutureTask<Void> future;
 
 
     /**
@@ -35,7 +37,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * Handler to new Handler()
      */
     public SafeAsyncTask() {
-        this.handler = new Handler();
         this.executor = DEFAULT_EXECUTOR;
     }
 
@@ -51,7 +52,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * Sets Handler to new Handler()
      */
     public SafeAsyncTask( Executor executor ) {
-        this.handler = new Handler();
         this.executor = executor;
     }
 
@@ -61,6 +61,13 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     }
 
 
+    public FutureTask<Void> future() {
+        if( future!=null )
+            throw new UnsupportedOperationException("You cannot call future() twice");
+
+        future = new FutureTask<Void>( newTask() );
+        return future;
+    }
 
 
     public SafeAsyncTask<ResultT> handler( Handler handler ) {
@@ -78,11 +85,14 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     protected void execute( StackTraceElement[] launchLocation ) {
         this.launchLocation = launchLocation;
-        executor.execute( future );
+        executor.execute( future() );
     }
 
     public boolean cancel( boolean mayInterruptIfRunning ) {
-        return future != null && future.cancel(mayInterruptIfRunning);
+        if( future==null )
+            throw new UnsupportedOperationException("You cannot cancel this task before calling future()");
+
+        return future.cancel(mayInterruptIfRunning);
     }
 
 
@@ -136,9 +146,11 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     protected static class Task<ResultT> implements Callable<Void> {
         protected SafeAsyncTask<ResultT> parent;
+        protected Handler handler;
 
         public Task(SafeAsyncTask parent) {
             this.parent = parent;
+            this.handler = parent.handler!=null ? parent.handler : new Handler();
         }
 
         public Void call() throws Exception {
@@ -226,7 +238,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
             // for it to complete.
             // If it throws an exception, capture that exception
             // and rethrow it later.
-            parent.handler().post( new Runnable() {
+            handler.post( new Runnable() {
                public void run() {
                    try {
                        c.call();

@@ -17,6 +17,7 @@ package roboguice.activity;
 
 import roboguice.activity.event.*;
 import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
 
@@ -30,10 +31,6 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import roboguice.application.RoboApplication;
-import roboguice.event.EventManager;
-import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -78,7 +75,7 @@ public class RoboActivity extends Activity implements InjectorProvider {
         scope.enter(this);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
-        eventManager.notify(new OnCreateEvent(savedInstanceState));
+        eventManager.notify(this,new OnCreateEvent(savedInstanceState));
     }
 
     @Override
@@ -108,27 +105,27 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
-        eventManager.notify(new OnRestartEvent());
+        eventManager.notify(this, new OnRestartEvent());
     }
 
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
-        eventManager.notify(new OnStartEvent());
+        eventManager.notify(this, new OnStartEvent());
     }
 
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
-        eventManager.notify(new OnResumeEvent());
+        eventManager.notify( this, new OnResumeEvent());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        eventManager.notify(new OnPauseEvent());
+        eventManager.notify( this, new OnPauseEvent());
         scope.exit(this);
     }
 
@@ -136,50 +133,50 @@ public class RoboActivity extends Activity implements InjectorProvider {
     protected void onNewIntent( Intent intent ) {
         super.onNewIntent(intent);
         scope.enter(this);
-        eventManager.notify(new OnNewIntentEvent());
+        eventManager.notify( this, new OnNewIntentEvent());
     }
 
     @Override
     protected void onStop() {
-        eventManager.notify(new OnStopEvent());
+        eventManager.notify( this, new OnStopEvent());
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        eventManager.notify(new OnDestroyEvent());
-        eventManager.clear();
+        eventManager.notify( this, new OnDestroyEvent());
+        eventManager.clear( this );
         super.onDestroy();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        eventManager.notify(new OnConfigurationChangedEvent(newConfig));
+        eventManager.notify( this, new OnConfigurationChangedEvent(newConfig));
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        eventManager.notify(new OnKeyDownEvent(keyCode, event));
+        eventManager.notify( this, new OnKeyDownEvent(keyCode, event));
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        eventManager.notify(new OnKeyUpEvent(keyCode, event));
+        eventManager.notify( this, new OnKeyUpEvent(keyCode, event));
         return super.onKeyUp(keyCode, event);
     }
 
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        eventManager.notify(new OnContentChangedEvent());
+        eventManager.notify( this, new OnContentChangedEvent());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        eventManager.notify(new OnActivityResultEvent(requestCode, resultCode, data));
+        eventManager.notify( this, new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
     /**

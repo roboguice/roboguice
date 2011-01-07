@@ -119,7 +119,7 @@ public class RoboModule extends AbstractModule {
           bindListener(Matchers.any(), preferenceListener);
 
         if (observationManager.isEnabled())
-            bindListener(Matchers.any(), new ObserverTypeListener(observationManager));
+            bindListener(Matchers.any(), new ObserverTypeListener(contextProvider,observationManager));
 
         requestStaticInjection( Ln.class );
         requestStaticInjection( RoboThread.class );

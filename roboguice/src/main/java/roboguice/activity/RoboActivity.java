@@ -157,8 +157,7 @@ public class RoboActivity extends Activity implements InjectorProvider {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        eventManager.notify( this, new OnKeyDownEvent(keyCode, event));
-        return super.onKeyDown(keyCode, event);
+        return eventManager.notifyWithResult( this, new OnKeyDownEvent(keyCode, event), boolean.class, false) || super.onKeyDown(keyCode,event);
     }
 
     @Override

@@ -17,8 +17,9 @@ public class RoboAsyncTaskBackgroundJunk extends RoboAsyncTask<Void> {
         return null;
     }
 
-    public void onKeyDown(@Observes OnKeyDownEvent keyDownEvent){
+    public boolean onKeyDown(@Observes OnKeyDownEvent keyDownEvent){
         Ln.v("onKeyDown");
+        return false;
     }
 
     protected void onActivityDestroy(@Observes OnDestroyEvent ignored ) {

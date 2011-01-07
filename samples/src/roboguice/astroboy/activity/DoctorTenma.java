@@ -20,7 +20,6 @@ import roboguice.activity.event.OnKeyDownEvent;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
 import roboguice.astroboy.bean.*;
-import roboguice.astroboy.service.BooleanResultHandler;
 import roboguice.astroboy.service.ContextObservingClassEventService;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.inject.ExtrasListener;
@@ -166,11 +165,7 @@ public class DoctorTenma extends RoboActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        final BooleanResultHandler booleanReturnHandler = new BooleanResultHandler();
-
-        eventManager.notifyWithResult(this,new OnKeyDownEvent(keyCode, event), booleanReturnHandler);
-
-        return booleanReturnHandler.isSuccess() || super.onKeyDown(keyCode, event);
+        return eventManager.notifyWithResult(this,new OnKeyDownEvent(keyCode, event), boolean.class, false) || super.onKeyDown(keyCode, event);
     }
 
 

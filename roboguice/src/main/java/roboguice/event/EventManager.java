@@ -25,9 +25,10 @@ import java.util.*;
  * @author Adam Tybor
  * @author John Ericksen
  */
+@SuppressWarnings({"unchecked"})
 @Singleton
 public class EventManager {
-    protected Map<Context, Map<Class, Set<ContextObserverReference>>> registrations = new WeakHashMap<Context, Map<Class, Set<ContextObserverReference>>>();
+    protected Map<Context, Map<Class, Set<ObserverReference<?>>>> registrations = new WeakHashMap<Context, Map<Class, Set<ObserverReference<?>>>>();
 
     public boolean isEnabled() {
         return true;
@@ -39,18 +40,18 @@ public class EventManager {
     public void registerObserver(Context context, Object instance, Method method, Class event) {
         if (!isEnabled()) return;
 
-        Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
+        Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) {
-            methods = new HashMap<Class, Set<ContextObserverReference>>();
+            methods = new HashMap<Class, Set<ObserverReference<?>>>();
             registrations.put(context, methods);
         }
 
-        Set<ContextObserverReference> observers = methods.get(event);
+        Set<ObserverReference<?>> observers = methods.get(event);
         if (observers == null) {
-            observers = new HashSet<ContextObserverReference>();
+            observers = new HashSet<ObserverReference<?>>();
             methods.put(event, observers);
         }
-        observers.add(new ContextObserverReference(instance, method));
+        observers.add(new ObserverReference(instance, method));
     }
 
     /**
@@ -59,14 +60,14 @@ public class EventManager {
     public void unregisterObserver(Context context, Object instance, Class event) {
         if (!isEnabled()) return;
 
-        final Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
+        final Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
-        final Set<ContextObserverReference> observers = methods.get(event);
+        final Set<ObserverReference<?>> observers = methods.get(event);
         if (observers == null) return;
 
-        for (Iterator<ContextObserverReference> iterator = observers.iterator(); iterator.hasNext();) {
-            ContextObserverReference observer = iterator.next();
+        for (Iterator<ObserverReference<?>> iterator = observers.iterator(); iterator.hasNext();) {
+            ObserverReference observer = iterator.next();
             if (observer != null) {
                 final Object registeredInstance = observer.instanceReference.get();
                 if (registeredInstance == instance) {
@@ -81,7 +82,7 @@ public class EventManager {
      * Clears all observers of the given context.
      */
     public void clear( Context context ) {
-        final Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
+        final Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
         registrations.remove(context);
@@ -98,17 +99,17 @@ public class EventManager {
     public void notify(Context context, Object event) {
         if (!isEnabled()) return;
 
-        final Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
+        final Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
         for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
 
-            final Set<ContextObserverReference> observers = methods.get(aClass);
+            final Set<ObserverReference<?>> observers = methods.get(aClass);
             if (observers == null) return;
 
-            for (ContextObserverReference observerMethod : observers) {
+            for (ObserverReference observer : observers) {
                 try {
-                    observerMethod.invoke(null, event);
+                    observer.invoke(event,null,null);
                 } catch (InvocationTargetException e) {
                     Ln.e(e);
                 } catch (IllegalAccessException e) {
@@ -127,20 +128,21 @@ public class EventManager {
      * @param context
      * @param event
      */
-    public void notifyWithResult(Context context, Object event, EventResultHandler resultHandler) {
-        if (!isEnabled()) return;
+    public <ResultType> ResultType notifyWithResult(Context context, Object event, Class<ResultType> returnType, ResultType defaultValue ) {
+        if (!isEnabled()) return defaultValue;
 
-        final Map<Class, Set<ContextObserverReference>> methods = registrations.get(context);
-        if (methods == null) return;
+        final Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
+        if (methods == null) return defaultValue;
 
         for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
 
-            final Set<ContextObserverReference> observers = methods.get(aClass);
-            if (observers == null) return;
+            final Set<ObserverReference<?>> observers = methods.get(aClass);
+            if (observers == null) return defaultValue;
 
-            for (ContextObserverReference observerMethod : observers) {
+            for (ObserverReference<?> o : observers) {
+                final ObserverReference<ResultType> observer = (ObserverReference<ResultType>) o;
                 try {
-                    observerMethod.invoke(resultHandler, event);
+                    return observer.invoke( event, returnType, defaultValue);
                 } catch (InvocationTargetException e) {
                     Ln.e(e);
                 } catch (IllegalAccessException e) {
@@ -148,6 +150,8 @@ public class EventManager {
                 }
             }
         }
+
+        return defaultValue;
     }
 
     public static class NullEventManager extends EventManager {
@@ -157,24 +161,28 @@ public class EventManager {
         }
     }
     
-    protected static class ContextObserverReference {
+    protected static class ObserverReference<ResultType> {
         protected Method method;
         protected WeakReference<Object> instanceReference;
 
-        public ContextObserverReference(Object instance, Method method) {
+        public ObserverReference(Object instance, Method method) {
             this.instanceReference = new WeakReference<Object>(instance);
             this.method = method;
-        }
-
-        public void invoke(EventResultHandler resultHandler, Object event) throws InvocationTargetException, IllegalAccessException {
-            final Object instance = instanceReference.get();
-            final EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
-
             method.setAccessible(true);
-
-            if (instance != null)
-                innerResultHandler.handleReturn( method.getParameterTypes().length==0 ? method.invoke(instance) : method.invoke(instance, event));
-            
         }
+
+        public ResultType invoke(Object event, Class<ResultType> returnType, ResultType defaultValue ) throws InvocationTargetException, IllegalAccessException {
+            final Object instance = instanceReference.get();
+            
+            if( instance==null )
+                return defaultValue;
+
+            if( returnType!=null && !returnType.isAssignableFrom(method.getReturnType()) )
+                throw new RuntimeException(String.format("Method %s.%s does not return a value that is assignable to %s", instance.getClass().getName(), method.getName(), returnType.getName()));
+
+
+            return (ResultType) method.invoke(instance, event);
+        }
+
     }
 }

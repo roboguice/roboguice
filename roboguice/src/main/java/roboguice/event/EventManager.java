@@ -40,6 +40,10 @@ public class EventManager {
     public void registerObserver(Context context, Object instance, Method method, Class event) {
         if (!isEnabled()) return;
 
+        final Returns returns = (Returns) event.getAnnotation(Returns.class);
+        if( returns!=null && !returns.value().isAssignableFrom(method.getReturnType()) )
+            throw new RuntimeException( String.format("Method %s.%s does not return a value that is assignable to %s",method.getDeclaringClass().getName(),method.getName(),returns.value().getName()) );
+
         Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) {
             methods = new HashMap<Class<?>, Set<ObserverReference<?>>>();
@@ -109,7 +113,7 @@ public class EventManager {
 
             for (ObserverReference observer : observers) {
                 try {
-                    observer.invoke(event,null,null);
+                    observer.invoke(event,null);
                 } catch (InvocationTargetException e) {
                     Ln.e(e);
                 } catch (IllegalAccessException e) {
@@ -128,7 +132,7 @@ public class EventManager {
      * @param context
      * @param event
      */
-    public <ResultType> ResultType notifyWithResult(Context context, Object event, Class<ResultType> returnType, ResultType defaultValue ) {
+    public <ResultType> ResultType notifyWithResult(Context context, Object event, ResultType defaultValue ) {
         if (!isEnabled()) return defaultValue;
 
         final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
@@ -142,7 +146,7 @@ public class EventManager {
             for (ObserverReference<?> o : observers) {
                 final ObserverReference<ResultType> observer = (ObserverReference<ResultType>) o;
                 try {
-                    return observer.invoke( event, returnType, defaultValue);
+                    return observer.invoke( event, defaultValue);
                 } catch (InvocationTargetException e) {
                     Ln.e(e);
                 } catch (IllegalAccessException e) {
@@ -171,17 +175,10 @@ public class EventManager {
             method.setAccessible(true);
         }
 
-        public ResultType invoke(Object event, Class<ResultType> returnType, ResultType defaultValue ) throws InvocationTargetException, IllegalAccessException {
+        public ResultType invoke(Object event, ResultType defaultValue ) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
-            
-            if( instance==null )
-                return defaultValue;
+            return instance == null ? defaultValue : (ResultType) method.invoke(instance, event);
 
-            if( returnType!=null && !returnType.isAssignableFrom(method.getReturnType()) )
-                throw new RuntimeException(String.format("Method %s.%s does not return a value that is assignable to %s", instance.getClass().getName(), method.getName(), returnType.getName()));
-
-
-            return (ResultType) method.invoke(instance, event);
         }
 
     }

@@ -16,7 +16,6 @@
 package roboguice.astroboy.activity;
 
 import roboguice.activity.RoboActivity;
-import roboguice.activity.event.OnKeyDownEvent;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
 import roboguice.astroboy.bean.*;
@@ -31,7 +30,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -163,10 +161,6 @@ public class DoctorTenma extends RoboActivity {
 
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return eventManager.notifyWithResult(this,new OnKeyDownEvent(keyCode, event), boolean.class, false) || super.onKeyDown(keyCode, event);
-    }
 
 
 }

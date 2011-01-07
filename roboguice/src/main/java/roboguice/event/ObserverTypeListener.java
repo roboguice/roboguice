@@ -69,7 +69,7 @@ public class ObserverTypeListener implements TypeListener {
             throw new RuntimeException("Annotation @Observes must only annotate one parameter," +
                     " which must be the only parameter in the listener method.");
 
-        if(method.getParameterTypes().length == 1 && !method.getParameterTypes()[0].isAssignableFrom(parameterType))
+        if(method.getParameterTypes().length == 1 && !method.getParameterTypes()[0].equals(parameterType))
             throw new RuntimeException("Value injected by Observer or Observes in method " +
                     method.getDeclaringClass().getCanonicalName() + "." + method.getName() +
                     " must match annotated type " + parameterType.getName() + " .");

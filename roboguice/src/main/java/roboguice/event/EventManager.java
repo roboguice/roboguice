@@ -2,6 +2,7 @@ package roboguice.event;
 
 import roboguice.util.Ln;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.google.inject.Singleton;
@@ -39,6 +40,9 @@ public class EventManager {
      */
     public void registerObserver(Context context, Object instance, Method method, Class event) {
         if (!isEnabled()) return;
+
+        if( context instanceof Application )
+            throw new RuntimeException("You may not register event handlers on the Application context");
 
         Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) {
@@ -117,19 +121,17 @@ public class EventManager {
         final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
-        for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
 
-            final Set<ObserverReference<?>> observers = methods.get(aClass);
-            if (observers == null) return;
+        final Set<ObserverReference<?>> observers = methods.get(event.getClass());
+        if (observers == null) return;
 
-            for (ObserverReference observer : observers) {
-                try {
-                    observer.invoke(event,null);
-                } catch (InvocationTargetException e) {
-                    Ln.e(e);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
+        for (ObserverReference observer : observers) {
+            try {
+                observer.invoke(event,null);
+            } catch (InvocationTargetException e) {
+                Ln.e(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
         }
     }
@@ -152,20 +154,17 @@ public class EventManager {
         final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return defaultValue;
 
-        for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
+        final Set<ObserverReference<?>> observers = methods.get(event.getClass());
+        if (observers == null) return defaultValue;
 
-            final Set<ObserverReference<?>> observers = methods.get(aClass);
-            if (observers == null) return defaultValue;
-
-            for (ObserverReference<?> o : observers) {
-                final ObserverReference<ResultType> observer = (ObserverReference<ResultType>) o;
-                try {
-                    return observer.invoke( event, defaultValue);
-                } catch (InvocationTargetException e) {
-                    Ln.e(e);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                }
+        for (ObserverReference<?> o : observers) {
+            final ObserverReference<ResultType> observer = (ObserverReference<ResultType>) o;
+            try {
+                return observer.invoke( event, defaultValue);
+            } catch (InvocationTargetException e) {
+                Ln.e(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
         }
 

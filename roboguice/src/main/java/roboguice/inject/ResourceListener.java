@@ -15,17 +15,19 @@
  */
 package roboguice.inject;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import android.app.Application;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 
-import android.app.Application;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 
 /**
@@ -97,6 +99,8 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
                 value = resources.getStringArray(id);
             } else if (int[].class.isAssignableFrom(t) || Integer[].class.isAssignableFrom(t)) {
                 value = resources.getIntArray(id);
+            } else if (Animation.class.isAssignableFrom(t)) {
+                value = AnimationUtils.loadAnimation(application, id);
             }
 
             if (value == null && field.getAnnotation(Nullable.class) == null) {

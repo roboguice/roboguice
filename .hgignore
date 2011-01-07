@@ -5,3 +5,4 @@ classes/
 /bin/
 .*.iws$
 local.properties
+.idea/

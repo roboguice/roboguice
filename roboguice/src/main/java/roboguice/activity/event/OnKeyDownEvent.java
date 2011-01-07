@@ -10,8 +10,8 @@ import android.view.KeyEvent;
  */
 public class OnKeyDownEvent {
     
-        protected final int keyCode;
-        protected final KeyEvent event;
+        protected int keyCode;
+        protected KeyEvent event;
 
         public OnKeyDownEvent(int keyCode, KeyEvent event) {
             this.keyCode = keyCode;

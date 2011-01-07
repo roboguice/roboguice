@@ -29,7 +29,7 @@ import com.google.inject.Provider;
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
     protected static final String DEFAULT = "default";
 
-    protected final String preferencesName;
+    protected String preferencesName;
 
     @Inject protected Provider<Context> contextProvider;
 

@@ -10,7 +10,7 @@ import android.content.res.Configuration;
  */
 public class OnConfigurationChangedEvent {
 
-        protected final Configuration config;
+        protected Configuration config;
 
         public OnConfigurationChangedEvent(Configuration config) {
             this.config = config;

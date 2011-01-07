@@ -10,9 +10,9 @@ import android.content.Intent;
  */
 public class OnActivityResultEvent {
     
-        protected final int requestCode;
-        protected final int resultCode;
-        protected final Intent data;
+        protected int requestCode;
+        protected int resultCode;
+        protected Intent data;
 
         public OnActivityResultEvent(int requestCode, int resultCode, Intent data) {
             this.requestCode = requestCode;

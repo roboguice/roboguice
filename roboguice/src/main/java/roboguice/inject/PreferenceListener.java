@@ -59,7 +59,7 @@ public class PreferenceListener implements TypeListener {
 
 
     protected static class PreferenceMembersInjector<T> implements MembersInjector<T> {
-        protected final Field field;
+        protected Field field;
         protected Provider<Context> contextProvider;
         protected InjectPreference annotation;
 

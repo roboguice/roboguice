@@ -39,15 +39,15 @@ import java.util.List;
  */
 public class RoboModule extends AbstractModule {
 
-    protected final ContextScope contextScope;
-    protected final Provider<Context> throwingContextProvider;
-    protected final Provider<Context> contextProvider;
-    protected final ResourceListener resourceListener;
-    protected final ViewListener viewListener;
-    protected final ExtrasListener extrasListener;
-    protected final PreferenceListener preferenceListener;
-    protected final Application application;
-    protected final EventManager observationManager;
+    protected ContextScope contextScope;
+    protected Provider<Context> throwingContextProvider;
+    protected Provider<Context> contextProvider;
+    protected ResourceListener resourceListener;
+    protected ViewListener viewListener;
+    protected ExtrasListener extrasListener;
+    protected PreferenceListener preferenceListener;
+    protected Application application;
+    protected EventManager observationManager;
 
     public RoboModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
             ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener,

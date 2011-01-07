@@ -10,7 +10,7 @@ import android.os.Bundle;
  */
 public class OnCreateEvent{
 
-        protected final Bundle savedInstanceState;
+        protected Bundle savedInstanceState;
 
         public OnCreateEvent(Bundle savedInstanceState) {
             this.savedInstanceState = savedInstanceState;

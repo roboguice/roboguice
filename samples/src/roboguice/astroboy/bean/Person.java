@@ -19,8 +19,8 @@ import java.util.Date;
 
 public class Person {
 
-    protected final String name;
-    protected final Date   age;
+    private final String name;
+    private final Date   age;
 
     public Person(String name) {
         this.name = name;

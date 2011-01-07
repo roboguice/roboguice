@@ -3,7 +3,7 @@
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
-        <option name="PLATFORM_NAME" value="Android 1.5 Platform" />
+        <option name="PLATFORM_NAME" value="Android 1.6 Google APIs" />
         <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/target/generated-sources/r" />
         <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/target/generated-sources/aidl" />
         <option name="MANIFEST_FILE_RELATIVE_PATH" value="/AndroidManifest.xml" />
@@ -49,7 +49,15 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.android:android-test:1.5_r4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: junit:junit:3.8.2" level="project" />
     <orderEntry type="module" module-name="roboguice" />
-    <orderEntry type="library" name="Maven: com.google.inject:guice:2.0-no_aop" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../roboguice/lib/guice-2.0-no_aop.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 

@@ -7,7 +7,6 @@ import com.google.inject.spi.TypeListener;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.security.InvalidParameterException;
 
 /**
  * Guice driven type listener which scans for the @Observes annotations.
@@ -19,9 +18,8 @@ import java.security.InvalidParameterException;
 public class ObserverTypeListener implements TypeListener {
     protected final EventManager observationManager;
 
-    public ContextObserverTypeListener(Provider<Context> contextProvider, ContextObservationManager observationManager) {
-        this.mContextProvider = contextProvider;
-        this.mObservationManager = observationManager;
+    public ObserverTypeListener(EventManager observationManager) {
+        this.observationManager = observationManager;
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
@@ -86,12 +84,11 @@ public class ObserverTypeListener implements TypeListener {
         public ContextObserverMethodInjector(EventManager observationManager, Method method, Class event) {
             this.mObservationManager = observationManager;
             this.mMethod = method;
-            this.eventType = eventType;
+            this.event = event;
         }
 
-        @Override
         public void afterInjection(I i) {
-            mObservationManager.registerObserver(mContextProvider.get(), i, mMethod, eventType);
+            mObservationManager.registerObserver(i, mMethod, event);
         }
     }
 }

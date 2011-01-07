@@ -1,56 +1,70 @@
-package roboguice.inject;
+package roboguice.event;
 
-import android.content.Context;
-
-import com.google.inject.Singleton;
+import roboguice.inject.ContextScoped;
+import roboguice.util.Ln;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
-@Singleton
-public class ContextObservationManager {
+/**
+ * Manager class handling the following:
+ *
+ *   Registration of event observing methods:
+ *      registerObserver()
+ *      unregisterObserver()
+ *      clear()
+ *   Raising Events:
+ *      notify()
+ *      notifyWithResult()
+ *
+ * @author Adam Tybor
+ * @author John Ericksen
+ */
+@ContextScoped
+public class EventManager {
 
-    protected final Map<Context, Map<Class<?>, Set<ContextObserverMethod>>> mRegistrations;
-
-    public ContextObservationManager() {
-        mRegistrations  = new WeakHashMap<Context, Map<Class<?>, Set<ContextObserverMethod>>>();
-    }
+    protected Map<Class<?>, Set<ContextObserverReference>> methods = new HashMap<Class<?>, Set<ContextObserverReference>>();
 
     public boolean isEnabled() {
         return true;
     }
 
-    public void registerObserver(Context context, Object instance, Method method, Class<?> type ) {
+    /**
+     * Registers given method with provided context and event.
+     *
+     * @param context
+     * @param instance
+     * @param method
+     * @param event
+     */
+    public void registerObserver(Object instance, Method method, Class event) {
         if (!isEnabled()) return;
 
-        Map<Class<?>, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
-        if (methods == null) {
-            methods = new HashMap<Class<?>, Set<ContextObserverMethod>>();
-            mRegistrations.put(context, methods);
-        }
-
-        Set<ContextObserverMethod> observers = methods.get(type);
+        Set<ContextObserverReference> observers = methods.get(event);
         if (observers == null) {
-            observers = new HashSet<ContextObserverMethod>();
-            methods.put(type, observers);
+            observers = new HashSet<ContextObserverReference>();
+            methods.put(event, observers);
         }
-
-        observers.add(new ContextObserverMethod(instance, method, type));
+        observers.add(new ContextObserverReference(instance, method));
     }
 
-    public void unregisterObserver(Context context, Object instance, String event) {
+    /**
+     * UnRegisters all methods observing the given event from the provided context.
+     *
+     * @param context
+     * @param instance
+     * @param event
+     */
+    public void unregisterObserver(Object instance, Class event) {
         if (!isEnabled()) return;
 
-        final Map<Class<?>, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
-        if (methods == null) return;
-
-        final Set<ContextObserverMethod> observers = methods.get(event);
+        final Set<ContextObserverReference> observers = methods.get(event);
         if (observers == null) return;
 
-        for (Iterator<ContextObserverMethod> iterator = observers.iterator(); iterator.hasNext();) {
-            ContextObserverMethod observer = iterator.next();
+        for (Iterator<ContextObserverReference> iterator = observers.iterator(); iterator.hasNext();) {
+            ContextObserverReference observer = iterator.next();
             if (observer != null) {
                 final Object registeredInstance = observer.instanceReference.get();
                 if (registeredInstance == instance) {
@@ -61,57 +75,95 @@ public class ContextObservationManager {
         }
     }
 
-    public void clear(Context context) {
-        if (!isEnabled()) return;
-
-        final Map<Class<?>, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
-        if (methods == null) return;
-
-        mRegistrations.remove(context);
+    /**
+     * Clears all observers of the given context.
+     * @param context
+     */
+    public void clear() {
         methods.clear();
     }
 
-    public void notify(Context context, String event, Object... args) {
+    /**
+     * Raises the event's class' event on the given context.  This event object is passed (if configured) to the
+     * registered observer's method.
+     *
+     * @param context
+     * @param event
+     */
+    public void notify(Object event) {
         if (!isEnabled()) return;
 
-        final Map<Class<?>, Set<ContextObserverMethod>> methods = mRegistrations.get(context);
-        if (methods == null) return;
+        for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
 
-        final Set<ContextObserverMethod> observers = methods.get(event);
-        if (observers == null) return;
+            final Set<ContextObserverReference> observers = methods.get(aClass);
+            if (observers == null) return;
 
-        for (ContextObserverMethod observerMethod : observers) {
-            try {
-                observerMethod.invoke(null, args);
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+            for (ContextObserverReference observerMethod : observers) {
+                try {
+                    observerMethod.invoke(null, event);
+                } catch (InvocationTargetException e) {
+                    Ln.e(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
 
-    public static class NullContextObservationManager extends ContextObservationManager {
+    /**
+     * Raises the event's class' event on the given context.  This event object is passed (if configured) to the
+     * registered observer's method.
+     *
+     * A result handler can be provided to deal with the return values from the invoked observer methods.
+     *
+     * @param context
+     * @param event
+     */
+    public void notifyWithResult(Object event, EventResultHandler resultHandler) {
+        if (!isEnabled()) return;
+
+        for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
+
+            final Set<ContextObserverReference> observers = methods.get(aClass);
+            if (observers == null) return;
+
+            for (ContextObserverReference observerMethod : observers) {
+                try {
+                    observerMethod.invoke(resultHandler, event);
+                } catch (InvocationTargetException e) {
+                    Ln.e(e);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+    public static class NullEventManager extends EventManager {
         @Override
         public boolean isEnabled() {
             return false;
         }
     }
-
-    protected static class ContextObserverMethod {
-        protected Class<?> eventType;
+    
+    protected static class ContextObserverReference {
         protected Method method;
         protected WeakReference<Object> instanceReference;
 
-        public ContextObserverMethod(Object instance, Method method, Class<?> eventType ) {
+        public ContextObserverReference(Object instance, Method method) {
             this.instanceReference = new WeakReference<Object>(instance);
             this.method = method;
-            this.eventType = eventType;
         }
 
-        public Object invoke(Object defaultReturn, Object... args) throws InvocationTargetException, IllegalAccessException {
+        public void invoke(EventResultHandler resultHandler, Object event) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
-            return instance!=null ? method.invoke(instance,args) : defaultReturn;
+            final EventResultHandler innerResultHandler = resultHandler == null? new NoOpResultHandler() : resultHandler;
+
+            method.setAccessible(true);
+
+            if (instance != null)
+                innerResultHandler.handleReturn( method.getParameterTypes().length==0 ? method.invoke(instance) : method.invoke(instance, event));
+            
         }
     }
 }

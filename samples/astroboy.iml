@@ -49,8 +49,15 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.android:android-test:1.5_r4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: junit:junit:3.8.2" level="project" />
     <orderEntry type="module" module-name="roboguice" />
-    <orderEntry type="library" name="Maven: com.google.inject:guice:2.0" level="project" />
-    <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../roboguice/lib/guice-2.0-no_aop.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
 

@@ -111,6 +111,9 @@ public class EventManager {
     public void notify(Context context, Object event) {
         if (!isEnabled()) return;
 
+        if( event.getClass().getAnnotation(Returns.class)!=null )
+            throw new RuntimeException("You must use notifyWithResult for events that expect return values");
+
         final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
@@ -142,6 +145,9 @@ public class EventManager {
      */
     public <ResultType> ResultType notifyWithResult(Context context, Object event, ResultType defaultValue ) {
         if (!isEnabled()) return defaultValue;
+
+        if( event.getClass().getAnnotation(Returns.class)==null )
+            throw new RuntimeException("You must use notify with events that do not expect return values");
 
         final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return defaultValue;

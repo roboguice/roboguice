@@ -1,5 +1,7 @@
 package roboguice.activity.event;
 
+import roboguice.event.Returns;
+
 import android.view.KeyEvent;
 
 /**
@@ -8,6 +10,7 @@ import android.view.KeyEvent;
  * @author Adam Tybor
  * @author John Ericksen
  */
+@Returns(boolean.class)
 public class OnKeyUpEvent {
 
         protected int keyCode;

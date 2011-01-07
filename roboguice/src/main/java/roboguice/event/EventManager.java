@@ -28,7 +28,7 @@ import java.util.*;
 @SuppressWarnings({"unchecked"})
 @Singleton
 public class EventManager {
-    protected Map<Context, Map<Class, Set<ObserverReference<?>>>> registrations = new WeakHashMap<Context, Map<Class, Set<ObserverReference<?>>>>();
+    protected Map<Context, Map<Class<?>, Set<ObserverReference<?>>>> registrations = new WeakHashMap<Context, Map<Class<?>, Set<ObserverReference<?>>>>();
 
     public boolean isEnabled() {
         return true;
@@ -40,9 +40,9 @@ public class EventManager {
     public void registerObserver(Context context, Object instance, Method method, Class event) {
         if (!isEnabled()) return;
 
-        Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
+        Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) {
-            methods = new HashMap<Class, Set<ObserverReference<?>>>();
+            methods = new HashMap<Class<?>, Set<ObserverReference<?>>>();
             registrations.put(context, methods);
         }
 
@@ -55,12 +55,12 @@ public class EventManager {
     }
 
     /**
-     * UnRegisters all methods observing the given event from the provided context.
+     * Unregisters all methods observing the given event from the provided context.
      */
     public void unregisterObserver(Context context, Object instance, Class event) {
         if (!isEnabled()) return;
 
-        final Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
+        final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
         final Set<ObserverReference<?>> observers = methods.get(event);
@@ -82,7 +82,7 @@ public class EventManager {
      * Clears all observers of the given context.
      */
     public void clear( Context context ) {
-        final Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
+        final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
         registrations.remove(context);
@@ -99,7 +99,7 @@ public class EventManager {
     public void notify(Context context, Object event) {
         if (!isEnabled()) return;
 
-        final Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
+        final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
         for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){
@@ -131,7 +131,7 @@ public class EventManager {
     public <ResultType> ResultType notifyWithResult(Context context, Object event, Class<ResultType> returnType, ResultType defaultValue ) {
         if (!isEnabled()) return defaultValue;
 
-        final Map<Class, Set<ObserverReference<?>>> methods = registrations.get(context);
+        final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return defaultValue;
 
         for(Class<?> aClass = event.getClass(); aClass != null; aClass = aClass.getSuperclass()){

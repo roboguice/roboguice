@@ -38,7 +38,4 @@ public class ContextObservingClassEventService {
         return false;
     }
 
-    public void logall(@Observes Object event){
-        Ln.v("Object event");
-    }
 }

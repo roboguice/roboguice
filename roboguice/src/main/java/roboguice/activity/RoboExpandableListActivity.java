@@ -15,17 +15,17 @@
  */
 package roboguice.activity;
 
-import roboguice.application.RoboApplication;
-import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
-
-import com.google.inject.Injector;
-
 import android.app.ExpandableListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.content.Intent;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboExpandableListActivity} extends from
@@ -37,6 +37,9 @@ import android.content.Intent;
  * @author Mike Burton
  */
 public class RoboExpandableListActivity extends ExpandableListActivity implements InjectorProvider {
+
+    @Inject protected EventManager eventManager;
+
     protected ContextScope scope;
 
     @Override

@@ -52,50 +52,56 @@ public class PreferenceListener implements TypeListener {
             c = c.getSuperclass();
         }
     }
+
+
+
+
+
+
+    protected static class PreferenceMembersInjector<T> implements MembersInjector<T> {
+        protected final Field field;
+        protected Provider<Context> contextProvider;
+        protected InjectPreference annotation;
+
+        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider,
+                                         InjectPreference annotation) {
+            this.field = field;
+            this.contextProvider = contextProvider;
+            this.annotation = annotation;
+        }
+
+        public void injectMembers(T instance) {
+            final Context context = contextProvider.get();
+
+            if (!(context instanceof PreferenceActivity)) {
+                throw new IllegalArgumentException(String.format(
+                    "Can't inject a preference into a non-subclass of PreferenceAcvitity (%s)",
+                    field.getDeclaringClass()));
+            }
+
+            final PreferenceActivity activity = (PreferenceActivity) context;
+            final String key = annotation.value();
+
+            Preference value = activity.findPreference(key);
+
+            if (value == null && !field.isAnnotationPresent(Nullable.class)) {
+                throw new NullPointerException(
+                    String.format("Can't inject null value into %s.%s when field is not @Nullable",
+                                  field.getDeclaringClass(), field.getName()));
+            }
+
+            try {
+                field.setAccessible(true);
+                field.set(instance, value);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (IllegalArgumentException f) {
+                throw new IllegalArgumentException(
+                    String.format("Can't assign %s value %s to %s field %s",
+                                  value != null ? value.getClass() : "(null)",
+                                  value, field.getType(), field.getName()));
+            }
+        }
+    }
 }
 
-class PreferenceMembersInjector<T> implements MembersInjector<T> {
-    protected final Field field;
-    protected final Provider<Context> contextProvider;
-    protected final InjectPreference annotation;
-
-    public PreferenceMembersInjector(Field field, Provider<Context> contextProvider,
-                                     InjectPreference annotation) {
-        this.field = field;
-        this.contextProvider = contextProvider;
-        this.annotation = annotation;
-    }
-
-    public void injectMembers(T instance) {
-        final Context context = contextProvider.get();
-
-        if (!(context instanceof PreferenceActivity)) {
-            throw new IllegalArgumentException(String.format(
-                "Can't inject a preference into a non-subclass of PreferenceAcvitity (%s)",
-                field.getDeclaringClass()));
-        }
-
-        final PreferenceActivity activity = (PreferenceActivity) context;
-        final String key = annotation.value();
-
-        Preference value = activity.findPreference(key);
-
-        if (value == null && !field.isAnnotationPresent(Nullable.class)) {
-            throw new NullPointerException(
-                String.format("Can't inject null value into %s.%s when field is not @Nullable",
-                              field.getDeclaringClass(), field.getName()));
-        }
-
-        try {
-            field.setAccessible(true);
-            field.set(instance, value);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalArgumentException f) {
-            throw new IllegalArgumentException(
-                String.format("Can't assign %s value %s to %s field %s",
-                              value != null ? value.getClass() : "(null)",
-                              value, field.getType(), field.getName()));
-        }
-    }
-}

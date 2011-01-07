@@ -15,12 +15,16 @@
  */
 package roboguice.application;
 
-import android.app.Application;
-import android.content.Context;
-import com.google.inject.*;
 import roboguice.config.AbstractAndroidModule;
 import roboguice.config.RoboModule;
+import roboguice.event.EventManager;
+import roboguice.event.EventManager.NullEventManager;
 import roboguice.inject.*;
+
+import android.app.Application;
+import android.content.Context;
+
+import com.google.inject.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +65,7 @@ public class RoboApplication extends Application implements InjectorProvider {
     protected ExtrasListener extrasListener;
     protected PreferenceListener preferenceListener;
     protected List<StaticTypeListener> staticTypeListeners;
-    protected ContextObservationManager observationManager;
+    protected EventManager observationManager;
 
     /**
      * Returns the {@link Injector} of your application. If none exists yet,
@@ -99,18 +103,16 @@ public class RoboApplication extends Application implements InjectorProvider {
                 return RoboApplication.this;
             }
         };
+        
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
         resourceListener = new ResourceListener(this);
         viewListener = new ViewListener(contextProvider, this, contextScope);
         extrasListener = new ExtrasListener(contextProvider);
-        if (allowPreferenceInjection()) {
+        observationManager = allowContextObservers() ? new EventManager() : new NullEventManager();
+
+        if (allowPreferenceInjection())
           preferenceListener = new PreferenceListener(contextProvider);
-        }
-        if (allowContextObservers()) {
-            observationManager = new ContextObservationManager();
-        } else {
-            observationManager = new ContextObservationManager.NullContextObservationManager();
-        }
+
 
         staticTypeListeners = new ArrayList<StaticTypeListener>();
         staticTypeListeners.add(resourceListener);
@@ -131,6 +133,7 @@ public class RoboApplication extends Application implements InjectorProvider {
                 contextProvider, resourceListener, viewListener, extrasListener, preferenceListener,
                 observationManager, this);
         modules.add(roboguiceModule);
+        //context observer manager module
         addApplicationModules(modules);
         for (Module m : modules) {
             if (m instanceof AbstractAndroidModule) {

@@ -1,5 +1,12 @@
 package roboguice.config;
 
+import roboguice.event.EventManager;
+import roboguice.event.ObserverTypeListener;
+import roboguice.inject.*;
+import roboguice.util.Ln;
+import roboguice.util.RoboAsyncTask;
+import roboguice.util.RoboThread;
+
 import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -15,14 +22,11 @@ import android.os.Vibrator;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
-import roboguice.inject.*;
-import roboguice.util.Ln;
-import roboguice.util.RoboAsyncTask;
-import roboguice.util.RoboThread;
 
 import java.util.List;
 
@@ -43,11 +47,11 @@ public class RoboModule extends AbstractModule {
     protected final ExtrasListener extrasListener;
     protected final PreferenceListener preferenceListener;
     protected final Application application;
-    protected final ContextObservationManager observationManager;
+    protected final EventManager observationManager;
 
     public RoboModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
             ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener,
-            PreferenceListener preferenceListener, ContextObservationManager observationManager, Application application) {
+            PreferenceListener preferenceListener, EventManager observationManager, Application application) {
         this.contextScope = contextScope;
         this.throwingContextProvider = throwingContextProvider;
         this.contextProvider = contextProvider;
@@ -83,11 +87,11 @@ public class RoboModule extends AbstractModule {
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
 
         // Context observers
-        bind(ContextObservationManager.class).toInstance(observationManager);
+        bind(EventManager.class).toInstance(observationManager);
 
-        for (Class<? extends Object> c = application.getClass(); c != null && Application.class.isAssignableFrom(c); c = c.getSuperclass()) {
+        for (Class<?> c = application.getClass(); c != null && Application.class.isAssignableFrom(c); c = c.getSuperclass())
             bind((Class<Object>) c).toInstance(application);
-        }
+
 
         // System Services
         bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));
@@ -111,13 +115,11 @@ public class RoboModule extends AbstractModule {
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
 
-        if (preferenceListener != null) {
+        if (preferenceListener != null)
           bindListener(Matchers.any(), preferenceListener);
-        }
 
-        if (observationManager.isEnabled()) {
-            bindListener(Matchers.any(), new ContextObserverTypeListener(contextProvider, observationManager));
-        }
+        if (observationManager.isEnabled())
+            bindListener(Matchers.any(), new ObserverTypeListener(observationManager));
 
         requestStaticInjection( Ln.class );
         requestStaticInjection( RoboThread.class );

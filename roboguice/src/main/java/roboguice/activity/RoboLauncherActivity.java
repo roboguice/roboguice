@@ -15,17 +15,17 @@
  */
 package roboguice.activity;
 
-import roboguice.application.RoboApplication;
-import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
-
 import android.app.LauncherActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-
+import com.google.inject.Inject;
 import com.google.inject.Injector;
-import android.content.Intent;
+import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.InjectorProvider;
 
 /**
  * A {@link RoboLauncherActivity} extends from {@link LauncherActivity} to provide
@@ -36,6 +36,9 @@ import android.content.Intent;
  * @author Toly Pochkin
  */
 public class RoboLauncherActivity extends LauncherActivity implements InjectorProvider {
+
+    @Inject protected EventManager eventManager;
+
     protected ContextScope scope;
 
     /** {@inheritDoc } */

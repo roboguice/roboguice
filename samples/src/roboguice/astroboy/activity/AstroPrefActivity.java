@@ -15,16 +15,13 @@
  */
 package roboguice.astroboy.activity;
 
-import roboguice.activity.RoboPreferenceActivity;
-import roboguice.astroboy.R;
-import roboguice.inject.InjectPreference;
-
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.widget.Toast;
+import com.google.inject.Inject;
+import roboguice.activity.RoboPreferenceActivity;
+import roboguice.astroboy.R;
+import roboguice.astroboy.service.PreferenceChangeEventToastListener;
+import roboguice.inject.InjectPreference;
 
 /**
  * @author Rodrigo Damazio
@@ -33,8 +30,8 @@ public class AstroPrefActivity extends RoboPreferenceActivity {
 
   @InjectPreference("bool_pref")
   CheckBoxPreference boolPref;
-  @InjectPreference("text_pref")
-  EditTextPreference textPref;
+  @Inject
+  PreferenceChangeEventToastListener preferenceChangeEventListener;
 
   @Override
   protected void onCreatePreferences() {
@@ -45,11 +42,7 @@ public class AstroPrefActivity extends RoboPreferenceActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    boolPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-        public boolean onPreferenceChange(Preference arg0, Object arg1) {
-            Toast.makeText(AstroPrefActivity.this, "Meep.", Toast.LENGTH_LONG).show();
-            return true;
-        }
-    });
+      //example of binding a event listener through a preference change listener
+    boolPref.setOnPreferenceChangeListener(preferenceChangeEventListener);
   }
 }

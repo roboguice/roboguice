@@ -16,17 +16,19 @@
 package roboguice.activity;
 
 import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectorProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
-import android.content.Intent;
 
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
@@ -38,6 +40,9 @@ import android.content.Intent;
  * @author Rodrigo Damazio
  */
 public abstract class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
+    
+    @Inject protected EventManager eventManager;
+
     protected ContextScope scope;
 
     /** {@inheritDoc } */

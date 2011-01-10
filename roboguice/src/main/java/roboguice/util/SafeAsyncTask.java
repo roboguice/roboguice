@@ -149,7 +149,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     }
 
 
-    protected static class Task<ResultT> implements Callable<Void> {
+    public static class Task<ResultT> implements Callable<Void> {
         protected SafeAsyncTask<ResultT> parent;
         protected Handler handler;
 

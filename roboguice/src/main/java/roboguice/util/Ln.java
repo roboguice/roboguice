@@ -62,33 +62,13 @@ public class Ln  {
      */
     @Inject protected static LnConfig config = new LnConfig();
 
-    protected static class LnConfig {
-        protected boolean isVerboseEnabled = true;
-        protected boolean isDebugEnabled = true;
-        protected String packageName = "";
-        protected String scope = "";
+    /**
+     * Tricky.  print is initially set to LnPrint(), then replaced by guice during
+     * static injection pass.  This allows overriding where the log message is delivered to.
+     */
+    @Inject protected static LnPrint print = new LnPrint();
 
-        protected LnConfig() {
-        }
 
-        @Inject
-        protected LnConfig( Context context ) {
-            synchronized(LnConfig.class) {
-                try {
-                    packageName = context.getPackageName();
-                    final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
-                    isVerboseEnabled = isDebugEnabled = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-                    scope = packageName.toUpperCase();
-
-                    Ln.d("Configuring Ln, verbose=%s debug=%s",isVerboseEnabled,isDebugEnabled);
-
-                } catch( PackageManager.NameNotFoundException e ) {
-                    Log.e(packageName, "Error configuring logger", e);
-                }
-            }
-        }
-
-    }
 
     private Ln() {}
 
@@ -185,7 +165,7 @@ public class Ln  {
         if( config.isDebugEnabled )
             message = String.format("%s %s %s", new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis()), Thread.currentThread().getName(), message);
         
-        return Log.println(priority, getScope(), message);
+        return print.println(priority, getScope(), message);
     }
 
     protected static String toSafeLabelString( String str ) {
@@ -196,4 +176,45 @@ public class Ln  {
         return str;
     }
 
+
+
+
+
+
+    protected static class LnConfig {
+        protected boolean isVerboseEnabled = true;
+        protected boolean isDebugEnabled = true;
+        protected String packageName = "";
+        protected String scope = "";
+
+        protected LnConfig() {
+        }
+
+        @Inject
+        public LnConfig( Context context ) {
+            synchronized(LnConfig.class) {
+                try {
+                    packageName = context.getPackageName();
+                    final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
+                    isVerboseEnabled = isDebugEnabled = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+                    scope = packageName.toUpperCase();
+
+                    Ln.d("Configuring Ln, verbose=%s debug=%s",isVerboseEnabled,isDebugEnabled);
+
+                } catch( PackageManager.NameNotFoundException e ) {
+                    Log.e(packageName, "Error configuring logger", e);
+                }
+            }
+        }
+
+    }
+
+
+
+    /** Default implementation logs to android.util.Log */
+    public static class LnPrint {
+        public int println(int priority, String tag, String msg ) {
+            return Log.println(priority,tag,msg);
+        }
+    }
 }

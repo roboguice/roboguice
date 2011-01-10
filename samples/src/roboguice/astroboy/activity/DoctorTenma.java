@@ -24,11 +24,11 @@ import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
+import roboguice.util.Ln;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -44,10 +44,8 @@ import static junit.framework.Assert.assertNull;
 public class DoctorTenma extends RoboActivity {
     // You can inject arbitrary View, String, and other types of resources.
     // See ResourceListener for details.
-    @InjectView(R.id.widget1)
-    protected TextView          helloView;
-    @InjectResource(R.string.hello)
-    protected String            hello;
+    @InjectView(R.id.widget1) protected TextView helloView;
+    @InjectResource(R.string.hello) protected String hello;
 
     /**
      * You can inject Extras from the intent that started this activity with
@@ -57,8 +55,7 @@ public class DoctorTenma extends RoboActivity {
      *
      * @see ExtrasListener
      */
-    @InjectExtra("nameExtra")
-    protected String            nameExtra;
+    @InjectExtra("nameExtra") protected String nameExtra;
 
     /**
      * The extra must exists when the activity is injected, unless you specify
@@ -67,7 +64,7 @@ public class DoctorTenma extends RoboActivity {
      * field.
      */
     @InjectExtra(value = "optionalExtra", optional = true)
-    protected Date              myDateExtra        = new Date(0);
+    protected Date myDateExtra        = new Date(0);
 
     /**
      * The default behavior of the {@link InjectExtra} annotation is to forbid
@@ -77,7 +74,7 @@ public class DoctorTenma extends RoboActivity {
      */
     @InjectExtra("nullExtra")
     @Nullable
-    protected Object            nullInjectedMember = new Object();
+    protected Object nullInjectedMember = new Object();
 
     /**
      * This example shows how to inject a bean converted from an extra value
@@ -89,8 +86,7 @@ public class DoctorTenma extends RoboActivity {
      * inject a bean created from multiple extra values (e.g. creating a person
      * from its name and age).
      */
-    @Inject
-    protected Person            personFromExtra;
+    @Inject protected Person personFromExtra;
 
     /**
      * This is a more flexible way to inject a bean : a converter is configured
@@ -98,37 +94,32 @@ public class DoctorTenma extends RoboActivity {
      * String extra. See {@link PersonExtraConverter} and {@link AstroboyModule}
      * .
      */
-    @InjectExtra("nameExtra")
-    protected Person            personFromConvertedExtra;
+    @InjectExtra("nameExtra") protected Person personFromConvertedExtra;
 
     /**
      * This date is injected using the converter {@link DateExtraConverter} that
      * converts a {@link Long} to a {@link Date}.
      */
-    @InjectExtra("timestampExtra")
-    protected Date              dateFromTimestampExtra;
+    @InjectExtra("timestampExtra") protected Date dateFromTimestampExtra;
 
     /**
      * This date is injected using the converter {@link DateTwiceExtraConverter}
      * that converts an {@link Integer} (doubled) to a {@link Date}.
      */
     @InjectExtra("timestampTwiceExtra")
-    protected Date              dateFromTimestampTwiceExtra;
+    protected Date dateFromTimestampTwiceExtra;
 
     // You can inject various useful android objects.
     // See GuiceApplication.configure to see what's available.
-    @Inject
-    protected SharedPreferences prefs;
+    @Inject protected SharedPreferences prefs;
 
     // Injecting a collaborator
-    @Inject
-    protected TalkingThing      talker;
+    @Inject protected TalkingThing      talker;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main); // Injection doesn't happen until you
-        // call setContentView()
+        setContentView(R.layout.main); // Injection doesn't happen until you call setContentView()
 
         helloView.setText(hello + ", " + this.getClass().getSimpleName());
         helloView.setOnClickListener(new OnClickListener() {
@@ -147,7 +138,7 @@ public class DoctorTenma extends RoboActivity {
         assertEquals(dateFromTimestampExtra.getTime(), 1000L);
         assertEquals(dateFromTimestampTwiceExtra.getTime(), 2000L);
 
-        Log.d("DoctorTenma", talker.talk());
+        Ln.d(talker.talk());
 
     }
 }

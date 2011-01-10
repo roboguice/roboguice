@@ -168,14 +168,6 @@ public class Ln  {
         return print.println(priority, getScope(), message);
     }
 
-    protected static String toSafeLabelString( String str ) {
-        str = Strings.toString(str);
-        str = str.replaceAll("\\W+","_");
-        if( str.length()>30 )
-            str = str.substring(0,30);
-        return str;
-    }
-
 
 
 

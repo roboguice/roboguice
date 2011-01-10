@@ -56,6 +56,10 @@ import java.text.SimpleDateFormat;
  */
 @SuppressWarnings({"ImplicitArrayToString"})
 public class Ln  {
+    /**
+     * Tricky.  config is initially set to LnConfig() with sensible defaults, then replaced
+     * by LnConfig(Context) during guice static injection pass.
+     */
     @Inject protected static LnConfig config = new LnConfig();
 
     protected static class LnConfig {
@@ -79,7 +83,7 @@ public class Ln  {
                     Ln.d("Configuring Ln, verbose=%s debug=%s",isVerboseEnabled,isDebugEnabled);
 
                 } catch( PackageManager.NameNotFoundException e ) {
-                    android.util.Log.e(packageName, "Error configuring logger", e);
+                    Log.e(packageName, "Error configuring logger", e);
                 }
             }
         }

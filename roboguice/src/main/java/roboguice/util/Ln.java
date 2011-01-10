@@ -13,9 +13,14 @@ import java.text.SimpleDateFormat;
 /**
  * A more natural android logging facility.
  *
+ * WARNING: CHECK OUT COMMON PITFALLS BELOW
+ *
  * Unlike {@link android.util.Log}, Log provides sensible defaults.
  * Debug and Verbose logging is enabled for applications that
  * have "android:debuggable=true" in their AndroidManifest.xml.
+ * For apps built using SDK Tools r8 or later, this means any debug
+ * build.  Release builds built with r8 or later will have verbose
+ * and debug log messages turned off.
  *
  * The default tag is automatically set to your app's packagename,
  * and the current context (eg. activity, service, application, etc)
@@ -33,10 +38,13 @@ import java.text.SimpleDateFormat;
  * Also, the current file and line is automatically appended to the tag
  * (this is only done if debug is enabled for performance reasons).
  *
- * NOTE:
- * Make sure you put the exception FIRST in the call.  A common
- * mistake is to place it last as is the android.util.Log convention,
- * but then it will get treated as varargs parameter.
+ * COMMON PITFALLS:
+ * * Make sure you put the exception FIRST in the call.  A common
+ *   mistake is to place it last as is the android.util.Log convention,
+ *   but then it will get treated as varargs parameter.
+ * * vararg parameters are not appended to the log message!  You must
+ *   insert them into the log message using %s or another similar
+ *   format parameter
  *
  * Usage Examples:
  *

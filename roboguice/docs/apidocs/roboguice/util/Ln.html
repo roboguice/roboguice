@@ -186,7 +186,8 @@ A more natural android logging facility.
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#config">config</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tricky.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config is initially set to LnConfig() with sensible defaults, then replaced
+ by LnConfig(Context) during guice static injection pass.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -194,7 +195,8 @@ A more natural android logging facility.
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#print">print</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Tricky.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print is initially set to LnPrint(), then replaced by guice during
+ static injection pass.</TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -262,14 +264,6 @@ A more natural android logging facility.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#getScope()">getScope</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;int</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#i(java.lang.Object, java.lang.Object...)">i</A></B>(java.lang.Object&nbsp;s1,
   java.lang.Object...&nbsp;args)</CODE>
@@ -307,15 +301,6 @@ A more natural android logging facility.
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;boolean</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#isVerboseEnabled()">isVerboseEnabled</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;int</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#println(int, java.lang.String)">println</A></B>(int&nbsp;priority,
-        java.lang.String&nbsp;message)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -403,7 +388,7 @@ config</H3>
 <FONT SIZE="-1">@Inject
 </FONT>protected static <A HREF="../../roboguice/util/Ln.LnConfig.html" title="class in roboguice.util">Ln.LnConfig</A> <B>config</B></PRE>
 <DL>
-<DD>Tricky.  config is initially set to LnConfig() with sensible defaults, then replaced
+<DD>config is initially set to LnConfig() with sensible defaults, then replaced
  by LnConfig(Context) during guice static injection pass.
 <P>
 <DL>
@@ -417,7 +402,7 @@ print</H3>
 <FONT SIZE="-1">@Inject
 </FONT>protected static <A HREF="../../roboguice/util/Ln.LnPrint.html" title="class in roboguice.util">Ln.LnPrint</A> <B>print</B></PRE>
 <DL>
-<DD>Tricky.  print is initially set to LnPrint(), then replaced by guice during
+<DD>print is initially set to LnPrint(), then replaced by guice during
  static injection pass.  This allows overriding where the log message is delivered to.
 <P>
 <DL>
@@ -629,29 +614,6 @@ public static boolean <B>isDebugEnabled</B>()</PRE>
 isVerboseEnabled</H3>
 <PRE>
 public static boolean <B>isVerboseEnabled</B>()</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="getScope()"><!-- --></A><H3>
-getScope</H3>
-<PRE>
-protected static java.lang.String <B>getScope</B>()</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="println(int, java.lang.String)"><!-- --></A><H3>
-println</H3>
-<PRE>
-public static int <B>println</B>(int&nbsp;priority,
-                          java.lang.String&nbsp;message)</PRE>
 <DL>
 <DD><DL>
 </DL>

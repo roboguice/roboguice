@@ -57,13 +57,13 @@ import java.text.SimpleDateFormat;
 @SuppressWarnings({"ImplicitArrayToString"})
 public class Ln  {
     /**
-     * Tricky.  config is initially set to LnConfig() with sensible defaults, then replaced
+     * config is initially set to LnConfig() with sensible defaults, then replaced
      * by LnConfig(Context) during guice static injection pass.
      */
     @Inject protected static LnConfig config = new LnConfig();
 
     /**
-     * Tricky.  print is initially set to LnPrint(), then replaced by guice during
+     * print is initially set to LnPrint(), then replaced by guice during
      * static injection pass.  This allows overriding where the log message is delivered to.
      */
     @Inject protected static LnPrint print = new LnPrint();
@@ -75,73 +75,83 @@ public class Ln  {
 
 
     public static int v(Throwable t) {
-        return config.isVerboseEnabled ? println(Log.VERBOSE, Log.getStackTraceString(t) ) : 0;
+        return config.isVerboseEnabled ? print.println(Log.VERBOSE, Log.getStackTraceString(t)) : 0;
     }
 
     public static int v(Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return config.isVerboseEnabled ? println(Log.VERBOSE, args.length>0 ? String.format(s,args) : s) : 0;
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return config.isVerboseEnabled ? print.println(Log.VERBOSE, message) : 0;
     }
 
     public static int v(Throwable throwable, Object s1, Object... args ) {
         final String s = Strings.toString(s1);
-        return config.isVerboseEnabled ? println(Log.VERBOSE,(args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable)) : 0;
+        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return config.isVerboseEnabled ? print.println(Log.VERBOSE, message) : 0;
     }
 
     public static int d(Throwable t) {
-        return config.isDebugEnabled ? println(Log.DEBUG, Log.getStackTraceString(t)) : 0;
+        return config.isDebugEnabled ? print.println(Log.DEBUG, Log.getStackTraceString(t)) : 0;
     }
 
     public static int d(Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return config.isDebugEnabled ? println(Log.DEBUG, args.length>0 ? String.format(s,args) : s) : 0;
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return config.isDebugEnabled ? print.println(Log.DEBUG, message) : 0;
     }
 
     public static int d(Throwable throwable, Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return config.isDebugEnabled ? println(Log.DEBUG, (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable)) : 0;
+        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return config.isDebugEnabled ? print.println(Log.DEBUG, message) : 0;
     }
 
     public static int i(Throwable t) {
-        return println(Log.INFO,Log.getStackTraceString(t));
+        return print.println(Log.INFO, Log.getStackTraceString(t));
     }
 
     public static int i( Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return println(Log.INFO,args.length>0 ? String.format(s,args) : s );
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return print.println(Log.INFO, message);
     }
 
     public static int i(Throwable throwable, Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return println(Log.INFO, (args.length > 0 ? String.format(s, args) : s) + '\n' + Log.getStackTraceString(throwable));
+        final String message = (args.length > 0 ? String.format(s, args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return print.println(Log.INFO, message);
     }
 
     public static int w(Throwable t) {
-        return println(Log.WARN, Log.getStackTraceString(t));
+        return print.println(Log.WARN, Log.getStackTraceString(t));
     }
 
     public static int w( Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return println(Log.WARN,args.length>0 ? String.format(s,args) : s);
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return print.println(Log.WARN, message);
     }
 
     public static int w( Throwable throwable, Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return println(Log.WARN, (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable));
+        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return print.println(Log.WARN, message);
     }
 
     public static int e(Throwable t) {
-        return println(Log.ERROR, Log.getStackTraceString(t));
+        return print.println(Log.ERROR, Log.getStackTraceString(t));
     }
 
     public static int e( Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return println(Log.ERROR,args.length>0 ? String.format(s,args) : s);
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return print.println(Log.ERROR, message);
     }
 
     public static int e( Throwable throwable, Object s1, Object... args) {
         final String s = Strings.toString(s1);
-        return println(Log.ERROR, (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable));
+        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return print.println(Log.ERROR, message);
     }
 
     public static boolean isDebugEnabled() {
@@ -151,25 +161,6 @@ public class Ln  {
     public static boolean isVerboseEnabled() {
         return config.isVerboseEnabled;
     }
-
-    protected static String getScope() {
-        if( config.isDebugEnabled ) {
-            final StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
-            return config.scope + "/" + trace.getFileName() + ":" + trace.getLineNumber();
-        }
-
-        return config.scope;
-    }
-
-    public static int println( int priority, String message ) {
-        if( config.isDebugEnabled )
-            message = String.format("%s %s %s", new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis()), Thread.currentThread().getName(), message);
-        
-        return print.println(priority, getScope(), message);
-    }
-
-
-
 
 
 
@@ -191,7 +182,7 @@ public class Ln  {
                     isVerboseEnabled = isDebugEnabled = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
                     scope = packageName.toUpperCase();
 
-                    Ln.d("Configuring Ln, verbose=%s debug=%s",isVerboseEnabled,isDebugEnabled);
+                    Ln.d("Configuring Logging, verbose=%s debug=%s",isVerboseEnabled,isDebugEnabled);
 
                 } catch( PackageManager.NameNotFoundException e ) {
                     Log.e(packageName, "Error configuring logger", e);
@@ -205,8 +196,21 @@ public class Ln  {
 
     /** Default implementation logs to android.util.Log */
     public static class LnPrint {
-        public int println(int priority, String tag, String msg ) {
-            return Log.println(priority,tag,msg);
+        public int println(int priority, String msg ) {
+            if( config.isDebugEnabled )
+                msg = String.format("%s %s %s", new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis()), Thread.currentThread().getName(), msg);
+
+            return Log.println(priority,getScope(),msg);
         }
+
+        protected static String getScope() {
+            if( config.isDebugEnabled ) {
+                final StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
+                return config.scope + "/" + trace.getFileName() + ":" + trace.getLineNumber();
+            }
+
+            return config.scope;
+        }
+        
     }
 }

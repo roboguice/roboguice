@@ -55,7 +55,7 @@ function windowTitle()
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;PREV CLASS&nbsp;
-&nbsp;<A HREF="../../roboguice/util/Ln.LnConfig.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/Ln.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Ln.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -158,7 +158,7 @@ A more natural android logging facility.
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected static&nbsp;class</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.LnConfig.html" title="class in roboguice.util">Ln.LnConfig</A></B></CODE>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -166,7 +166,7 @@ A more natural android logging facility.
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;class</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.LnPrint.html" title="class in roboguice.util">Ln.LnPrint</A></B></CODE>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default implementation logs to android.util.Log</TD>
@@ -182,20 +182,20 @@ A more natural android logging facility.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;<A HREF="../../roboguice/util/Ln.LnConfig.html" title="class in roboguice.util">Ln.LnConfig</A></CODE></FONT></TD>
+<CODE>protected static&nbsp;<A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#config">config</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config is initially set to LnConfig() with sensible defaults, then replaced
- by LnConfig(Context) during guice static injection pass.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config is initially set to Config() with sensible defaults, then replaced
+ by Config(Context) during guice static injection pass.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;<A HREF="../../roboguice/util/Ln.LnPrint.html" title="class in roboguice.util">Ln.LnPrint</A></CODE></FONT></TD>
+<CODE>protected static&nbsp;<A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#print">print</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print is initially set to LnPrint(), then replaced by guice during
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print is initially set to Print(), then replaced by guice during
  static injection pass.</TD>
 </TR>
 </TABLE>
@@ -386,10 +386,10 @@ A more natural android logging facility.
 config</H3>
 <PRE>
 <FONT SIZE="-1">@Inject
-</FONT>protected static <A HREF="../../roboguice/util/Ln.LnConfig.html" title="class in roboguice.util">Ln.LnConfig</A> <B>config</B></PRE>
+</FONT>protected static <A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A> <B>config</B></PRE>
 <DL>
-<DD>config is initially set to LnConfig() with sensible defaults, then replaced
- by LnConfig(Context) during guice static injection pass.
+<DD>config is initially set to Config() with sensible defaults, then replaced
+ by Config(Context) during guice static injection pass.
 <P>
 <DL>
 </DL>
@@ -400,9 +400,9 @@ config</H3>
 print</H3>
 <PRE>
 <FONT SIZE="-1">@Inject
-</FONT>protected static <A HREF="../../roboguice/util/Ln.LnPrint.html" title="class in roboguice.util">Ln.LnPrint</A> <B>print</B></PRE>
+</FONT>protected static <A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A> <B>print</B></PRE>
 <DL>
-<DD>print is initially set to LnPrint(), then replaced by guice during
+<DD>print is initially set to Print(), then replaced by guice during
  static injection pass.  This allows overriding where the log message is delivered to.
 <P>
 <DL>
@@ -651,7 +651,7 @@ public static boolean <B>isVerboseEnabled</B>()</PRE>
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;PREV CLASS&nbsp;
-&nbsp;<A HREF="../../roboguice/util/Ln.LnConfig.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/Ln.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Ln.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;

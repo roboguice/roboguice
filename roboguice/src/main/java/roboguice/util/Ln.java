@@ -57,16 +57,16 @@ import java.text.SimpleDateFormat;
 @SuppressWarnings({"ImplicitArrayToString"})
 public class Ln  {
     /**
-     * config is initially set to LnConfig() with sensible defaults, then replaced
-     * by LnConfig(Context) during guice static injection pass.
+     * config is initially set to Config() with sensible defaults, then replaced
+     * by Config(Context) during guice static injection pass.
      */
-    @Inject protected static LnConfig config = new LnConfig();
+    @Inject protected static Config config = new Config();
 
     /**
-     * print is initially set to LnPrint(), then replaced by guice during
+     * print is initially set to Print(), then replaced by guice during
      * static injection pass.  This allows overriding where the log message is delivered to.
      */
-    @Inject protected static LnPrint print = new LnPrint();
+    @Inject protected static Print print = new Print();
 
 
 
@@ -164,18 +164,18 @@ public class Ln  {
 
 
 
-    protected static class LnConfig {
+    protected static class Config {
         protected boolean isVerboseEnabled = true;
         protected boolean isDebugEnabled = true;
         protected String packageName = "";
         protected String scope = "";
 
-        protected LnConfig() {
+        protected Config() {
         }
 
         @Inject
-        public LnConfig( Context context ) {
-            synchronized(LnConfig.class) {
+        public Config(Context context) {
+            synchronized(Config.class) {
                 try {
                     packageName = context.getPackageName();
                     final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
@@ -195,7 +195,7 @@ public class Ln  {
 
 
     /** Default implementation logs to android.util.Log */
-    public static class LnPrint {
+    public static class Print {
         public int println(int priority, String msg ) {
             if( config.isDebugEnabled )
                 msg = String.format("%s %s %s", new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis()), Thread.currentThread().getName(), msg);

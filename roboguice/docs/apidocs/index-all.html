@@ -139,8 +139,8 @@ Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" ti
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/Ln.html#config"><B>config</B></A> - 
 Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
-<DD>config is initially set to Config() with sensible defaults, then replaced
- by Config(Context) during guice static injection pass.
+<DD>config is initially set to BaseConfig() with sensible defaults, then replaced
+ by BaseConfig(Context) during guice static injection pass.
 <DT><A HREF="./roboguice/config/RoboModule.html#configure()"><B>configure()</B></A> - 
 Method in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" title="class in roboguice.config">RoboModule</A>
 <DD>Configure this module to define Android related bindings.<br />
@@ -353,6 +353,9 @@ Method in class roboguice.inject.<A HREF="./roboguice/inject/StringResourceFacto
 <DT><A HREF="./roboguice/inject/SystemServiceProvider.html#get()"><B>get()</B></A> - 
 Method in class roboguice.inject.<A HREF="./roboguice/inject/SystemServiceProvider.html" title="class in roboguice.inject">SystemServiceProvider</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.html#getConfig()"><B>getConfig()</B></A> - 
+Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#getInjector()"><B>getInjector()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
 <DD>&nbsp;
@@ -394,6 +397,12 @@ Method in class roboguice.service.<A HREF="./roboguice/service/RoboService.html"
 <DD>&nbsp;
 <DT><A HREF="./roboguice/test/RoboUnitTestCase.html#getInjector()"><B>getInjector()</B></A> - 
 Method in class roboguice.test.<A HREF="./roboguice/test/RoboUnitTestCase.html" title="class in roboguice.test">RoboUnitTestCase</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#getLoggingLevel()"><B>getLoggingLevel()</B></A> - 
+Method in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.Config.html#getLoggingLevel()"><B>getLoggingLevel()</B></A> - 
+Method in interface roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/Ln.Print.html#getScope()"><B>getScope()</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A>
@@ -517,13 +526,13 @@ Variable in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" t
 <DT><A HREF="./roboguice/config/AbstractAndroidModule.html#listeners"><B>listeners</B></A> - 
 Variable in class roboguice.config.<A HREF="./roboguice/config/AbstractAndroidModule.html" title="class in roboguice.config">AbstractAndroidModule</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html" title="class in roboguice.util"><B>Ln</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>A more natural android logging facility.<DT><A HREF="./roboguice/util/Ln.Config.html" title="class in roboguice.util"><B>Ln.Config</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>&nbsp;<DT><A HREF="./roboguice/util/Ln.Config.html#Ln.Config()"><B>Ln.Config()</B></A> - 
-Constructor for class roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A>
+<DT><A HREF="./roboguice/util/Ln.html" title="class in roboguice.util"><B>Ln</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>A more natural android logging facility.<DT><A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util"><B>Ln.BaseConfig</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>&nbsp;<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#Ln.BaseConfig()"><B>Ln.BaseConfig()</B></A> - 
+Constructor for class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.Config.html#Ln.Config(android.content.Context)"><B>Ln.Config(Context)</B></A> - 
-Constructor for class roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A>
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#Ln.BaseConfig(android.content.Context)"><B>Ln.BaseConfig(Context)</B></A> - 
+Constructor for class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util"><B>Ln.Print</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>Default implementation logs to android.util.Log<DT><A HREF="./roboguice/util/Ln.Print.html#Ln.Print()"><B>Ln.Print()</B></A> - 
+<DT><A HREF="./roboguice/util/Ln.Config.html" title="interface in roboguice.util"><B>Ln.Config</B></A> - Interface in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>&nbsp;<DT><A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util"><B>Ln.Print</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>Default implementation logs to android.util.Log<DT><A HREF="./roboguice/util/Ln.Print.html#Ln.Print()"><B>Ln.Print()</B></A> - 
 Constructor for class roboguice.util.<A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/Ln.html#logLevelToString(int)"><B>logLevelToString(int)</B></A> - 
@@ -540,8 +549,8 @@ Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" ti
 <DT><A HREF="./roboguice/activity/RoboSplashActivity.html#minDisplayMs"><B>minDisplayMs</B></A> - 
 Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboSplashActivity.html" title="class in roboguice.activity">RoboSplashActivity</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.Config.html#minimumLogLevel"><B>minimumLogLevel</B></A> - 
-Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A>
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#minimumLogLevel"><B>minimumLogLevel</B></A> - 
+Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
 <DD>&nbsp;
 </DL>
 <HR>
@@ -809,8 +818,8 @@ Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" tit
 <A NAME="_P_"><!-- --></A><H2>
 <B>P</B></H2>
 <DL>
-<DT><A HREF="./roboguice/util/Ln.Config.html#packageName"><B>packageName</B></A> - 
-Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A>
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#packageName"><B>packageName</B></A> - 
+Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/SafeAsyncTask.Task.html#parent"><B>parent</B></A> - 
 Variable in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>
@@ -1070,8 +1079,8 @@ Variable in class roboguice.service.<A HREF="./roboguice/service/RoboIntentServi
 <DT><A HREF="./roboguice/service/RoboService.html#scope"><B>scope</B></A> - 
 Variable in class roboguice.service.<A HREF="./roboguice/service/RoboService.html" title="class in roboguice.service">RoboService</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.Config.html#scope"><B>scope</B></A> - 
-Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A>
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#scope"><B>scope</B></A> - 
+Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/RoboAsyncTask.html#scope"><B>scope</B></A> - 
 Variable in class roboguice.util.<A HREF="./roboguice/util/RoboAsyncTask.html" title="class in roboguice.util">RoboAsyncTask</A>
@@ -1166,6 +1175,12 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#setContentView(android.view.View)"><B>setContentView(View)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
 <DD>
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#setLoggingLevel(int)"><B>setLoggingLevel(int)</B></A> - 
+Method in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.Config.html#setLoggingLevel(int)"><B>setLoggingLevel(int)</B></A> - 
+Method in interface roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/config/AbstractAndroidModule.html#setStaticTypeListeners(java.util.List)"><B>setStaticTypeListeners(List&lt;StaticTypeListener&gt;)</B></A> - 
 Method in class roboguice.config.<A HREF="./roboguice/config/AbstractAndroidModule.html" title="class in roboguice.config">AbstractAndroidModule</A>
 <DD>&nbsp;

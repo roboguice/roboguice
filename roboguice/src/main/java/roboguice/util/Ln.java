@@ -202,7 +202,7 @@ public class Ln  {
         public void setLoggingLevel(int level);
     }
 
-    protected static class BaseConfig implements Config {
+    public static class BaseConfig implements Config {
         protected int minimumLogLevel = Log.VERBOSE;
         protected String packageName = "";
         protected String scope = "";
@@ -212,18 +212,16 @@ public class Ln  {
 
         @Inject
         public BaseConfig(Context context) {
-            synchronized(BaseConfig.class) {
-                try {
-                    packageName = context.getPackageName();
-                    final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
-                    minimumLogLevel = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0 ? Log.VERBOSE : Log.INFO;
-                    scope = packageName.toUpperCase();
+            try {
+                packageName = context.getPackageName();
+                final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
+                minimumLogLevel = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0 ? Log.VERBOSE : Log.INFO;
+                scope = packageName.toUpperCase();
 
-                    Ln.d("Configuring Logging, minimum log level is %s", logLevelToString(minimumLogLevel) );
+                Ln.d("Configuring Logging, minimum log level is %s", logLevelToString(minimumLogLevel) );
 
-                } catch( PackageManager.NameNotFoundException e ) {
-                    Log.e(packageName, "Error configuring logger", e);
-                }
+            } catch( PackageManager.NameNotFoundException e ) {
+                Log.e(packageName, "Error configuring logger", e);
             }
         }
 

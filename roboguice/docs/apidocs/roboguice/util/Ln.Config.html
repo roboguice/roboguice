@@ -54,7 +54,7 @@ function windowTitle()
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../roboguice/util/Ln.html" title="class in roboguice.util"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util"><B>PREV CLASS</B></A>&nbsp;
 &nbsp;<A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/Ln.Config.html" target="_top"><B>FRAMES</B></A>  &nbsp;
@@ -75,9 +75,9 @@ function windowTitle()
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#methods_inherited_from_class_java.lang.Object">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;METHOD</FONT></TD>
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>
 </TABLE>
 <A NAME="skip-navbar_top"></A>
@@ -89,83 +89,23 @@ DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor
 <FONT SIZE="-1">
 roboguice.util</FONT>
 <BR>
-Class Ln.Config</H2>
-<PRE>
-java.lang.Object
-  <IMG SRC="../../resources/inherit.gif" ALT="extended by "><B>roboguice.util.Ln.Config</B>
-</PRE>
+Interface Ln.Config</H2>
+<DL>
+<DT><B>All Known Implementing Classes:</B> <DD><A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A></DD>
+</DL>
 <DL>
 <DT><B>Enclosing class:</B><DD><A HREF="../../roboguice/util/Ln.html" title="class in roboguice.util">Ln</A></DD>
 </DL>
 <HR>
 <DL>
-<DT><PRE>protected static class <B>Ln.Config</B><DT>extends java.lang.Object</DL>
+<DT><PRE>public static interface <B>Ln.Config</B></DL>
 </PRE>
 
 <P>
 <HR>
 
 <P>
-<!-- =========== FIELD SUMMARY =========== -->
 
-<A NAME="field_summary"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
-<B>Field Summary</B></FONT></TH>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;int</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html#minimumLogLevel">minimumLogLevel</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html#packageName">packageName</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html#scope">scope</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-</TABLE>
-&nbsp;
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-
-<A NAME="constructor_summary"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
-<B>Constructor Summary</B></FONT></TH>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected </CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html#Ln.Config()">Ln.Config</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html#Ln.Config(android.content.Context)">Ln.Config</A></B>(android.content.Context&nbsp;context)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-</TABLE>
-&nbsp;
 <!-- ========== METHOD SUMMARY =========== -->
 
 <A NAME="method_summary"><!-- --></A>
@@ -174,82 +114,55 @@ java.lang.Object
 <TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
 <B>Method Summary</B></FONT></TH>
 </TR>
-</TABLE>
-&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Methods inherited from class java.lang.Object</B></TH>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html#getLoggingLevel()">getLoggingLevel</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</CODE></TD>
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html#setLoggingLevel(int)">setLoggingLevel</A></B>(int&nbsp;level)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 </TABLE>
 &nbsp;
 <P>
 
-<!-- ============ FIELD DETAIL =========== -->
+<!-- ============ METHOD DETAIL ========== -->
 
-<A NAME="field_detail"><!-- --></A>
+<A NAME="method_detail"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
 <TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
-<B>Field Detail</B></FONT></TH>
+<B>Method Detail</B></FONT></TH>
 </TR>
 </TABLE>
 
-<A NAME="minimumLogLevel"><!-- --></A><H3>
-minimumLogLevel</H3>
+<A NAME="getLoggingLevel()"><!-- --></A><H3>
+getLoggingLevel</H3>
 <PRE>
-protected int <B>minimumLogLevel</B></PRE>
+int <B>getLoggingLevel</B>()</PRE>
 <DL>
-<DL>
+<DD><DL>
 </DL>
+</DD>
 </DL>
 <HR>
 
-<A NAME="packageName"><!-- --></A><H3>
-packageName</H3>
+<A NAME="setLoggingLevel(int)"><!-- --></A><H3>
+setLoggingLevel</H3>
 <PRE>
-protected java.lang.String <B>packageName</B></PRE>
+void <B>setLoggingLevel</B>(int&nbsp;level)</PRE>
 <DL>
-<DL>
+<DD><DL>
 </DL>
-</DL>
-<HR>
-
-<A NAME="scope"><!-- --></A><H3>
-scope</H3>
-<PRE>
-protected java.lang.String <B>scope</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-
-<A NAME="constructor_detail"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
-<B>Constructor Detail</B></FONT></TH>
-</TR>
-</TABLE>
-
-<A NAME="Ln.Config()"><!-- --></A><H3>
-Ln.Config</H3>
-<PRE>
-protected <B>Ln.Config</B>()</PRE>
-<DL>
-</DL>
-<HR>
-
-<A NAME="Ln.Config(android.content.Context)"><!-- --></A><H3>
-Ln.Config</H3>
-<PRE>
-<FONT SIZE="-1">@Inject
-</FONT>public <B>Ln.Config</B>(android.content.Context&nbsp;context)</PRE>
-<DL>
+</DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
 <HR>
@@ -282,7 +195,7 @@ Ln.Config</H3>
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../roboguice/util/Ln.html" title="class in roboguice.util"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util"><B>PREV CLASS</B></A>&nbsp;
 &nbsp;<A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/Ln.Config.html" target="_top"><B>FRAMES</B></A>  &nbsp;
@@ -303,9 +216,9 @@ Ln.Config</H3>
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#methods_inherited_from_class_java.lang.Object">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;METHOD</FONT></TD>
+DETAIL:&nbsp;FIELD&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>
 </TABLE>
 <A NAME="skip-navbar_bottom"></A>

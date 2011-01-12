@@ -55,7 +55,7 @@ function windowTitle()
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;PREV CLASS&nbsp;
-&nbsp;<A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/Ln.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Ln.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -157,8 +157,16 @@ A more natural android logging facility.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;class</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A></B></CODE>
+<CODE>static&nbsp;class</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;interface</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -182,12 +190,12 @@ A more natural android logging facility.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;<A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A></CODE></FONT></TD>
+<CODE>protected static&nbsp;<A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#config">config</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config is initially set to Config() with sensible defaults, then replaced
- by Config(Context) during guice static injection pass.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config is initially set to BaseConfig() with sensible defaults, then replaced
+ by BaseConfig(Context) during guice static injection pass.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -258,6 +266,14 @@ A more natural android logging facility.
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#e(java.lang.Throwable, java.lang.Object, java.lang.Object...)">e</A></B>(java.lang.Throwable&nbsp;throwable,
   java.lang.Object&nbsp;s1,
   java.lang.Object...&nbsp;args)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;<A HREF="../../roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#getConfig()">getConfig</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -394,10 +410,10 @@ A more natural android logging facility.
 config</H3>
 <PRE>
 <FONT SIZE="-1">@Inject
-</FONT>protected static <A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util">Ln.Config</A> <B>config</B></PRE>
+</FONT>protected static <A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A> <B>config</B></PRE>
 <DL>
-<DD>config is initially set to Config() with sensible defaults, then replaced
- by Config(Context) during guice static injection pass.
+<DD>config is initially set to BaseConfig() with sensible defaults, then replaced
+ by BaseConfig(Context) during guice static injection pass.
 <P>
 <DL>
 </DL>
@@ -629,6 +645,17 @@ public static boolean <B>isVerboseEnabled</B>()</PRE>
 </DL>
 <HR>
 
+<A NAME="getConfig()"><!-- --></A><H3>
+getConfig</H3>
+<PRE>
+public static <A HREF="../../roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A> <B>getConfig</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
 <A NAME="logLevelToString(int)"><!-- --></A><H3>
 logLevelToString</H3>
 <PRE>
@@ -670,7 +697,7 @@ public static java.lang.String <B>logLevelToString</B>(int&nbsp;loglevel)</PRE>
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;PREV CLASS&nbsp;
-&nbsp;<A HREF="../../roboguice/util/Ln.Config.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/Ln.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Ln.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;

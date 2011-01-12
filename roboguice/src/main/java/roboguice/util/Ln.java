@@ -57,10 +57,10 @@ import java.text.SimpleDateFormat;
 @SuppressWarnings({"ImplicitArrayToString"})
 public class Ln  {
     /**
-     * config is initially set to Config() with sensible defaults, then replaced
-     * by Config(Context) during guice static injection pass.
+     * config is initially set to BaseConfig() with sensible defaults, then replaced
+     * by BaseConfig(Context) during guice static injection pass.
      */
-    @Inject protected static Config config = new Config();
+    @Inject protected static BaseConfig config = new BaseConfig();
 
     /**
      * print is initially set to Print(), then replaced by guice during
@@ -191,19 +191,28 @@ public class Ln  {
     public static boolean isVerboseEnabled() {
         return config.minimumLogLevel <= Log.VERBOSE;
     }
-    
 
-    protected static class Config {
+    public static Config getConfig() {
+        return config;
+    }
+
+
+    public static interface Config {
+        public int getLoggingLevel();
+        public void setLoggingLevel(int level);
+    }
+
+    protected static class BaseConfig implements Config {
         protected int minimumLogLevel = Log.VERBOSE;
         protected String packageName = "";
         protected String scope = "";
 
-        protected Config() {
+        protected BaseConfig() {
         }
 
         @Inject
-        public Config(Context context) {
-            synchronized(Config.class) {
+        public BaseConfig(Context context) {
+            synchronized(BaseConfig.class) {
                 try {
                     packageName = context.getPackageName();
                     final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
@@ -218,6 +227,13 @@ public class Ln  {
             }
         }
 
+        public int getLoggingLevel() {
+            return minimumLogLevel;
+        }
+
+        public void setLoggingLevel(int level) {
+            minimumLogLevel = level;
+        }
     }
 
     public static String logLevelToString( int loglevel ) {

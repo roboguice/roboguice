@@ -79,15 +79,21 @@ public class Ln  {
     }
 
     public static int v(Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.VERBOSE )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = args.length>0 ? String.format(s,args) : s;
-        return config.minimumLogLevel <= Log.VERBOSE ? print.println(Log.VERBOSE, message) : 0;
+        return print.println(Log.VERBOSE, message);
     }
 
     public static int v(Throwable throwable, Object s1, Object... args ) {
+        if( config.minimumLogLevel > Log.VERBOSE )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return config.minimumLogLevel <= Log.VERBOSE ? print.println(Log.VERBOSE, message) : 0;
+        return print.println(Log.VERBOSE, message);
     }
 
     public static int d(Throwable t) {
@@ -95,15 +101,21 @@ public class Ln  {
     }
 
     public static int d(Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.DEBUG )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = args.length>0 ? String.format(s,args) : s;
-        return config.minimumLogLevel <= Log.DEBUG ? print.println(Log.DEBUG, message) : 0;
+        return print.println(Log.DEBUG, message);
     }
 
     public static int d(Throwable throwable, Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.DEBUG )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return config.minimumLogLevel <= Log.DEBUG ? print.println(Log.DEBUG, message) : 0;
+        return print.println(Log.DEBUG, message);
     }
 
     public static int i(Throwable t) {
@@ -111,15 +123,21 @@ public class Ln  {
     }
 
     public static int i( Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.INFO )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = args.length>0 ? String.format(s,args) : s;
-        return config.minimumLogLevel <= Log.INFO ? print.println(Log.INFO, message) : 0;
+        return print.println(Log.INFO, message);
     }
 
     public static int i(Throwable throwable, Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.INFO )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = (args.length > 0 ? String.format(s, args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return config.minimumLogLevel <= Log.INFO ? print.println(Log.INFO, message) : 0;
+        return print.println(Log.INFO, message);
     }
 
     public static int w(Throwable t) {
@@ -127,15 +145,21 @@ public class Ln  {
     }
 
     public static int w( Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.WARN )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = args.length>0 ? String.format(s,args) : s;
-        return config.minimumLogLevel <= Log.WARN ? print.println(Log.WARN, message) : 0;
+        return print.println(Log.WARN, message);
     }
 
     public static int w( Throwable throwable, Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.WARN )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return config.minimumLogLevel <= Log.WARN ? print.println(Log.WARN, message) : 0;
+        return print.println(Log.WARN, message);
     }
 
     public static int e(Throwable t) {
@@ -143,15 +167,21 @@ public class Ln  {
     }
 
     public static int e( Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.ERROR )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = args.length>0 ? String.format(s,args) : s;
-        return config.minimumLogLevel <= Log.ERROR ? print.println(Log.ERROR, message) : 0;
+        return print.println(Log.ERROR, message);
     }
 
     public static int e( Throwable throwable, Object s1, Object... args) {
+        if( config.minimumLogLevel > Log.ERROR )
+            return 0;
+
         final String s = Strings.toString(s1);
         final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return config.minimumLogLevel <= Log.ERROR ? print.println(Log.ERROR, message) : 0;
+        return print.println(Log.ERROR, message);
     }
 
     public static boolean isDebugEnabled() {

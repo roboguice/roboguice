@@ -150,16 +150,16 @@ A Module that provides bindings and configuration to use Guice on Android.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/config/RoboModule.html#extrasListener">extrasListener</A></B></CODE>
+<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/config/RoboModule.html#eventManager">eventManager</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/config/RoboModule.html#observationManager">observationManager</A></B></CODE>
+<CODE>protected &nbsp;<A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/config/RoboModule.html#extrasListener">extrasListener</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -214,7 +214,7 @@ A Module that provides bindings and configuration to use Guice on Android.
            <A HREF="../../roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A>&nbsp;viewListener,
            <A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A>&nbsp;extrasListener,
            <A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A>&nbsp;preferenceListener,
-           <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;observationManager,
+           <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;eventManager,
            android.app.Application&nbsp;application)</CODE>
 
 <BR>
@@ -355,10 +355,10 @@ protected android.app.Application <B>application</B></PRE>
 </DL>
 <HR>
 
-<A NAME="observationManager"><!-- --></A><H3>
-observationManager</H3>
+<A NAME="eventManager"><!-- --></A><H3>
+eventManager</H3>
 <PRE>
-protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>observationManager</B></PRE>
+protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>eventManager</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -384,7 +384,7 @@ public <B>RoboModule</B>(<A HREF="../../roboguice/inject/ContextScope.html" titl
                   <A HREF="../../roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A>&nbsp;viewListener,
                   <A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A>&nbsp;extrasListener,
                   <A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A>&nbsp;preferenceListener,
-                  <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;observationManager,
+                  <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;eventManager,
                   android.app.Application&nbsp;application)</PRE>
 <DL>
 </DL>

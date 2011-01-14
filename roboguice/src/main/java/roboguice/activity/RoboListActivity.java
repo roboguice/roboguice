@@ -58,18 +58,21 @@ public class RoboListActivity extends ListActivity implements InjectorProvider {
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         scope.injectViews();
+        eventManager.notify(this,new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
         scope.injectViews();
+        eventManager.notify(this,new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
         scope.injectViews();
+        eventManager.notify(this,new OnContentViewAvailableEvent());
     }
 
     @Override

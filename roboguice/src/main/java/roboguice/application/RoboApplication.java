@@ -65,7 +65,7 @@ public class RoboApplication extends Application implements InjectorProvider {
     protected ExtrasListener extrasListener;
     protected PreferenceListener preferenceListener;
     protected List<StaticTypeListener> staticTypeListeners;
-    protected EventManager observationManager;
+    protected EventManager eventManager;
 
     /**
      * Returns the {@link Injector} of your application. If none exists yet,
@@ -73,7 +73,7 @@ public class RoboApplication extends Application implements InjectorProvider {
      * <br />
      * This method is thread-safe.<br />
      * <br />
-     * If you decide to override {@link #getInjector()}, you will have to handle
+     * If you decide to override getInjector(), you will have to handle
      * synchronization.
      */
     public Injector getInjector() {
@@ -108,7 +108,7 @@ public class RoboApplication extends Application implements InjectorProvider {
         resourceListener = new ResourceListener(this);
         viewListener = new ViewListener(contextProvider, this, contextScope);
         extrasListener = new ExtrasListener(contextProvider);
-        observationManager = allowContextObservers() ? new EventManager() : new NullEventManager();
+        eventManager = allowContextObservers() ? new EventManager() : new NullEventManager();
 
         if (allowPreferenceInjection())
           preferenceListener = new PreferenceListener(contextProvider);
@@ -131,7 +131,7 @@ public class RoboApplication extends Application implements InjectorProvider {
         ArrayList<Module> modules = new ArrayList<Module>();
         Module roboguiceModule = new RoboModule(contextScope, throwingContextProvider,
                 contextProvider, resourceListener, viewListener, extrasListener, preferenceListener,
-                observationManager, this);
+                eventManager, this);
         modules.add(roboguiceModule);
         //context observer manager module
         addApplicationModules(modules);

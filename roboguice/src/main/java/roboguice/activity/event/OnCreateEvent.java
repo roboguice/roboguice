@@ -5,6 +5,8 @@ import android.os.Bundle;
 /**
  * Class representing the event raised by RoboActivity.onCreate()
  *
+ * You may also be interested in roboguice.activity.event.OnContentViewAvailableEvent
+ * 
  * @author Adam Tybor
  * @author John Ericksen
  */

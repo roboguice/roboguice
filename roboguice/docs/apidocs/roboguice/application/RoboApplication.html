@@ -158,6 +158,14 @@ This class is in charge of starting the Guice configuration. When the
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#eventManager">eventManager</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;<A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#extrasListener">extrasListener</A></B></CODE>
 
@@ -171,14 +179,6 @@ This class is in charge of starting the Guice configuration. When the
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The <CODE>Injector</CODE> of your application.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#observationManager">observationManager</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -458,10 +458,10 @@ protected java.util.List&lt;<A HREF="../../roboguice/inject/StaticTypeListener.h
 </DL>
 <HR>
 
-<A NAME="observationManager"><!-- --></A><H3>
-observationManager</H3>
+<A NAME="eventManager"><!-- --></A><H3>
+eventManager</H3>
 <PRE>
-protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>observationManager</B></PRE>
+protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>eventManager</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -504,7 +504,7 @@ public com.google.inject.Injector <B>getInjector</B>()</PRE>
  <br />
  This method is thread-safe.<br />
  <br />
- If you decide to override <A HREF="../../roboguice/application/RoboApplication.html#getInjector()"><CODE>getInjector()</CODE></A>, you will have to handle
+ If you decide to override getInjector(), you will have to handle
  synchronization.
 <P>
 <DD><DL>

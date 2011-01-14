@@ -257,10 +257,13 @@ public class Ln  {
     /** Default implementation logs to android.util.Log */
     public static class Print {
         public int println(int priority, String msg ) {
+            return Log.println(priority,getScope(), processMessage(msg));
+        }
+
+        protected String processMessage(String msg) {
             if( config.minimumLogLevel <= Log.DEBUG )
                 msg = String.format("%s %s %s", new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis()), Thread.currentThread().getName(), msg);
-
-            return Log.println(priority,getScope(),msg);
+            return msg;
         }
 
         protected static String getScope() {
@@ -271,6 +274,6 @@ public class Ln  {
 
             return config.scope;
         }
-        
+
     }
 }

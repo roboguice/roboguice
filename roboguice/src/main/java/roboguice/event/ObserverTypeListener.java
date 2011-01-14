@@ -81,7 +81,7 @@ public class ObserverTypeListener implements TypeListener {
      * 
      * @param <I>
      */
-    protected static class ContextObserverMethodInjector<I> implements InjectionListener<I> {
+    public static class ContextObserverMethodInjector<I> implements InjectionListener<I> {
         protected Provider<Context> contextProvider;
         protected EventManager eventManager;
         protected Method method;

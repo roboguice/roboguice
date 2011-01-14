@@ -181,7 +181,7 @@ public class EventManager {
         }
     }
     
-    protected static class ObserverReference<ResultType> {
+    public static class ObserverReference<ResultType> {
         protected Method method;
         protected WeakReference<Object> instanceReference;
 
@@ -194,7 +194,6 @@ public class EventManager {
         public ResultType invoke(Object event, ResultType defaultValue ) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
             return instance == null ? defaultValue : (ResultType) method.invoke(instance, event);
-
         }
 
     }

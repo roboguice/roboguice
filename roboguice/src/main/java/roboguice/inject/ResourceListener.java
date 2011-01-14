@@ -16,7 +16,9 @@
 package roboguice.inject;
 
 import android.app.Application;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -93,6 +95,12 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
 
             if (String.class.isAssignableFrom(t)) {
                 value = resources.getString(id);
+            } else if (boolean.class.isAssignableFrom(t) || Boolean.class.isAssignableFrom(t)) {
+                value = resources.getBoolean(id);
+            } else if (ColorStateList.class.isAssignableFrom(t)  ) {
+                value = resources.getColorStateList(id);
+            } else if (int.class.isAssignableFrom(t) || Integer.class.isAssignableFrom(t)) {
+                value = resources.getInteger(id);
             } else if (Drawable.class.isAssignableFrom(t)) {
                 value = resources.getDrawable(id);
             } else if (String[].class.isAssignableFrom(t)) {
@@ -101,6 +109,8 @@ class ResourceMembersInjector<T> implements MembersInjector<T> {
                 value = resources.getIntArray(id);
             } else if (Animation.class.isAssignableFrom(t)) {
                 value = AnimationUtils.loadAnimation(application, id);
+            } else if (Movie.class.isAssignableFrom(t)  ) {
+                value = resources.getMovie(id);
             }
 
             if (value == null && field.getAnnotation(Nullable.class) == null) {

@@ -25,7 +25,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
@@ -153,16 +152,6 @@ public class RoboActivity extends Activity implements InjectorProvider {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         eventManager.notify( this, new OnConfigurationChangedEvent(newConfig));
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return eventManager.notifyWithResult( this, new OnKeyDownEvent(keyCode, event), false) || super.onKeyDown(keyCode,event);
-    }
-
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        return eventManager.notifyWithResult( this, new OnKeyUpEvent(keyCode, event), false) || super.onKeyUp(keyCode, event);
     }
 
     @Override

@@ -145,6 +145,8 @@ public class EventManager {
      * @param context
      * @param event
      */
+    /*
+    // Disabled for now until we can figure out best way to proceed
     public <ResultType> ResultType notifyWithResult(Context context, Object event, ResultType defaultValue ) {
         if (!isEnabled()) return defaultValue;
 
@@ -170,6 +172,7 @@ public class EventManager {
 
         return defaultValue;
     }
+    */
 
     public static class NullEventManager extends EventManager {
         @Override

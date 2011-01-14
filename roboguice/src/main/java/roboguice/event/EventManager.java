@@ -56,6 +56,7 @@ public class EventManager {
             methods.put(event, observers);
         }
 
+        /*
         final Returns returns = (Returns) event.getAnnotation(Returns.class);
         if( returns!=null ) {
             if( !returns.value().isAssignableFrom(method.getReturnType()) )
@@ -66,6 +67,7 @@ public class EventManager {
                 throw new RuntimeException( String.format("Only one observer allowed for event types that return a value annotation.  Previously registered observer is %s.%s", observer.method.getDeclaringClass().getName(), observer.method.getName()));
             }
         }
+        */
 
         observers.add(new ObserverReference(instance, method));
     }
@@ -115,8 +117,10 @@ public class EventManager {
     public void notify(Context context, Object event) {
         if (!isEnabled()) return;
 
+        /*
         if( event.getClass().getAnnotation(Returns.class)!=null )
             throw new RuntimeException("You must use notifyWithResult for events that expect return values");
+        */
 
         final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;

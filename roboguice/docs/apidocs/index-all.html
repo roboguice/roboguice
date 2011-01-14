@@ -77,7 +77,7 @@ function windowTitle()
 <A NAME="skip-navbar_top"></A>
 <!-- ========= END OF TOP NAVBAR ========= -->
 
-<A HREF="#_A_">A</A> <A HREF="#_C_">C</A> <A HREF="#_D_">D</A> <A HREF="#_E_">E</A> <A HREF="#_F_">F</A> <A HREF="#_G_">G</A> <A HREF="#_H_">H</A> <A HREF="#_I_">I</A> <A HREF="#_J_">J</A> <A HREF="#_L_">L</A> <A HREF="#_M_">M</A> <A HREF="#_N_">N</A> <A HREF="#_O_">O</A> <A HREF="#_P_">P</A> <A HREF="#_R_">R</A> <A HREF="#_S_">S</A> <A HREF="#_T_">T</A> <A HREF="#_V_">V</A> <A HREF="#_W_">W</A> <HR>
+<A HREF="#_A_">A</A> <A HREF="#_C_">C</A> <A HREF="#_D_">D</A> <A HREF="#_E_">E</A> <A HREF="#_F_">F</A> <A HREF="#_G_">G</A> <A HREF="#_H_">H</A> <A HREF="#_I_">I</A> <A HREF="#_J_">J</A> <A HREF="#_L_">L</A> <A HREF="#_M_">M</A> <A HREF="#_N_">N</A> <A HREF="#_O_">O</A> <A HREF="#_P_">P</A> <A HREF="#_R_">R</A> <A HREF="#_S_">S</A> <A HREF="#_T_">T</A> <A HREF="#_U_">U</A> <A HREF="#_V_">V</A> <A HREF="#_W_">W</A> <HR>
 <A NAME="_A_"><!-- --></A><H2>
 <B>A</B></H2>
 <DL>
@@ -90,6 +90,12 @@ Constructor for class roboguice.inject.<A HREF="./roboguice/inject/ActivityProvi
 <DT><A HREF="./roboguice/application/RoboApplication.html#addApplicationModules(java.util.List)"><B>addApplicationModules(List&lt;Module&gt;)</B></A> - 
 Method in class roboguice.application.<A HREF="./roboguice/application/RoboApplication.html" title="class in roboguice.application">RoboApplication</A>
 <DD>You should override this method to add your own custom bindings.
+<DT><A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#afterInjection(I)"><B>afterInjection(I)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObserverTypeListener.ContextObserverMethodInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/application/RoboApplication.html#allowContextObservers()"><B>allowContextObservers()</B></A> - 
+Method in class roboguice.application.<A HREF="./roboguice/application/RoboApplication.html" title="class in roboguice.application">RoboApplication</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/application/RoboApplication.html#allowPreferenceInjection()"><B>allowPreferenceInjection()</B></A> - 
 Method in class roboguice.application.<A HREF="./roboguice/application/RoboApplication.html" title="class in roboguice.application">RoboApplication</A>
 <DD>Returns whether or not <A HREF="./roboguice/inject/InjectPreference.html" title="annotation in roboguice.inject"><CODE>InjectPreference</CODE></A> will be
@@ -99,6 +105,15 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboSplashActiv
 <DD>It's expected that most splash pages will want to finish after they start
  the next activity, but in case this isn't true you can override this
  method to change the behavior.
+<DT><A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html#annotation"><B>annotation</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html" title="class in roboguice.inject">ExtrasListener.ExtrasMembersInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html#annotation"><B>annotation</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject">PreferenceListener.PreferenceMembersInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html#annotation"><B>annotation</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html" title="class in roboguice.inject">ResourceListener.ResourceMembersInjector</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ContextScope.html#app"><B>app</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>
 <DD>&nbsp;
@@ -107,6 +122,9 @@ Variable in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" 
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ResourceListener.html#application"><B>application</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/ResourceListener.html" title="class in roboguice.inject">ResourceListener</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html#application"><B>application</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html" title="class in roboguice.inject">ResourceListener.ResourceMembersInjector</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/RoboApplicationProvider.html#application"><B>application</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/RoboApplicationProvider.html" title="class in roboguice.inject">RoboApplicationProvider</A>
@@ -134,9 +152,24 @@ Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" tit
 <DT><A HREF="./roboguice/util/Strings.html#capitalize(java.lang.String)"><B>capitalize(String)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.html#checkMethodParameters(java.lang.reflect.Method, java.lang.Class)"><B>checkMethodParameters(Method, Class)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.html" title="class in roboguice.event">ObserverTypeListener</A>
+<DD>Error checking method, verifies:
+
+ 1.
 <DT><A HREF="./roboguice/util/Strings.html#chunk(java.lang.String, int)"><B>chunk(String, int)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.html#clear(android.content.Context)"><B>clear(Context)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>
+<DD>Clears all observers of the given context.
+<DT><A HREF="./roboguice/activity/event/OnConfigurationChangedEvent.html#config"><B>config</B></A> - 
+Variable in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnConfigurationChangedEvent.html" title="class in roboguice.activity.event">OnConfigurationChangedEvent</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.html#config"><B>config</B></A> - 
+Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DD>config is initially set to BaseConfig() with sensible defaults, then replaced
+ by BaseConfig(Context) during guice static injection pass.
 <DT><A HREF="./roboguice/config/RoboModule.html#configure()"><B>configure()</B></A> - 
 Method in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" title="class in roboguice.config">RoboModule</A>
 <DD>Configure this module to define Android related bindings.<br />
@@ -145,9 +178,6 @@ Method in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" ti
  override this method, but rather create a <CODE>Module</CODE> implementation
  and add it to the configuring modules by overriding
  <A HREF="./roboguice/application/RoboApplication.html#addApplicationModules(java.util.List)"><CODE>RoboApplication.addApplicationModules(List)</CODE></A>.<br />
-<DT><A HREF="./roboguice/util/Ln.html#configured"><B>configured</B></A> - 
-Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
-<DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ContentResolverProvider.html" title="class in roboguice.inject"><B>ContentResolverProvider</B></A> - Class in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>&nbsp;<DT><A HREF="./roboguice/inject/ContentResolverProvider.html#ContentResolverProvider()"><B>ContentResolverProvider()</B></A> - 
 Constructor for class roboguice.inject.<A HREF="./roboguice/inject/ContentResolverProvider.html" title="class in roboguice.inject">ContentResolverProvider</A>
 <DD>&nbsp;
@@ -166,11 +196,23 @@ Variable in class roboguice.application.<A HREF="./roboguice/application/RoboApp
 <DT><A HREF="./roboguice/config/RoboModule.html#contextProvider"><B>contextProvider</B></A> - 
 Variable in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" title="class in roboguice.config">RoboModule</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#contextProvider"><B>contextProvider</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObserverTypeListener.ContextObserverMethodInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.html#contextProvider"><B>contextProvider</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.html" title="class in roboguice.event">ObserverTypeListener</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ExtrasListener.html#contextProvider"><B>contextProvider</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html#contextProvider"><B>contextProvider</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html" title="class in roboguice.inject">ExtrasListener.ExtrasMembersInjector</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/inject/PreferenceListener.html#contextProvider"><B>contextProvider</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html#contextProvider"><B>contextProvider</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject">PreferenceListener.PreferenceMembersInjector</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/SharedPreferencesProvider.html#contextProvider"><B>contextProvider</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/SharedPreferencesProvider.html" title="class in roboguice.inject">SharedPreferencesProvider</A>
@@ -180,9 +222,6 @@ Variable in class roboguice.inject.<A HREF="./roboguice/inject/SystemServiceProv
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ViewListener.html#contextProvider"><B>contextProvider</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A>
-<DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#contextProvider"><B>contextProvider</B></A> - 
-Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/RoboAsyncTask.html#contextProvider"><B>contextProvider</B></A> - 
 Static variable in class roboguice.util.<A HREF="./roboguice/util/RoboAsyncTask.html" title="class in roboguice.util">RoboAsyncTask</A>
@@ -203,6 +242,9 @@ Constructor for class roboguice.inject.<A HREF="./roboguice/inject/ContextScope.
  instance.<DT><A HREF="./roboguice/inject/ExtraConverter.html#convert(FROM)"><B>convert(FROM)</B></A> - 
 Method in interface roboguice.inject.<A HREF="./roboguice/inject/ExtraConverter.html" title="interface in roboguice.inject">ExtraConverter</A>
 <DD>Converts an instance of FROM to an instances of TO.
+<DT><A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html#convert(java.lang.reflect.Field, java.lang.Object, com.google.inject.Injector)"><B>convert(Field, Object, Injector)</B></A> - 
+Method in class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html" title="class in roboguice.inject">ExtrasListener.ExtrasMembersInjector</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/util/Strings.html#copy(java.io.Reader, java.io.Writer)"><B>copy(Reader, Writer)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
@@ -225,6 +267,9 @@ Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/Ln.html#d(java.lang.Throwable, java.lang.Object, java.lang.Object...)"><B>d(Throwable, Object, Object...)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnActivityResultEvent.html#data"><B>data</B></A> - 
+Variable in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnActivityResultEvent.html" title="class in roboguice.activity.event">OnActivityResultEvent</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/SharedPreferencesProvider.html#DEFAULT"><B>DEFAULT</B></A> - 
 Static variable in class roboguice.inject.<A HREF="./roboguice/inject/SharedPreferencesProvider.html" title="class in roboguice.inject">SharedPreferencesProvider</A>
@@ -282,7 +327,60 @@ Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" ti
 <DT><A HREF="./roboguice/util/Strings.html#equalsIgnoreCase(java.lang.Object, java.lang.Object)"><B>equalsIgnoreCase(Object, Object)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/SafeAsyncTask.html#execute()"><B>execute()</B></A> - 
+<DT><A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#event"><B>event</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObserverTypeListener.ContextObserverMethodInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivity.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.html" title="class in roboguice.activity">RoboActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivityGroup.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboListActivity.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboMapActivity.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity.html" title="class in roboguice.activity">RoboMapActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboTabActivity.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.html" title="class in roboguice.event"><B>EventManager</B></A> - Class in <A HREF="./roboguice/event/package-summary.html">roboguice.event</A><DD>Manager class handling the following:
+
+   Registration of event observing methods:
+      registerObserver()
+      unregisterObserver()
+      clear()
+   Raising Events:
+      notify()
+      notifyWithResult()<DT><A HREF="./roboguice/event/EventManager.html#EventManager()"><B>EventManager()</B></A> - 
+Constructor for class roboguice.event.<A HREF="./roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObserverTypeListener.ContextObserverMethodInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.html#eventManager"><B>eventManager</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.html" title="class in roboguice.event">ObserverTypeListener</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.NullEventManager.html" title="class in roboguice.event"><B>EventManager.NullEventManager</B></A> - Class in <A HREF="./roboguice/event/package-summary.html">roboguice.event</A><DD>Raises the event's class' event on the given context.<DT><A HREF="./roboguice/event/EventManager.NullEventManager.html#EventManager.NullEventManager()"><B>EventManager.NullEventManager()</B></A> - 
+Constructor for class roboguice.event.<A HREF="./roboguice/event/EventManager.NullEventManager.html" title="class in roboguice.event">EventManager.NullEventManager</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event"><B>EventManager.ObserverReference</B></A>&lt;<A HREF="./roboguice/event/EventManager.ObserverReference.html" title="type parameter in EventManager.ObserverReference">ResultType</A>&gt; - Class in <A HREF="./roboguice/event/package-summary.html">roboguice.event</A><DD>&nbsp;<DT><A HREF="./roboguice/event/EventManager.ObserverReference.html#EventManager.ObserverReference(java.lang.Object, java.lang.reflect.Method)"><B>EventManager.ObserverReference(Object, Method)</B></A> - 
+Constructor for class roboguice.event.<A HREF="./roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event">EventManager.ObserverReference</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventResultHandler.html" title="interface in roboguice.event"><B>EventResultHandler</B></A> - Interface in <A HREF="./roboguice/event/package-summary.html">roboguice.event</A><DD>&nbsp;<DT><A HREF="./roboguice/util/SafeAsyncTask.html#execute()"><B>execute()</B></A> - 
 Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/SafeAsyncTask.html#execute(java.lang.StackTraceElement[])"><B>execute(StackTraceElement[])</B></A> - 
@@ -312,11 +410,23 @@ Variable in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" 
 <DT><A HREF="./roboguice/inject/ExtrasListener.html" title="class in roboguice.inject"><B>ExtrasListener</B></A> - Class in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>&nbsp;<DT><A HREF="./roboguice/inject/ExtrasListener.html#ExtrasListener(com.google.inject.Provider)"><B>ExtrasListener(Provider&lt;Context&gt;)</B></A> - 
 Constructor for class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html" title="class in roboguice.inject"><B>ExtrasListener.ExtrasMembersInjector</B></A>&lt;<A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html" title="type parameter in ExtrasListener.ExtrasMembersInjector">T</A>&gt; - Class in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>&nbsp;<DT><A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html#ExtrasListener.ExtrasMembersInjector(java.lang.reflect.Field, com.google.inject.Provider, roboguice.inject.InjectExtra)"><B>ExtrasListener.ExtrasMembersInjector(Field, Provider&lt;Context&gt;, InjectExtra)</B></A> - 
+Constructor for class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html" title="class in roboguice.inject">ExtrasListener.ExtrasMembersInjector</A>
+<DD>&nbsp;
 </DL>
 <HR>
 <A NAME="_F_"><!-- --></A><H2>
 <B>F</B></H2>
 <DL>
+<DT><A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html#field"><B>field</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html" title="class in roboguice.inject">ExtrasListener.ExtrasMembersInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html#field"><B>field</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject">PreferenceListener.PreferenceMembersInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html#field"><B>field</B></A> - 
+Variable in class roboguice.inject.<A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html" title="class in roboguice.inject">ResourceListener.ResourceMembersInjector</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/util/SafeAsyncTask.html#future"><B>future</B></A> - 
 Variable in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>
 <DD>&nbsp;
@@ -354,6 +464,15 @@ Method in class roboguice.inject.<A HREF="./roboguice/inject/StringResourceFacto
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/SystemServiceProvider.html#get()"><B>get()</B></A> - 
 Method in class roboguice.inject.<A HREF="./roboguice/inject/SystemServiceProvider.html" title="class in roboguice.inject">SystemServiceProvider</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnConfigurationChangedEvent.html#getConfig()"><B>getConfig()</B></A> - 
+Method in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnConfigurationChangedEvent.html" title="class in roboguice.activity.event">OnConfigurationChangedEvent</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.html#getConfig()"><B>getConfig()</B></A> - 
+Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnActivityResultEvent.html#getData()"><B>getData()</B></A> - 
+Method in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnActivityResultEvent.html" title="class in roboguice.activity.event">OnActivityResultEvent</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#getInjector()"><B>getInjector()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
@@ -397,8 +516,23 @@ Method in class roboguice.service.<A HREF="./roboguice/service/RoboService.html"
 <DT><A HREF="./roboguice/test/RoboUnitTestCase.html#getInjector()"><B>getInjector()</B></A> - 
 Method in class roboguice.test.<A HREF="./roboguice/test/RoboUnitTestCase.html" title="class in roboguice.test">RoboUnitTestCase</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#getScope()"><B>getScope()</B></A> - 
-Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#getLoggingLevel()"><B>getLoggingLevel()</B></A> - 
+Method in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.Config.html#getLoggingLevel()"><B>getLoggingLevel()</B></A> - 
+Method in interface roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnActivityResultEvent.html#getRequestCode()"><B>getRequestCode()</B></A> - 
+Method in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnActivityResultEvent.html" title="class in roboguice.activity.event">OnActivityResultEvent</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnActivityResultEvent.html#getResultCode()"><B>getResultCode()</B></A> - 
+Method in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnActivityResultEvent.html" title="class in roboguice.activity.event">OnActivityResultEvent</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnCreateEvent.html#getSavedInstanceState()"><B>getSavedInstanceState()</B></A> - 
+Method in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnCreateEvent.html" title="class in roboguice.activity.event">OnCreateEvent</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.Print.html#getScope()"><B>getScope()</B></A> - 
+Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ContextScope.html#getScopedObjectMap(com.google.inject.Key)"><B>getScopedObjectMap(Key&lt;T&gt;)</B></A> - 
 Method in class roboguice.inject.<A HREF="./roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>
@@ -426,6 +560,15 @@ Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" tit
 <DT><A HREF="./roboguice/util/SafeAsyncTask.Task.html#handler"><B>handler</B></A> - 
 Variable in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventResultHandler.html#handleReturn(java.lang.Object)"><B>handleReturn(Object)</B></A> - 
+Method in interface roboguice.event.<A HREF="./roboguice/event/EventResultHandler.html" title="interface in roboguice.event">EventResultHandler</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/NoOpResultHandler.html#handleReturn(java.lang.Object)"><B>handleReturn(Object)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/NoOpResultHandler.html" title="class in roboguice.event">NoOpResultHandler</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.html#hear(com.google.inject.TypeLiteral, com.google.inject.spi.TypeEncounter)"><B>hear(TypeLiteral&lt;I&gt;, TypeEncounter&lt;I&gt;)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.html" title="class in roboguice.event">ObserverTypeListener</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ExtrasListener.html#hear(com.google.inject.TypeLiteral, com.google.inject.spi.TypeEncounter)"><B>hear(TypeLiteral&lt;I&gt;, TypeEncounter&lt;I&gt;)</B></A> - 
 Method in class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A>
 <DD>&nbsp;
@@ -452,9 +595,6 @@ Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="
 <DT><A HREF="./roboguice/util/Ln.html#i(java.lang.Throwable, java.lang.Object, java.lang.Object...)"><B>i(Throwable, Object, Object...)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#init()"><B>init()</B></A> - 
-Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
-<DD>&nbsp;
 <DT><A HREF="./roboguice/application/RoboApplication.html#initInstanceMembers()"><B>initInstanceMembers()</B></A> - 
 Method in class roboguice.application.<A HREF="./roboguice/application/RoboApplication.html" title="class in roboguice.application">RoboApplication</A>
 <DD>Since we don't create the injector when the <A HREF="./roboguice/application/RoboApplication.html" title="class in roboguice.application"><CODE>RoboApplication</CODE></A> is
@@ -463,7 +603,16 @@ Method in class roboguice.application.<A HREF="./roboguice/application/RoboAppli
  application instance members, which are not used until the injector is
  first created.
 <DT><A HREF="./roboguice/inject/InjectExtra.html" title="annotation in roboguice.inject"><B>InjectExtra</B></A> - Annotation Type in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>Indicates that a variable member of a class (whether static or not) should be
- injected with an Android extra.<DT><A HREF="./roboguice/test/RoboUnitTestCase.html#injector"><B>injector</B></A> - 
+ injected with an Android extra.<DT><A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html#injectMembers(T)"><B>injectMembers(T)</B></A> - 
+Method in class roboguice.inject.<A HREF="./roboguice/inject/ExtrasListener.ExtrasMembersInjector.html" title="class in roboguice.inject">ExtrasListener.ExtrasMembersInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html#injectMembers(T)"><B>injectMembers(T)</B></A> - 
+Method in class roboguice.inject.<A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject">PreferenceListener.PreferenceMembersInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html#injectMembers(T)"><B>injectMembers(T)</B></A> - 
+Method in class roboguice.inject.<A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html" title="class in roboguice.inject">ResourceListener.ResourceMembersInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/test/RoboUnitTestCase.html#injector"><B>injector</B></A> - 
 Variable in class roboguice.test.<A HREF="./roboguice/test/RoboUnitTestCase.html" title="class in roboguice.test">RoboUnitTestCase</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/InjectorProvider.html" title="interface in roboguice.inject"><B>InjectorProvider</B></A> - Interface in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>&nbsp;<DT><A HREF="./roboguice/inject/InjectPreference.html" title="annotation in roboguice.inject"><B>InjectPreference</B></A> - Annotation Type in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>Indicates that a variable member of a class (whether static or not) should be
@@ -473,8 +622,11 @@ Variable in class roboguice.test.<A HREF="./roboguice/test/RoboUnitTestCase.html
  injected with an Android view.<DT><A HREF="./roboguice/inject/ContextScope.html#injectViews()"><B>injectViews()</B></A> - 
 Method in class roboguice.inject.<A HREF="./roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#isDebugEnabled"><B>isDebugEnabled</B></A> - 
-Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DT><A HREF="./roboguice/event/EventManager.ObserverReference.html#instanceReference"><B>instanceReference</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event">EventManager.ObserverReference</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.ObserverReference.html#invoke(java.lang.Object, ResultType)"><B>invoke(Object, ResultType)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event">EventManager.ObserverReference</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/Ln.html#isDebugEnabled()"><B>isDebugEnabled()</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
@@ -482,8 +634,11 @@ Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="
 <DT><A HREF="./roboguice/util/Strings.html#isEmpty(java.lang.Object)"><B>isEmpty(Object)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#isVerboseEnabled"><B>isVerboseEnabled</B></A> - 
-Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DT><A HREF="./roboguice/event/EventManager.html#isEnabled()"><B>isEnabled()</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.NullEventManager.html#isEnabled()"><B>isEnabled()</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/EventManager.NullEventManager.html" title="class in roboguice.event">EventManager.NullEventManager</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/Ln.html#isVerboseEnabled()"><B>isVerboseEnabled()</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
@@ -528,7 +683,19 @@ Variable in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" t
 <DT><A HREF="./roboguice/config/AbstractAndroidModule.html#listeners"><B>listeners</B></A> - 
 Variable in class roboguice.config.<A HREF="./roboguice/config/AbstractAndroidModule.html" title="class in roboguice.config">AbstractAndroidModule</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html" title="class in roboguice.util"><B>Ln</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>A more natural android logging facility.</DL>
+<DT><A HREF="./roboguice/util/Ln.html" title="class in roboguice.util"><B>Ln</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>A more natural android logging facility.<DT><A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util"><B>Ln.BaseConfig</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>&nbsp;<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#Ln.BaseConfig()"><B>Ln.BaseConfig()</B></A> - 
+Constructor for class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#Ln.BaseConfig(android.content.Context)"><B>Ln.BaseConfig(Context)</B></A> - 
+Constructor for class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.Config.html" title="interface in roboguice.util"><B>Ln.Config</B></A> - Interface in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>&nbsp;<DT><A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util"><B>Ln.Print</B></A> - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>Default implementation logs to android.util.Log<DT><A HREF="./roboguice/util/Ln.Print.html#Ln.Print()"><B>Ln.Print()</B></A> - 
+Constructor for class roboguice.util.<A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.html#logLevelToString(int)"><B>logLevelToString(int)</B></A> - 
+Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DD>&nbsp;
+</DL>
 <HR>
 <A NAME="_M_"><!-- --></A><H2>
 <B>M</B></H2>
@@ -536,8 +703,17 @@ Variable in class roboguice.config.<A HREF="./roboguice/config/AbstractAndroidMo
 <DT><A HREF="./roboguice/util/Strings.html#md5(java.lang.String)"><B>md5(String)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.ObserverReference.html#method"><B>method</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event">EventManager.ObserverReference</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#method"><B>method</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObserverTypeListener.ContextObserverMethodInjector</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboSplashActivity.html#minDisplayMs"><B>minDisplayMs</B></A> - 
 Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboSplashActivity.html" title="class in roboguice.activity">RoboSplashActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#minimumLogLevel"><B>minimumLogLevel</B></A> - 
+Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
 <DD>&nbsp;
 </DL>
 <HR>
@@ -556,14 +732,123 @@ Method in class roboguice.util.<A HREF="./roboguice/util/RoboAsyncTask.html" tit
 <DT><A HREF="./roboguice/util/SafeAsyncTask.html#newTask()"><B>newTask()</B></A> - 
 Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/event/NoOpResultHandler.html" title="class in roboguice.event"><B>NoOpResultHandler</B></A> - Class in <A HREF="./roboguice/event/package-summary.html">roboguice.event</A><DD>&nbsp;<DT><A HREF="./roboguice/event/NoOpResultHandler.html#NoOpResultHandler()"><B>NoOpResultHandler()</B></A> - 
+Constructor for class roboguice.event.<A HREF="./roboguice/event/NoOpResultHandler.html" title="class in roboguice.event">NoOpResultHandler</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/util/Strings.html#notEmpty(java.lang.Object)"><B>notEmpty(Object)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.html#notify(android.content.Context, java.lang.Object)"><B>notify(Context, Object)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>
+<DD>Raises the event's class' event on the given context.
 </DL>
 <HR>
 <A NAME="_O_"><!-- --></A><H2>
 <B>O</B></H2>
 <DL>
+<DT><A HREF="./roboguice/application/RoboApplication.html#observationManager"><B>observationManager</B></A> - 
+Variable in class roboguice.application.<A HREF="./roboguice/application/RoboApplication.html" title="class in roboguice.application">RoboApplication</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/config/RoboModule.html#observationManager"><B>observationManager</B></A> - 
+Variable in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" title="class in roboguice.config">RoboModule</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.html" title="class in roboguice.event"><B>ObserverTypeListener</B></A> - Class in <A HREF="./roboguice/event/package-summary.html">roboguice.event</A><DD>Guice driven type listener which scans for the @Observes annotations.<DT><A HREF="./roboguice/event/ObserverTypeListener.html#ObserverTypeListener(com.google.inject.Provider, roboguice.event.EventManager)"><B>ObserverTypeListener(Provider&lt;Context&gt;, EventManager)</B></A> - 
+Constructor for class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.html" title="class in roboguice.event">ObserverTypeListener</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event"><B>ObserverTypeListener.ContextObserverMethodInjector</B></A>&lt;<A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="type parameter in ObserverTypeListener.ContextObserverMethodInjector">I</A>&gt; - Class in <A HREF="./roboguice/event/package-summary.html">roboguice.event</A><DD>Injection listener to handle the observation manager registration.<DT><A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#ObserverTypeListener.ContextObserverMethodInjector(com.google.inject.Provider, roboguice.event.EventManager, java.lang.reflect.Method, java.lang.Class)"><B>ObserverTypeListener.ContextObserverMethodInjector(Provider&lt;Context&gt;, EventManager, Method, Class&lt;?&gt;)</B></A> - 
+Constructor for class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObserverTypeListener.ContextObserverMethodInjector</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/Observes.html" title="annotation in roboguice.event"><B>Observes</B></A> - Annotation Type in <A HREF="./roboguice/event/package-summary.html">roboguice.event</A><DD>Parameter annotation to bind a given method and parameter to an event raised through the
+ EventManager.notify() method.<DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivity.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.html" title="class in roboguice.activity">RoboActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboListActivity.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboMapActivity.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity.html" title="class in roboguice.activity">RoboMapActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboTabActivity.html#onActivityResult(int, int, android.content.Intent)"><B>onActivityResult(int, int, Intent)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnActivityResultEvent.html" title="class in roboguice.activity.event"><B>OnActivityResultEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onActivityResult()<DT><A HREF="./roboguice/activity/event/OnActivityResultEvent.html#OnActivityResultEvent(int, int, android.content.Intent)"><B>OnActivityResultEvent(int, int, Intent)</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnActivityResultEvent.html" title="class in roboguice.activity.event">OnActivityResultEvent</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivity.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.html" title="class in roboguice.activity">RoboActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboListActivity.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboMapActivity.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity.html" title="class in roboguice.activity">RoboMapActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboTabActivity.html#onConfigurationChanged(android.content.res.Configuration)"><B>onConfigurationChanged(Configuration)</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnConfigurationChangedEvent.html" title="class in roboguice.activity.event"><B>OnConfigurationChangedEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onConfigurationChanged()<DT><A HREF="./roboguice/activity/event/OnConfigurationChangedEvent.html#OnConfigurationChangedEvent(android.content.res.Configuration)"><B>OnConfigurationChangedEvent(Configuration)</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnConfigurationChangedEvent.html" title="class in roboguice.activity.event">OnConfigurationChangedEvent</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivity.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.html" title="class in roboguice.activity">RoboActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboListActivity.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboMapActivity.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity.html" title="class in roboguice.activity">RoboMapActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboTabActivity.html#onContentChanged()"><B>onContentChanged()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnContentChangedEvent.html" title="class in roboguice.activity.event"><B>OnContentChangedEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onContentChanged()<DT><A HREF="./roboguice/activity/event/OnContentChangedEvent.html#OnContentChangedEvent()"><B>OnContentChangedEvent()</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnContentChangedEvent.html" title="class in roboguice.activity.event">OnContentChangedEvent</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onCreate(android.os.Bundle)"><B>onCreate(Bundle)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
 <DD>&nbsp;
@@ -572,13 +857,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.ht
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onCreate(android.os.Bundle)"><B>onCreate(Bundle)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onCreate(android.os.Bundle)"><B>onCreate(Bundle)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onCreate(android.os.Bundle)"><B>onCreate(Bundle)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboListActivity.html#onCreate(android.os.Bundle)"><B>onCreate(Bundle)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
 <DD>&nbsp;
@@ -593,7 +878,7 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboSplashActiv
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#onCreate(android.os.Bundle)"><B>onCreate(Bundle)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/application/RoboInjectableApplication.html#onCreate()"><B>onCreate()</B></A> - 
 Method in class roboguice.application.<A HREF="./roboguice/application/RoboInjectableApplication.html" title="class in roboguice.application">RoboInjectableApplication</A>
 <DD>&nbsp;
@@ -603,14 +888,47 @@ Method in class roboguice.service.<A HREF="./roboguice/service/RoboIntentService
 <DT><A HREF="./roboguice/service/RoboService.html#onCreate()"><B>onCreate()</B></A> - 
 Method in class roboguice.service.<A HREF="./roboguice/service/RoboService.html" title="class in roboguice.service">RoboService</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnCreateEvent.html" title="class in roboguice.activity.event"><B>OnCreateEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onCreate()<DT><A HREF="./roboguice/activity/event/OnCreateEvent.html#OnCreateEvent(android.os.Bundle)"><B>OnCreateEvent(Bundle)</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnCreateEvent.html" title="class in roboguice.activity.event">OnCreateEvent</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onCreatePreferences()"><B>onCreatePreferences()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
 <DD>Override this method to specify how your preferences will be loaded.
+<DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivity.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.html" title="class in roboguice.activity">RoboActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboListActivity.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboMapActivity.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity.html" title="class in roboguice.activity">RoboMapActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboTabActivity.html#onDestroy()"><B>onDestroy()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/service/RoboIntentService.html#onDestroy()"><B>onDestroy()</B></A> - 
 Method in class roboguice.service.<A HREF="./roboguice/service/RoboIntentService.html" title="class in roboguice.service">RoboIntentService</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/service/RoboService.html#onDestroy()"><B>onDestroy()</B></A> - 
 Method in class roboguice.service.<A HREF="./roboguice/service/RoboService.html" title="class in roboguice.service">RoboService</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnDestroyEvent.html" title="class in roboguice.activity.event"><B>OnDestroyEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onDestroy()<DT><A HREF="./roboguice/activity/event/OnDestroyEvent.html#OnDestroyEvent()"><B>OnDestroyEvent()</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnDestroyEvent.html" title="class in roboguice.activity.event">OnDestroyEvent</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/SafeAsyncTask.html#onException(java.lang.Exception)"><B>onException(Exception)</B></A> - 
 Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>
@@ -650,6 +968,9 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceA
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#onNewIntent(android.content.Intent)"><B>onNewIntent(Intent)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnNewIntentEvent.html" title="class in roboguice.activity.event"><B>OnNewIntentEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onNewIntent()<DT><A HREF="./roboguice/activity/event/OnNewIntentEvent.html#OnNewIntentEvent()"><B>OnNewIntentEvent()</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnNewIntentEvent.html" title="class in roboguice.activity.event">OnNewIntentEvent</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onPause()"><B>onPause()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
 <DD>&nbsp;
@@ -658,7 +979,7 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.ht
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onPause()"><B>onPause()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onPause()"><B>onPause()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
 <DD>&nbsp;
@@ -677,6 +998,9 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceA
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#onPause()"><B>onPause()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnPauseEvent.html" title="class in roboguice.activity.event"><B>OnPauseEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onPause()<DT><A HREF="./roboguice/activity/event/OnPauseEvent.html#OnPauseEvent()"><B>OnPauseEvent()</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnPauseEvent.html" title="class in roboguice.activity.event">OnPauseEvent</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/util/SafeAsyncTask.html#onPreExecute()"><B>onPreExecute()</B></A> - 
 Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>
 <DD>&nbsp;
@@ -691,13 +1015,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.ht
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onRestart()"><B>onRestart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onRestart()"><B>onRestart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onRestart()"><B>onRestart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboListActivity.html#onRestart()"><B>onRestart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
 <DD>&nbsp;
@@ -706,10 +1030,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onRestart()"><B>onRestart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#onRestart()"><B>onRestart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
-<DD>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnRestartEvent.html" title="class in roboguice.activity.event"><B>OnRestartEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onRestart()<DT><A HREF="./roboguice/activity/event/OnRestartEvent.html#OnRestartEvent()"><B>OnRestartEvent()</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnRestartEvent.html" title="class in roboguice.activity.event">OnRestartEvent</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onResume()"><B>onResume()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
 <DD>&nbsp;
@@ -718,13 +1045,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.ht
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onResume()"><B>onResume()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onResume()"><B>onResume()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onResume()"><B>onResume()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboListActivity.html#onResume()"><B>onResume()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
 <DD>&nbsp;
@@ -733,10 +1060,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onResume()"><B>onResume()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#onResume()"><B>onResume()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
-<DD>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnResumeEvent.html" title="class in roboguice.activity.event"><B>OnResumeEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onResume()<DT><A HREF="./roboguice/activity/event/OnResumeEvent.html#OnResumeEvent()"><B>OnResumeEvent()</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnResumeEvent.html" title="class in roboguice.activity.event">OnResumeEvent</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onRetainNonConfigurationInstance()"><B>onRetainNonConfigurationInstance()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
 <DD>&nbsp;
@@ -745,13 +1075,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.ht
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onRetainNonConfigurationInstance()"><B>onRetainNonConfigurationInstance()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onRetainNonConfigurationInstance()"><B>onRetainNonConfigurationInstance()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onRetainNonConfigurationInstance()"><B>onRetainNonConfigurationInstance()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboListActivity.html#onRetainNonConfigurationInstance()"><B>onRetainNonConfigurationInstance()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
 <DD>&nbsp;
@@ -760,10 +1090,10 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onRetainNonConfigurationInstance()"><B>onRetainNonConfigurationInstance()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#onRetainNonConfigurationInstance()"><B>onRetainNonConfigurationInstance()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onStart()"><B>onStart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
 <DD>&nbsp;
@@ -772,13 +1102,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.ht
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onStart()"><B>onStart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onStart()"><B>onStart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onStart()"><B>onStart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboListActivity.html#onStart()"><B>onStart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
 <DD>&nbsp;
@@ -787,15 +1117,48 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onStart()"><B>onStart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#onStart()"><B>onStart()</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/service/RoboIntentService.html#onStart(android.content.Intent, int)"><B>onStart(Intent, int)</B></A> - 
 Method in class roboguice.service.<A HREF="./roboguice/service/RoboIntentService.html" title="class in roboguice.service">RoboIntentService</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/service/RoboService.html#onStart(android.content.Intent, int)"><B>onStart(Intent, int)</B></A> - 
 Method in class roboguice.service.<A HREF="./roboguice/service/RoboService.html" title="class in roboguice.service">RoboService</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnStartEvent.html" title="class in roboguice.activity.event"><B>OnStartEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onStart()<DT><A HREF="./roboguice/activity/event/OnStartEvent.html#OnStartEvent()"><B>OnStartEvent()</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnStartEvent.html" title="class in roboguice.activity.event">OnStartEvent</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivity.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.html" title="class in roboguice.activity">RoboActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboActivityGroup.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboListActivity.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboMapActivity.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity.html" title="class in roboguice.activity">RoboMapActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/RoboTabActivity.html#onStop()"><B>onStop()</B></A> - 
+Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnStopEvent.html" title="class in roboguice.activity.event"><B>OnStopEvent</B></A> - Class in <A HREF="./roboguice/activity/event/package-summary.html">roboguice.activity.event</A><DD>Class representing the event raised by RoboActivity.onStop()<DT><A HREF="./roboguice/activity/event/OnStopEvent.html#OnStopEvent()"><B>OnStopEvent()</B></A> - 
+Constructor for class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnStopEvent.html" title="class in roboguice.activity.event">OnStopEvent</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/SafeAsyncTask.html#onSuccess(ResultT)"><B>onSuccess(ResultT)</B></A> - 
 Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>
@@ -805,8 +1168,8 @@ Method in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.html" tit
 <A NAME="_P_"><!-- --></A><H2>
 <B>P</B></H2>
 <DL>
-<DT><A HREF="./roboguice/util/Ln.html#packageName"><B>packageName</B></A> - 
-Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#packageName"><B>packageName</B></A> - 
+Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/SafeAsyncTask.Task.html#parent"><B>parent</B></A> - 
 Variable in class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>
@@ -824,22 +1187,41 @@ Variable in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" 
 <DT><A HREF="./roboguice/inject/PreferenceListener.html" title="class in roboguice.inject"><B>PreferenceListener</B></A> - Class in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>Listener for preference injection.<DT><A HREF="./roboguice/inject/PreferenceListener.html#PreferenceListener(com.google.inject.Provider)"><B>PreferenceListener(Provider&lt;Context&gt;)</B></A> - 
 Constructor for class roboguice.inject.<A HREF="./roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject"><B>PreferenceListener.PreferenceMembersInjector</B></A>&lt;<A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="type parameter in PreferenceListener.PreferenceMembersInjector">T</A>&gt; - Class in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>&nbsp;<DT><A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html#PreferenceListener.PreferenceMembersInjector(java.lang.reflect.Field, com.google.inject.Provider, roboguice.inject.InjectPreference)"><B>PreferenceListener.PreferenceMembersInjector(Field, Provider&lt;Context&gt;, InjectPreference)</B></A> - 
+Constructor for class roboguice.inject.<A HREF="./roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject">PreferenceListener.PreferenceMembersInjector</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/inject/SharedPreferencesProvider.html#preferencesName"><B>preferencesName</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/SharedPreferencesProvider.html" title="class in roboguice.inject">SharedPreferencesProvider</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#prefsProvider"><B>prefsProvider</B></A> - 
+<DT><A HREF="./roboguice/util/Ln.html#print"><B>print</B></A> - 
 Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DD>print is initially set to Print(), then replaced by guice during
+ static injection pass.
+<DT><A HREF="./roboguice/util/Ln.Print.html#println(int, java.lang.String)"><B>println(int, String)</B></A> - 
+Method in class roboguice.util.<A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#println(int, java.lang.String)"><B>println(int, String)</B></A> - 
-Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DT><A HREF="./roboguice/util/Ln.Print.html#processMessage(java.lang.String)"><B>processMessage(String)</B></A> - 
+Method in class roboguice.util.<A HREF="./roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A>
 <DD>&nbsp;
 </DL>
 <HR>
 <A NAME="_R_"><!-- --></A><H2>
 <B>R</B></H2>
 <DL>
+<DT><A HREF="./roboguice/event/ObserverTypeListener.html#registerContextObserver(com.google.inject.spi.TypeEncounter, java.lang.reflect.Method, java.lang.Class)"><B>registerContextObserver(TypeEncounter&lt;I&gt;, Method, Class)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/ObserverTypeListener.html" title="class in roboguice.event">ObserverTypeListener</A>
+<DD>Error checks the observed method and registers method with typeEncounter
+<DT><A HREF="./roboguice/event/EventManager.html#registerObserver(android.content.Context, java.lang.Object, java.lang.reflect.Method, java.lang.Class)"><B>registerObserver(Context, Object, Method, Class)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>
+<DD>Registers given method with provided context and event.
 <DT><A HREF="./roboguice/inject/ContextScope.html#registerViewForInjection(roboguice.inject.ViewMembersInjector)"><B>registerViewForInjection(ViewMembersInjector&lt;?&gt;)</B></A> - 
 Method in class roboguice.inject.<A HREF="./roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/event/EventManager.html#registrations"><B>registrations</B></A> - 
+Variable in class roboguice.event.<A HREF="./roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnActivityResultEvent.html#requestCode"><B>requestCode</B></A> - 
+Variable in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnActivityResultEvent.html" title="class in roboguice.activity.event">OnActivityResultEvent</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/config/AbstractAndroidModule.html#requestStaticInjection(java.lang.Class...)"><B>requestStaticInjection(Class&lt;?&gt;...)</B></A> - 
 Method in class roboguice.config.<A HREF="./roboguice/config/AbstractAndroidModule.html" title="class in roboguice.config">AbstractAndroidModule</A>
@@ -862,6 +1244,9 @@ Variable in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" 
 <DT><A HREF="./roboguice/inject/ResourceListener.html" title="class in roboguice.inject"><B>ResourceListener</B></A> - Class in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>Resource listener.<DT><A HREF="./roboguice/inject/ResourceListener.html#ResourceListener(android.app.Application)"><B>ResourceListener(Application)</B></A> - 
 Constructor for class roboguice.inject.<A HREF="./roboguice/inject/ResourceListener.html" title="class in roboguice.inject">ResourceListener</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html" title="class in roboguice.inject"><B>ResourceListener.ResourceMembersInjector</B></A>&lt;<A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html" title="type parameter in ResourceListener.ResourceMembersInjector">T</A>&gt; - Class in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>&nbsp;<DT><A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html#ResourceListener.ResourceMembersInjector(java.lang.reflect.Field, android.app.Application, roboguice.inject.InjectResource)"><B>ResourceListener.ResourceMembersInjector(Field, Application, InjectResource)</B></A> - 
+Constructor for class roboguice.inject.<A HREF="./roboguice/inject/ResourceListener.ResourceMembersInjector.html" title="class in roboguice.inject">ResourceListener.ResourceMembersInjector</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ResourcesProvider.html#resources"><B>resources</B></A> - 
 Variable in class roboguice.inject.<A HREF="./roboguice/inject/ResourcesProvider.html" title="class in roboguice.inject">ResourcesProvider</A>
 <DD>&nbsp;
@@ -870,6 +1255,9 @@ Variable in class roboguice.inject.<A HREF="./roboguice/inject/StringResourceFac
 <DD>&nbsp;
 <DT><A HREF="./roboguice/inject/ResourcesProvider.html" title="class in roboguice.inject"><B>ResourcesProvider</B></A> - Class in <A HREF="./roboguice/inject/package-summary.html">roboguice.inject</A><DD>&nbsp;<DT><A HREF="./roboguice/inject/ResourcesProvider.html#ResourcesProvider(android.app.Application)"><B>ResourcesProvider(Application)</B></A> - 
 Constructor for class roboguice.inject.<A HREF="./roboguice/inject/ResourcesProvider.html" title="class in roboguice.inject">ResourcesProvider</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnActivityResultEvent.html#resultCode"><B>resultCode</B></A> - 
+Variable in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnActivityResultEvent.html" title="class in roboguice.activity.event">OnActivityResultEvent</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity"><B>RoboAccountAuthenticatorActivity</B></A> - Class in <A HREF="./roboguice/activity/package-summary.html">roboguice.activity</A><DD>A subclass of <CODE>AccountAuthenticatorActivity</CODE> that provides dependency injection
  with RoboGuice.<DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#RoboAccountAuthenticatorActivity()"><B>RoboAccountAuthenticatorActivity()</B></A> - 
@@ -928,7 +1316,7 @@ Constructor for class roboguice.receiver.<A HREF="./roboguice/receiver/RoboBroad
  using Google Guice.<br /><DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#RoboExpandableListActivity()"><B>RoboExpandableListActivity()</B></A> - 
 Constructor for class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/activity/package-summary.html"><B>roboguice.activity</B></A> - package roboguice.activity<DD>&nbsp;<DT><A HREF="./roboguice/adapter/package-summary.html"><B>roboguice.adapter</B></A> - package roboguice.adapter<DD>&nbsp;<DT><A HREF="./roboguice/application/package-summary.html"><B>roboguice.application</B></A> - package roboguice.application<DD>&nbsp;<DT><A HREF="./roboguice/config/package-summary.html"><B>roboguice.config</B></A> - package roboguice.config<DD>&nbsp;<DT><A HREF="./roboguice/inject/package-summary.html"><B>roboguice.inject</B></A> - package roboguice.inject<DD>&nbsp;<DT><A HREF="./roboguice/receiver/package-summary.html"><B>roboguice.receiver</B></A> - package roboguice.receiver<DD>&nbsp;<DT><A HREF="./roboguice/service/package-summary.html"><B>roboguice.service</B></A> - package roboguice.service<DD>&nbsp;<DT><A HREF="./roboguice/test/package-summary.html"><B>roboguice.test</B></A> - package roboguice.test<DD>&nbsp;<DT><A HREF="./roboguice/util/package-summary.html"><B>roboguice.util</B></A> - package roboguice.util<DD>&nbsp;<DT><A HREF="./roboguice/application/RoboInjectableApplication.html" title="class in roboguice.application"><B>RoboInjectableApplication</B></A> - Class in <A HREF="./roboguice/application/package-summary.html">roboguice.application</A><DD>Like RoboApplication, but allows you to inject resource into the application
+<DT><A HREF="./roboguice/activity/package-summary.html"><B>roboguice.activity</B></A> - package roboguice.activity<DD>&nbsp;<DT><A HREF="./roboguice/activity/event/package-summary.html"><B>roboguice.activity.event</B></A> - package roboguice.activity.event<DD>&nbsp;<DT><A HREF="./roboguice/adapter/package-summary.html"><B>roboguice.adapter</B></A> - package roboguice.adapter<DD>&nbsp;<DT><A HREF="./roboguice/application/package-summary.html"><B>roboguice.application</B></A> - package roboguice.application<DD>&nbsp;<DT><A HREF="./roboguice/config/package-summary.html"><B>roboguice.config</B></A> - package roboguice.config<DD>&nbsp;<DT><A HREF="./roboguice/event/package-summary.html"><B>roboguice.event</B></A> - package roboguice.event<DD>&nbsp;<DT><A HREF="./roboguice/inject/package-summary.html"><B>roboguice.inject</B></A> - package roboguice.inject<DD>&nbsp;<DT><A HREF="./roboguice/receiver/package-summary.html"><B>roboguice.receiver</B></A> - package roboguice.receiver<DD>&nbsp;<DT><A HREF="./roboguice/service/package-summary.html"><B>roboguice.service</B></A> - package roboguice.service<DD>&nbsp;<DT><A HREF="./roboguice/test/package-summary.html"><B>roboguice.test</B></A> - package roboguice.test<DD>&nbsp;<DT><A HREF="./roboguice/util/package-summary.html"><B>roboguice.util</B></A> - package roboguice.util<DD>&nbsp;<DT><A HREF="./roboguice/application/RoboInjectableApplication.html" title="class in roboguice.application"><B>RoboInjectableApplication</B></A> - Class in <A HREF="./roboguice/application/package-summary.html">roboguice.application</A><DD>Like RoboApplication, but allows you to inject resource into the application
  itself.<DT><A HREF="./roboguice/application/RoboInjectableApplication.html#RoboInjectableApplication()"><B>RoboInjectableApplication()</B></A> - 
 Constructor for class roboguice.application.<A HREF="./roboguice/application/RoboInjectableApplication.html" title="class in roboguice.application">RoboInjectableApplication</A>
 <DD>&nbsp;
@@ -961,7 +1349,7 @@ Constructor for class roboguice.util.<A HREF="./roboguice/util/RoboLooperThread.
  dynamic injection of collaborators, using Google Guice.<br /><DT><A HREF="./roboguice/activity/RoboMapActivity.html#RoboMapActivity()"><B>RoboMapActivity()</B></A> - 
 Constructor for class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity.html" title="class in roboguice.activity">RoboMapActivity</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/config/RoboModule.html" title="class in roboguice.config"><B>RoboModule</B></A> - Class in <A HREF="./roboguice/config/package-summary.html">roboguice.config</A><DD>A Module that provides bindings and configuration to use Guice on Android.<DT><A HREF="./roboguice/config/RoboModule.html#RoboModule(roboguice.inject.ContextScope, com.google.inject.Provider, com.google.inject.Provider, roboguice.inject.ResourceListener, roboguice.inject.ViewListener, roboguice.inject.ExtrasListener, roboguice.inject.PreferenceListener, android.app.Application)"><B>RoboModule(ContextScope, Provider&lt;Context&gt;, Provider&lt;Context&gt;, ResourceListener, ViewListener, ExtrasListener, PreferenceListener, Application)</B></A> - 
+<DT><A HREF="./roboguice/config/RoboModule.html" title="class in roboguice.config"><B>RoboModule</B></A> - Class in <A HREF="./roboguice/config/package-summary.html">roboguice.config</A><DD>A Module that provides bindings and configuration to use Guice on Android.<DT><A HREF="./roboguice/config/RoboModule.html#RoboModule(roboguice.inject.ContextScope, com.google.inject.Provider, com.google.inject.Provider, roboguice.inject.ResourceListener, roboguice.inject.ViewListener, roboguice.inject.ExtrasListener, roboguice.inject.PreferenceListener, roboguice.event.EventManager, android.app.Application)"><B>RoboModule(ContextScope, Provider&lt;Context&gt;, Provider&lt;Context&gt;, ResourceListener, ViewListener, ExtrasListener, PreferenceListener, EventManager, Application)</B></A> - 
 Constructor for class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" title="class in roboguice.config">RoboModule</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity"><B>RoboPreferenceActivity</B></A> - Class in <A HREF="./roboguice/activity/package-summary.html">roboguice.activity</A><DD>A <A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity"><CODE>RoboPreferenceActivity</CODE></A> extends from <CODE>PreferenceActivity</CODE> to provide
@@ -1023,6 +1411,9 @@ Constructor for class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.htm
 <DT><A HREF="./roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util"><B>SafeAsyncTask.Task</B></A>&lt;<A HREF="./roboguice/util/SafeAsyncTask.Task.html" title="type parameter in SafeAsyncTask.Task">ResultT</A>&gt; - Class in <A HREF="./roboguice/util/package-summary.html">roboguice.util</A><DD>&nbsp;<DT><A HREF="./roboguice/util/SafeAsyncTask.Task.html#SafeAsyncTask.Task(roboguice.util.SafeAsyncTask)"><B>SafeAsyncTask.Task(SafeAsyncTask)</B></A> - 
 Constructor for class roboguice.util.<A HREF="./roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>
 <DD>&nbsp;
+<DT><A HREF="./roboguice/activity/event/OnCreateEvent.html#savedInstanceState"><B>savedInstanceState</B></A> - 
+Variable in class roboguice.activity.event.<A HREF="./roboguice/activity/event/OnCreateEvent.html" title="class in roboguice.activity.event">OnCreateEvent</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html#scope"><B>scope</B></A> - 
 Variable in class roboguice.activity.<A HREF="./roboguice/activity/RoboAccountAuthenticatorActivity.html" title="class in roboguice.activity">RoboAccountAuthenticatorActivity</A>
 <DD>&nbsp;
@@ -1065,8 +1456,8 @@ Variable in class roboguice.service.<A HREF="./roboguice/service/RoboIntentServi
 <DT><A HREF="./roboguice/service/RoboService.html#scope"><B>scope</B></A> - 
 Variable in class roboguice.service.<A HREF="./roboguice/service/RoboService.html" title="class in roboguice.service">RoboService</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#scope"><B>scope</B></A> - 
-Static variable in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#scope"><B>scope</B></A> - 
+Variable in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
 <DD>&nbsp;
 <DT><A HREF="./roboguice/util/RoboAsyncTask.html#scope"><B>scope</B></A> - 
 Variable in class roboguice.util.<A HREF="./roboguice/util/RoboAsyncTask.html" title="class in roboguice.util">RoboAsyncTask</A>
@@ -1100,13 +1491,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivity.ht
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#setContentView(int)"><B>setContentView(int)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#setContentView(android.view.View, android.view.ViewGroup.LayoutParams)"><B>setContentView(View, ViewGroup.LayoutParams)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboActivityGroup.html#setContentView(android.view.View)"><B>setContentView(View)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboActivityGroup.html" title="class in roboguice.activity">RoboActivityGroup</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboExpandableListActivity.html#setContentView(int)"><B>setContentView(int)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableListActivity.html" title="class in roboguice.activity">RoboExpandableListActivity</A>
 <DD>&nbsp;
@@ -1118,13 +1509,13 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboExpandableL
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#setContentView(int)"><B>setContentView(int)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#setContentView(android.view.View, android.view.ViewGroup.LayoutParams)"><B>setContentView(View, ViewGroup.LayoutParams)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboLauncherActivity.html#setContentView(android.view.View)"><B>setContentView(View)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboLauncherActivity.html" title="class in roboguice.activity">RoboLauncherActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboListActivity.html#setContentView(int)"><B>setContentView(int)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboListActivity.html" title="class in roboguice.activity">RoboListActivity</A>
 <DD>&nbsp;
@@ -1145,22 +1536,28 @@ Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboMapActivity
 <DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#setContentView(int)"><B>setContentView(int)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#setContentView(android.view.View, android.view.ViewGroup.LayoutParams)"><B>setContentView(View, ViewGroup.LayoutParams)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboPreferenceActivity.html#setContentView(android.view.View)"><B>setContentView(View)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity">RoboPreferenceActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#setContentView(int)"><B>setContentView(int)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#setContentView(android.view.View, android.view.ViewGroup.LayoutParams)"><B>setContentView(View, ViewGroup.LayoutParams)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
-<DD>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/activity/RoboTabActivity.html#setContentView(android.view.View)"><B>setContentView(View)</B></A> - 
 Method in class roboguice.activity.<A HREF="./roboguice/activity/RoboTabActivity.html" title="class in roboguice.activity">RoboTabActivity</A>
-<DD>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.BaseConfig.html#setLoggingLevel(int)"><B>setLoggingLevel(int)</B></A> - 
+Method in class roboguice.util.<A HREF="./roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A>
+<DD>&nbsp;
+<DT><A HREF="./roboguice/util/Ln.Config.html#setLoggingLevel(int)"><B>setLoggingLevel(int)</B></A> - 
+Method in interface roboguice.util.<A HREF="./roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A>
+<DD>&nbsp;
 <DT><A HREF="./roboguice/config/AbstractAndroidModule.html#setStaticTypeListeners(java.util.List)"><B>setStaticTypeListeners(List&lt;StaticTypeListener&gt;)</B></A> - 
 Method in class roboguice.config.<A HREF="./roboguice/config/AbstractAndroidModule.html" title="class in roboguice.config">AbstractAndroidModule</A>
 <DD>&nbsp;
@@ -1211,9 +1608,6 @@ Variable in class roboguice.config.<A HREF="./roboguice/config/RoboModule.html" 
 <DT><A HREF="./roboguice/adapter/IterableAdapter.html#toList(java.lang.Iterable)"><B>toList(Iterable&lt;T&gt;)</B></A> - 
 Static method in class roboguice.adapter.<A HREF="./roboguice/adapter/IterableAdapter.html" title="class in roboguice.adapter">IterableAdapter</A>
 <DD>&nbsp;
-<DT><A HREF="./roboguice/util/Ln.html#toSafeLabelString(java.lang.String)"><B>toSafeLabelString(String)</B></A> - 
-Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="class in roboguice.util">Ln</A>
-<DD>&nbsp;
 <DT><A HREF="./roboguice/util/Strings.html#toString(java.io.InputStream)"><B>toString(InputStream)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
@@ -1226,6 +1620,14 @@ Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" ti
 <DT><A HREF="./roboguice/util/Strings.html#toString(java.lang.Object, java.lang.String)"><B>toString(Object, String)</B></A> - 
 Static method in class roboguice.util.<A HREF="./roboguice/util/Strings.html" title="class in roboguice.util">Strings</A>
 <DD>&nbsp;
+</DL>
+<HR>
+<A NAME="_U_"><!-- --></A><H2>
+<B>U</B></H2>
+<DL>
+<DT><A HREF="./roboguice/event/EventManager.html#unregisterObserver(android.content.Context, java.lang.Object, java.lang.Class)"><B>unregisterObserver(Context, Object, Class)</B></A> - 
+Method in class roboguice.event.<A HREF="./roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>
+<DD>Unregisters all methods observing the given event from the provided context.
 </DL>
 <HR>
 <A NAME="_V_"><!-- --></A><H2>
@@ -1274,7 +1676,7 @@ Static method in class roboguice.util.<A HREF="./roboguice/util/Ln.html" title="
 <DD>&nbsp;
 </DL>
 <HR>
-<A HREF="#_A_">A</A> <A HREF="#_C_">C</A> <A HREF="#_D_">D</A> <A HREF="#_E_">E</A> <A HREF="#_F_">F</A> <A HREF="#_G_">G</A> <A HREF="#_H_">H</A> <A HREF="#_I_">I</A> <A HREF="#_J_">J</A> <A HREF="#_L_">L</A> <A HREF="#_M_">M</A> <A HREF="#_N_">N</A> <A HREF="#_O_">O</A> <A HREF="#_P_">P</A> <A HREF="#_R_">R</A> <A HREF="#_S_">S</A> <A HREF="#_T_">T</A> <A HREF="#_V_">V</A> <A HREF="#_W_">W</A> 
+<A HREF="#_A_">A</A> <A HREF="#_C_">C</A> <A HREF="#_D_">D</A> <A HREF="#_E_">E</A> <A HREF="#_F_">F</A> <A HREF="#_G_">G</A> <A HREF="#_H_">H</A> <A HREF="#_I_">I</A> <A HREF="#_J_">J</A> <A HREF="#_L_">L</A> <A HREF="#_M_">M</A> <A HREF="#_N_">N</A> <A HREF="#_O_">O</A> <A HREF="#_P_">P</A> <A HREF="#_R_">R</A> <A HREF="#_S_">S</A> <A HREF="#_T_">T</A> <A HREF="#_U_">U</A> <A HREF="#_V_">V</A> <A HREF="#_W_">W</A> 
 
 <!-- ======= START OF BOTTOM NAVBAR ====== -->
 <A NAME="navbar_bottom"><!-- --></A>

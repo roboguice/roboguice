@@ -158,6 +158,14 @@ A Module that provides bindings and configuration to use Guice on Android.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/config/RoboModule.html#observationManager">observationManager</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;<A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/config/RoboModule.html#preferenceListener">preferenceListener</A></B></CODE>
 
@@ -199,13 +207,14 @@ A Module that provides bindings and configuration to use Guice on Android.
 <B>Constructor Summary</B></FONT></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../roboguice/config/RoboModule.html#RoboModule(roboguice.inject.ContextScope, com.google.inject.Provider, com.google.inject.Provider, roboguice.inject.ResourceListener, roboguice.inject.ViewListener, roboguice.inject.ExtrasListener, roboguice.inject.PreferenceListener, android.app.Application)">RoboModule</A></B>(<A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>&nbsp;contextScope,
+<TD><CODE><B><A HREF="../../roboguice/config/RoboModule.html#RoboModule(roboguice.inject.ContextScope, com.google.inject.Provider, com.google.inject.Provider, roboguice.inject.ResourceListener, roboguice.inject.ViewListener, roboguice.inject.ExtrasListener, roboguice.inject.PreferenceListener, roboguice.event.EventManager, android.app.Application)">RoboModule</A></B>(<A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>&nbsp;contextScope,
            com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;throwingContextProvider,
            com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider,
            <A HREF="../../roboguice/inject/ResourceListener.html" title="class in roboguice.inject">ResourceListener</A>&nbsp;resourceListener,
            <A HREF="../../roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A>&nbsp;viewListener,
            <A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A>&nbsp;extrasListener,
            <A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A>&nbsp;preferenceListener,
+           <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;observationManager,
            android.app.Application&nbsp;application)</CODE>
 
 <BR>
@@ -241,7 +250,7 @@ A Module that provides bindings and configuration to use Guice on Android.
 <TH ALIGN="left"><B>Methods inherited from class com.google.inject.AbstractModule</B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE>addError, addError, addError, bind, bind, bind, bindConstant, binder, bindInterceptor, bindListener, bindScope, configure, convertToTypes, currentStage, getMembersInjector, getMembersInjector, getProvider, getProvider, install, requestInjection, requestStaticInjection, requireBinding, requireBinding</CODE></TD>
+<TD><CODE>addError, addError, addError, bind, bind, bind, bindConstant, binder, bindListener, bindScope, configure, convertToTypes, currentStage, getMembersInjector, getMembersInjector, getProvider, getProvider, install, requestInjection, requestStaticInjection, requireBinding, requireBinding</CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -269,7 +278,7 @@ A Module that provides bindings and configuration to use Guice on Android.
 <A NAME="contextScope"><!-- --></A><H3>
 contextScope</H3>
 <PRE>
-protected final <A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A> <B>contextScope</B></PRE>
+protected <A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A> <B>contextScope</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -279,7 +288,7 @@ protected final <A HREF="../../roboguice/inject/ContextScope.html" title="class 
 <A NAME="throwingContextProvider"><!-- --></A><H3>
 throwingContextProvider</H3>
 <PRE>
-protected final com.google.inject.Provider&lt;android.content.Context&gt; <B>throwingContextProvider</B></PRE>
+protected com.google.inject.Provider&lt;android.content.Context&gt; <B>throwingContextProvider</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -289,7 +298,7 @@ protected final com.google.inject.Provider&lt;android.content.Context&gt; <B>thr
 <A NAME="contextProvider"><!-- --></A><H3>
 contextProvider</H3>
 <PRE>
-protected final com.google.inject.Provider&lt;android.content.Context&gt; <B>contextProvider</B></PRE>
+protected com.google.inject.Provider&lt;android.content.Context&gt; <B>contextProvider</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -299,7 +308,7 @@ protected final com.google.inject.Provider&lt;android.content.Context&gt; <B>con
 <A NAME="resourceListener"><!-- --></A><H3>
 resourceListener</H3>
 <PRE>
-protected final <A HREF="../../roboguice/inject/ResourceListener.html" title="class in roboguice.inject">ResourceListener</A> <B>resourceListener</B></PRE>
+protected <A HREF="../../roboguice/inject/ResourceListener.html" title="class in roboguice.inject">ResourceListener</A> <B>resourceListener</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -309,7 +318,7 @@ protected final <A HREF="../../roboguice/inject/ResourceListener.html" title="cl
 <A NAME="viewListener"><!-- --></A><H3>
 viewListener</H3>
 <PRE>
-protected final <A HREF="../../roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A> <B>viewListener</B></PRE>
+protected <A HREF="../../roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A> <B>viewListener</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -319,7 +328,7 @@ protected final <A HREF="../../roboguice/inject/ViewListener.html" title="class 
 <A NAME="extrasListener"><!-- --></A><H3>
 extrasListener</H3>
 <PRE>
-protected final <A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A> <B>extrasListener</B></PRE>
+protected <A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A> <B>extrasListener</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -329,7 +338,7 @@ protected final <A HREF="../../roboguice/inject/ExtrasListener.html" title="clas
 <A NAME="preferenceListener"><!-- --></A><H3>
 preferenceListener</H3>
 <PRE>
-protected final <A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A> <B>preferenceListener</B></PRE>
+protected <A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A> <B>preferenceListener</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -339,7 +348,17 @@ protected final <A HREF="../../roboguice/inject/PreferenceListener.html" title="
 <A NAME="application"><!-- --></A><H3>
 application</H3>
 <PRE>
-protected final android.app.Application <B>application</B></PRE>
+protected android.app.Application <B>application</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="observationManager"><!-- --></A><H3>
+observationManager</H3>
+<PRE>
+protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>observationManager</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -355,7 +374,7 @@ protected final android.app.Application <B>application</B></PRE>
 </TR>
 </TABLE>
 
-<A NAME="RoboModule(roboguice.inject.ContextScope, com.google.inject.Provider, com.google.inject.Provider, roboguice.inject.ResourceListener, roboguice.inject.ViewListener, roboguice.inject.ExtrasListener, roboguice.inject.PreferenceListener, android.app.Application)"><!-- --></A><H3>
+<A NAME="RoboModule(roboguice.inject.ContextScope, com.google.inject.Provider, com.google.inject.Provider, roboguice.inject.ResourceListener, roboguice.inject.ViewListener, roboguice.inject.ExtrasListener, roboguice.inject.PreferenceListener, roboguice.event.EventManager, android.app.Application)"><!-- --></A><H3>
 RoboModule</H3>
 <PRE>
 public <B>RoboModule</B>(<A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>&nbsp;contextScope,
@@ -365,6 +384,7 @@ public <B>RoboModule</B>(<A HREF="../../roboguice/inject/ContextScope.html" titl
                   <A HREF="../../roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A>&nbsp;viewListener,
                   <A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A>&nbsp;extrasListener,
                   <A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A>&nbsp;preferenceListener,
+                  <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;observationManager,
                   android.app.Application&nbsp;application)</PRE>
 <DL>
 </DL>

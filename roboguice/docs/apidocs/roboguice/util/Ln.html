@@ -55,7 +55,7 @@ function windowTitle()
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;PREV CLASS&nbsp;
-&nbsp;<A HREF="../../roboguice/util/RoboAsyncTask.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/Ln.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Ln.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -75,7 +75,7 @@ function windowTitle()
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
 DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>
@@ -102,9 +102,14 @@ java.lang.Object
 <P>
 A more natural android logging facility.
 
+ WARNING: CHECK OUT COMMON PITFALLS BELOW
+
  Unlike <CODE>Log</CODE>, Log provides sensible defaults.
  Debug and Verbose logging is enabled for applications that
  have "android:debuggable=true" in their AndroidManifest.xml.
+ For apps built using SDK Tools r8 or later, this means any debug
+ build.  Release builds built with r8 or later will have verbose
+ and debug log messages turned off.
 
  The default tag is automatically set to your app's packagename,
  and the current context (eg. activity, service, application, etc)
@@ -122,10 +127,13 @@ A more natural android logging facility.
  Also, the current file and line is automatically appended to the tag
  (this is only done if debug is enabled for performance reasons).
 
- NOTE:
- Make sure you put the exception FIRST in the call.  A common
- mistake is to place it last as is the android.util.Log convention,
- but then it will get treated as varargs parameter.
+ COMMON PITFALLS:
+ * Make sure you put the exception FIRST in the call.  A common
+   mistake is to place it last as is the android.util.Log convention,
+   but then it will get treated as varargs parameter.
+ * vararg parameters are not appended to the log message!  You must
+   insert them into the log message using %s or another similar
+   format parameter
 
  Usage Examples:
 
@@ -139,7 +147,40 @@ A more natural android logging facility.
 <HR>
 
 <P>
-<!-- =========== FIELD SUMMARY =========== -->
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+
+<A NAME="nested_class_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Nested Class Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;class</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;interface</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;class</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default implementation logs to android.util.Log</TD>
+</TR>
+</TABLE>
+&nbsp;<!-- =========== FIELD SUMMARY =========== -->
 
 <A NAME="field_summary"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -149,59 +190,21 @@ A more natural android logging facility.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;boolean</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#configured">configured</A></B></CODE>
+<CODE>protected static&nbsp;<A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#config">config</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;config is initially set to BaseConfig() with sensible defaults, then replaced
+ by BaseConfig(Context) during guice static injection pass.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;com.google.inject.Provider&lt;android.content.Context&gt;</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#contextProvider">contextProvider</A></B></CODE>
+<CODE>protected static&nbsp;<A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#print">print</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;boolean</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#isDebugEnabled">isDebugEnabled</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;boolean</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#isVerboseEnabled">isVerboseEnabled</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#packageName">packageName</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;com.google.inject.Provider&lt;android.content.SharedPreferences&gt;</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#prefsProvider">prefsProvider</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#scope">scope</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print is initially set to Print(), then replaced by guice during
+ static injection pass.</TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -269,8 +272,8 @@ A more natural android logging facility.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#getScope()">getScope</A></B>()</CODE>
+<CODE>static&nbsp;<A HREF="../../roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#getConfig()">getConfig</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -304,14 +307,6 @@ A more natural android logging facility.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#init()">init</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;boolean</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/Ln.html#isDebugEnabled()">isDebugEnabled</A></B>()</CODE>
 
@@ -328,17 +323,8 @@ A more natural android logging facility.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>static&nbsp;int</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#println(int, java.lang.String)">println</A></B>(int&nbsp;priority,
-        java.lang.String&nbsp;message)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;java.lang.String</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#toSafeLabelString(java.lang.String)">toSafeLabelString</A></B>(java.lang.String&nbsp;str)</CODE>
+<CODE>static&nbsp;java.lang.String</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/Ln.html#logLevelToString(int)">logLevelToString</A></B>(int&nbsp;loglevel)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -420,73 +406,29 @@ A more natural android logging facility.
 </TR>
 </TABLE>
 
-<A NAME="isVerboseEnabled"><!-- --></A><H3>
-isVerboseEnabled</H3>
-<PRE>
-protected static boolean <B>isVerboseEnabled</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<A NAME="isDebugEnabled"><!-- --></A><H3>
-isDebugEnabled</H3>
-<PRE>
-protected static boolean <B>isDebugEnabled</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<A NAME="packageName"><!-- --></A><H3>
-packageName</H3>
-<PRE>
-protected static java.lang.String <B>packageName</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<A NAME="configured"><!-- --></A><H3>
-configured</H3>
-<PRE>
-protected static boolean <B>configured</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<A NAME="scope"><!-- --></A><H3>
-scope</H3>
-<PRE>
-protected static java.lang.String <B>scope</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<A NAME="contextProvider"><!-- --></A><H3>
-contextProvider</H3>
+<A NAME="config"><!-- --></A><H3>
+config</H3>
 <PRE>
 <FONT SIZE="-1">@Inject
-</FONT>protected static com.google.inject.Provider&lt;android.content.Context&gt; <B>contextProvider</B></PRE>
+</FONT>protected static <A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util">Ln.BaseConfig</A> <B>config</B></PRE>
 <DL>
+<DD>config is initially set to BaseConfig() with sensible defaults, then replaced
+ by BaseConfig(Context) during guice static injection pass.
+<P>
 <DL>
 </DL>
 </DL>
 <HR>
 
-<A NAME="prefsProvider"><!-- --></A><H3>
-prefsProvider</H3>
+<A NAME="print"><!-- --></A><H3>
+print</H3>
 <PRE>
 <FONT SIZE="-1">@Inject
-</FONT>protected static com.google.inject.Provider&lt;android.content.SharedPreferences&gt; <B>prefsProvider</B></PRE>
+</FONT>protected static <A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util">Ln.Print</A> <B>print</B></PRE>
 <DL>
+<DD>print is initially set to Print(), then replaced by guice during
+ static injection pass.  This allows overriding where the log message is delivered to.
+<P>
 <DL>
 </DL>
 </DL>
@@ -500,17 +442,6 @@ prefsProvider</H3>
 <B>Method Detail</B></FONT></TH>
 </TR>
 </TABLE>
-
-<A NAME="init()"><!-- --></A><H3>
-init</H3>
-<PRE>
-public static void <B>init</B>()</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
 
 <A NAME="v(java.lang.Throwable)"><!-- --></A><H3>
 v</H3>
@@ -714,10 +645,10 @@ public static boolean <B>isVerboseEnabled</B>()</PRE>
 </DL>
 <HR>
 
-<A NAME="getScope()"><!-- --></A><H3>
-getScope</H3>
+<A NAME="getConfig()"><!-- --></A><H3>
+getConfig</H3>
 <PRE>
-protected static java.lang.String <B>getScope</B>()</PRE>
+public static <A HREF="../../roboguice/util/Ln.Config.html" title="interface in roboguice.util">Ln.Config</A> <B>getConfig</B>()</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -725,22 +656,10 @@ protected static java.lang.String <B>getScope</B>()</PRE>
 </DL>
 <HR>
 
-<A NAME="println(int, java.lang.String)"><!-- --></A><H3>
-println</H3>
+<A NAME="logLevelToString(int)"><!-- --></A><H3>
+logLevelToString</H3>
 <PRE>
-public static int <B>println</B>(int&nbsp;priority,
-                          java.lang.String&nbsp;message)</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="toSafeLabelString(java.lang.String)"><!-- --></A><H3>
-toSafeLabelString</H3>
-<PRE>
-protected static java.lang.String <B>toSafeLabelString</B>(java.lang.String&nbsp;str)</PRE>
+public static java.lang.String <B>logLevelToString</B>(int&nbsp;loglevel)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -778,7 +697,7 @@ protected static java.lang.String <B>toSafeLabelString</B>(java.lang.String&nbsp
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;PREV CLASS&nbsp;
-&nbsp;<A HREF="../../roboguice/util/RoboAsyncTask.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/util/Ln.BaseConfig.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/Ln.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Ln.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -798,7 +717,7 @@ protected static java.lang.String <B>toSafeLabelString</B>(java.lang.String&nbsp
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
 DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;CONSTR&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>

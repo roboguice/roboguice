@@ -6,3 +6,5 @@ classes/
 .*.iws$
 local.properties
 .idea/
+.*.ipr$
+.*.iml$

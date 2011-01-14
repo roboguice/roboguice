@@ -174,6 +174,14 @@ This class is in charge of starting the Guice configuration. When the
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#observationManager">observationManager</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;<A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#preferenceListener">preferenceListener</A></B></CODE>
 
@@ -254,6 +262,14 @@ This class is in charge of starting the Guice configuration. When the
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You should override this method to add your own custom bindings.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#allowContextObservers()">allowContextObservers</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -440,6 +456,16 @@ protected java.util.List&lt;<A HREF="../../roboguice/inject/StaticTypeListener.h
 <DL>
 </DL>
 </DL>
+<HR>
+
+<A NAME="observationManager"><!-- --></A><H3>
+observationManager</H3>
+<PRE>
+protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>observationManager</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
 
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 
@@ -571,6 +597,20 @@ protected boolean <B>allowPreferenceInjection</B>()</PRE>
  <A HREF="../../roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity"><CODE>RoboPreferenceActivity</CODE></A>'s may want to turn this
  off for a slight startup performance gain.
 <P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="allowContextObservers()"><!-- --></A><H3>
+allowContextObservers</H3>
+<PRE>
+protected boolean <B>allowContextObservers</B>()</PRE>
+<DL>
 <DD><DL>
 </DL>
 </DD>

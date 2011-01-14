@@ -1,21 +1,25 @@
 package roboguice.util;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.util.Log;
+
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 import java.text.SimpleDateFormat;
 
 /**
  * A more natural android logging facility.
  *
+ * WARNING: CHECK OUT COMMON PITFALLS BELOW
+ *
  * Unlike {@link android.util.Log}, Log provides sensible defaults.
  * Debug and Verbose logging is enabled for applications that
  * have "android:debuggable=true" in their AndroidManifest.xml.
+ * For apps built using SDK Tools r8 or later, this means any debug
+ * build.  Release builds built with r8 or later will have verbose
+ * and debug log messages turned off.
  *
  * The default tag is automatically set to your app's packagename,
  * and the current context (eg. activity, service, application, etc)
@@ -33,10 +37,13 @@ import java.text.SimpleDateFormat;
  * Also, the current file and line is automatically appended to the tag
  * (this is only done if debug is enabled for performance reasons).
  *
- * NOTE:
- * Make sure you put the exception FIRST in the call.  A common
- * mistake is to place it last as is the android.util.Log convention,
- * but then it will get treated as varargs parameter.
+ * COMMON PITFALLS:
+ * * Make sure you put the exception FIRST in the call.  A common
+ *   mistake is to place it last as is the android.util.Log convention,
+ *   but then it will get treated as varargs parameter.
+ * * vararg parameters are not appended to the log message!  You must
+ *   insert them into the log message using %s or another similar
+ *   format parameter
  *
  * Usage Examples:
  *
@@ -49,155 +56,224 @@ import java.text.SimpleDateFormat;
  */
 @SuppressWarnings({"ImplicitArrayToString"})
 public class Ln  {
-    protected static boolean isVerboseEnabled = true;
-    protected static boolean isDebugEnabled = true;
-    protected static String packageName = "";
-    protected static boolean configured = false;
-    protected static String scope = "";
+    /**
+     * config is initially set to BaseConfig() with sensible defaults, then replaced
+     * by BaseConfig(Context) during guice static injection pass.
+     */
+    @Inject protected static BaseConfig config = new BaseConfig();
 
-    @Inject protected static Provider<Context> contextProvider;
-    @Inject protected static Provider<SharedPreferences> prefsProvider;
+    /**
+     * print is initially set to Print(), then replaced by guice during
+     * static injection pass.  This allows overriding where the log message is delivered to.
+     */
+    @Inject protected static Print print = new Print();
+
+
 
     private Ln() {}
 
-    public static void init() {
-        if(!configured && contextProvider!=null ) {
-            synchronized(Ln.class) {
-                if(!configured) {
-                    try {
-                        final Context context = contextProvider.get();
-                        packageName = context.getPackageName();
-                        final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
-                        isVerboseEnabled = isDebugEnabled = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
-                        scope = packageName.toUpperCase();
-                        configured = true;
-                    } catch( PackageManager.NameNotFoundException e ) {
-                        android.util.Log.e(packageName, "Error configuring logger", e);
-                    }
-                }
-            }
-        }
-    }
 
 
     public static int v(Throwable t) {
-        init();
-        return isVerboseEnabled ? println(Log.VERBOSE, Log.getStackTraceString(t) ) : 0;
+        return config.minimumLogLevel <= Log.VERBOSE ? print.println(Log.VERBOSE, Log.getStackTraceString(t)) : 0;
     }
 
     public static int v(Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.VERBOSE )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return isVerboseEnabled ? println(Log.VERBOSE, args.length>0 ? String.format(s,args) : s) : 0;
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return print.println(Log.VERBOSE, message);
     }
 
     public static int v(Throwable throwable, Object s1, Object... args ) {
-        init();
+        if( config.minimumLogLevel > Log.VERBOSE )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return isVerboseEnabled ? println(Log.VERBOSE,(args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable)) : 0;
+        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return print.println(Log.VERBOSE, message);
     }
 
     public static int d(Throwable t) {
-        init();
-        return isDebugEnabled ? println(Log.DEBUG, Log.getStackTraceString(t)) : 0;
+        return config.minimumLogLevel <= Log.DEBUG ? print.println(Log.DEBUG, Log.getStackTraceString(t)) : 0;
     }
 
     public static int d(Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.DEBUG )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return isDebugEnabled ? println(Log.DEBUG, args.length>0 ? String.format(s,args) : s) : 0;
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return print.println(Log.DEBUG, message);
     }
 
     public static int d(Throwable throwable, Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.DEBUG )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return isDebugEnabled ? println(Log.DEBUG, (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable)) : 0;
+        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return print.println(Log.DEBUG, message);
     }
 
     public static int i(Throwable t) {
-        init();
-        return println(Log.INFO,Log.getStackTraceString(t));
+        return config.minimumLogLevel <= Log.INFO ? print.println(Log.INFO, Log.getStackTraceString(t)) : 0;
     }
 
     public static int i( Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.INFO )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return println(Log.INFO,args.length>0 ? String.format(s,args) : s );
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return print.println(Log.INFO, message);
     }
 
     public static int i(Throwable throwable, Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.INFO )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return println(Log.INFO, (args.length > 0 ? String.format(s, args) : s) + '\n' + Log.getStackTraceString(throwable));
+        final String message = (args.length > 0 ? String.format(s, args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return print.println(Log.INFO, message);
     }
 
     public static int w(Throwable t) {
-        init();
-        return println(Log.WARN, Log.getStackTraceString(t));
+        return config.minimumLogLevel <= Log.WARN ? print.println(Log.WARN, Log.getStackTraceString(t)) : 0;
     }
 
     public static int w( Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.WARN )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return println(Log.WARN,args.length>0 ? String.format(s,args) : s);
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return print.println(Log.WARN, message);
     }
 
     public static int w( Throwable throwable, Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.WARN )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return println(Log.WARN, (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable));
+        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return print.println(Log.WARN, message);
     }
 
     public static int e(Throwable t) {
-        init();
-        return println(Log.ERROR, Log.getStackTraceString(t));
+        return config.minimumLogLevel <= Log.ERROR ? print.println(Log.ERROR, Log.getStackTraceString(t)) : 0;
     }
 
     public static int e( Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.ERROR )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return println(Log.ERROR,args.length>0 ? String.format(s,args) : s);
+        final String message = args.length>0 ? String.format(s,args) : s;
+        return print.println(Log.ERROR, message);
     }
 
     public static int e( Throwable throwable, Object s1, Object... args) {
-        init();
+        if( config.minimumLogLevel > Log.ERROR )
+            return 0;
+
         final String s = Strings.toString(s1);
-        return println(Log.ERROR, (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable));
+        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        return print.println(Log.ERROR, message);
     }
 
     public static boolean isDebugEnabled() {
-        init();
-        return isDebugEnabled;
+        return config.minimumLogLevel <= Log.DEBUG;
     }
 
     public static boolean isVerboseEnabled() {
-        init();
-        return isVerboseEnabled;
+        return config.minimumLogLevel <= Log.VERBOSE;
     }
 
-    protected static String getScope() {
-        init();
-        if( isDebugEnabled ) {
-            final StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
-            return scope + "/" + trace.getFileName() + ":" + trace.getLineNumber();
+    public static Config getConfig() {
+        return config;
+    }
+
+
+    public static interface Config {
+        public int getLoggingLevel();
+        public void setLoggingLevel(int level);
+    }
+
+    public static class BaseConfig implements Config {
+        protected int minimumLogLevel = Log.VERBOSE;
+        protected String packageName = "";
+        protected String scope = "";
+
+        protected BaseConfig() {
         }
 
-        return scope;
+        @Inject
+        public BaseConfig(Context context) {
+            try {
+                packageName = context.getPackageName();
+                final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
+                minimumLogLevel = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0 ? Log.VERBOSE : Log.INFO;
+                scope = packageName.toUpperCase();
+
+                Ln.d("Configuring Logging, minimum log level is %s", logLevelToString(minimumLogLevel) );
+
+            } catch( PackageManager.NameNotFoundException e ) {
+                Log.e(packageName, "Error configuring logger", e);
+            }
+        }
+
+        public int getLoggingLevel() {
+            return minimumLogLevel;
+        }
+
+        public void setLoggingLevel(int level) {
+            minimumLogLevel = level;
+        }
     }
 
-    public static int println( int priority, String message ) {
-        if( isDebugEnabled )
-            message = String.format("%s %s %s", new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis()), Thread.currentThread().getName(), message);
-        
-        return Log.println(priority, getScope(), message);
+    public static String logLevelToString( int loglevel ) {
+        switch( loglevel ) {
+            case Log.VERBOSE:
+                return "VERBOSE";
+            case Log.DEBUG:
+                return "DEBUG";
+            case Log.INFO:
+                return "INFO";
+            case Log.WARN:
+                return "WARN";
+            case Log.ERROR:
+                return "ERROR";
+            case Log.ASSERT:
+                return "ASSERT";
+        }
+
+        return "UNKNOWN";
     }
 
-    protected static String toSafeLabelString( String str ) {
-        str = Strings.toString(str);
-        str = str.replaceAll("\\W+","_");
-        if( str.length()>30 )
-            str = str.substring(0,30);
-        return str;
-    }
 
+    /** Default implementation logs to android.util.Log */
+    public static class Print {
+        public int println(int priority, String msg ) {
+            return Log.println(priority,getScope(), processMessage(msg));
+        }
+
+        protected String processMessage(String msg) {
+            if( config.minimumLogLevel <= Log.DEBUG )
+                msg = String.format("%s %s %s", new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis()), Thread.currentThread().getName(), msg);
+            return msg;
+        }
+
+        protected static String getScope() {
+            if( config.minimumLogLevel <= Log.DEBUG ) {
+                final StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
+                return config.scope + "/" + trace.getFileName() + ":" + trace.getLineNumber();
+            }
+
+            return config.scope;
+        }
+
+    }
 }

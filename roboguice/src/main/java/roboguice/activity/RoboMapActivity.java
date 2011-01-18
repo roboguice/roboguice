@@ -50,28 +50,28 @@ public abstract class RoboMapActivity extends MapActivity implements InjectorPro
         scope.enter(this);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
-        eventManager.notify(this,new OnCreateEvent(savedInstanceState));
+        eventManager.fire(this, new OnCreateEvent(savedInstanceState));
     }
 
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         scope.injectViews();
-        eventManager.notify(this,new OnContentViewAvailableEvent());
+        eventManager.fire(this, new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
         scope.injectViews();
-        eventManager.notify(this,new OnContentViewAvailableEvent());
+        eventManager.fire(this, new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
         scope.injectViews();
-        eventManager.notify(this,new OnContentViewAvailableEvent());
+        eventManager.fire(this, new OnContentViewAvailableEvent());
     }
 
     @Override
@@ -83,27 +83,27 @@ public abstract class RoboMapActivity extends MapActivity implements InjectorPro
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
-        eventManager.notify(this, new OnRestartEvent());
+        eventManager.fire(this, new OnRestartEvent());
     }
 
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
-        eventManager.notify(this, new OnStartEvent());
+        eventManager.fire(this, new OnStartEvent());
     }
 
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
-        eventManager.notify( this, new OnResumeEvent());
+        eventManager.fire(this, new OnResumeEvent());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        eventManager.notify( this, new OnPauseEvent());
+        eventManager.fire(this, new OnPauseEvent());
         scope.exit(this);
     }
 
@@ -111,38 +111,38 @@ public abstract class RoboMapActivity extends MapActivity implements InjectorPro
     public void onNewIntent( Intent intent ) {
         super.onNewIntent(intent);
         scope.enter(this);
-        eventManager.notify( this, new OnNewIntentEvent());
+        eventManager.fire(this, new OnNewIntentEvent());
     }
 
     @Override
     protected void onStop() {
-        eventManager.notify( this, new OnStopEvent());
+        eventManager.fire(this, new OnStopEvent());
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        eventManager.notify( this, new OnDestroyEvent());
-        eventManager.clear( this );
+        eventManager.fire(this, new OnDestroyEvent());
+        eventManager.clear(this);
         super.onDestroy();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        eventManager.notify( this, new OnConfigurationChangedEvent(newConfig));
+        eventManager.fire(this, new OnConfigurationChangedEvent(newConfig));
     }
 
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        eventManager.notify( this, new OnContentChangedEvent());
+        eventManager.fire(this, new OnContentChangedEvent());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        eventManager.notify( this, new OnActivityResultEvent(requestCode, resultCode, data));
+        eventManager.fire(this, new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
     /**

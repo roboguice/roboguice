@@ -8,7 +8,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Parameter annotation to bind a given method and parameter to an event raised through the
- * EventManager.notify() method.
+ * EventManager.fire() method.
  *
  * Please note that a runtime exception will be thrown if more than one parameter is annotated or more than one parameter
  * exists in the method definition.
@@ -17,7 +17,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  *
  * ContextEvent<EventParameter> event = new ContextEvent<EventParameter>(EventParameter.class, new EventParameter("data"));
  *
- * eventManager.notify(context, event);
+ * eventManager.fire(context, event);
  *
  * triggers:
  *

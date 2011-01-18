@@ -20,7 +20,7 @@ public class PreferenceChangeEventToastListener implements Preference.OnPreferen
 
     public boolean onPreferenceChange(Preference preference, Object o) {
         //raise the ToastEvent
-        eventManager.notify(context,new ToastEvent("hello toast"));
+        eventManager.fire(context, new ToastEvent("hello toast"));
         return true;
     }
 }

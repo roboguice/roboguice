@@ -20,7 +20,7 @@ import java.util.*;
  *      unregisterObserver()
  *      clear()
  *   Raising Events:
- *      notify()
+ *      fire()
  *      notifyWithResult()
  *
  * @author Adam Tybor
@@ -114,7 +114,7 @@ public class EventManager {
      * @param context
      * @param event
      */
-    public void notify(Context context, Object event) {
+    public void fire(Context context, Object event) {
         if (!isEnabled()) return;
 
         /*
@@ -155,7 +155,7 @@ public class EventManager {
         if (!isEnabled()) return defaultValue;
 
         if( event.getClass().getAnnotation(Returns.class)==null )
-            throw new RuntimeException("You must use notify with events that do not expect return values");
+            throw new RuntimeException("You must use fire with events that do not expect return values");
 
         final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return defaultValue;

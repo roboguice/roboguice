@@ -157,6 +157,12 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     }
 
     @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        eventManager.notify( this, new OnContentChangedEvent());
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         eventManager.notify( this, new OnActivityResultEvent(requestCode, resultCode, data));

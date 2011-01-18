@@ -109,20 +109,20 @@ java.lang.Object
 <P>
 A <A HREF="../../roboguice/service/RoboIntentService.html" title="class in roboguice.service"><CODE>RoboIntentService</CODE></A> extends from <CODE>IntentService</CODE> to provide dynamic
  injection of collaborators, using Google Guice.<br /> <br />
- 
+ <p/>
  Your own services that usually extend from <CODE>IntentService</CODE> should now extend from
  <A HREF="../../roboguice/service/RoboIntentService.html" title="class in roboguice.service"><CODE>RoboIntentService</CODE></A>.<br /> <br />
-
+ <p/>
  If we didn't provide what you need, you have two options : either post an issue on <a
  href="http://code.google.com/p/roboguice/issues/list">the bug tracker</a>, or
  implement it yourself. Have a look at the source code of this class (
  <A HREF="../../roboguice/service/RoboIntentService.html" title="class in roboguice.service"><CODE>RoboIntentService</CODE></A>), you won't have to write that much changes. And of
  course, you are welcome to contribute and send your implementations to the
  RoboGuice project.<br /> <br />
-
+ <p/>
  You can have access to the Guice
  <CODE>Injector</CODE> at any time, by calling <A HREF="../../roboguice/service/RoboIntentService.html#getInjector()"><CODE>getInjector()</CODE></A>.<br />
-
+ <p/>
  However, you will not have access to Context scoped beans until
  <A HREF="../../roboguice/service/RoboIntentService.html#onCreate()"><CODE>onCreate()</CODE></A> is called. <br /> <br />
 <P>
@@ -142,6 +142,14 @@ A <A HREF="../../roboguice/service/RoboIntentService.html" title="class in robog
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
 <TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
 <B>Field Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/service/RoboIntentService.html#eventManager">eventManager</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -206,6 +214,14 @@ A <A HREF="../../roboguice/service/RoboIntentService.html" title="class in robog
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/service/RoboIntentService.html#onConfigurationChanged(android.content.res.Configuration)">onConfigurationChanged</A></B>(android.content.res.Configuration&nbsp;newConfig)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/service/RoboIntentService.html#onCreate()">onCreate</A></B>()</CODE>
 
 <BR>
@@ -244,7 +260,7 @@ A <A HREF="../../roboguice/service/RoboIntentService.html" title="class in robog
 <TH ALIGN="left"><B>Methods inherited from class android.app.Service</B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE>dump, finalize, getApplication, onConfigurationChanged, onLowMemory, onRebind, onUnbind, setForeground, startForeground, stopForeground, stopSelf, stopSelf, stopSelfResult</CODE></TD>
+<TD><CODE>dump, finalize, getApplication, onLowMemory, onRebind, onUnbind, setForeground, startForeground, stopForeground, stopSelf, stopSelf, stopSelfResult</CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_android.content.ContextWrapper"><!-- --></A>
@@ -286,6 +302,16 @@ A <A HREF="../../roboguice/service/RoboIntentService.html" title="class in robog
 <B>Field Detail</B></FONT></TH>
 </TR>
 </TABLE>
+
+<A NAME="eventManager"><!-- --></A><H3>
+eventManager</H3>
+<PRE>
+protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>eventManager</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
 
 <A NAME="scope"><!-- --></A><H3>
 scope</H3>
@@ -359,6 +385,20 @@ public void <B>onDestroy</B>()</PRE>
 <DL>
 <DD><DL>
 <DT><B>Overrides:</B><DD><CODE>onDestroy</CODE> in class <CODE>android.app.IntentService</CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="onConfigurationChanged(android.content.res.Configuration)"><!-- --></A><H3>
+onConfigurationChanged</H3>
+<PRE>
+public void <B>onConfigurationChanged</B>(android.content.res.Configuration&nbsp;newConfig)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE>onConfigurationChanged</CODE> in interface <CODE>android.content.ComponentCallbacks</CODE><DT><B>Overrides:</B><DD><CODE>onConfigurationChanged</CODE> in class <CODE>android.app.Service</CODE></DL>
 </DD>
 <DD><DL>
 </DL>

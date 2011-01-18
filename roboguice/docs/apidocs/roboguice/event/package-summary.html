@@ -85,20 +85,6 @@ Package roboguice.event
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
 <TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
 <TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
-<B>Interface Summary</B></FONT></TH>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD WIDTH="15%"><B><A HREF="../../roboguice/event/EventResultHandler.html" title="interface in roboguice.event">EventResultHandler</A></B></TD>
-<TD>&nbsp;</TD>
-</TR>
-</TABLE>
-&nbsp;
-
-<P>
-
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
 <B>Class Summary</B></FONT></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
@@ -110,7 +96,7 @@ Package roboguice.event
       unregisterObserver()
       clear()
    Raising Events:
-      notify()
+      fire()
       notifyWithResult()</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
@@ -122,15 +108,11 @@ Package roboguice.event
 <TD>&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD WIDTH="15%"><B><A HREF="../../roboguice/event/NoOpResultHandler.html" title="class in roboguice.event">NoOpResultHandler</A></B></TD>
-<TD>&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD WIDTH="15%"><B><A HREF="../../roboguice/event/ObserverTypeListener.html" title="class in roboguice.event">ObserverTypeListener</A></B></TD>
+<TD WIDTH="15%"><B><A HREF="../../roboguice/event/ObservesTypeListener.html" title="class in roboguice.event">ObservesTypeListener</A></B></TD>
 <TD>Guice driven type listener which scans for the @Observes annotations.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD WIDTH="15%"><B><A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObserverTypeListener.ContextObserverMethodInjector&lt;I&gt;</A></B></TD>
+<TD WIDTH="15%"><B><A HREF="../../roboguice/event/ObservesTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObservesTypeListener.ContextObserverMethodInjector&lt;I&gt;</A></B></TD>
 <TD>Injection listener to handle the observation manager registration.</TD>
 </TR>
 </TABLE>
@@ -146,7 +128,7 @@ Package roboguice.event
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../roboguice/event/Observes.html" title="annotation in roboguice.event">Observes</A></B></TD>
 <TD>Parameter annotation to bind a given method and parameter to an event raised through the
- EventManager.notify() method.</TD>
+ EventManager.fire() method.</TD>
 </TR>
 </TABLE>
 &nbsp;

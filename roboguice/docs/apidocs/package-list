@@ -7,5 +7,6 @@ roboguice.event
 roboguice.inject
 roboguice.receiver
 roboguice.service
+roboguice.service.event
 roboguice.test
 roboguice.util

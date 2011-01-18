@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-ObserverTypeListener.ContextObserverMethodInjector (roboguice 1.1-SNAPSHOT API)
+ObservesTypeListener (roboguice 1.1-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ ObserverTypeListener.ContextObserverMethodInjector (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="ObserverTypeListener.ContextObserverMethodInjector (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="ObservesTypeListener (roboguice 1.1-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -39,7 +39,7 @@ function windowTitle()
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
-  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="class-use/ObserverTypeListener.ContextObserverMethodInjector.html"><FONT CLASS="NavBarFont1"><B>Use</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="class-use/ObservesTypeListener.html"><FONT CLASS="NavBarFont1"><B>Use</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
@@ -54,11 +54,11 @@ function windowTitle()
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../roboguice/event/ObserverTypeListener.html" title="class in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/event/Observes.html" title="annotation in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/event/Observes.html" title="annotation in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../roboguice/event/ObservesTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-  <A HREF="../../index.html?roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" target="_top"><B>FRAMES</B></A>  &nbsp;
-&nbsp;<A HREF="ObserverTypeListener.ContextObserverMethodInjector.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+  <A HREF="../../index.html?roboguice/event/ObservesTypeListener.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="ObservesTypeListener.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
 &nbsp;<SCRIPT type="text/javascript">
   <!--
   if(window==top) {
@@ -75,7 +75,7 @@ function windowTitle()
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
 DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>
@@ -89,33 +89,50 @@ DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor
 <FONT SIZE="-1">
 roboguice.event</FONT>
 <BR>
-Class ObserverTypeListener.ContextObserverMethodInjector&lt;I&gt;</H2>
+Class ObservesTypeListener</H2>
 <PRE>
 java.lang.Object
-  <IMG SRC="../../resources/inherit.gif" ALT="extended by "><B>roboguice.event.ObserverTypeListener.ContextObserverMethodInjector&lt;I&gt;</B>
+  <IMG SRC="../../resources/inherit.gif" ALT="extended by "><B>roboguice.event.ObservesTypeListener</B>
 </PRE>
 <DL>
-<DT><DT><B>Type Parameters:</B><DD><CODE>I</CODE> - </DL>
-<DL>
-<DT><B>All Implemented Interfaces:</B> <DD>com.google.inject.spi.InjectionListener&lt;I&gt;</DD>
-</DL>
-<DL>
-<DT><B>Enclosing class:</B><DD><A HREF="../../roboguice/event/ObserverTypeListener.html" title="class in roboguice.event">ObserverTypeListener</A></DD>
+<DT><B>All Implemented Interfaces:</B> <DD>com.google.inject.spi.TypeListener</DD>
 </DL>
 <HR>
 <DL>
-<DT><PRE>public static class <B>ObserverTypeListener.ContextObserverMethodInjector&lt;I&gt;</B><DT>extends java.lang.Object<DT>implements com.google.inject.spi.InjectionListener&lt;I&gt;</DL>
+<DT><PRE>public class <B>ObservesTypeListener</B><DT>extends java.lang.Object<DT>implements com.google.inject.spi.TypeListener</DL>
 </PRE>
 
 <P>
-Injection listener to handle the observation manager registration.
+Guice driven type listener which scans for the @Observes annotations.
+ Registers these methods with the EventManager.
 <P>
 
 <P>
+<DL>
+<DT><B>Author:</B></DT>
+  <DD>Adam Tybor, John Ericksen</DD>
+</DL>
 <HR>
 
 <P>
-<!-- =========== FIELD SUMMARY =========== -->
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+
+<A NAME="nested_class_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Nested Class Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;class</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event">ObservesTypeListener.ContextObserverMethodInjector</A>&lt;<A HREF="../../roboguice/event/ObservesTypeListener.ContextObserverMethodInjector.html" title="type parameter in ObservesTypeListener.ContextObserverMethodInjector">I</A>&gt;</B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Injection listener to handle the observation manager registration.</TD>
+</TR>
+</TABLE>
+&nbsp;<!-- =========== FIELD SUMMARY =========== -->
 
 <A NAME="field_summary"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -126,15 +143,7 @@ Injection listener to handle the observation manager registration.
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;com.google.inject.Provider&lt;android.content.Context&gt;</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#contextProvider">contextProvider</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.lang.Class&lt;?&gt;</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#event">event</A></B></CODE>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#contextProvider">contextProvider</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -142,15 +151,7 @@ Injection listener to handle the observation manager registration.
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#eventManager">eventManager</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.lang.reflect.Method</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#method">method</A></B></CODE>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#eventManager">eventManager</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -166,10 +167,8 @@ Injection listener to handle the observation manager registration.
 <B>Constructor Summary</B></FONT></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#ObserverTypeListener.ContextObserverMethodInjector(com.google.inject.Provider, roboguice.event.EventManager, java.lang.reflect.Method, java.lang.Class)">ObserverTypeListener.ContextObserverMethodInjector</A></B>(com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider,
-                                                   <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;eventManager,
-                                                   java.lang.reflect.Method&nbsp;method,
-                                                   java.lang.Class&lt;?&gt;&nbsp;event)</CODE>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#ObservesTypeListener(com.google.inject.Provider, roboguice.event.EventManager)">ObservesTypeListener</A></B>(com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider,
+                     <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;eventManager)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -186,11 +185,47 @@ Injection listener to handle the observation manager registration.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html#afterInjection(I)">afterInjection</A></B>(<A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="type parameter in ObserverTypeListener.ContextObserverMethodInjector">I</A>&nbsp;i)</CODE>
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#checkMethodParameters(java.lang.reflect.Method, java.lang.Class)">checkMethodParameters</A></B>(java.lang.reflect.Method&nbsp;method,
+                      java.lang.Class&nbsp;parameterType)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Error checking method, verifies:
+
+ 1.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;I&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#hear(com.google.inject.TypeLiteral, com.google.inject.spi.TypeEncounter)">hear</A></B>(com.google.inject.TypeLiteral&lt;I&gt;&nbsp;iTypeLiteral,
+     com.google.inject.spi.TypeEncounter&lt;I&gt;&nbsp;iTypeEncounter)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected 
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;I&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#registerContextObserver(com.google.inject.spi.TypeEncounter, java.lang.reflect.Method, java.lang.Class)">registerContextObserver</A></B>(com.google.inject.spi.TypeEncounter&lt;I&gt;&nbsp;iTypeEncounter,
+                        java.lang.reflect.Method&nbsp;method,
+                        java.lang.Class&nbsp;parameterType)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Error checks the observed method and registers method with typeEncounter</TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -215,16 +250,6 @@ Injection listener to handle the observation manager registration.
 </TR>
 </TABLE>
 
-<A NAME="contextProvider"><!-- --></A><H3>
-contextProvider</H3>
-<PRE>
-protected com.google.inject.Provider&lt;android.content.Context&gt; <B>contextProvider</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
 <A NAME="eventManager"><!-- --></A><H3>
 eventManager</H3>
 <PRE>
@@ -235,20 +260,10 @@ protected <A HREF="../../roboguice/event/EventManager.html" title="class in robo
 </DL>
 <HR>
 
-<A NAME="method"><!-- --></A><H3>
-method</H3>
+<A NAME="contextProvider"><!-- --></A><H3>
+contextProvider</H3>
 <PRE>
-protected java.lang.reflect.Method <B>method</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<A NAME="event"><!-- --></A><H3>
-event</H3>
-<PRE>
-protected java.lang.Class&lt;?&gt; <B>event</B></PRE>
+protected com.google.inject.Provider&lt;android.content.Context&gt; <B>contextProvider</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -264,13 +279,11 @@ protected java.lang.Class&lt;?&gt; <B>event</B></PRE>
 </TR>
 </TABLE>
 
-<A NAME="ObserverTypeListener.ContextObserverMethodInjector(com.google.inject.Provider, roboguice.event.EventManager, java.lang.reflect.Method, java.lang.Class)"><!-- --></A><H3>
-ObserverTypeListener.ContextObserverMethodInjector</H3>
+<A NAME="ObservesTypeListener(com.google.inject.Provider, roboguice.event.EventManager)"><!-- --></A><H3>
+ObservesTypeListener</H3>
 <PRE>
-public <B>ObserverTypeListener.ContextObserverMethodInjector</B>(com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider,
-                                                          <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;eventManager,
-                                                          java.lang.reflect.Method&nbsp;method,
-                                                          java.lang.Class&lt;?&gt;&nbsp;event)</PRE>
+public <B>ObservesTypeListener</B>(com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider,
+                            <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A>&nbsp;eventManager)</PRE>
 <DL>
 </DL>
 
@@ -284,16 +297,55 @@ public <B>ObserverTypeListener.ContextObserverMethodInjector</B>(com.google.inje
 </TR>
 </TABLE>
 
-<A NAME="afterInjection(java.lang.Object)"><!-- --></A><A NAME="afterInjection(I)"><!-- --></A><H3>
-afterInjection</H3>
+<A NAME="hear(com.google.inject.TypeLiteral, com.google.inject.spi.TypeEncounter)"><!-- --></A><H3>
+hear</H3>
 <PRE>
-public void <B>afterInjection</B>(<A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="type parameter in ObserverTypeListener.ContextObserverMethodInjector">I</A>&nbsp;i)</PRE>
+public &lt;I&gt; void <B>hear</B>(com.google.inject.TypeLiteral&lt;I&gt;&nbsp;iTypeLiteral,
+                     com.google.inject.spi.TypeEncounter&lt;I&gt;&nbsp;iTypeEncounter)</PRE>
 <DL>
 <DD><DL>
-<DT><B>Specified by:</B><DD><CODE>afterInjection</CODE> in interface <CODE>com.google.inject.spi.InjectionListener&lt;<A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="type parameter in ObserverTypeListener.ContextObserverMethodInjector">I</A>&gt;</CODE></DL>
+<DT><B>Specified by:</B><DD><CODE>hear</CODE> in interface <CODE>com.google.inject.spi.TypeListener</CODE></DL>
 </DD>
 <DD><DL>
 </DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="registerContextObserver(com.google.inject.spi.TypeEncounter, java.lang.reflect.Method, java.lang.Class)"><!-- --></A><H3>
+registerContextObserver</H3>
+<PRE>
+protected &lt;I&gt; void <B>registerContextObserver</B>(com.google.inject.spi.TypeEncounter&lt;I&gt;&nbsp;iTypeEncounter,
+                                           java.lang.reflect.Method&nbsp;method,
+                                           java.lang.Class&nbsp;parameterType)</PRE>
+<DL>
+<DD>Error checks the observed method and registers method with typeEncounter
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Type Parameters:</B><DD><CODE>I</CODE> - <DT><B>Parameters:</B><DD><CODE>iTypeEncounter</CODE> - <DD><CODE>method</CODE> - <DD><CODE>parameterType</CODE> - </DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="checkMethodParameters(java.lang.reflect.Method, java.lang.Class)"><!-- --></A><H3>
+checkMethodParameters</H3>
+<PRE>
+protected void <B>checkMethodParameters</B>(java.lang.reflect.Method&nbsp;method,
+                                     java.lang.Class&nbsp;parameterType)</PRE>
+<DL>
+<DD>Error checking method, verifies:
+
+ 1.  The method has the correct number of parameters, 0 or 1
+ 2.  If the method has a parameter, it is of the proper type.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>method</CODE> - <DD><CODE>parameterType</CODE> - </DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
@@ -312,7 +364,7 @@ public void <B>afterInjection</B>(<A HREF="../../roboguice/event/ObserverTypeLis
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
-  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="class-use/ObserverTypeListener.ContextObserverMethodInjector.html"><FONT CLASS="NavBarFont1"><B>Use</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="class-use/ObservesTypeListener.html"><FONT CLASS="NavBarFont1"><B>Use</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
   <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
@@ -327,11 +379,11 @@ public void <B>afterInjection</B>(<A HREF="../../roboguice/event/ObserverTypeLis
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../roboguice/event/ObserverTypeListener.html" title="class in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/event/Observes.html" title="annotation in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/event/Observes.html" title="annotation in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../roboguice/event/ObservesTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-  <A HREF="../../index.html?roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" target="_top"><B>FRAMES</B></A>  &nbsp;
-&nbsp;<A HREF="ObserverTypeListener.ContextObserverMethodInjector.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+  <A HREF="../../index.html?roboguice/event/ObservesTypeListener.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="ObservesTypeListener.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
 &nbsp;<SCRIPT type="text/javascript">
   <!--
   if(window==top) {
@@ -348,7 +400,7 @@ public void <B>afterInjection</B>(<A HREF="../../roboguice/event/ObserverTypeLis
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
 DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>

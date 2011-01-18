@@ -104,6 +104,10 @@ Packages that use <A HREF="../../roboguice/event/package-summary.html">roboguice
 <TD><A HREF="#roboguice.event"><B>roboguice.event</B></A></TD>
 <TD>&nbsp;&nbsp;</TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><A HREF="#roboguice.service"><B>roboguice.service</B></A></TD>
+<TD>&nbsp;&nbsp;</TD>
+</TR>
 </TABLE>
 &nbsp;
 <P>
@@ -124,7 +128,7 @@ Classes in <A HREF="../../roboguice/event/package-summary.html">roboguice.event<
       unregisterObserver()
       clear()
    Raising Events:
-      notify()
+      fire()
       notifyWithResult()</TD>
 </TR>
 </TABLE>
@@ -147,7 +151,7 @@ Classes in <A HREF="../../roboguice/event/package-summary.html">roboguice.event<
       unregisterObserver()
       clear()
    Raising Events:
-      notify()
+      fire()
       notifyWithResult()</TD>
 </TR>
 </TABLE>
@@ -170,7 +174,7 @@ Classes in <A HREF="../../roboguice/event/package-summary.html">roboguice.event<
       unregisterObserver()
       clear()
    Raising Events:
-      notify()
+      fire()
       notifyWithResult()</TD>
 </TR>
 </TABLE>
@@ -193,7 +197,7 @@ Classes in <A HREF="../../roboguice/event/package-summary.html">roboguice.event<
       unregisterObserver()
       clear()
    Raising Events:
-      notify()
+      fire()
       notifyWithResult()</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
@@ -202,11 +206,28 @@ Classes in <A HREF="../../roboguice/event/package-summary.html">roboguice.event<
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
+</TABLE>
+&nbsp;
+<P>
+<A NAME="roboguice.service"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+Classes in <A HREF="../../roboguice/event/package-summary.html">roboguice.event</A> used by <A HREF="../../roboguice/service/package-summary.html">roboguice.service</A></FONT></TH>
+</TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><B><A HREF="../../roboguice/event/class-use/EventResultHandler.html#roboguice.event"><B>EventResultHandler</B></A></B>
+<TD><B><A HREF="../../roboguice/event/class-use/EventManager.html#roboguice.service"><B>EventManager</B></A></B>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Manager class handling the following:
+
+   Registration of event observing methods:
+      registerObserver()
+      unregisterObserver()
+      clear()
+   Raising Events:
+      fire()
+      notifyWithResult()</TD>
 </TR>
 </TABLE>
 &nbsp;

@@ -110,7 +110,7 @@ Manager class handling the following:
       unregisterObserver()
       clear()
    Raising Events:
-      notify()
+      fire()
       notifyWithResult()
 <P>
 
@@ -199,20 +199,20 @@ Manager class handling the following:
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#fire(android.content.Context, java.lang.Object)">fire</A></B>(android.content.Context&nbsp;context,
+     java.lang.Object&nbsp;event)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Raises the event's class' event on the given context.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;boolean</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#isEnabled()">isEnabled</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#notify(android.content.Context, java.lang.Object)">notify</A></B>(android.content.Context&nbsp;context,
-       java.lang.Object&nbsp;event)</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Raises the event's class' event on the given context.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -349,11 +349,11 @@ public void <B>clear</B>(android.content.Context&nbsp;context)</PRE>
 </DL>
 <HR>
 
-<A NAME="notify(android.content.Context, java.lang.Object)"><!-- --></A><H3>
-notify</H3>
+<A NAME="fire(android.content.Context, java.lang.Object)"><!-- --></A><H3>
+fire</H3>
 <PRE>
-public void <B>notify</B>(android.content.Context&nbsp;context,
-                   java.lang.Object&nbsp;event)</PRE>
+public void <B>fire</B>(android.content.Context&nbsp;context,
+                 java.lang.Object&nbsp;event)</PRE>
 <DL>
 <DD>Raises the event's class' event on the given context.  This event object is passed (if configured) to the
  registered observer's method.

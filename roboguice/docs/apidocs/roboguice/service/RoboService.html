@@ -144,6 +144,14 @@ A <A HREF="../../roboguice/service/RoboService.html" title="class in roboguice.s
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/service/RoboService.html#eventManager">eventManager</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;<A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/service/RoboService.html#scope">scope</A></B></CODE>
 
@@ -205,6 +213,14 @@ A <A HREF="../../roboguice/service/RoboService.html" title="class in roboguice.s
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/service/RoboService.html#onConfigurationChanged(android.content.res.Configuration)">onConfigurationChanged</A></B>(android.content.res.Configuration&nbsp;newConfig)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/service/RoboService.html#onCreate()">onCreate</A></B>()</CODE>
 
 <BR>
@@ -234,7 +250,7 @@ A <A HREF="../../roboguice/service/RoboService.html" title="class in roboguice.s
 <TH ALIGN="left"><B>Methods inherited from class android.app.Service</B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE>dump, finalize, getApplication, onBind, onConfigurationChanged, onLowMemory, onRebind, onStartCommand, onUnbind, setForeground, startForeground, stopForeground, stopSelf, stopSelf, stopSelfResult</CODE></TD>
+<TD><CODE>dump, finalize, getApplication, onBind, onLowMemory, onRebind, onStartCommand, onUnbind, setForeground, startForeground, stopForeground, stopSelf, stopSelf, stopSelfResult</CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_android.content.ContextWrapper"><!-- --></A>
@@ -276,6 +292,16 @@ A <A HREF="../../roboguice/service/RoboService.html" title="class in roboguice.s
 <B>Field Detail</B></FONT></TH>
 </TR>
 </TABLE>
+
+<A NAME="eventManager"><!-- --></A><H3>
+eventManager</H3>
+<PRE>
+protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>eventManager</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
 
 <A NAME="scope"><!-- --></A><H3>
 scope</H3>
@@ -349,6 +375,20 @@ public void <B>onDestroy</B>()</PRE>
 <DL>
 <DD><DL>
 <DT><B>Overrides:</B><DD><CODE>onDestroy</CODE> in class <CODE>android.app.Service</CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="onConfigurationChanged(android.content.res.Configuration)"><!-- --></A><H3>
+onConfigurationChanged</H3>
+<PRE>
+public void <B>onConfigurationChanged</B>(android.content.res.Configuration&nbsp;newConfig)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE>onConfigurationChanged</CODE> in interface <CODE>android.content.ComponentCallbacks</CODE><DT><B>Overrides:</B><DD><CODE>onConfigurationChanged</CODE> in class <CODE>android.app.Service</CODE></DL>
 </DD>
 <DD><DL>
 </DL>

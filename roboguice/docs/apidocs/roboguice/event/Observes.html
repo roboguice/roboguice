@@ -54,8 +54,8 @@ function windowTitle()
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;NEXT CLASS</FONT></TD>
+&nbsp;<A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../roboguice/event/ObservesTypeListener.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/event/Observes.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Observes.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -99,7 +99,7 @@ Annotation Type Observes</H2>
 
 <P>
 Parameter annotation to bind a given method and parameter to an event raised through the
- EventManager.notify() method.
+ EventManager.fire() method.
 
  Please note that a runtime exception will be thrown if more than one parameter is annotated or more than one parameter
  exists in the method definition.
@@ -108,7 +108,7 @@ Parameter annotation to bind a given method and parameter to an event raised thr
 
  ContextEvent<EventParameter> event = new ContextEvent<EventParameter>(EventParameter.class, new EventParameter("data"));
 
- eventManager.notify(context, event);
+ eventManager.fire(context, event);
 
  triggers:
 
@@ -157,8 +157,8 @@ Parameter annotation to bind a given method and parameter to an event raised thr
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;<A HREF="../../roboguice/event/ObserverTypeListener.ContextObserverMethodInjector.html" title="class in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;NEXT CLASS</FONT></TD>
+&nbsp;<A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../roboguice/event/ObservesTypeListener.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/event/Observes.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="Observes.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;

@@ -11,12 +11,17 @@
 package roboguice.service;
 
 import roboguice.application.RoboApplication;
+import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
+import roboguice.service.event.OnConfigurationChangedEvent;
+import roboguice.service.event.OnCreateEvent;
+import roboguice.service.event.OnDestroyEvent;
+import roboguice.service.event.OnStartEvent;
 
 import android.app.Service;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.res.Configuration;
 
 import com.google.inject.Injector;
 
@@ -45,27 +50,38 @@ import com.google.inject.Injector;
  */
 public abstract class RoboService extends Service implements InjectorProvider {
 
+    protected EventManager eventManager;
     protected ContextScope scope;
 
     @Override
     public void onCreate() {
         final Injector injector = getInjector();
+        eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
         injector.injectMembers(this);
         super.onCreate();
+        eventManager.fire(this, new OnCreateEvent() );
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
         scope.enter(this);
         super.onStart(intent, startId);
+        eventManager.fire(this, new OnStartEvent());
     }
 
     @Override
     public void onDestroy() {
+        eventManager.fire(this,new OnDestroyEvent() );
         scope.exit(this);
         super.onDestroy();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        eventManager.fire(this, new OnConfigurationChangedEvent() );
     }
 
     /**

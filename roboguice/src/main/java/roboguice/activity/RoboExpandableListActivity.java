@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 /**
@@ -41,13 +40,13 @@ import com.google.inject.Injector;
  * @author Mike Burton
  */
 public class RoboExpandableListActivity extends ExpandableListActivity implements InjectorProvider {
-    @Inject protected EventManager eventManager;
-
+    protected EventManager eventManager;
     protected ContextScope scope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = getInjector();
+        eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
         injector.injectMembers(this);
@@ -133,6 +132,12 @@ public class RoboExpandableListActivity extends ExpandableListActivity implement
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         eventManager.notify( this, new OnConfigurationChangedEvent(newConfig));
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        eventManager.notify( this, new OnContentChangedEvent());
     }
 
     @Override

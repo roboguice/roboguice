@@ -29,7 +29,6 @@ import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 /**
@@ -42,16 +41,14 @@ import com.google.inject.Injector;
  * @author Rodrigo Damazio
  */
 public abstract class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
-    @Inject protected EventManager eventManager;
-
+    protected EventManager eventManager;
     protected ContextScope scope;
 
     /** {@inheritDoc } */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         final Injector injector = getInjector();
+        eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
 
@@ -60,6 +57,8 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
 
         // Only then inject everything
         injector.injectMembers(this);
+
+        super.onCreate(savedInstanceState);
 
         eventManager.notify(this,new OnCreateEvent(savedInstanceState));
 
@@ -154,6 +153,12 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         eventManager.notify( this, new OnConfigurationChangedEvent(newConfig));
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        eventManager.notify( this, new OnContentChangedEvent());
     }
 
     @Override

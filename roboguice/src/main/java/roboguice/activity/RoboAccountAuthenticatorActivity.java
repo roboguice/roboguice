@@ -30,7 +30,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 /**
@@ -41,13 +40,13 @@ import com.google.inject.Injector;
  */
 public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivity implements InjectorProvider
 {
-    @Inject protected EventManager eventManager;
-
+    protected EventManager eventManager;
     protected ContextScope scope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = getInjector();
+        eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
         injector.injectMembers(this);
@@ -133,6 +132,12 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         eventManager.notify( this, new OnConfigurationChangedEvent(newConfig));
+    }
+
+    @Override
+    public void onContentChanged() {
+        super.onContentChanged();
+        eventManager.notify( this, new OnContentChangedEvent());
     }
 
     @Override

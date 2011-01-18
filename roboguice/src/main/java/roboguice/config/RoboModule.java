@@ -1,7 +1,7 @@
 package roboguice.config;
 
 import roboguice.event.EventManager;
-import roboguice.event.ObserverTypeListener;
+import roboguice.event.ObservesTypeListener;
 import roboguice.inject.*;
 import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
@@ -119,7 +119,7 @@ public class RoboModule extends AbstractModule {
           bindListener(Matchers.any(), preferenceListener);
 
         if (eventManager.isEnabled())
-            bindListener(Matchers.any(), new ObserverTypeListener(contextProvider, eventManager));
+            bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager));
 
         requestStaticInjection( Ln.class );
         requestStaticInjection( RoboThread.class );

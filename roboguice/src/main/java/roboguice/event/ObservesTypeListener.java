@@ -18,11 +18,11 @@ import java.lang.reflect.Method;
  * @author Adam Tybor
  * @author John Ericksen
  */
-public class ObserverTypeListener implements TypeListener {
+public class ObservesTypeListener implements TypeListener {
     protected EventManager eventManager;
     protected Provider<Context> contextProvider;
 
-    public ObserverTypeListener(Provider<Context> contextProvider, EventManager eventManager) {
+    public ObservesTypeListener(Provider<Context> contextProvider, EventManager eventManager) {
         this.eventManager = eventManager;
         this.contextProvider = contextProvider;
     }

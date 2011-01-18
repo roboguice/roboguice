@@ -19,7 +19,7 @@ import roboguice.activity.RoboActivity;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
 import roboguice.astroboy.bean.*;
-import roboguice.astroboy.service.ContextObservingClassEventService;
+import roboguice.astroboy.service.ExampleObserver;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.InjectExtra;
@@ -44,7 +44,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
 
 public class DoctorTenma extends RoboActivity {
-    @Inject protected ContextObservingClassEventService mContextObservingService;
 
     // You can inject arbitrary View, String, and other types of resources.
     // See ResourceListener for details.
@@ -120,8 +119,11 @@ public class DoctorTenma extends RoboActivity {
     // Injecting a collaborator
     @Inject protected TalkingThing      talker;
 
-    @Inject
-    protected Provider<RoboAsyncTaskBackgroundJunk> backgroundJunkProvider;
+    // Injecting an event handling class that handles various events.
+    @Inject protected ExampleObserver observers;
+
+
+    @Inject protected Provider<RoboAsyncTaskBackgroundJunk> backgroundJunkProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

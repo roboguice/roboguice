@@ -14,7 +14,7 @@ import com.google.inject.Inject;
  *
  * @author John Ericksen
  */
-public class ContextObservingClassEventService {
+public class ExampleObserver {
 
     @Inject protected Context context;
 

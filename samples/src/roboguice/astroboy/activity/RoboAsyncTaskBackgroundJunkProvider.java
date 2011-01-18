@@ -6,8 +6,8 @@ import com.google.inject.Provider;
 /**
  * @author John Ericksen
  */
-public class RoboAsyncTaskBackgroundJunkProvider implements Provider<RoboAsyncTaskBackgroundJunk> {
-    public RoboAsyncTaskBackgroundJunk get() {
-        return new RoboAsyncTaskBackgroundJunk();
+public class RoboAsyncTaskBackgroundJunkProvider implements Provider<ExampleBackgroundTask> {
+    public ExampleBackgroundTask get() {
+        return new ExampleBackgroundTask();
     }
 }

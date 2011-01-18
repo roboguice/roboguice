@@ -8,7 +8,7 @@ import roboguice.util.RoboAsyncTask;
 /**
  * @author John Ericksen
  */
-public class RoboAsyncTaskBackgroundJunk extends RoboAsyncTask<Void> {
+public class ExampleBackgroundTask extends RoboAsyncTask<Void> {
 
     public Void call() throws Exception {
         Ln.d("Doing some junk in background thread %s", this);
@@ -16,6 +16,13 @@ public class RoboAsyncTaskBackgroundJunk extends RoboAsyncTask<Void> {
         return null;
     }
 
+    @Override
+    protected void onInterrupted(InterruptedException e) {
+        Ln.d("Interrupting background task %s", this);
+    }
+
+    // If the activity is destroyed, this handler will make sure
+    // that this background task gets canceled.
     protected void onActivityDestroy(@Observes OnDestroyEvent ignored ) {
         Ln.d("Killing background thread %s", this);
         cancel(true);

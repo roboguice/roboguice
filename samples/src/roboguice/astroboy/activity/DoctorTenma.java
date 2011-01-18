@@ -35,7 +35,6 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.internal.Nullable;
 
 import java.util.Date;
@@ -122,8 +121,8 @@ public class DoctorTenma extends RoboActivity {
     // Injecting an event handling class that handles various events.
     @Inject protected ExampleObserver observers;
 
-
-    @Inject protected Provider<RoboAsyncTaskBackgroundJunk> backgroundJunkProvider;
+    // Injecting a background task that demonstrates @Observes OnDestroyEvent
+    @Inject protected ExampleBackgroundTask backgroundTaskProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -149,8 +148,7 @@ public class DoctorTenma extends RoboActivity {
 
         Ln.d(talker.talk());
 
-        backgroundJunkProvider.get().execute();
-
+        backgroundTaskProvider.execute();
 
     }
 

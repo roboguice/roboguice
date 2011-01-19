@@ -60,7 +60,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
 
         super.onCreate(savedInstanceState);
 
-        eventManager.fire(this, new OnCreateEvent(savedInstanceState));
+        eventManager.fire(new OnCreateEvent(savedInstanceState));
 
     }
 
@@ -79,21 +79,21 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         scope.injectViews();
-        eventManager.fire(this, new OnContentViewAvailableEvent());
+        eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
         scope.injectViews();
-        eventManager.fire(this, new OnContentViewAvailableEvent());
+        eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
         scope.injectViews();
-        eventManager.fire(this, new OnContentViewAvailableEvent());
+        eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
@@ -105,27 +105,27 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     protected void onRestart() {
         scope.enter(this);
         super.onRestart();
-        eventManager.fire(this, new OnRestartEvent());
+        eventManager.fire(new OnRestartEvent());
     }
 
     @Override
     protected void onStart() {
         scope.enter(this);
         super.onStart();
-        eventManager.fire(this, new OnStartEvent());
+        eventManager.fire(new OnStartEvent());
     }
 
     @Override
     protected void onResume() {
         scope.enter(this);
         super.onResume();
-        eventManager.fire(this, new OnResumeEvent());
+        eventManager.fire(new OnResumeEvent());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        eventManager.fire(this, new OnPauseEvent());
+        eventManager.fire(new OnPauseEvent());
         scope.exit(this);
     }
 
@@ -133,18 +133,18 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     protected void onNewIntent( Intent intent ) {
         super.onNewIntent(intent);
         scope.enter(this);
-        eventManager.fire(this, new OnNewIntentEvent());
+        eventManager.fire(new OnNewIntentEvent());
     }
 
     @Override
     protected void onStop() {
-        eventManager.fire(this, new OnStopEvent());
+        eventManager.fire(new OnStopEvent());
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        eventManager.fire(this, new OnDestroyEvent());
+        eventManager.fire(new OnDestroyEvent());
         eventManager.clear(this);
         super.onDestroy();
     }
@@ -152,19 +152,19 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(this, new OnConfigurationChangedEvent(newConfig));
+        eventManager.fire(new OnConfigurationChangedEvent(newConfig));
     }
 
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        eventManager.fire(this, new OnContentChangedEvent());
+        eventManager.fire(new OnContentChangedEvent());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        eventManager.fire(this, new OnActivityResultEvent(requestCode, resultCode, data));
+        eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
     /**

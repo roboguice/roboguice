@@ -56,20 +56,20 @@ public abstract class RoboIntentService extends IntentService implements Injecto
         scope.enter(this);
         injector.injectMembers(this);
         super.onCreate();
-        eventManager.fire(this, new OnCreateEvent() );
+        eventManager.fire(new OnCreateEvent() );
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
         scope.enter(this);
         super.onStart(intent, startId);
-        eventManager.fire(this, new OnStartEvent() );
+        eventManager.fire(new OnStartEvent() );
     }
 
 
     @Override
     public void onDestroy() {
-        eventManager.fire(this, new OnDestroyEvent() );
+        eventManager.fire(new OnDestroyEvent() );
         scope.exit(this);
         super.onDestroy();
     }
@@ -77,7 +77,7 @@ public abstract class RoboIntentService extends IntentService implements Injecto
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(this, new OnConfigurationChangedEvent() );
+        eventManager.fire(new OnConfigurationChangedEvent() );
     }
 
     /**

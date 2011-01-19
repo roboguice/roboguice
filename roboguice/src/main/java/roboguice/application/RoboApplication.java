@@ -109,7 +109,7 @@ public class RoboApplication extends Application implements InjectorProvider {
         viewListener = new ViewListener(contextProvider, this, contextScope);
         extrasListener = new ExtrasListener(contextProvider);
         eventManager = allowContextObservers() ? new EventManager() : new NullEventManager();
-
+                
         if (allowPreferenceInjection())
           preferenceListener = new PreferenceListener(contextProvider);
 

@@ -121,6 +121,8 @@ public class RoboModule extends AbstractModule {
         if (eventManager.isEnabled())
             bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager));
 
+        requestInjection(eventManager);
+        
         requestStaticInjection( Ln.class );
         requestStaticInjection( RoboThread.class );
         requestStaticInjection( RoboAsyncTask.class );

@@ -5,6 +5,8 @@ import roboguice.util.Ln;
 import android.app.Application;
 import android.content.Context;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import java.lang.ref.WeakReference;
@@ -29,6 +31,8 @@ import java.util.*;
 @SuppressWarnings({"unchecked"})
 @Singleton
 public class EventManager {
+    @Inject protected Provider<Context> contextProvider;
+    
     protected Map<Context, Map<Class<?>, Set<ObserverReference<?>>>> registrations = new WeakHashMap<Context, Map<Class<?>, Set<ObserverReference<?>>>>();
 
     public boolean isEnabled() {
@@ -108,13 +112,21 @@ public class EventManager {
     }
 
     /**
+     * Raises the event's class' event on the current context.  This event object is passed (if configured) to the
+     * registered observer's method.
+     */
+    public void fire( Object event ) {
+        fire(contextProvider.get(),event);
+    }
+
+    /**
      * Raises the event's class' event on the given context.  This event object is passed (if configured) to the
      * registered observer's method.
      *
      * @param context
      * @param event
      */
-    public void fire(Context context, Object event) {
+    protected void fire(Context context, Object event) {
         if (!isEnabled()) return;
 
         /*

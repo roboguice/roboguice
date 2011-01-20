@@ -68,7 +68,7 @@ import java.util.Map;
  */
 public class ContextScope implements Scope {
 
-    protected final ThreadLocal<Map<Key<?>, Object>> values = new ThreadLocal<Map<Key<?>, Object>>();
+    protected final ThreadLocal<Map<Key<Context>, Object>> values = new ThreadLocal<Map<Key<Context>, Object>>();
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
     protected RoboApplication app;
 
@@ -83,16 +83,17 @@ public class ContextScope implements Scope {
      * via enter().
      */
     public void enter(Context context) {
-        Map<Key<?>,Object> map = values.get();
+        Map<Key<Context>,Object> map = values.get();
         if( map==null ) {
-            map = new HashMap<Key<?>,Object>();
+            map = new HashMap<Key<Context>,Object>();
             values.set(map);
         }
 
         map.put(Key.get(Context.class), context);
     }
 
-    public void exit(Context context) {
+    @SuppressWarnings({"UnusedParameters"})
+    public void exit(Context ignored) {
         values.remove();
     }
 
@@ -108,27 +109,29 @@ public class ContextScope implements Scope {
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
+            @SuppressWarnings({"SuspiciousMethodCalls", "unchecked"})
             public T get() {
-                final Map<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
+                final Map<Key<Context>, Object> scopedObjects = getScopedObjectMap(key);
 
                 @SuppressWarnings("unchecked")
                 T current = (T) scopedObjects.get(key);
                 if (current == null && !scopedObjects.containsKey(key)) {
                     current = unscoped.get();
-                    scopedObjects.put(key, current);
+                    scopedObjects.put((Key<Context>) key, current);
                 }
                 return current;
             }
         };
     }
 
-    protected <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
-        final Map<Key<?>,Object> map = values.get();
-        return map!=null ? map : defaultScopedObjectMap();
+    @SuppressWarnings({"UnusedParameters"})
+    protected <T> Map<Key<Context>, Object> getScopedObjectMap(Key<T> key) {
+        final Map<Key<Context>,Object> map = values.get();
+        return map!=null ? map : initialScopedObjectMap();
     }
 
-    protected Map<Key<?>,Object> defaultScopedObjectMap() {
-        final HashMap<Key<?>,Object> map = new HashMap<Key<?>,Object>();
+    protected Map<Key<Context>,Object> initialScopedObjectMap() {
+        final HashMap<Key<Context>,Object> map = new HashMap<Key<Context>,Object>();
         map.put(Key.get(Context.class),app);
         return map;
     }

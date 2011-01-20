@@ -15,13 +15,7 @@
  */
 package roboguice.astroboy;
 
-import java.util.Date;
-
-import roboguice.astroboy.bean.DateExtraConverter;
-import roboguice.astroboy.bean.DateTwiceExtraConverter;
-import roboguice.astroboy.bean.Person;
-import roboguice.astroboy.bean.PersonExtraConverter;
-import roboguice.astroboy.bean.PersonFromNameExtraProvider;
+import roboguice.astroboy.bean.*;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.astroboy.service.TalkingThingMockImpl;
 import roboguice.config.AbstractAndroidModule;
@@ -29,6 +23,8 @@ import roboguice.inject.ExtraConverter;
 import roboguice.inject.SharedPreferencesName;
 
 import com.google.inject.TypeLiteral;
+
+import java.util.Date;
 
 public class AstroboyModule extends AbstractAndroidModule {
 
@@ -38,17 +34,10 @@ public class AstroboyModule extends AbstractAndroidModule {
          * Here is the place to write the configuration specific to your application, i.e. your own custom bindings.
          */
         bind(TalkingThing.class).to(TalkingThingMockImpl.class);
-
         bind(Person.class).toProvider(PersonFromNameExtraProvider.class);
-
-        bind(new TypeLiteral<ExtraConverter<String, Person>>() {
-        }).to(PersonExtraConverter.class);
-
-        bind(new TypeLiteral<ExtraConverter<Long, Date>>() {
-        }).to(DateExtraConverter.class);
-
-        bind(new TypeLiteral<ExtraConverter<Integer, Date>>() {
-        }).to(DateTwiceExtraConverter.class);
+        bind(new TypeLiteral<ExtraConverter<String, Person>>(){}).to(PersonExtraConverter.class);
+        bind(new TypeLiteral<ExtraConverter<Long, Date>>(){}).to(DateExtraConverter.class);
+        bind(new TypeLiteral<ExtraConverter<Integer, Date>>(){}).to(DateTwiceExtraConverter.class);
 
         // BUG need a better way to set default preferences context
         bindConstant().annotatedWith(SharedPreferencesName.class).to("roboguice.astroboy");

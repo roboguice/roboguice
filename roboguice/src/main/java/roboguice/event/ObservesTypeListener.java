@@ -28,16 +28,18 @@ public class ObservesTypeListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
-        for (Method method : iTypeLiteral.getRawType().getDeclaredMethods()) {
-            final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-            for(int i = 0; i < parameterAnnotations.length; i++){
-                final Annotation[] annotationArray = parameterAnnotations[i];
-                final Class<?>[] parameterTypes = method.getParameterTypes();
-                final Class<?> parameterType = parameterTypes[i];
+        for( Class<?> c = iTypeLiteral.getRawType(); c!=Object.class ; c = c.getSuperclass() ) {
+            for (Method method : c.getDeclaredMethods()) {
+                final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+                for(int i = 0; i < parameterAnnotations.length; i++){
+                    final Annotation[] annotationArray = parameterAnnotations[i];
+                    final Class<?>[] parameterTypes = method.getParameterTypes();
+                    final Class<?> parameterType = parameterTypes[i];
 
-                for(Annotation annotation : annotationArray)
-                    if(annotation.annotationType().equals(Observes.class))
-                        registerContextObserver(iTypeEncounter, method, parameterType);                                    
+                    for(Annotation annotation : annotationArray)
+                        if(annotation.annotationType().equals(Observes.class))
+                            registerContextObserver(iTypeEncounter, method, parameterType);
+                }
             }
         }
     }

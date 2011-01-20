@@ -126,7 +126,7 @@ public class EventManager {
      * @param context
      * @param event
      */
-    protected void fire(Context context, Object event) {
+    public void fire(Context context, Object event) {
         if (!isEnabled()) return;
 
         /*

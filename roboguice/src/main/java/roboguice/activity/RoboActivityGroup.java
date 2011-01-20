@@ -104,7 +104,6 @@ public class RoboActivityGroup extends ActivityGroup implements InjectorProvider
     protected void onPause() {
         super.onPause();
         eventManager.fire(new OnPauseEvent());
-        scope.exit(this);
     }
 
     @Override
@@ -124,6 +123,7 @@ public class RoboActivityGroup extends ActivityGroup implements InjectorProvider
     protected void onDestroy() {
         eventManager.fire(new OnDestroyEvent());
         eventManager.clear(this);
+        scope.exit(this);
         super.onDestroy();
     }
 

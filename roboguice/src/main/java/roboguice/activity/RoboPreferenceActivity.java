@@ -126,7 +126,6 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     protected void onPause() {
         super.onPause();
         eventManager.fire(new OnPauseEvent());
-        scope.exit(this);
     }
 
     @Override
@@ -146,6 +145,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     protected void onDestroy() {
         eventManager.fire(new OnDestroyEvent());
         eventManager.clear(this);
+        scope.exit(this);
         super.onDestroy();
     }
 

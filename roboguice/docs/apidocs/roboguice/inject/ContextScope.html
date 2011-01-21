@@ -128,7 +128,7 @@ java.lang.Object
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.lang.ThreadLocal&lt;java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.Object&gt;&gt;</CODE></FONT></TD>
+<CODE>protected &nbsp;java.lang.ThreadLocal&lt;java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt;&gt;</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#values">values</A></B></CODE>
 
 <BR>
@@ -170,14 +170,6 @@ java.lang.Object
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.Object&gt;</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#defaultScopedObjectMap()">defaultScopedObjectMap</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#enter(android.content.Context)">enter</A></B>(android.content.Context&nbsp;context)</CODE>
 
@@ -187,7 +179,7 @@ java.lang.Object
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#exit(android.content.Context)">exit</A></B>(android.content.Context&nbsp;context)</CODE>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#exit(android.content.Context)">exit</A></B>(android.content.Context&nbsp;ignored)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -198,11 +190,19 @@ java.lang.Object
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
 <TR ALIGN="right" VALIGN="">
 <TD NOWRAP><FONT SIZE="-1">
-<CODE>&lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.Object&gt;</CODE></FONT></TD>
+<CODE>&lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt;</CODE></FONT></TD>
 </TR>
 </TABLE>
 </CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#getScopedObjectMap(com.google.inject.Key)">getScopedObjectMap</A></B>(com.google.inject.Key&lt;T&gt;&nbsp;key)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#initialScopedObjectMap()">initialScopedObjectMap</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -274,7 +274,7 @@ java.lang.Object
 <A NAME="values"><!-- --></A><H3>
 values</H3>
 <PRE>
-protected final java.lang.ThreadLocal&lt;java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.Object&gt;&gt; <B>values</B></PRE>
+protected final java.lang.ThreadLocal&lt;java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt;&gt; <B>values</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -349,7 +349,7 @@ public void <B>enter</B>(android.content.Context&nbsp;context)</PRE>
 <A NAME="exit(android.content.Context)"><!-- --></A><H3>
 exit</H3>
 <PRE>
-public void <B>exit</B>(android.content.Context&nbsp;context)</PRE>
+public void <B>exit</B>(android.content.Context&nbsp;ignored)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -406,7 +406,7 @@ public &lt;T&gt; com.google.inject.Provider&lt;T&gt; <B>scope</B>(com.google.inj
 <A NAME="getScopedObjectMap(com.google.inject.Key)"><!-- --></A><H3>
 getScopedObjectMap</H3>
 <PRE>
-protected &lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.Object&gt; <B>getScopedObjectMap</B>(com.google.inject.Key&lt;T&gt;&nbsp;key)</PRE>
+protected &lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt; <B>getScopedObjectMap</B>(com.google.inject.Key&lt;T&gt;&nbsp;key)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -417,10 +417,10 @@ protected &lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.Ob
 </DL>
 <HR>
 
-<A NAME="defaultScopedObjectMap()"><!-- --></A><H3>
-defaultScopedObjectMap</H3>
+<A NAME="initialScopedObjectMap()"><!-- --></A><H3>
+initialScopedObjectMap</H3>
 <PRE>
-protected java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.Object&gt; <B>defaultScopedObjectMap</B>()</PRE>
+protected java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt; <B>initialScopedObjectMap</B>()</PRE>
 <DL>
 <DD><DL>
 </DL>

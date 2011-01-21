@@ -44,29 +44,23 @@ public class ResourceListener implements StaticTypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        Class<?> c = typeLiteral.getRawType();
-        while (c != null) {
-            for (Field field : c.getDeclaredFields()) {
-                if (!Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class)) {
+        
+        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c = c.getSuperclass() )
+            for (Field field : c.getDeclaredFields())
+                if (!Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class))
                     typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
-                }
-            }
-            c = c.getSuperclass();
-        }
+
     }
 
     @SuppressWarnings("unchecked")
     public void requestStaticInjection(Class<?>... types) {
-        for (Class<?> c : types) {
-            while (c != null) {
-                for (Field field : c.getDeclaredFields()) {
-                    if (Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class)) {
+        
+        for (Class<?> c : types)
+            for( ; c!=Object.class; c=c.getSuperclass() )
+                for (Field field : c.getDeclaredFields())
+                    if (Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class))
                         new ResourceMembersInjector(field, application, field.getAnnotation(InjectResource.class)).injectMembers(null);
-                    }
-                }
-                c = c.getSuperclass();
-            }
-        }
+
 
     }
 

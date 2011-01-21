@@ -20,16 +20,21 @@ import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectPreference;
+import roboguice.inject.InjectView;
 import roboguice.inject.InjectorProvider;
 
+import android.R;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ListView;
 
 import com.google.inject.Injector;
+
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
@@ -43,6 +48,8 @@ import com.google.inject.Injector;
 public abstract class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
     protected EventManager eventManager;
     protected ContextScope scope;
+
+    @InjectView(R.id.list) protected ListView listView;
 
     /** {@inheritDoc } */
     @Override
@@ -59,6 +66,9 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
 
         // Only then inject everything
         injector.injectMembers(this);
+
+        assertNotNull(listView);
+
 
         eventManager.fire(new OnCreateEvent(savedInstanceState));
 

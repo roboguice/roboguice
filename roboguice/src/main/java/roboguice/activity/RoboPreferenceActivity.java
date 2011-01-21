@@ -52,13 +52,13 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
 
+        super.onCreate(savedInstanceState);
+
         // Injecting the preferences requires that they've been loaded, so load them
         onCreatePreferences();
 
         // Only then inject everything
         injector.injectMembers(this);
-
-        super.onCreate(savedInstanceState);
 
         eventManager.fire(new OnCreateEvent(savedInstanceState));
 

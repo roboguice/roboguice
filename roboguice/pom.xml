@@ -37,8 +37,8 @@
         <mailingList>
             <name>RoboGuice Forum/Mailinglist</name>
             <post>http://groups.google.com/group/roboguice</post>
-            <subscribe>http://groups.google.com/group/roboguice</subscribe>
-            <unsubscribe>http://groups.google.com/group/roboguice</unsubscribe>
+            <subscribe>http://groups.google.com/group/roboguice/subscribe</subscribe>
+            <unsubscribe>https://groups.google.com/group/roboguice/subscribe</unsubscribe>
         </mailingList>
     </mailingLists>
     <scm>

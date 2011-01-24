@@ -27,6 +27,11 @@
             <name>Michael Burton</name>
             <email>mb-mavencentral@niskala.org</email>
         </developer>
+        <developer>
+            <id>mosabua</id>
+            <name>Manfred Moser</name>
+            <email>manfred@simpligility.com</email>
+        </developer>
     </developers>
     <mailingLists>
         <mailingList>
@@ -44,7 +49,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    
+
     <build>
         <defaultGoal>package</defaultGoal>
         <plugins>

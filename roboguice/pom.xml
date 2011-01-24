@@ -1,18 +1,22 @@
 <project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.roboguice</groupId>
     <artifactId>roboguice</artifactId>
-    <name>roboguice</name>
+    <name>RoboGuice</name>
     <version>1.1-SNAPSHOT</version>
+    <description>A framework for using Google Guice dependency injection in Android.</description>
 
-    <description>
-    A framework for using Google Guice dependency injection in Android.
-  </description>
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
-    <url>http://code.google.com/p/roboguice/</url>
+    <url>http://roboguice.org</url>
     <issueManagement>
         <system>Google Code Issue Tracker</system>
         <url>http://code.google.com/p/roboguice/issues/list</url>
@@ -21,10 +25,26 @@
         <developer>
             <id>mburton</id>
             <name>Michael Burton</name>
-            <email>mike@niskala.org</email>
+            <email>mb-mavencentral@niskala.org</email>
         </developer>
     </developers>
-
+    <mailingLists>
+        <mailingList>
+            <name>RoboGuice Forum/Mailinglist</name>
+            <post>http://groups.google.com/group/roboguice</post>
+            <subscribe>http://groups.google.com/group/roboguice</subscribe>
+            <unsubscribe>http://groups.google.com/group/roboguice</unsubscribe>
+        </mailingList>
+    </mailingLists>
+    <scm>
+        <url>http://code.google.com/p/roboguice/source/list</url>
+        <connection>scm:hg:https://roboguice.googlecode.com/hg/</connection>
+        <developerConnection>scm:hg:https://roboguice.googlecode.com/hg/</developerConnection>
+    </scm>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
     <build>
         <defaultGoal>package</defaultGoal>
         <plugins>
@@ -77,11 +97,6 @@
         </extensions>
 
     </build>
-
-    <scm>
-        <connection>scm:hg:https://roboguice.googlecode.com/hg/</connection>
-        <developerConnection>scm:hg:https://roboguice.googlecode.com/hg/</developerConnection>
-    </scm>
 
     <dependencies>
         <dependency>

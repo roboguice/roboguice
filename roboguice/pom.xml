@@ -3,7 +3,7 @@
     <groupId>org.roboguice</groupId>
     <artifactId>roboguice</artifactId>
     <name>RoboGuice</name>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
     <description>A framework for using Google Guice dependency injection in Android.</description>
 
     <licenses>
@@ -90,13 +90,6 @@
                 </executions>
             </plugin>
         </plugins>
-        <extensions>
-            <extension>
-                <groupId>org.jvnet.wagon-svn</groupId>
-                <artifactId>wagon-svn</artifactId>
-                <version>1.9</version>
-            </extension>
-        </extensions>
 
     </build>
 

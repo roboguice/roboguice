@@ -7,7 +7,7 @@
     <artifactId>tests</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>apk</packaging>
-    <name>AstroBoy</name>
+    <name>RoboGuice Tests</name>
 
     <dependencies>
         <dependency>
@@ -27,7 +27,6 @@
             <artifactId>roboguice</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
-        <!-- this artifact has to be installed into your repository manually, no public repo has it-->
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>

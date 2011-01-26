@@ -15,34 +15,34 @@
  */
 package roboguice.astroboy.activity;
 
-import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import com.google.inject.Inject;
 import roboguice.activity.RoboPreferenceActivity;
 import roboguice.astroboy.R;
 import roboguice.astroboy.service.PreferenceChangeEventToastListener;
 import roboguice.inject.InjectPreference;
+
+import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+
+import com.google.inject.Inject;
 
 /**
  * @author Rodrigo Damazio
  */
 public class AstroPrefActivity extends RoboPreferenceActivity {
 
-  @InjectPreference("bool_pref")
-  CheckBoxPreference boolPref;
-  @Inject
-  PreferenceChangeEventToastListener preferenceChangeEventListener;
+    @InjectPreference("bool_pref") protected CheckBoxPreference boolPref;
+    @Inject protected PreferenceChangeEventToastListener preferenceChangeEventListener;
 
-  @Override
-  protected void onCreatePreferences() {
-    addPreferencesFromResource(R.xml.preference);
-  }
+    @Override
+    protected void onCreatePreferences() {
+        addPreferencesFromResource(R.xml.preference);
+    }
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-      //example of binding a event listener through a preference change listener
-    boolPref.setOnPreferenceChangeListener(preferenceChangeEventListener);
-  }
+        //example of binding a event listener through a preference change listener
+        boolPref.setOnPreferenceChangeListener(preferenceChangeEventListener);
+    }
 }

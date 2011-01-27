@@ -24,18 +24,14 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
 
-import java.util.List;
-
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
- * Used by {@link roboguice.application.RoboApplication}.
+ * Used by {@link roboguice.RoboGuice}.
  *
  * @author Mike Burton
- * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
 public class RoboModule extends AbstractModule {
 
@@ -49,12 +45,7 @@ public class RoboModule extends AbstractModule {
     }
 
     /**
-     * Configure this module to define Android related bindings.<br />
-     * <br />
-     * If you want to provide your own bindings, you should <strong>NOT</strong>
-     * override this method, but rather create a {@link Module} implementation
-     * and add it to the configuring modules by overriding
-     * {@link roboguice.application.RoboApplication#addApplicationModules(List)}.<br />
+     * Configure this module to define Android related bindings.
      */
     @SuppressWarnings("unchecked")
     @Override

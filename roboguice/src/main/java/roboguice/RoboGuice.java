@@ -18,7 +18,11 @@ public class RoboGuice {
     private RoboGuice() {
     }
 
-    public static Injector getInjector(Application context) {
+    public static Injector getInjector( Application context) {
+        return getInjector(Stage.PRODUCTION, context);
+    }
+    
+    public static Injector getInjector(Stage stage, Application context) {
 
         Injector rtrn = injectors.get(context);
         if( rtrn!=null )
@@ -44,7 +48,7 @@ public class RoboGuice {
                 }
             }
 
-            rtrn = Guice.createInjector(Stage.PRODUCTION, modules);
+            rtrn = Guice.createInjector(stage, modules);
             injectors.put(context,rtrn);
 
         }

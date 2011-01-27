@@ -36,11 +36,17 @@ import com.google.inject.matcher.Matchers;
 public class RoboModule extends AbstractModule {
 
     protected Application application;
+    protected Provider<Context> contextProvider;
+    protected ContextScope contextScope;
     protected ResourceListener resourceListener;
+    protected ViewListener viewListener;
 
 
     public RoboModule(final Application application) {
         this.application = application;
+        contextScope = new ContextScope(application);
+        contextProvider = contextScope.scope();
+        viewListener = new ViewListener(contextProvider, application, contextScope);
         resourceListener = new ResourceListener(application);
     }
 
@@ -51,9 +57,6 @@ public class RoboModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        final ContextScope contextScope = new ContextScope(application);
-        final Provider<Context> contextProvider = contextScope.scope();
-        final ViewListener viewListener = new ViewListener(contextProvider, application, contextScope);
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
         final EventManager eventManager = new EventManager();
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider);
@@ -108,14 +111,6 @@ public class RoboModule extends AbstractModule {
         requestStaticInjection(Ln.class);
         requestStaticInjection(RoboThread.class);
         requestStaticInjection(RoboAsyncTask.class);
-    }
-
-    @Override
-    protected void requestStaticInjection(Class<?>... types) {
-        super.requestStaticInjection(types);
-        if( resourceListener!=null )
-            resourceListener.requestStaticInjection(types);
-
     }
 
 }

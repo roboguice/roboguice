@@ -15,18 +15,13 @@
  */
 package roboguice.application;
 
-import roboguice.config.AbstractAndroidModule;
-import roboguice.config.RoboModule;
-import roboguice.event.EventManager;
-import roboguice.event.EventManager.NullEventManager;
-import roboguice.inject.*;
+import roboguice.RoboGuice;
+import roboguice.inject.InjectorProvider;
 
 import android.app.Application;
-import android.content.Context;
 
-import com.google.inject.*;
+import com.google.inject.Injector;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,20 +47,12 @@ import java.util.List;
  */
 public class RoboApplication extends Application implements InjectorProvider {
 
+
     /**
      * The {@link Injector} of your application.
      */
     protected Injector guiceInjector;
 
-    protected ContextScope contextScope;
-    protected Provider<Context> throwingContextProvider;
-    protected Provider<Context> contextProvider;
-    protected ResourceListener resourceListener;
-    protected ViewListener viewListener;
-    protected ExtrasListener extrasListener;
-    protected PreferenceListener preferenceListener;
-    protected List<StaticTypeListener> staticTypeListeners;
-    protected EventManager eventManager;
 
     /**
      * Returns the {@link Injector} of your application. If none exists yet,
@@ -80,7 +67,6 @@ public class RoboApplication extends Application implements InjectorProvider {
         if (guiceInjector == null) {
             synchronized (this) {
                 if (guiceInjector == null) {
-                    initInstanceMembers();
                     guiceInjector = createInjector();
                 }
             }
@@ -88,97 +74,9 @@ public class RoboApplication extends Application implements InjectorProvider {
         return guiceInjector;
     }
 
-    /**
-     * Since we don't create the injector when the {@link RoboApplication} is
-     * instantiated, but rather when getInjector is first called (lazy
-     * initialization), the same lazy initialization is applied to this
-     * application instance members, which are not used until the injector is
-     * first created. The main advantage is that roboguice footprint is close to
-     * zero if no RoboActivity is used when running the application.
-     */
-    protected void initInstanceMembers() {
-        contextScope = new ContextScope(this);
-        throwingContextProvider = new Provider<Context>() {
-            public Context get() {
-                return RoboApplication.this;
-            }
-        };
-        
-        contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
-        resourceListener = new ResourceListener(this);
-        viewListener = new ViewListener(contextProvider, this, contextScope);
-        extrasListener = new ExtrasListener(contextProvider);
-        eventManager = allowContextObservers() ? new EventManager() : new NullEventManager();
-                
-        if (allowPreferenceInjection())
-          preferenceListener = new PreferenceListener(contextProvider);
 
-
-        staticTypeListeners = new ArrayList<StaticTypeListener>();
-        staticTypeListeners.add(resourceListener);
-    }
-
-    /**
-     * Creates an {@link Injector} configured for this application. This
-     * {@link Injector} will be configured with a {@link roboguice.config.RoboModule} , plus
-     * any {@link Module} you might add by overriding
-     * {@link #addApplicationModules(List)}. <br />
-     * <br />
-     * In most cases, you should <strong>NOT</strong> override the
-     * {@link #createInjector()} method.
-     */
     protected Injector createInjector() {
-        ArrayList<Module> modules = new ArrayList<Module>();
-        Module roboguiceModule = new RoboModule(contextScope, throwingContextProvider,
-                contextProvider, resourceListener, viewListener, extrasListener, preferenceListener,
-                eventManager, this);
-        modules.add(roboguiceModule);
-        //context observer manager module
-        addApplicationModules(modules);
-        for (Module m : modules) {
-            if (m instanceof AbstractAndroidModule) {
-                ((AbstractAndroidModule) m).setStaticTypeListeners(staticTypeListeners);
-            }
-        }
-        return Guice.createInjector(Stage.PRODUCTION, modules);
+        return RoboGuice.createInjector(this);
     }
 
-    /**
-     * You should override this method to add your own custom bindings. <br />
-     * To do so, you must create implementations of the {@link Module}
-     * interface, and add them to the list of {@link Module} given as a
-     * parameter. The easiest way to create an {@link Module} implementation is
-     * to subclass {@link AbstractAndroidModule}, which provides proxy methods
-     * to the binder methods (enabling more readable configuration)<br />
-     * <br />
-     * This method is called by {@link #createInjector()}.<br />
-     * <br />
-     * The default implementation is a no-op and does nothing.
-     *
-     * @param modules
-     *            The list of modules to which you may add your own custom
-     *            modules. Please notice that it already contains one module,
-     *            which is this.
-     */
-    protected void addApplicationModules(List<Module> modules) {
-    }
-
-    /**
-     * Returns whether or not {@link roboguice.inject.InjectPreference} will be
-     * supported.
-     * It is supported by default, but applications that have no
-     * {@link roboguice.activity.RoboPreferenceActivity}'s may want to turn this
-     * off for a slight startup performance gain.
-     */
-    protected boolean allowPreferenceInjection() {
-      return true;
-    }
-
-    protected boolean allowContextObservers() {
-        return true;
-    }
-
-    public List<StaticTypeListener> getStaticTypeListeners() {
-        return staticTypeListeners;
-    }
 }

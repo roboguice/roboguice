@@ -1,5 +1,6 @@
 package roboguice.config;
 
+import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.inject.*;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
@@ -39,28 +41,13 @@ import java.util.List;
  */
 public class RoboModule extends AbstractModule {
 
-    protected ContextScope contextScope;
-    protected Provider<Context> throwingContextProvider;
-    protected Provider<Context> contextProvider;
+    protected RoboApplication application;
     protected ResourceListener resourceListener;
-    protected ViewListener viewListener;
-    protected ExtrasListener extrasListener;
-    protected PreferenceListener preferenceListener;
-    protected Application application;
-    protected EventManager eventManager;
 
-    public RoboModule(ContextScope contextScope, Provider<Context> throwingContextProvider, Provider<Context> contextProvider,
-            ResourceListener resourceListener, ViewListener viewListener, ExtrasListener extrasListener,
-            PreferenceListener preferenceListener, EventManager eventManager, Application application) {
-        this.contextScope = contextScope;
-        this.throwingContextProvider = throwingContextProvider;
-        this.contextProvider = contextProvider;
-        this.resourceListener = resourceListener;
-        this.viewListener = viewListener;
-        this.extrasListener = extrasListener;
-        this.preferenceListener = preferenceListener;
-        this.eventManager = eventManager;
+
+    public RoboModule(final RoboApplication application) {
         this.application = application;
+        resourceListener = new ResourceListener(application);
     }
 
     /**
@@ -74,12 +61,27 @@ public class RoboModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     protected void configure() {
+
+        final ContextScope contextScope = new ContextScope(application);
+        final Provider<Context> throwingContextProvider = new Provider<Context>() {
+            public Context get() {
+                return application;
+            }
+        };
+
+        final Provider<Context> contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
+        final ViewListener viewListener = new ViewListener(contextProvider, application, contextScope);
+        final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
+        final EventManager eventManager = new EventManager();
+        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider);
+
+
         // Context Scope bindings
         bindScope(ContextScoped.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
         bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
         bind(Activity.class).toProvider(ActivityProvider.class);
-        bind(AssetManager.class).toProvider( AssetManagerProvider.class );
+        bind(AssetManager.class).toProvider(AssetManagerProvider.class);
 
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
@@ -107,25 +109,29 @@ public class RoboModule extends AbstractModule {
         bind(ConnectivityManager.class).toProvider(new SystemServiceProvider<ConnectivityManager>(Context.CONNECTIVITY_SERVICE));
         bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(Context.WIFI_SERVICE));
         bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
-        bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
+        bind(SensorManager.class).toProvider(new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
 
 
         // Android Resources, Views and extras require special handling
         bindListener(Matchers.any(), resourceListener);
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
-
-        if (preferenceListener != null)
-          bindListener(Matchers.any(), preferenceListener);
-
-        if (eventManager.isEnabled())
-            bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager));
+        bindListener(Matchers.any(), preferenceListener);
+        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager));
 
         requestInjection(eventManager);
-        
-        requestStaticInjection( Ln.class );
-        requestStaticInjection( RoboThread.class );
-        requestStaticInjection( RoboAsyncTask.class );
+
+        requestStaticInjection(Ln.class);
+        requestStaticInjection(RoboThread.class);
+        requestStaticInjection(RoboAsyncTask.class);
+    }
+
+    @Override
+    protected void requestStaticInjection(Class<?>... types) {
+        super.requestStaticInjection(types);
+        if( resourceListener!=null )
+            resourceListener.requestStaticInjection(types);
+
     }
 
 }

@@ -15,8 +15,8 @@
  */
 package roboguice.activity;
 
-import roboguice.RoboGuice;
 import roboguice.activity.event.*;
+import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.InjectorProvider;
@@ -173,6 +173,6 @@ public class RoboActivity extends Activity implements InjectorProvider {
      */
     @Override
     public Injector getInjector() {
-        return RoboGuice.createInjector(this.getApplication());
+        return ((RoboApplication) getApplication()).getInjector();
     }
 }

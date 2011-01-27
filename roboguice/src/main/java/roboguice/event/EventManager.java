@@ -35,16 +35,10 @@ public class EventManager {
     
     protected Map<Context, Map<Class<?>, Set<ObserverReference<?>>>> registrations = new WeakHashMap<Context, Map<Class<?>, Set<ObserverReference<?>>>>();
 
-    public boolean isEnabled() {
-        return true;
-    }
-
     /**
      * Registers given method with provided context and event.
      */
     public void registerObserver(Context context, Object instance, Method method, Class event) {
-        if (!isEnabled()) return;
-
         if( context instanceof Application )
             throw new RuntimeException("You may not register event handlers on the Application context");
 
@@ -80,8 +74,6 @@ public class EventManager {
      * Unregisters all methods observing the given event from the provided context.
      */
     public void unregisterObserver(Context context, Object instance, Class event) {
-        if (!isEnabled()) return;
-
         final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
@@ -127,8 +119,6 @@ public class EventManager {
      * @param event
      */
     public void fire(Context context, Object event) {
-        if (!isEnabled()) return;
-
         /*
         if( event.getClass().getAnnotation(Returns.class)!=null )
             throw new RuntimeException("You must use notifyWithResult for events that expect return values");
@@ -190,13 +180,7 @@ public class EventManager {
     }
     */
 
-    public static class NullEventManager extends EventManager {
-        @Override
-        public boolean isEnabled() {
-            return false;
-        }
-    }
-    
+
     public static class ObserverReference<ResultType> {
         protected Method method;
         protected WeakReference<Object> instanceReference;

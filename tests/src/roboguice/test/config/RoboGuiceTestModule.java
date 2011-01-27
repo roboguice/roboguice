@@ -1,8 +1,8 @@
 package roboguice.test.config;
 
-import roboguice.config.AbstractAndroidModule;
+import com.google.inject.AbstractModule;
 
-public class RoboGuiceTestModule extends AbstractAndroidModule {
+public class RoboGuiceTestModule extends AbstractModule {
 
     @Override
     protected void configure() {

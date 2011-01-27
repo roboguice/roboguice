@@ -23,9 +23,4 @@ import java.util.List;
 
 public class AstroboyApplication extends RoboApplication {
 
-    @Override
-    protected void addApplicationModules(List<Module> modules) {
-        modules.add(new AstroboyModule());
-    }
-
 }

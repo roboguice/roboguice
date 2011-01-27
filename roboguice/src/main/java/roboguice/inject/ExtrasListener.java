@@ -45,15 +45,12 @@ public class ExtrasListener implements TypeListener {
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
 
-        Class<?> c = typeLiteral.getRawType();
-        while (c != null) {
-            for (Field field : c.getDeclaredFields()) {
-                if (field.isAnnotationPresent(InjectExtra.class)) {
+        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
+            for (Field field : c.getDeclaredFields())
+                if (field.isAnnotationPresent(InjectExtra.class))
                     typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
-                }
-            }
-            c = c.getSuperclass();
-        }
+
+
     }
 
 

@@ -92,7 +92,6 @@ public class ContextScope implements Scope {
         map.put(Key.get(Context.class), context);
     }
 
-    @SuppressWarnings({"UnusedParameters"})
     public void exit(Context ignored) {
         values.remove();
     }
@@ -107,13 +106,24 @@ public class ContextScope implements Scope {
         }
     }
 
+    public Provider<Context> scope() {
+        return scope(Key.get(Context.class), new Provider<Context>() {
+            public Context get() {
+                return app;
+            }
+        });
+    }
+
+    /**
+     * @param <T> is only allowed to be Context
+     */
+    @SuppressWarnings({"SuspiciousMethodCalls","unchecked"})
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
-            @SuppressWarnings({"SuspiciousMethodCalls", "unchecked"})
             public T get() {
-                final Map<Key<Context>, Object> scopedObjects = getScopedObjectMap(key);
+                final Map<Key<Context>,Object> map = values.get();
+                final Map<Key<Context>, Object> scopedObjects = map != null ? map : initialScopedObjectMap();
 
-                @SuppressWarnings("unchecked")
                 T current = (T) scopedObjects.get(key);
                 if (current == null && !scopedObjects.containsKey(key)) {
                     current = unscoped.get();
@@ -122,12 +132,6 @@ public class ContextScope implements Scope {
                 return current;
             }
         };
-    }
-
-    @SuppressWarnings({"UnusedParameters"})
-    protected <T> Map<Key<Context>, Object> getScopedObjectMap(Key<T> key) {
-        final Map<Key<Context>,Object> map = values.get();
-        return map!=null ? map : initialScopedObjectMap();
     }
 
     protected Map<Key<Context>,Object> initialScopedObjectMap() {

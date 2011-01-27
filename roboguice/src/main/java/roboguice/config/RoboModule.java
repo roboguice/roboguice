@@ -24,7 +24,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
@@ -62,13 +61,7 @@ public class RoboModule extends AbstractModule {
     protected void configure() {
 
         final ContextScope contextScope = new ContextScope(application);
-        final Provider<Context> throwingContextProvider = new Provider<Context>() {
-            public Context get() {
-                return application;
-            }
-        };
-
-        final Provider<Context> contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
+        final Provider<Context> contextProvider = contextScope.scope();
         final ViewListener viewListener = new ViewListener(contextProvider, application, contextScope);
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
         final EventManager eventManager = new EventManager();
@@ -78,7 +71,7 @@ public class RoboModule extends AbstractModule {
         // Context Scope bindings
         bindScope(ContextScoped.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
-        bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
+        bind(Context.class).toProvider(contextProvider).in(ContextScoped.class);
         bind(Activity.class).toProvider(ActivityProvider.class);
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
 

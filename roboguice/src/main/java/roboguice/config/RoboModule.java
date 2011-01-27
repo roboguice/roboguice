@@ -1,6 +1,5 @@
 package roboguice.config;
 
-import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.inject.*;
@@ -41,11 +40,11 @@ import java.util.List;
  */
 public class RoboModule extends AbstractModule {
 
-    protected RoboApplication application;
+    protected Application application;
     protected ResourceListener resourceListener;
 
 
-    public RoboModule(final RoboApplication application) {
+    public RoboModule(final Application application) {
         this.application = application;
         resourceListener = new ResourceListener(application);
     }

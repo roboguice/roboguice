@@ -152,7 +152,7 @@ public class DoctorTenma extends RoboActivity {
 
         backgroundTaskProvider.execute();
 
-        final Injector injector = RoboGuice.createInjector(this.getApplication());
+        final Injector injector = RoboGuice.getInjector(this.getApplication());
     }
 
 

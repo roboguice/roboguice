@@ -1,6 +1,5 @@
 package roboguice;
 
-import roboguice.application.RoboApplication;
 import roboguice.config.RoboModule;
 
 import android.app.Application;
@@ -19,7 +18,7 @@ public class RoboGuice {
     private RoboGuice() {
     }
 
-    public static Injector createInjector(Application context) {
+    public static Injector getInjector(Application context) {
 
         Injector rtrn = injectors.get(context);
         if( rtrn!=null )
@@ -34,7 +33,7 @@ public class RoboGuice {
             final String[] moduleNames = context.getResources().getStringArray(id);
             final ArrayList<Module> modules = new ArrayList<Module>();
 
-            modules.add(new RoboModule((RoboApplication) context));
+            modules.add(new RoboModule(context));
 
             if (moduleNames != null) {
                 try {

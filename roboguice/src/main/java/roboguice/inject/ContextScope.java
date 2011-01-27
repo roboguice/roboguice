@@ -50,8 +50,8 @@ package roboguice.inject;
  * From http://code.google.com/p/google-guice/wiki/CustomScopes
  */
 
-import roboguice.application.RoboApplication;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.google.inject.Key;
@@ -70,9 +70,9 @@ public class ContextScope implements Scope {
 
     protected final ThreadLocal<Map<Key<Context>, Object>> values = new ThreadLocal<Map<Key<Context>, Object>>();
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
-    protected RoboApplication app;
+    protected Application app;
 
-    public ContextScope( RoboApplication app ) {
+    public ContextScope( Application app ) {
         this.app = app;
     }
 

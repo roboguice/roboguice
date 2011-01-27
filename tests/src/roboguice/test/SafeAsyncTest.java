@@ -1,20 +1,22 @@
 package roboguice.test;
 
-import roboguice.test.config.RoboGuiceTestApplication;
+import roboguice.RoboGuice;
 import roboguice.util.RoboAsyncTask;
 import roboguice.util.RoboLooperThread;
 
+import android.app.Application;
 import android.content.Context;
 import android.test.suitebuilder.annotation.MediumTest;
 import android.view.View;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.Provider;
 
 import java.util.concurrent.CountDownLatch;
 
 
-public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
+public class SafeAsyncTest extends RoboUnitTestCase {
     public enum State {
         UNKNOWN, TEST_FAIL, TEST_SUCCESS
     }
@@ -240,11 +242,12 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
     public void testRoboAsyncTask() throws InterruptedException {
         final CountDownLatch latch = new CountDownLatch(1);
         final State state[] = new State[]{State.UNKNOWN};
+        final Injector injector = RoboGuice.getInjector((Application)getInstrumentation().getTargetContext().getApplicationContext());
 
         new RoboLooperThread() {
             public void run() {
 
-                final FakeHttpGet g = new FakeHttpGet(new View(getInjector().getInstance(Context.class)), "http://google.com" ){
+                final FakeHttpGet g = new FakeHttpGet(new View(injector.getInstance(Context.class)), "http://google.com" ){
                     @Override
                     protected void onSuccess(String s) throws Exception {
                         state[0] = s.contains("booga") ? SafeAsyncTest.State.TEST_SUCCESS : SafeAsyncTest.State.TEST_FAIL;
@@ -256,7 +259,7 @@ public class SafeAsyncTest extends RoboUnitTestCase<RoboGuiceTestApplication> {
                     }
 
                 };
-                getInjector().injectMembers(g);
+                injector.injectMembers(g);
                 g.execute();
 
             }

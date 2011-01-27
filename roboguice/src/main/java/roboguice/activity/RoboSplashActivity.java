@@ -1,11 +1,11 @@
 package roboguice.activity;
 
-import roboguice.application.RoboApplication;
+import roboguice.RoboGuice;
 import roboguice.inject.ContextScope;
 
 import android.app.Activity;
+import android.app.Application;
 import android.os.Bundle;
-import android.content.Intent;
 
 /**
  * An activity that can be used to display a splash page while initializing the
@@ -34,8 +34,8 @@ public abstract class RoboSplashActivity extends Activity {
                 // Set up a new thread since app.getInjector() takes so long
                 // Set the execution context for this thread in case the user
                 // want to use the injector
-                final RoboApplication app = (RoboApplication) getApplication();
-                final ContextScope scope = app.getInjector().getInstance(ContextScope.class);
+                final Application app = getApplication();
+                final ContextScope scope = RoboGuice.getInjector(app).getInstance(ContextScope.class);
 
                 scope.enter(app);
                 try {
@@ -68,7 +68,7 @@ public abstract class RoboSplashActivity extends Activity {
      * 
      * @param app
      */
-    protected void doStuffInBackground(RoboApplication app) {
+    protected void doStuffInBackground(Application app) {
     }
 
     /**

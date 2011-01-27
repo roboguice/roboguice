@@ -15,11 +15,10 @@
  */
 package roboguice.activity;
 
+import roboguice.RoboGuice;
 import roboguice.activity.event.*;
-import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
 
 import android.app.LauncherActivity;
 import android.content.Intent;
@@ -38,13 +37,13 @@ import com.google.inject.Injector;
  * 
  * @author Toly Pochkin
  */
-public class RoboLauncherActivity extends LauncherActivity implements InjectorProvider {
+public class RoboLauncherActivity extends LauncherActivity {
     protected EventManager eventManager;
     protected ContextScope scope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = getInjector();
+        final Injector injector = RoboGuice.getInjector(getApplication());
         eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
@@ -145,11 +144,4 @@ public class RoboLauncherActivity extends LauncherActivity implements InjectorPr
         eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
     }
 
-    /**
-     * @see roboguice.application.RoboApplication#getInjector()
-     */
-    @Override
-    public Injector getInjector() {
-        return ((RoboApplication) getApplication()).getInjector();
-    }
 }

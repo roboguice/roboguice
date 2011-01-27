@@ -15,6 +15,8 @@
  */
 package roboguice.inject;
 
+import roboguice.RoboGuice;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -76,7 +78,7 @@ public class ExtrasListener implements TypeListener {
             }
 
             final Activity activity = (Activity) context;
-            Object value = null;
+            Object value;
 
             final String id = annotation.value();
             final Bundle extras = activity.getIntent().getExtras();
@@ -94,11 +96,7 @@ public class ExtrasListener implements TypeListener {
 
             value = extras.get(id);
 
-            // Context must implement InjectorProvider to enable extra conversion
-            if (context instanceof InjectorProvider) {
-                Injector injector = ((InjectorProvider) context).getInjector();
-                value = convert(field, value, injector);
-            }
+            value = convert(field, value, RoboGuice.getInjector(activity.getApplication()));
 
             /*
              * Please notice : null checking is done AFTER conversion. Having

@@ -4,6 +4,13 @@ import android.app.Application;
 
 import com.google.inject.AbstractModule;
 
+/**
+ * An extension to guice's AbstractModule that gives the module access to
+ * the Application instance.
+ *
+ * In addition, it overrides {@link #requestStaticInjection(Class[])} to add support
+ * for RoboGuice's resource and view injection when injecting static methods.
+ */
 public abstract class AbstractRoboModule extends AbstractModule {
     protected RoboModule roboModule;
     protected Application application;

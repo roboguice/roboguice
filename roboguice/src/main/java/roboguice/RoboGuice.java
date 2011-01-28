@@ -13,6 +13,9 @@ import com.google.inject.Stage;
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 
+/**
+ * BUG hashmap should also key off of stage
+ */
 public class RoboGuice {
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
 
@@ -23,21 +26,21 @@ public class RoboGuice {
         return getInjector(Stage.PRODUCTION, context);
     }
     
-    public static Injector getInjector(Stage stage, Application context) {
+    public static Injector getInjector(Stage stage, Application application) {
 
-        Injector rtrn = injectors.get(context);
+        Injector rtrn = injectors.get(application);
         if( rtrn!=null )
             return rtrn;
 
         synchronized (RoboGuice.class) {
-            rtrn = injectors.get(context);
+            rtrn = injectors.get(application);
             if( rtrn!=null )
                 return rtrn;
 
-            final int id = context.getResources().getIdentifier("roboguice_modules", "array", context.getPackageName());
-            final String[] moduleNames = context.getResources().getStringArray(id);
+            final int id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
+            final String[] moduleNames = application.getResources().getStringArray(id);
             final ArrayList<Module> modules = new ArrayList<Module>();
-            final RoboModule roboModule = new RoboModule(context);
+            final RoboModule roboModule = new RoboModule(application);
 
             modules.add(roboModule);
 
@@ -45,7 +48,7 @@ public class RoboGuice {
                 try {
                     for (String name : moduleNames) {
                         //noinspection unchecked
-                        final AbstractRoboModule m = ((Class<AbstractRoboModule>) Class.forName(name)).newInstance();
+                        final AbstractRoboModule m = ((Class<AbstractRoboModule>) Class.forName(name)).getConstructor(Application.class).newInstance(application);
                         m.setRoboModule(roboModule);
                         modules.add( m );
                     }
@@ -55,7 +58,7 @@ public class RoboGuice {
             }
 
             rtrn = Guice.createInjector(stage, modules);
-            injectors.put(context,rtrn);
+            injectors.put(application,rtrn);
 
         }
 

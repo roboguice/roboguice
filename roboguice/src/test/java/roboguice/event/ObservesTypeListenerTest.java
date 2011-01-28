@@ -99,9 +99,7 @@ class EventManagerModule extends AbstractModule {
 
         // Context observers
         bind(EventManager.class).toInstance(eventManager);
-
-        if (eventManager.isEnabled())
-            bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager));
+        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager));
 
         requestInjection(eventManager);
     }

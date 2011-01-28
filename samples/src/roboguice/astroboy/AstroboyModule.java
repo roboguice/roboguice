@@ -22,11 +22,16 @@ import roboguice.config.AbstractRoboModule;
 import roboguice.inject.ExtraConverter;
 import roboguice.inject.SharedPreferencesName;
 
+import android.app.Application;
+
 import com.google.inject.TypeLiteral;
 
 import java.util.Date;
 
 public class AstroboyModule extends AbstractRoboModule {
+    public AstroboyModule(Application application) {
+        super(application);
+    }
 
     @Override
     protected void configure() {

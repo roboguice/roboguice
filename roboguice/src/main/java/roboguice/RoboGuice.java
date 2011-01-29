@@ -33,7 +33,6 @@ public class RoboGuice {
         return getInjector( DEFAULT_STAGE, application, modules );
     }
 
-    // BUG doesn't allow overriding of RoboModule
     public static Injector getInjector( Stage stage, Application application, Module... modules ) {
 
         Injector rtrn = injectors.get(application);
@@ -45,12 +44,7 @@ public class RoboGuice {
             if( rtrn!=null )
                 return rtrn;
 
-            final LinkedList<Module> list = new LinkedList<Module>(Arrays.asList(modules));
-            final RoboModule roboModule = new RoboModule(application);
-
-            list.add(0,roboModule);
-
-            rtrn = Guice.createInjector(stage, list);
+            rtrn = Guice.createInjector(stage, modules);
             injectors.put(application,rtrn);
 
         }
@@ -89,7 +83,7 @@ public class RoboGuice {
                 }
             }
 
-            rtrn = Guice.createInjector(stage, modules);
+            rtrn = getInjector(stage,application,modules.toArray(new Module[modules.size()]));
             injectors.put(application,rtrn);
 
         }

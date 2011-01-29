@@ -55,7 +55,6 @@ public class RoboModule extends AbstractModule {
     /**
      * Configure this module to define Android related bindings.
      */
-    @SuppressWarnings("unchecked")
     @Override
     protected void configure() {
 

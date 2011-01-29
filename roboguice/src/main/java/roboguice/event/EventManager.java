@@ -39,7 +39,7 @@ public class EventManager {
         return true;
     }
 
-    public <T> void registerObserver( Context context, EventListener listener, Class<T> event ) {
+    public <T> void registerObserver( Context context, Class<T> event, EventListener listener ) {
         if (!isEnabled()) return;
 
         if( context instanceof Application )
@@ -65,7 +65,7 @@ public class EventManager {
      * Registers given method with provided context and event.
      */
     public <T> void registerObserver(Context context, Object instance, Method method, Class<T> event) {
-        registerObserver(context, new ObserverMethodListener<T>( new ObserverReference<T>(instance, method)), event);
+        registerObserver(context, event, new ObserverMethodListener<T>( new ObserverReference<T>(instance, method)));
     }
 
     public <T> void unregisterObserver(Context context, Class<T> event, EventListener<T> listener ) {

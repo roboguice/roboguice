@@ -11,6 +11,8 @@ import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.hardware.SensorManager;
@@ -76,6 +78,14 @@ public class RoboModule extends AbstractModule {
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
         bind(Application.class).toInstance(application);
 
+
+        // Package Info
+        try {
+            final PackageInfo info = application.getPackageManager().getPackageInfo(application.getPackageName(),0);
+            bind(PackageInfo.class).toInstance(info);
+        } catch( PackageManager.NameNotFoundException e ) {
+            throw new RuntimeException(e);
+        }
 
 
         bind(EventManager.class).toInstance(eventManager);

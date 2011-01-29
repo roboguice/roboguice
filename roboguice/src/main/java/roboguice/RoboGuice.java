@@ -18,14 +18,52 @@ import java.util.WeakHashMap;
  */
 public class RoboGuice {
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
+    protected static Stage DEFAULT_STAGE = Stage.PRODUCTION;
 
     private RoboGuice() {
     }
 
     public static Injector getInjector( Application context) {
-        return getInjector(Stage.PRODUCTION, context);
+        return getInjector(DEFAULT_STAGE, context);
     }
-    
+
+    public static Injector getInjector( Application application, Module... modules ) {
+        return getInjector( DEFAULT_STAGE, application, modules );
+    }
+
+    // BUG doesn't allow overriding of RoboModule
+    public static Injector getInjector( Stage stage, Application application, Module... modules ) {
+
+        Injector rtrn = injectors.get(application);
+        if( rtrn!=null )
+            return rtrn;
+
+        synchronized (RoboGuice.class) {
+            rtrn = injectors.get(application);
+            if( rtrn!=null )
+                return rtrn;
+
+            final ArrayList<Module> list = new ArrayList<Module>();
+            final RoboModule roboModule = new RoboModule(application);
+
+            list.add(roboModule);
+
+            for ( Module m : modules ) {
+                if( m instanceof AbstractRoboModule )
+                    ((AbstractRoboModule)m).setRoboModule(roboModule);
+                list.add(m);
+            }
+
+            rtrn = Guice.createInjector(stage, list);
+            injectors.put(application,rtrn);
+
+        }
+
+        return rtrn;
+    }
+
+
+
     public static Injector getInjector(Stage stage, Application application) {
 
         Injector rtrn = injectors.get(application);
@@ -47,9 +85,9 @@ public class RoboGuice {
             if (moduleNames != null) {
                 try {
                     for (String name : moduleNames) {
-                        //noinspection unchecked
-                        final AbstractRoboModule m = ((Class<AbstractRoboModule>) Class.forName(name)).getConstructor(Application.class).newInstance(application);
-                        m.setRoboModule(roboModule);
+                        final Module m = Class.forName(name).asSubclass(Module.class).getConstructor(Application.class).newInstance(application);
+                        if( m instanceof AbstractRoboModule )
+                            ((AbstractRoboModule)m).setRoboModule(roboModule);
                         modules.add( m );
                     }
                 } catch (Exception e) {

@@ -39,6 +39,23 @@ public class EventManager {
         return true;
     }
 
+
+    public <T> void registerObserver( Class<T> event, EventListener listener ) {
+        registerObserver(contextProvider.get(),event,listener);
+    }
+    
+    public <T> void registerObserver(Object instance, Method method, Class<T> event) {
+        registerObserver(contextProvider.get(),instance,method,event);
+    }
+
+    public <T> void unregisterObserver(Class<T> event, EventListener<T> listener ) {
+        unregisterObserver(contextProvider.get(),event,listener);
+    }
+
+    public <T> void unregisterObserver(Object instance, Class<T> event) {
+        unregisterObserver(contextProvider.get(),instance,event);
+    }
+
     public <T> void registerObserver( Context context, Class<T> event, EventListener listener ) {
         if (!isEnabled()) return;
 

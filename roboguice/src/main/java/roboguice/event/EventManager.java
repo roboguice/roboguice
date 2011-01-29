@@ -33,64 +33,75 @@ import java.util.*;
 public class EventManager {
     @Inject protected Provider<Context> contextProvider;
     
-    protected Map<Context, Map<Class<?>, Set<ObserverReference<?>>>> registrations = new WeakHashMap<Context, Map<Class<?>, Set<ObserverReference<?>>>>();
+    protected Map<Context, Map<Class<?>, Set<EventListener<?>>>> registrations = new WeakHashMap<Context, Map<Class<?>, Set<EventListener<?>>>>();
 
     public boolean isEnabled() {
         return true;
     }
 
-    /**
-     * Registers given method with provided context and event.
-     */
-    public void registerObserver(Context context, Object instance, Method method, Class event) {
+    public <T> void registerObserver( Context context, EventListener listener, Class<T> event ) {
         if (!isEnabled()) return;
 
         if( context instanceof Application )
             throw new RuntimeException("You may not register event handlers on the Application context");
 
-        Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
+        Map<Class<?>, Set<EventListener<?>>> methods = registrations.get(context);
         if (methods == null) {
-            methods = new HashMap<Class<?>, Set<ObserverReference<?>>>();
+            methods = new HashMap<Class<?>, Set<EventListener<?>>>();
             registrations.put(context, methods);
         }
 
-        Set<ObserverReference<?>> observers = methods.get(event);
+        Set<EventListener<?>> observers = methods.get(event);
         if (observers == null) {
-            observers = new HashSet<ObserverReference<?>>();
+            observers = new HashSet<EventListener<?>>();
             methods.put(event, observers);
         }
 
-        /*
-        final Returns returns = (Returns) event.getAnnotation(Returns.class);
-        if( returns!=null ) {
-            if( !returns.value().isAssignableFrom(method.getReturnType()) )
-                throw new RuntimeException( String.format("Method %s.%s does not return a value that is assignable to %s",method.getDeclaringClass().getName(),method.getName(),returns.value().getName()) );
+        observers.add(listener);
 
-            if( !observers.isEmpty() ) {
-                final ObserverReference observer = observers.iterator().next();
-                throw new RuntimeException( String.format("Only one observer allowed for event types that return a value annotation.  Previously registered observer is %s.%s", observer.method.getDeclaringClass().getName(), observer.method.getName()));
+    }
+
+    /**
+     * Registers given method with provided context and event.
+     */
+    public <T> void registerObserver(Context context, Object instance, Method method, Class<T> event) {
+        registerObserver(context, new ObserverMethodListener<T>( new ObserverReference<T>(instance, method)), event);
+    }
+
+    public <T> void unregisterObserver(Context context, Class<T> event, EventListener<T> listener ) {
+        if (!isEnabled()) return;
+
+        final Map<Class<?>, Set<EventListener<?>>> methods = registrations.get(context);
+        if (methods == null) return;
+
+        final Set<EventListener<?>> observers = methods.get(event);
+        if (observers == null) return;
+
+        for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
+            final EventListener registeredListener = iterator.next();
+            if (registeredListener == listener) {
+                iterator.remove();
+                break;
             }
         }
-        */
-
-        observers.add(new ObserverReference(instance, method));
     }
 
     /**
      * Unregisters all methods observing the given event from the provided context.
      */
-    public void unregisterObserver(Context context, Object instance, Class event) {
+    public <T> void unregisterObserver(Context context, Object instance, Class<T> event) {
         if (!isEnabled()) return;
 
-        final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
+        final Map<Class<?>, Set<EventListener<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
-        final Set<ObserverReference<?>> observers = methods.get(event);
+        final Set<EventListener<?>> observers = methods.get(event);
         if (observers == null) return;
 
-        for (Iterator<ObserverReference<?>> iterator = observers.iterator(); iterator.hasNext();) {
-            ObserverReference observer = iterator.next();
-            if (observer != null) {
+        for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
+            final EventListener listener = iterator.next();
+            if( listener instanceof ObserverMethodListener ) {
+                final ObserverReference observer = ((ObserverMethodListener)listener).observer;
                 final Object registeredInstance = observer.instanceReference.get();
                 if (registeredInstance == instance) {
                     iterator.remove();
@@ -104,7 +115,7 @@ public class EventManager {
      * Clears all observers of the given context.
      */
     public void clear( Context context ) {
-        final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
+        final Map<Class<?>, Set<EventListener<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
         registrations.remove(context);
@@ -116,7 +127,7 @@ public class EventManager {
      * registered observer's method.
      */
     public void fire( Object event ) {
-        fire(contextProvider.get(),event);
+        fire(contextProvider.get(), event);
     }
 
     /**
@@ -129,66 +140,17 @@ public class EventManager {
     public void fire(Context context, Object event) {
         if (!isEnabled()) return;
 
-        /*
-        if( event.getClass().getAnnotation(Returns.class)!=null )
-            throw new RuntimeException("You must use notifyWithResult for events that expect return values");
-        */
-
-        final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
+        final Map<Class<?>, Set<EventListener<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
 
-        final Set<ObserverReference<?>> observers = methods.get(event.getClass());
+        final Set<EventListener<?>> observers = methods.get(event.getClass());
         if (observers == null) return;
 
-        for (ObserverReference observer : observers) {
-            try {
-                observer.invoke(event,null);
-            } catch (InvocationTargetException e) {
-                Ln.e(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
+        for (EventListener observer : observers)
+            observer.onEvent(event);
+
     }
-
-    /**
-     * Raises the event's class' event on the given context.  This event object is passed (if configured) to the
-     * registered observer's method.
-     *
-     * A result handler can be provided to deal with the return values from the invoked observer methods.
-     *
-     * @param context
-     * @param event
-     */
-    /*
-    // Disabled for now until we can figure out best way to proceed
-    public <ResultType> ResultType notifyWithResult(Context context, Object event, ResultType defaultValue ) {
-        if (!isEnabled()) return defaultValue;
-
-        if( event.getClass().getAnnotation(Returns.class)==null )
-            throw new RuntimeException("You must use fire with events that do not expect return values");
-
-        final Map<Class<?>, Set<ObserverReference<?>>> methods = registrations.get(context);
-        if (methods == null) return defaultValue;
-
-        final Set<ObserverReference<?>> observers = methods.get(event.getClass());
-        if (observers == null) return defaultValue;
-
-        for (ObserverReference<?> o : observers) {
-            final ObserverReference<ResultType> observer = (ObserverReference<ResultType>) o;
-            try {
-                return observer.invoke( event, defaultValue);
-            } catch (InvocationTargetException e) {
-                Ln.e(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        return defaultValue;
-    }
-    */
 
     public static class NullEventManager extends EventManager {
         @Override
@@ -210,6 +172,26 @@ public class EventManager {
         public ResultType invoke(Object event, ResultType defaultValue ) throws InvocationTargetException, IllegalAccessException {
             final Object instance = instanceReference.get();
             return instance == null ? defaultValue : (ResultType) method.invoke(instance, event);
+        }
+
+    }
+
+    public static class ObserverMethodListener<T> implements EventListener<T> {
+        protected ObserverReference<T> observer;
+
+        public ObserverMethodListener(ObserverReference<T> observer) {
+            this.observer = observer;
+        }
+
+        @Override
+        public void onEvent(T event) {
+            try {
+                observer.invoke(event,null);
+            } catch (InvocationTargetException e) {
+                Ln.e(e);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }

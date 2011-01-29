@@ -15,10 +15,9 @@
  */
 package roboguice.inject;
 
-import static junit.framework.Assert.assertNotNull;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
@@ -26,9 +25,10 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 
-import android.app.Activity;
-import android.app.Application;
-import android.content.Context;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * 
@@ -102,10 +102,8 @@ class ViewMembersInjector<T> implements MembersInjector<T> {
 
             value = ((Activity) contextProvider.get()).findViewById(annotation.value());
 
-            if (value == null && field.getAnnotation(Nullable.class) == null) {
-                throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
-                        .getName()));
-            }
+            if (value == null && field.getAnnotation(Nullable.class) == null)
+                throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
             field.setAccessible(true);
             field.set(instance, value);

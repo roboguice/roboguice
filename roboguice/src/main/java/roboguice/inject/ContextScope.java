@@ -70,6 +70,7 @@ public class ContextScope implements Scope {
 
     protected final ThreadLocal<Map<Key<Context>, Object>> values = new ThreadLocal<Map<Key<Context>, Object>>();
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
+    protected ArrayList<PreferenceMembersInjector<?>> preferencesForInjection = new ArrayList<PreferenceMembersInjector<?>>();
     protected RoboApplication app;
 
     public ContextScope( RoboApplication app ) {
@@ -101,10 +102,19 @@ public class ContextScope implements Scope {
         viewsForInjection.add(injector);
     }
 
+    public void registerPreferenceForInjection(PreferenceMembersInjector<?> injector) {
+        preferencesForInjection.add(injector);
+    }
+
+
     public void injectViews() {
-        for (int i = viewsForInjection.size() - 1; i >= 0; --i) {
+        for (int i = viewsForInjection.size() - 1; i >= 0; --i)
             viewsForInjection.remove(i).reallyInjectMembers();
-        }
+    }
+
+    public void injectPreferenceViews() {
+        for( int i = preferencesForInjection.size()-1; i>=0; --i)
+            preferencesForInjection.remove(i).reallyInjectMembers();
     }
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {

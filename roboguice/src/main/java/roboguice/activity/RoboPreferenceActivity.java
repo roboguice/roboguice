@@ -19,22 +19,17 @@ import roboguice.activity.event.*;
 import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
-import roboguice.inject.InjectPreference;
-import roboguice.inject.InjectView;
 import roboguice.inject.InjectorProvider;
 
-import android.R;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.ListView;
 
 import com.google.inject.Injector;
-
-import static junit.framework.Assert.assertNotNull;
 
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
@@ -44,12 +39,11 @@ import static junit.framework.Assert.assertNotNull;
  * 
  * @author Toly Pochkin
  * @author Rodrigo Damazio
+ * @author Mike Burton
  */
 public abstract class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
     protected EventManager eventManager;
     protected ContextScope scope;
-
-    @InjectView(R.id.list) protected ListView listView;
 
     /** {@inheritDoc } */
     @Override
@@ -58,31 +52,15 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
         eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
-
-        super.onCreate(savedInstanceState);
-
-        // Injecting the preferences requires that they've been loaded, so load them
-        onCreatePreferences();
-
-        // Only then inject everything
         injector.injectMembers(this);
-
-        assertNotNull(listView);
-
-
+        super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
-
     }
 
-    /**
-     * Override this method to specify how your preferences will be loaded.
-     * This is called before injecting the preference member fields, and will
-     * usually contain a call to {@link #addPreferencesFromResource}. This
-     * method must load or create all preferences which will be injected by
-     * {@link InjectPreference} annotations.
-     */
-    protected void onCreatePreferences() {
-        // Do nothing by default
+    @Override
+    public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
+        super.setPreferenceScreen(preferenceScreen);
+        scope.injectPreferenceViews();
     }
 
     @Override

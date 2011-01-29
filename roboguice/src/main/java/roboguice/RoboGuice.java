@@ -11,6 +11,8 @@ import com.google.inject.Module;
 import com.google.inject.Stage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.WeakHashMap;
 
 /**
@@ -43,16 +45,10 @@ public class RoboGuice {
             if( rtrn!=null )
                 return rtrn;
 
-            final ArrayList<Module> list = new ArrayList<Module>();
+            final LinkedList<Module> list = new LinkedList<Module>(Arrays.asList(modules));
             final RoboModule roboModule = new RoboModule(application);
 
-            list.add(roboModule);
-
-            for ( Module m : modules ) {
-                if( m instanceof AbstractRoboModule )
-                    ((AbstractRoboModule)m).setRoboModule(roboModule);
-                list.add(m);
-            }
+            list.add(0,roboModule);
 
             rtrn = Guice.createInjector(stage, list);
             injectors.put(application,rtrn);
@@ -85,10 +81,8 @@ public class RoboGuice {
             if (moduleNames != null) {
                 try {
                     for (String name : moduleNames) {
-                        final Module m = Class.forName(name).asSubclass(Module.class).getConstructor(Application.class).newInstance(application);
-                        if( m instanceof AbstractRoboModule )
-                            ((AbstractRoboModule)m).setRoboModule(roboModule);
-                        modules.add( m );
+                        final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
+                        modules.add( AbstractRoboModule.class.isAssignableFrom(clazz) ? clazz.getConstructor(RoboModule.class).newInstance(roboModule) : clazz.newInstance() );
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e);

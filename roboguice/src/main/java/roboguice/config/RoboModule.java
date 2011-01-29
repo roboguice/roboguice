@@ -44,7 +44,7 @@ public class RoboModule extends AbstractModule {
     protected ViewListener viewListener;
 
 
-    public RoboModule(final Application application) {
+    public RoboModule( Application application) {
         this.application = application;
         contextScope = new ContextScope(application);
         contextProvider = contextScope.scope();
@@ -57,7 +57,7 @@ public class RoboModule extends AbstractModule {
      */
     @Override
     protected void configure() {
-
+        
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
         final EventManager eventManager = new EventManager();
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider);

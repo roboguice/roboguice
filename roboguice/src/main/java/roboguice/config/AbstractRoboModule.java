@@ -13,22 +13,13 @@ import com.google.inject.AbstractModule;
  */
 public abstract class AbstractRoboModule extends AbstractModule {
     protected RoboModule roboModule;
-    protected Application application;
 
-    protected AbstractRoboModule(Application application) {
-        this.application = application;
+    protected AbstractRoboModule(RoboModule roboModule) {
+        this.roboModule = roboModule;
     }
 
     public Application getApplication() {
-        return application;
-    }
-
-    public RoboModule getRoboModule() {
-        return roboModule;
-    }
-
-    public void setRoboModule( RoboModule roboModule ) {
-        this.roboModule = roboModule;
+        return roboModule.application;
     }
 
     @Override

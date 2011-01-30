@@ -123,7 +123,7 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
     @Override
     protected void onDestroy() {
         eventManager.fire(new OnDestroyEvent());
-        eventManager.clear(this);
+        eventManager.clear();
         scope.exit(this);
         super.onDestroy();
     }

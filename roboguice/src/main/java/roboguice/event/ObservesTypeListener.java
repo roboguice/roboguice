@@ -1,7 +1,6 @@
 package roboguice.event;
 
 import android.content.Context;
-
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.InjectionListener;
@@ -29,18 +28,26 @@ public class ObservesTypeListener implements TypeListener {
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
         for( Class<?> c = iTypeLiteral.getRawType(); c!=Object.class ; c = c.getSuperclass() ) {
-            for (Method method : c.getDeclaredMethods()) {
-                final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-                for(int i = 0; i < parameterAnnotations.length; i++){
-                    final Annotation[] annotationArray = parameterAnnotations[i];
-                    final Class<?>[] parameterTypes = method.getParameterTypes();
-                    final Class<?> parameterType = parameterTypes[i];
+            for (Method method : c.getDeclaredMethods())
+                findContextObserver(method, iTypeEncounter);
 
-                    for(Annotation annotation : annotationArray)
-                        if(annotation.annotationType().equals(Observes.class))
-                            registerContextObserver(iTypeEncounter, method, parameterType);
-                }
-            }
+            for( Class<?> interfaceClass : c.getInterfaces())
+                for (Method method : interfaceClass.getDeclaredMethods())
+                    findContextObserver(method, iTypeEncounter);
+
+        }
+    }
+
+    protected <I> void findContextObserver(Method method, TypeEncounter<I> iTypeEncounter) {
+        final Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+        for(int i = 0; i < parameterAnnotations.length; i++){
+            final Annotation[] annotationArray = parameterAnnotations[i];
+            final Class<?>[] parameterTypes = method.getParameterTypes();
+            final Class<?> parameterType = parameterTypes[i];
+
+            for(Annotation annotation : annotationArray)
+                if(annotation.annotationType().equals(Observes.class))
+                    registerContextObserver(iTypeEncounter, method, parameterType);
         }
     }
 
@@ -53,34 +60,24 @@ public class ObservesTypeListener implements TypeListener {
      * @param <I>
      */
     protected <I> void registerContextObserver(TypeEncounter<I> iTypeEncounter, Method method, Class parameterType) {
-        checkMethodParameters(method, parameterType);
+        checkMethodParameters(method);
         iTypeEncounter.register(new ContextObserverMethodInjector<I>(contextProvider, eventManager, method, parameterType));
     }
 
     /**
-     * Error checking method, verifies:
-     *
-     * 1.  The method has the correct number of parameters, 0 or 1
-     * 2.  If the method has a parameter, it is of the proper type.
+     * Error checking method, verifies that the method has the correct number of parameters.
      *
      * @param method
-     * @param parameterType
      */
-    protected void checkMethodParameters(Method method, Class parameterType) {
+    protected void checkMethodParameters(Method method) {
         if(method.getParameterTypes().length > 1)
             throw new RuntimeException("Annotation @Observes must only annotate one parameter," +
                     " which must be the only parameter in the listener method.");
-
-        if(method.getParameterTypes().length == 1 && !method.getParameterTypes()[0].equals(parameterType))
-            throw new RuntimeException("Value injected by Observer or Observes in method " +
-                    method.getDeclaringClass().getCanonicalName() + "." + method.getName() +
-                    " must match annotated type " + parameterType.getName() + " .");
-        
     }
 
     /**
      * Injection listener to handle the observation manager registration.
-     * 
+     *
      * @param <I>
      */
     public static class ContextObserverMethodInjector<I> implements InjectionListener<I> {

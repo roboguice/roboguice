@@ -132,7 +132,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     @Override
     protected void onDestroy() {
         eventManager.fire(new OnDestroyEvent());
-        eventManager.clear(this);
+        eventManager.clear();
         scope.exit(this);
         super.onDestroy();
     }

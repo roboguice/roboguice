@@ -122,7 +122,7 @@ public class RoboLauncherActivity extends LauncherActivity implements InjectorPr
     @Override
     protected void onDestroy() {
         eventManager.fire(new OnDestroyEvent());
-        eventManager.clear(this);
+        eventManager.clear();
         scope.exit(this);
         super.onDestroy();
     }

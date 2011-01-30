@@ -18,7 +18,6 @@ package roboguice.inject;
 import android.app.Application;
 import android.content.Context;
 import android.preference.PreferenceActivity;
-
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
@@ -27,8 +26,6 @@ import com.google.inject.spi.TypeEncounter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
-import static junit.framework.Assert.assertNotNull;
 
 /**
  * 
@@ -94,7 +91,8 @@ class PreferenceMembersInjector<T> implements MembersInjector<T> {
     }
 
     public void reallyInjectMembers() {
-        assertNotNull(instance);
+        //TODO:Runtime Exception?
+        assert instance != null;
 
         Object value = null;
 

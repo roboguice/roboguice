@@ -86,13 +86,6 @@ public class EventManager {
     }
 
     /**
-     * Unregister all of the current context's event observers.
-     */
-    public void clear() {
-        clear(contextProvider.get());
-    }
-
-    /**
      * Raises the event's class' event on the current context.  This event object is passed (if configured) to the
      * registered observer's method.
      *

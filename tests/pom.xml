@@ -44,7 +44,7 @@
                 <version>2.8.4</version>
                 <configuration>
                     <sdk>
-                        <platform>3</platform>
+                        <platform>1.5</platform>
                     </sdk>
                     <emulator>
                         <avd>15</avd>

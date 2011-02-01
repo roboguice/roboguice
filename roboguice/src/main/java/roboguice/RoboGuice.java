@@ -11,12 +11,10 @@ import com.google.inject.Module;
 import com.google.inject.Stage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.WeakHashMap;
 
 /**
- * BUG hashmap should also key off of stage
+ * BUG hashmap should also key off of stage and modules list
  */
 public class RoboGuice {
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
@@ -25,14 +23,25 @@ public class RoboGuice {
     private RoboGuice() {
     }
 
+    /**
+     * Return the cached Injector instance for this application, or create a new one if necessary.
+     */
     public static Injector getInjector( Application context) {
         return getInjector(DEFAULT_STAGE, context);
     }
 
+    /**
+     * Return the cached Injector instance for this application, or create a new one if necessary.
+     * If specifying your own modules, you must include a RoboModule for most things to work properly.
+     */
     public static Injector getInjector( Application application, Module... modules ) {
         return getInjector( DEFAULT_STAGE, application, modules );
     }
 
+    /**
+     * Return the cached Injector instance for this application, or create a new one if necessary.
+     * If specifying your own modules, you must include a RoboModule for most things to work properly.
+     */
     public static Injector getInjector( Stage stage, Application application, Module... modules ) {
 
         Injector rtrn = injectors.get(application);
@@ -54,6 +63,9 @@ public class RoboGuice {
 
 
 
+    /**
+     * Return the cached Injector instance for this application, or create a new one if necessary.
+     */
     public static Injector getInjector(Stage stage, Application application) {
 
         Injector rtrn = injectors.get(application);

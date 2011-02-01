@@ -152,6 +152,7 @@ public class DoctorTenma extends RoboActivity {
 
         backgroundTaskProvider.execute();
 
+        // It's better to use @Inject Injector to get an injector, but you can always use RoboGuice.getInjector() in a pinch
         final Injector injector = RoboGuice.getInjector(this.getApplication());
     }
 

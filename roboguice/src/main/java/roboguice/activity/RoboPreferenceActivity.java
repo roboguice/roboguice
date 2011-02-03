@@ -34,6 +34,9 @@ import com.google.inject.Injector;
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
  * dynamic injection of collaborators, using Google Guice.<br />
+ *
+ * Note: there is currently a limitation that prevents you from using @InjectView if you use setContentView.
+ * http://code.google.com/p/roboguice/issues/detail?id=70
  * 
  * @see RoboActivity
  * 

@@ -78,21 +78,19 @@ public class RoboGuice {
                 return rtrn;
 
             final int id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
-            final String[] moduleNames = application.getResources().getStringArray(id);
+            final String[] moduleNames = id>0 ? application.getResources().getStringArray(id) : new String[]{};
             final ArrayList<Module> modules = new ArrayList<Module>();
             final RoboModule roboModule = new RoboModule(application);
 
             modules.add(roboModule);
 
-            if (moduleNames != null) {
-                try {
-                    for (String name : moduleNames) {
-                        final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                        modules.add( AbstractRoboModule.class.isAssignableFrom(clazz) ? clazz.getConstructor(RoboModule.class).newInstance(roboModule) : clazz.newInstance() );
-                    }
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+            try {
+                for (String name : moduleNames) {
+                    final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
+                    modules.add( AbstractRoboModule.class.isAssignableFrom(clazz) ? clazz.getConstructor(RoboModule.class).newInstance(roboModule) : clazz.newInstance() );
                 }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
 
             rtrn = getInjector(stage,application,modules.toArray(new Module[modules.size()]));

@@ -57,45 +57,24 @@ import android.content.Context;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
+import com.google.inject.internal.Maps;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
- * 
  * @author Mike Burton
  */
 public class ContextScope implements Scope {
 
-    protected final ThreadLocal<Map<Key<Context>, Object>> values = new ThreadLocal<Map<Key<Context>, Object>>();
+    protected ThreadLocal<WeakHashMap<Context,Map<Key<?>, Object>>> values = new ThreadLocal<WeakHashMap<Context,Map<Key<?>, Object>>>();
+    protected ThreadLocal<Context> currentContext = new ThreadLocal<Context>();
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
     protected ArrayList<PreferenceMembersInjector<?>> preferencesForInjection = new ArrayList<PreferenceMembersInjector<?>>();
-    protected RoboApplication app;
 
-    public ContextScope( RoboApplication app ) {
-        this.app = app;
-    }
-
-    /**
-     * Scopes can be entered multiple times with no problems (eg. from
-     * onCreate(), onStart(), etc). However, once they're closed, all their
-     * previous values are gone forever until the scope is reinitialized again
-     * via enter().
-     */
-    public void enter(Context context) {
-        Map<Key<Context>,Object> map = values.get();
-        if( map==null ) {
-            map = new HashMap<Key<Context>,Object>();
-            values.set(map);
-        }
-
-        map.put(Key.get(Context.class), context);
-    }
-
-    @SuppressWarnings({"UnusedParameters"})
-    public void exit(Context ignored) {
-        values.remove();
+    public ContextScope(RoboApplication app) {
+        enter(app);
     }
 
     public void registerViewForInjection(ViewMembersInjector<?> injector) {
@@ -106,44 +85,62 @@ public class ContextScope implements Scope {
         preferencesForInjection.add(injector);
     }
 
-
     public void injectViews() {
         for (int i = viewsForInjection.size() - 1; i >= 0; --i)
             viewsForInjection.remove(i).reallyInjectMembers();
     }
 
     public void injectPreferenceViews() {
-        for( int i = preferencesForInjection.size()-1; i>=0; --i)
+        for (int i = preferencesForInjection.size() - 1; i >= 0; --i)
             preferencesForInjection.remove(i).reallyInjectMembers();
+    }
+
+
+    public void enter(Context context) {
+        currentContext.set(context);
+
+        final Key<Context> key = Key.get(Context.class);
+        getScopedObjectMap(key).put(key, context);
+    }
+
+    @SuppressWarnings({"UnusedParameters"})
+    public void exit(Context ignored) {
+        // do nothing, the weakhashmap will take care of this for us
     }
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
-            @SuppressWarnings({"SuspiciousMethodCalls", "unchecked"})
             public T get() {
-                final Map<Key<Context>, Object> scopedObjects = getScopedObjectMap(key);
+                Map<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
 
                 @SuppressWarnings("unchecked")
                 T current = (T) scopedObjects.get(key);
                 if (current == null && !scopedObjects.containsKey(key)) {
                     current = unscoped.get();
-                    scopedObjects.put((Key<Context>) key, current);
+                    scopedObjects.put(key, current);
                 }
                 return current;
             }
         };
     }
 
-    @SuppressWarnings({"UnusedParameters"})
-    protected <T> Map<Key<Context>, Object> getScopedObjectMap(Key<T> key) {
-        final Map<Key<Context>,Object> map = values.get();
-        return map!=null ? map : initialScopedObjectMap();
-    }
+    protected <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
+        final Context context = currentContext.get();
 
-    protected Map<Key<Context>,Object> initialScopedObjectMap() {
-        final HashMap<Key<Context>,Object> map = new HashMap<Key<Context>,Object>();
-        map.put(Key.get(Context.class),app);
-        return map;
+        WeakHashMap<Context,Map<Key<?>, Object>> contextMap = values.get();
+        if( contextMap==null ) {
+            contextMap = new WeakHashMap<Context,Map<Key<?>,Object>>();
+            values.set( contextMap );
+        }
+
+
+        Map<Key<?>,Object> scopedObjects = contextMap.get(context);
+        if (scopedObjects == null) {
+            scopedObjects = Maps.newHashMap();
+            contextMap.put(context, scopedObjects);
+        }
+
+        return scopedObjects;
     }
 
 }

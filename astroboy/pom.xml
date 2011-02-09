@@ -35,7 +35,7 @@
         <dependency>
             <groupId>org.roboguice</groupId>
             <artifactId>roboguice</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.1.1-SNAPSHOT</version>
         </dependency>
         <!-- this artifact has to be installed into your repository manually, no public repo has it-->  
         <dependency>

@@ -74,13 +74,13 @@ public class RoboModule extends AbstractModule {
         bindScope(ContextScoped.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
         bind(Context.class).toProvider(throwingContextProvider).in(ContextScoped.class);
-        bind(Activity.class).toProvider(ActivityProvider.class);
-        bind(AssetManager.class).toProvider( AssetManagerProvider.class );
+        bind(Activity.class).toProvider(ActivityProvider.class).in(ContextScoped.class);
 
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         bind(Resources.class).toProvider(ResourcesProvider.class);
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
+        bind(AssetManager.class).toProvider( AssetManagerProvider.class );
 
         for (Class<?> c = application.getClass(); c != null && Application.class.isAssignableFrom(c); c = c.getSuperclass())
             bind((Class<Object>) c).toInstance(application);

@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+@ContextScoped
 public class AssetManagerProvider implements Provider<AssetManager> {
     @Inject protected Context context;
 

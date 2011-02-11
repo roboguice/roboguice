@@ -51,6 +51,8 @@ package roboguice.inject;
  */
 
 import roboguice.application.RoboApplication;
+import roboguice.util.Ln;
+import roboguice.util.Strings;
 
 import android.content.Context;
 
@@ -101,11 +103,21 @@ public class ContextScope implements Scope {
 
         final Key<Context> key = Key.get(Context.class);
         getScopedObjectMap(key).put(key, context);
+
+        final WeakHashMap<Context,Map<Key<?>,Object>> map = values.get();
+        if( map!=null )
+            Ln.d("Contexts in the %s scope map after inserting %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
     }
 
-    @SuppressWarnings({"UnusedParameters"})
-    public void exit(Context ignored) {
-        // do nothing, the weakhashmap will take care of this for us
+    public void exit(Context context) {
+        final WeakHashMap<Context,Map<Key<?>,Object>> map = values.get();
+        if( map!=null ) {
+            final Map<Key<?>,Object> scopedObjects = map.remove(context);
+            if( scopedObjects!=null )
+                scopedObjects.clear();
+
+            Ln.d("Contexts in the %s scope map after removing %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
+        }
     }
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {

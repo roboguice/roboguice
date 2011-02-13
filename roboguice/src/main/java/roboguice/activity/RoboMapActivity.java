@@ -116,17 +116,25 @@ public abstract class RoboMapActivity extends MapActivity implements InjectorPro
     @Override
     protected void onStop() {
         scope.enter(this);
-        eventManager.fire(new OnStopEvent());
-        super.onStop();
+        try {
+            eventManager.fire(new OnStopEvent());
+        } finally {
+            scope.exit(this);
+            super.onStop();
+        }
     }
 
     @Override
     protected void onDestroy() {
         scope.enter(this);
-        eventManager.fire(new OnDestroyEvent());
-        eventManager.clear(this);
-        scope.exit(this);
-        super.onDestroy();
+        try {
+            eventManager.fire(new OnDestroyEvent());
+        } finally {
+            eventManager.clear(this);
+            scope.exit(this);
+            scope.dispose(this);
+            super.onDestroy();
+        }
     }
 
     @Override

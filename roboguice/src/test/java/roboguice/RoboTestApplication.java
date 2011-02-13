@@ -2,6 +2,6 @@ package roboguice;
 
 import roboguice.application.RoboApplication;
 
-public class TestApplication extends RoboApplication {
+public class RoboTestApplication extends RoboApplication {
     
 }

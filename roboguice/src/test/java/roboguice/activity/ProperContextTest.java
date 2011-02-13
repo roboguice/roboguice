@@ -3,6 +3,7 @@ package roboguice.activity;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import roboguice.CustomRobolectricTestRunner;
 import roboguice.inject.ContextScope;
 
 import android.content.Context;

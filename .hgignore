@@ -8,3 +8,4 @@ local.properties
 .idea/
 .*.ipr$
 .*.iml$
+cached-robolectric-classes.jar

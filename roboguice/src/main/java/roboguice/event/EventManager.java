@@ -247,7 +247,11 @@ public class EventManager {
         public void onEvent(T event) {
             try {
                 final Object instance = instanceReference.get();
-                method.invoke(instance, event);
+                if (instance != null) {
+                    method.invoke(instance, event);
+                } else {
+                    Ln.w("trying to observe event %1$s on disposed context, consider explicitly calling EventManager.unregisterObserver", method.getName());
+                }
             } catch (InvocationTargetException e) {
                 Ln.e(e);
             } catch (IllegalAccessException e) {

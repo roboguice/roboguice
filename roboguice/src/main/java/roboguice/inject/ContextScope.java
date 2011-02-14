@@ -50,14 +50,16 @@ package roboguice.inject;
  * From http://code.google.com/p/google-guice/wiki/CustomScopes
  */
 
+import roboguice.application.RoboApplication;
+import roboguice.util.Ln;
+import roboguice.util.Strings;
+
 import android.content.Context;
+
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.internal.Maps;
-import roboguice.application.RoboApplication;
-import roboguice.util.Ln;
-import roboguice.util.Strings;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -98,23 +100,22 @@ public class ContextScope implements Scope {
 
 
     public void enter(Context context) {
-        Ln.v("Entering scope %1$s", context);
         ensureContextStack();
         contextStack.get().push(context);
 
         final Key<Context> key = Key.get(Context.class);
         getScopedObjectMap(key).put(key, context);
 
-        final WeakHashMap<Context,Map<Key<?>,Object>> map = values;
-        if( map!=null )
-            Ln.d("Contexts in the %s scope map after inserting %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
+        if( Ln.isVerboseEnabled() ) {
+            final WeakHashMap<Context,Map<Key<?>,Object>> map = values;
+            if( map!=null )
+                Ln.v("Contexts in the %s scope map after inserting %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
+        }
     }
 
     public void exit(Context context) {
-        Ln.v("Exiting scope %1$s", context);
         ensureContextStack();
         contextStack.get().remove(context);
-        Ln.v("Current scope is %1$s", contextStack.get().peek());
     }
 
     public void dispose(Context context) {
@@ -124,7 +125,8 @@ public class ContextScope implements Scope {
             if( scopedObjects!=null )
                 scopedObjects.clear();
 
-            Ln.d("Contexts in the %s scope map after removing %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
+            if( Ln.isVerboseEnabled() )
+                Ln.v("Contexts in the %s scope map after removing %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
         }
     }
 

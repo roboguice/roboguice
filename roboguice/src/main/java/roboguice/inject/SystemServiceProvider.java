@@ -15,20 +15,19 @@
  */
 package roboguice.inject;
 
-import android.content.Context;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import android.content.Context;
 
 /**
  * 
  * @author Mike Burton
  */
-@ContextScoped
 public class SystemServiceProvider<T> implements Provider<T> {
 
-    @Inject protected Context context;
-
+    @Inject
+    protected Provider<Context> contextProvider;
     protected String serviceName;
 
     public SystemServiceProvider(String serviceName) {
@@ -37,7 +36,7 @@ public class SystemServiceProvider<T> implements Provider<T> {
 
     @SuppressWarnings("unchecked")
     public T get() {
-        return (T) context.getSystemService(serviceName);
+        return (T) contextProvider.get().getSystemService(serviceName);
     }
 
 }

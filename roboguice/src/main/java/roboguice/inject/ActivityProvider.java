@@ -15,26 +15,24 @@
  */
 package roboguice.inject;
 
+import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
+
 import android.app.Activity;
 import android.content.Context;
-
-import com.google.inject.Inject;
-import com.google.inject.OutOfScopeException;
-import com.google.inject.Provider;
 
 /**
  * 
  * @author Mike Burton
  */
-@ContextScoped
+@Singleton
 public class ActivityProvider implements Provider<Activity> {
-    @Inject protected Context context;
+    @Inject
+    Provider<Context> contextProvider;
 
     public Activity get() {
-        if( !(context instanceof Activity))
-            throw new OutOfScopeException("Attempting to access the current activity outside of an Activity scope.  Context is of type " + context.getClass().getName() );
-
-        return (Activity) context;
+        return (Activity) contextProvider.get();
     }
 
 }

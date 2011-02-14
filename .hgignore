@@ -1,11 +1,25 @@
 syntax: regexp
+# Mac
 \.DS_Store
+
+# Output
 target/
 classes/
-/bin/
-.*.iws$
-local.properties
+bin/
+
+# Intellij
+\.iws$
+\.ipr$
+\.iml$
 .idea/
-.*.ipr$
-.*.iml$
+
+# Eclipse
+\.classpath
+\.project
+\.eml$
+
+# Android
+local.properties
+
+# Robolectric
 cached-robolectric-classes.jar

@@ -153,7 +153,12 @@ public class RoboExpandableListActivity extends ExpandableListActivity implement
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+        } finally {
+            scope.exit(this);
+        }
     }
 
     /**

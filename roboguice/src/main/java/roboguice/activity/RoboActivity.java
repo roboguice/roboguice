@@ -162,8 +162,9 @@ public class RoboActivity extends Activity implements InjectorProvider {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent(newConfig));
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig));
     }
 
     @Override

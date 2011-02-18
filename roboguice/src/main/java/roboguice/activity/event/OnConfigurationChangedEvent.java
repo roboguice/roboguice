@@ -10,13 +10,19 @@ import android.content.res.Configuration;
  */
 public class OnConfigurationChangedEvent {
 
-        protected Configuration config;
+        protected Configuration oldConfig;
+        protected Configuration newConfig;
 
-        public OnConfigurationChangedEvent(Configuration config) {
-            this.config = config;
+        public OnConfigurationChangedEvent(Configuration oldConfig, Configuration newConfig) {
+            this.oldConfig = oldConfig;
+            this.newConfig = newConfig;
         }
 
-        public Configuration getConfig() {
-            return config;
+        public Configuration getOldConfig() {
+            return oldConfig;
+        }
+
+        public Configuration getNewConfig() {
+            return newConfig;
         }
     }

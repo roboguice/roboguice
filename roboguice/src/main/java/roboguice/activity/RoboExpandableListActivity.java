@@ -140,8 +140,9 @@ public class RoboExpandableListActivity extends ExpandableListActivity implement
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent(newConfig));
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig));
     }
 
     @Override

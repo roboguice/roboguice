@@ -86,8 +86,9 @@ public abstract class RoboService extends Service implements InjectorProvider {
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent() );
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig) );
     }
 
     /**

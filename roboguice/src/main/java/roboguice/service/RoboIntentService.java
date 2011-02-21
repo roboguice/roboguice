@@ -76,8 +76,9 @@ public abstract class RoboIntentService extends IntentService implements Injecto
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent() );
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig,newConfig) );
     }
 
     /**

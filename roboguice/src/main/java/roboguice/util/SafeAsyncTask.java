@@ -162,7 +162,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
             try {
                 doPreExecute();
                 doSuccess(doCall());
-                return null;
 
             } catch( final Exception e ) {
                 try {
@@ -170,13 +169,12 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
                 } catch( Exception f ) {
                     // ignored, throw original instead
                 }
-                throw e;
 
             } finally {
                 doFinally();
             }
 
-
+            return null;
         }
 
         protected void doPreExecute() throws Exception {

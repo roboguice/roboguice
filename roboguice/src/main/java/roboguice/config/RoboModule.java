@@ -68,7 +68,6 @@ public class RoboModule extends AbstractModule {
     protected void configure() {
         
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
-        final EventManager eventManager = new EventManager();
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
 
 
@@ -95,11 +94,6 @@ public class RoboModule extends AbstractModule {
             throw new RuntimeException(e);
         }
 
-
-        bind(EventManager.class).toInstance(eventManager);
-
-
-
         // System Services
         bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));
         bind(WindowManager.class).toProvider(new SystemServiceProvider<WindowManager>(Context.WINDOW_SERVICE));
@@ -123,9 +117,6 @@ public class RoboModule extends AbstractModule {
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
         bindListener(Matchers.any(), preferenceListener);
-        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager));
-
-        requestInjection(eventManager);
 
         requestStaticInjection(Ln.class);
         requestStaticInjection(RoboThread.class);

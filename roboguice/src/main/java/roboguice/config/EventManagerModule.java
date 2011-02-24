@@ -1,15 +1,16 @@
 package roboguice.config;
 
-import roboguice.event.EventManager;
-import roboguice.event.ObservesTypeListener;
-
 import android.content.Context;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
+import roboguice.event.EventManager;
+import roboguice.event.ObservesTypeListener;
+import roboguice.event.eventListener.factory.ObservesThreadingFactory;
 
 /**
+ * Guice module configuring the Observes and EventManager functionality.
+ *
  * @author John Ericksen
  */
 public class EventManagerModule extends AbstractModule {
@@ -26,8 +27,14 @@ public class EventManagerModule extends AbstractModule {
     protected void configure() {
 
         // Context observers
+        ObservesThreadingFactory observerThreadingFactory = new ObservesThreadingFactory();
+        
         bind(EventManager.class).toInstance(eventManager);
-        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager));
+        bind(ObservesThreadingFactory.class).toInstance(observerThreadingFactory);
+
+        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager,observerThreadingFactory));
+        
+        requestInjection(observerThreadingFactory);
         requestInjection(eventManager);
     }
 }

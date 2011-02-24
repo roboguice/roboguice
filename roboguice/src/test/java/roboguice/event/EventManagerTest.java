@@ -1,18 +1,19 @@
 package roboguice.event;
 
+import org.easymock.EasyMock;
+import org.junit.Before;
+import org.junit.Test;
+
 import android.app.Application;
 import android.content.Context;
-import org.easymock.EasyMock;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Test class verifying eventManager functionality
+ *
  * @author John Ericksen
  */
 public class EventManagerTest {
@@ -25,7 +26,7 @@ public class EventManagerTest {
     private List<Method> methods;
     private EventOne event;
 
-    @BeforeClass(groups = "roboguice")
+    @Before
     public void setup() throws NoSuchMethodException {
         eventManager = new EventManager();
         context = EasyMock.createMock(Context.class);
@@ -39,12 +40,7 @@ public class EventManagerTest {
         event = new EventOne();
     }
 
-    @BeforeMethod(groups = "roboguice")
-    public void reset(){
-        tester.reset();
-    }
-
-    @Test(groups = "roboguice")
+    @Test
     public void testRegistrationLifeCycle(){
         for(Method method : eventOneMethods){
             eventManager.registerObserver(context, tester, method, EventOne.class);
@@ -70,7 +66,7 @@ public class EventManagerTest {
         tester.verifyCallCount(eventTwoMethods, EventTwo.class, 0);
     }
 
-    @Test(groups = "roboguice")
+    @Test
     public void testRegistrationClear(){
         Context contextTwo = EasyMock.createMock(Context.class);
 
@@ -90,34 +86,12 @@ public class EventManagerTest {
         tester.verifyCallCount(eventOneMethods, EventOne.class, 1);
     }
 
-    @Test(groups = "roboguice", expectedExceptions = RuntimeException.class)
+    @Test(expected = RuntimeException.class)
     public void testApplicationContextEvent(){
         Context applicationContext = EasyMock.createMock(Application.class);
 
         for(Method method : eventOneMethods){
             eventManager.registerObserver(applicationContext, tester, method, EventOne.class);
-        }
-    }
-
-    @Test(groups = "roboguice")
-    public void testInheritanceMethodCalling() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-
-        ClassOne one = new ClassOne();
-
-        Method baseMethod = ClassTwo.class.getDeclaredMethod("bar", null);
-
-        baseMethod.invoke(one, null);
-    }
-
-    public class ClassOne extends ClassTwo{
-        public void bar(){
-            System.out.println("I get called");
-        }
-    }
-
-    public class ClassTwo{
-        public void bar(){
-            System.out.println("I don't");
         }
     }
 }

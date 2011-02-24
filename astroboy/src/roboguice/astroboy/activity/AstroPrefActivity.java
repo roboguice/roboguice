@@ -19,11 +19,15 @@ import roboguice.activity.RoboPreferenceActivity;
 import roboguice.astroboy.R;
 import roboguice.astroboy.service.PreferenceChangeEventToastListener;
 import roboguice.inject.InjectPreference;
+import roboguice.inject.InjectView;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.widget.ListView;
 
 import com.google.inject.Inject;
+
+import static junit.framework.Assert.assertNotNull;
 
 /**
  * @author Rodrigo Damazio
@@ -31,18 +35,20 @@ import com.google.inject.Inject;
 public class AstroPrefActivity extends RoboPreferenceActivity {
 
     @InjectPreference("bool_pref") protected CheckBoxPreference boolPref;
+
     @Inject protected PreferenceChangeEventToastListener preferenceChangeEventListener;
 
-    @Override
-    protected void onCreatePreferences() {
-        addPreferencesFromResource(R.xml.preference);
-    }
+    @InjectView(android.R.id.list) protected ListView preferenceListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        addPreferencesFromResource(R.xml.preference);
+
         //example of binding a event listener through a preference change listener
         boolPref.setOnPreferenceChangeListener(preferenceChangeEventListener);
+
+        assertNotNull(preferenceListView);
     }
 }

@@ -21,11 +21,13 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
 
@@ -44,10 +46,17 @@ public class RoboModule extends AbstractModule {
     protected ViewListener viewListener;
 
 
-    public RoboModule( Application application) {
+    public RoboModule( final Application application) {
+
+        final Provider<Context> throwingContextProvider = new Provider<Context>() {
+            public Context get() {
+                return application;
+            }
+        };
+
         this.application = application;
         contextScope = new ContextScope(application);
-        contextProvider = contextScope.scope();
+        contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
         viewListener = new ViewListener(contextProvider, application, contextScope);
         resourceListener = new ResourceListener(application);
     }
@@ -60,7 +69,7 @@ public class RoboModule extends AbstractModule {
         
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
         final EventManager eventManager = new EventManager();
-        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider);
+        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
 
 
         // Context Scope bindings
@@ -105,7 +114,8 @@ public class RoboModule extends AbstractModule {
         bind(ConnectivityManager.class).toProvider(new SystemServiceProvider<ConnectivityManager>(Context.CONNECTIVITY_SERVICE));
         bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(Context.WIFI_SERVICE));
         bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
-        bind(SensorManager.class).toProvider(new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
+        bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
+        bind(TelephonyManager.class).toProvider( new SystemServiceProvider<TelephonyManager>(Context.TELEPHONY_SERVICE));
 
 
         // Android Resources, Views and extras require special handling

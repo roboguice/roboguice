@@ -1,6 +1,8 @@
 package roboguice.event;
 
 /**
+ * Context Observer testing interface
+ *
  * @author John Ericksen
  */
 public interface ContextObserverTester {

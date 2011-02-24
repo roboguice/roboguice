@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
+ * Base Context Observer testing class exercising the various implementation combinations.
+ *
  * @author John Ericksen
  */
 public class ContextObserverBase {
@@ -18,13 +20,23 @@ public class ContextObserverBase {
 
     public void verifyCallCount(List<Method> methods, Class<?> event, int expectedCount){
         for(Method method : methods){
-            assertTrue(callCount.containsKey(method.getName()) || expectedCount == 0);
+
+            assertTrue("Method: " + method.getName() + " was not called.",
+                    callCount.containsKey(method.getName()) || expectedCount == 0);
+
             if(callCount.containsKey(method.getName())){
+
             Map<Class<?>, Integer> callCountClass = callCount.get(method.getName());
+
                 if(expectedCount > 0){
-                    assertTrue(callCountClass.containsKey(event) || expectedCount == 0);
+
+                    assertTrue("Event: " + event.getName() + " was not observed.",
+                            callCountClass.containsKey(event) || expectedCount == 0);
+
                     if(callCountClass.containsKey(event)){
-                        assertEquals(callCountClass.get(event).intValue(), expectedCount);
+                        assertEquals(
+                                "Call count was not expected",
+                                callCountClass.get(event).intValue(), expectedCount);
                     }
                 }
             }

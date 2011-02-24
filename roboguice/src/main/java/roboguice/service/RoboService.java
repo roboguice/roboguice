@@ -73,15 +73,22 @@ public abstract class RoboService extends Service implements InjectorProvider {
 
     @Override
     public void onDestroy() {
-        eventManager.fire(new OnDestroyEvent() );
-        scope.exit(this);
-        super.onDestroy();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnDestroyEvent() );
+        } finally {
+            eventManager.clear(this);
+            scope.exit(this);
+            scope.dispose(this);
+            super.onDestroy();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent() );
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig) );
     }
 
     /**

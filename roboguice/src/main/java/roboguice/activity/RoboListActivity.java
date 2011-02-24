@@ -115,22 +115,33 @@ public class RoboListActivity extends ListActivity implements InjectorProvider {
 
     @Override
     protected void onStop() {
-        eventManager.fire(new OnStopEvent());
-        super.onStop();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnStopEvent());
+        } finally {
+            scope.exit(this);
+            super.onStop();
+        }
     }
 
     @Override
     protected void onDestroy() {
-        eventManager.fire(new OnDestroyEvent());
-        eventManager.clear(this);
-        scope.exit(this);
-        super.onDestroy();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnDestroyEvent());
+        } finally {
+            eventManager.clear(this);
+            scope.exit(this);
+            scope.dispose(this);
+            super.onDestroy();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent(newConfig));
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig));
     }
 
     @Override
@@ -142,7 +153,12 @@ public class RoboListActivity extends ListActivity implements InjectorProvider {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+        } finally {
+            scope.exit(this);
+        }
     }
 
     /**

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Context Observer testing class exercising the various implementation combinations.
+ *
  * @author John Ericksen
  */
 public class ContextObserverTesterImpl extends ContextObserverBase implements ContextObserverTester{

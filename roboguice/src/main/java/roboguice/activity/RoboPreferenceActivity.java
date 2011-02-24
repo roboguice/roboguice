@@ -19,13 +19,13 @@ import roboguice.activity.event.*;
 import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
-import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectorProvider;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceScreen;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
@@ -34,11 +34,15 @@ import com.google.inject.Injector;
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
  * dynamic injection of collaborators, using Google Guice.<br />
+ *
+ * Note: there is currently a limitation that prevents you from using @InjectView if you use setContentView.
+ * http://code.google.com/p/roboguice/issues/detail?id=70
  * 
  * @see RoboActivity
  * 
  * @author Toly Pochkin
  * @author Rodrigo Damazio
+ * @author Mike Burton
  */
 public abstract class RoboPreferenceActivity extends PreferenceActivity implements InjectorProvider {
     protected EventManager eventManager;
@@ -51,28 +55,15 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
         eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
-
-        super.onCreate(savedInstanceState);
-
-        // Injecting the preferences requires that they've been loaded, so load them
-        onCreatePreferences();
-
-        // Only then inject everything
         injector.injectMembers(this);
-
+        super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
-
     }
 
-    /**
-     * Override this method to specify how your preferences will be loaded.
-     * This is called before injecting the preference member fields, and will
-     * usually contain a call to {@link #addPreferencesFromResource}. This
-     * method must load or create all preferences which will be injected by
-     * {@link InjectPreference} annotations.
-     */
-    protected void onCreatePreferences() {
-        // Do nothing by default
+    @Override
+    public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
+        super.setPreferenceScreen(preferenceScreen);
+        scope.injectPreferenceViews();
     }
 
     @Override
@@ -137,22 +128,33 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
 
     @Override
     protected void onStop() {
-        eventManager.fire(new OnStopEvent());
-        super.onStop();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnStopEvent());
+        } finally {
+            scope.exit(this);
+            super.onStop();
+        }
     }
 
     @Override
     protected void onDestroy() {
-        eventManager.fire(new OnDestroyEvent());
-        eventManager.clear(this);
-        scope.exit(this);
-        super.onDestroy();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnDestroyEvent());
+        } finally {
+            eventManager.clear(this);
+            scope.exit(this);
+            scope.dispose(this);
+            super.onDestroy();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent(newConfig));
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig));
     }
 
     @Override
@@ -164,7 +166,12 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+        } finally {
+            scope.exit(this);
+        }
     }
 
     /**

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.roboguice</groupId>
-    <artifactId>tests</artifactId>
+    <artifactId>roboguice-tests</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>apk</packaging>
     <name>RoboGuice Tests</name>
@@ -13,13 +13,13 @@
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-            <version>1.5_r4</version>
+            <version>2.1_r1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android-test</artifactId>
-            <version>1.5_r4</version>
+            <version>2.1_r1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -58,4 +58,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>6</version>
+    </parent>
+    
 </project>

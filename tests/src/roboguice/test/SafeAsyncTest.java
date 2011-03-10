@@ -206,7 +206,7 @@ public class SafeAsyncTest extends RoboUnitTestCase {
                     }
 
                     @Override
-                    protected void onInterrupted(InterruptedException e) {
+                    protected void onInterrupted(Exception e) {
                         state[0] = null; // expected
                     }
 

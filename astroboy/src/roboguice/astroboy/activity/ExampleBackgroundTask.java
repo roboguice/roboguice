@@ -17,7 +17,7 @@ public class ExampleBackgroundTask extends RoboAsyncTask<Void> {
     }
 
     @Override
-    protected void onInterrupted(InterruptedException e) {
+    protected void onInterrupted(Exception e) {
         Ln.d("Interrupting background task %s", this);
     }
 

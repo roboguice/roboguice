@@ -9,15 +9,6 @@
     <packaging>apk</packaging>
     <name>AstroBoy</name>
 
-    <!-- we need this because roboguice is hosted there, if you build locally or download and install manually
-     or into your own repository server you can omit this. -->
-    <repositories>
-        <repository>
-            <id>maven2-repository.dev.java.net</id>
-            <name>Java.net Repository for Maven</name>
-            <url>http://download.java.net/maven/2/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
@@ -37,7 +28,6 @@
             <artifactId>roboguice</artifactId>
             <version>1.1.1-SNAPSHOT</version>
         </dependency>
-        <!-- this artifact has to be installed into your repository manually, no public repo has it-->  
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
@@ -77,4 +67,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>6</version>
+    </parent>
+    
 </project>

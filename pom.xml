@@ -4,9 +4,9 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.roboguice</groupId>
-    <artifactId>aggregator</artifactId>
+    <artifactId>roboguice-aggregator</artifactId>
     <name>Aggregator</name>
-    <version>SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -14,4 +14,11 @@
         <module>tests</module>
         <module>astroboy</module>
     </modules>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>6</version>
+    </parent>
+    
 </project>

@@ -15,8 +15,6 @@ public class ObservesThreadingFactory {
 
     public <T> EventListener<T> decorate(EventThread threadType, EventListener<T> eventListener){
         switch (threadType){
-            case CURRENT:
-                return eventListener;
             case UI:
                 return uiThreadFactory.decorate(eventListener);
             case BACKGROUND:

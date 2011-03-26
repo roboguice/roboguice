@@ -52,7 +52,7 @@ public class ObservesThreadingFactoryTest {
 
         replay(uiThreadFactory, asyncFactory);
 
-        EventListener outputListener = observesFactory.buildMethodObserver(EventThread.CURRENT, eventListener);
+        EventListener outputListener = observesFactory.decorate(EventThread.CURRENT, eventListener);
 
         assertEquals(eventListener, outputListener);
 
@@ -65,11 +65,11 @@ public class ObservesThreadingFactoryTest {
 
         reset(uiThreadFactory, asyncFactory);
 
-        expect(uiThreadFactory.buildDecorator(eventListener)).andReturn(outputListener);
+        expect(uiThreadFactory.decorate(eventListener)).andReturn(outputListener);
 
         replay(uiThreadFactory, asyncFactory);
 
-        assertEquals(observesFactory.buildMethodObserver(EventThread.UI, eventListener),
+        assertEquals(observesFactory.decorate(EventThread.UI, eventListener),
                 outputListener);
 
         verify(uiThreadFactory, asyncFactory);
@@ -81,11 +81,11 @@ public class ObservesThreadingFactoryTest {
 
         reset(uiThreadFactory, asyncFactory);
 
-        expect(asyncFactory.buildDecorator(eventListener)).andReturn(outputListener);
+        expect(asyncFactory.decorate(eventListener)).andReturn(outputListener);
 
         replay(uiThreadFactory, asyncFactory);
 
-        assertEquals(observesFactory.buildMethodObserver(EventThread.NEW, eventListener),
+        assertEquals(observesFactory.decorate(EventThread.BACKGROUND, eventListener),
                 outputListener);
 
         verify(uiThreadFactory, asyncFactory);

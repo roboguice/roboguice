@@ -1,8 +1,9 @@
 package roboguice.event.eventListener.factory;
 
-import com.google.inject.Inject;
 import roboguice.event.EventListener;
 import roboguice.event.eventListener.AsynchronousEventListenerDecorator;
+
+import com.google.inject.Inject;
 
 /**
  * Factory for the AsynchronousEventListenerDecorator
@@ -11,10 +12,9 @@ import roboguice.event.eventListener.AsynchronousEventListenerDecorator;
  */
 public class AsynchronousEventListenerDecoratorFactory {
 
-    @Inject
-    protected RunnableAsyncTaskAdaptorFactory taskFactory;
+    @Inject protected RunnableAsyncTaskAdaptorFactory taskFactory;
     
-    public <T> EventListener<T> buildDecorator(EventListener<T> eventListener) {
+    public <T> EventListener<T> decorate(EventListener<T> eventListener) {
         return new AsynchronousEventListenerDecorator<T>(eventListener, taskFactory);
     }
 }

@@ -108,7 +108,7 @@ public class ObservesTypeListener implements TypeListener {
 
         public void afterInjection(I i) {
             eventManager.registerObserver(contextProvider.get(), event,
-                    observerThreadingFactory.buildMethodObserver(threadType,
+                    observerThreadingFactory.decorate(threadType,
                             new ObserverMethodListener<T>(i, method)));
         }
     }

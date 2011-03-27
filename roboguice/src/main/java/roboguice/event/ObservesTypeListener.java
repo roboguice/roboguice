@@ -7,7 +7,7 @@ import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import roboguice.event.eventListener.ObserverMethodListener;
-import roboguice.event.eventListener.factory.ObservesThreadingFactory;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -22,12 +22,12 @@ import java.lang.reflect.Method;
 public class ObservesTypeListener implements TypeListener {
     protected EventManager eventManager;
     protected Provider<Context> contextProvider;
-    protected ObservesThreadingFactory observerThreadingFactory;
+    protected EventListenerThreadingDecorator observerThreadingDecorator;
 
-    public ObservesTypeListener(Provider<Context> contextProvider, EventManager eventManager, ObservesThreadingFactory observerThreadingFactory) {
+    public ObservesTypeListener(Provider<Context> contextProvider, EventManager eventManager, EventListenerThreadingDecorator observerThreadingDecorator) {
         this.eventManager = eventManager;
         this.contextProvider = contextProvider;
-        this.observerThreadingFactory = observerThreadingFactory;
+        this.observerThreadingDecorator = observerThreadingDecorator;
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
@@ -67,7 +67,7 @@ public class ObservesTypeListener implements TypeListener {
      */
     protected <I, T> void registerContextObserver(TypeEncounter<I> iTypeEncounter, Method method, Class<T> parameterType, EventThread threadType) {
         checkMethodParameters(method);
-        iTypeEncounter.register(new ContextObserverMethodInjector<I, T>(contextProvider, eventManager, observerThreadingFactory,
+        iTypeEncounter.register(new ContextObserverMethodInjector<I, T>(contextProvider, eventManager, observerThreadingDecorator,
                 method, parameterType,threadType));
     }
 
@@ -89,17 +89,17 @@ public class ObservesTypeListener implements TypeListener {
      */
     public static class ContextObserverMethodInjector<I, T> implements InjectionListener<I> {
         protected Provider<Context> contextProvider;
-        protected ObservesThreadingFactory observerThreadingFactory;
+        protected EventListenerThreadingDecorator observerThreadingDecorator;
         protected EventManager eventManager;
         protected Method method;
         protected Class<T> event;
         protected EventThread threadType;
 
         public ContextObserverMethodInjector(Provider<Context> contextProvider, EventManager eventManager,
-                                             ObservesThreadingFactory observerThreadingFactory,  Method method,
+                                             EventListenerThreadingDecorator observerThreadingDecorator,  Method method,
                                              Class<T> event, EventThread threadType) {
             this.contextProvider = contextProvider;
-            this.observerThreadingFactory = observerThreadingFactory;
+            this.observerThreadingDecorator = observerThreadingDecorator;
             this.eventManager = eventManager;
             this.method = method;
             this.event = event;
@@ -108,7 +108,7 @@ public class ObservesTypeListener implements TypeListener {
 
         public void afterInjection(I i) {
             eventManager.registerObserver(contextProvider.get(), event,
-                    observerThreadingFactory.decorate(threadType,
+                    observerThreadingDecorator.decorate(threadType,
                             new ObserverMethodListener<T>(i, method)));
         }
     }

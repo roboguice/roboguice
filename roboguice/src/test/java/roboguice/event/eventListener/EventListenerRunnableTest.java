@@ -8,23 +8,24 @@ import roboguice.event.EventOne;
 import static org.easymock.EasyMock.*;
 
 /**
- * Tests for the EventFireRunnable class
+ * Tests for the EventListenerRunnable class
  *
  * @author John Ericksen
  */
-public class EventFireRunnableTest {
+public class EventListenerRunnableTest {
 
     protected EventOne event;
     protected EventListener<EventOne> eventListener;
 
-    protected EventFireRunnable eventFireRunnable;
+    protected EventListenerRunnable eventListenerRunnable;
 
     @Before
     public void setup(){
+        //noinspection unchecked
         eventListener = createMock(EventListener.class);
         event = new EventOne();
 
-        eventFireRunnable = new EventFireRunnable<EventOne>(event, eventListener);
+        eventListenerRunnable = new EventListenerRunnable<EventOne>(event, eventListener);
     }
 
     @Test
@@ -35,7 +36,7 @@ public class EventFireRunnableTest {
 
         replay(eventListener);
 
-        eventFireRunnable.run();
+        eventListenerRunnable.run();
 
         verify(eventListener);
     }

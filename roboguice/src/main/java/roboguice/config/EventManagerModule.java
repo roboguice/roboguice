@@ -2,7 +2,7 @@ package roboguice.config;
 
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
-import roboguice.event.eventListener.factory.ObservesThreadingFactory;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
 import android.content.Context;
 
@@ -28,14 +28,14 @@ public class EventManagerModule extends AbstractModule {
     @Override
     protected void configure() {
 
-        final ObservesThreadingFactory observerThreadingFactory = new ObservesThreadingFactory();
+        final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
         
         bind(EventManager.class).toInstance(eventManager);
-        bind(ObservesThreadingFactory.class).toInstance(observerThreadingFactory);
+        bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
 
-        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager,observerThreadingFactory));
+        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager, observerThreadingDecorator));
         
-        requestInjection(observerThreadingFactory);
+        requestInjection(observerThreadingDecorator);
         requestInjection(eventManager);
     }
 }

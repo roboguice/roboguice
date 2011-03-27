@@ -1,7 +1,8 @@
 package roboguice.event.eventListener;
 
 import roboguice.event.EventListener;
-import roboguice.event.eventListener.factory.RunnableAsyncTaskAdaptorFactory;
+
+import android.os.Handler;
 
 /**
  * Event Listener Decorator class.  This decorator executes the event listener through the SafeAsyncTask functionality.
@@ -11,14 +12,18 @@ import roboguice.event.eventListener.factory.RunnableAsyncTaskAdaptorFactory;
 public class AsynchronousEventListenerDecorator<T> implements EventListener<T>{
 
     protected EventListener<T> eventListener;
-    protected RunnableAsyncTaskAdaptorFactory asyncTaskFactory;
+    protected Handler handler;
 
-    public AsynchronousEventListenerDecorator(EventListener<T> eventListener, RunnableAsyncTaskAdaptorFactory asyncTaskFactory) {
+    public AsynchronousEventListenerDecorator(EventListener<T> eventListener) {
         this.eventListener = eventListener;
-        this.asyncTaskFactory = asyncTaskFactory;
+    }
+
+    public AsynchronousEventListenerDecorator(Handler handler, EventListener<T> eventListener) {
+        this.handler = handler;
+        this.eventListener = eventListener;
     }
 
     public void onEvent(T event) {
-        asyncTaskFactory.build(event, eventListener).execute();
+        new RunnableAsyncTaskAdaptor(handler, new EventListenerRunnable<T>(event, eventListener)).execute();
     }
 }

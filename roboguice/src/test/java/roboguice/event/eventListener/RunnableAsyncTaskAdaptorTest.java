@@ -12,13 +12,13 @@ import static org.easymock.EasyMock.*;
  */
 public class RunnableAsyncTaskAdaptorTest {
 
-    protected EventFireRunnable runnable;
+    protected EventListenerRunnable runnable;
 
     protected RunnableAsyncTaskAdaptor runnableAdaptor;
 
     @Before
     public void setup(){
-        runnable = createMock(EventFireRunnable.class);
+        runnable = createMock(EventListenerRunnable.class);
 
         runnableAdaptor = new RunnableAsyncTaskAdaptor(runnable);
     }

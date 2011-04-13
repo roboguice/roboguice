@@ -11,7 +11,6 @@
 
     <modules>
         <module>roboguice</module>
-        <module>tests</module>
         <module>astroboy</module>
     </modules>
 

@@ -2,6 +2,7 @@ package roboguice.config;
 
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
 import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
@@ -44,6 +45,7 @@ public class RoboModule extends AbstractModule {
     protected ContextScope contextScope;
     protected ResourceListener resourceListener;
     protected ViewListener viewListener;
+    protected EventManager eventManager;
 
 
     public RoboModule( final Application application) {
@@ -59,6 +61,7 @@ public class RoboModule extends AbstractModule {
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
         viewListener = new ViewListener(contextProvider, application, contextScope);
         resourceListener = new ResourceListener(application);
+        eventManager = new EventManager();
     }
 
     /**
@@ -66,9 +69,10 @@ public class RoboModule extends AbstractModule {
      */
     @Override
     protected void configure() {
-        
+
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
+        final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
 
 
         // Context Scope bindings
@@ -84,6 +88,8 @@ public class RoboModule extends AbstractModule {
         bind(Resources.class).toProvider(ResourcesProvider.class);
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
         bind(Application.class).toInstance(application);
+        bind(EventManager.class).toInstance(eventManager);
+        bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
 
 
         // Package Info
@@ -117,6 +123,12 @@ public class RoboModule extends AbstractModule {
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
         bindListener(Matchers.any(), preferenceListener);
+        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager, observerThreadingDecorator));
+
+
+        requestInjection(observerThreadingDecorator);
+        requestInjection(eventManager);
+        
 
         requestStaticInjection(Ln.class);
         requestStaticInjection(RoboThread.class);

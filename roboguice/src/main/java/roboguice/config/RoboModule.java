@@ -7,6 +7,7 @@ import roboguice.inject.*;
 import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
 import roboguice.util.RoboThread;
+import roboguice.util.Strings;
 
 import android.app.*;
 import android.content.ContentResolver;
@@ -22,6 +23,8 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.os.Vibrator;
+import android.provider.Settings;
+import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
@@ -31,6 +34,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Names;
 
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
@@ -73,7 +77,10 @@ public class RoboModule extends AbstractModule {
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
+        final String androidId = Secure.getString(application.getContentResolver(), Secure.ANDROID_ID);
 
+        if(Strings.notEmpty(androidId))
+            bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
 
         // Context Scope bindings
         bindScope(ContextScoped.class, contextScope);

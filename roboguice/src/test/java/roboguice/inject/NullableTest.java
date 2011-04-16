@@ -16,27 +16,6 @@ import javax.annotation.Nullable;
 public class NullableTest {
 
     @Test
-    public void shouldRejectNullViews() {
-
-    }
-
-    @Test
-    public void shouldRejectNullResources() {
-
-    }
-
-    @Test
-    public void shouldRejectNullExtras() {
-
-    }
-
-    @Test
-    public void shouldRejectNullPrefs() {
-
-    }
-
-
-    @Test
     public void shouldRejectNullFields() throws Exception {
         assertThat(roboguice.inject.Nullable.isNullable(DummyClass.class.getDeclaredField("notNullable")), is(false));
     }

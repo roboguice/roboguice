@@ -37,8 +37,8 @@ import android.widget.TextView;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.internal.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;

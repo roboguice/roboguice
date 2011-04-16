@@ -12,8 +12,9 @@ public class Nullable {
 
     public static boolean isNullable(Field field) {
         for( Annotation a : field.getAnnotations() )
-            if( Strings.equals("Nullable",a.getClass().getSimpleName()))
+            if( Strings.equals("Nullable",a.annotationType().getSimpleName()))
                 return true;
+        
         return false;
     }
 }

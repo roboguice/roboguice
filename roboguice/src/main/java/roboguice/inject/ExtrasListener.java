@@ -20,7 +20,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import com.google.inject.*;
-import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import com.google.inject.util.Types;
@@ -108,7 +107,7 @@ public class ExtrasListener implements TypeListener {
              * don't use @Nullable and a converter returns null, an exception will
              * be thrown (which I find to be the most logic behavior).
              */
-            if (value == null && field.getAnnotation(Nullable.class) == null) {
+            if (value == null && Nullable.notNullable(field) ) {
                 throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
                         .getName()));
             }

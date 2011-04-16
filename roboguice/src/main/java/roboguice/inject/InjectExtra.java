@@ -22,7 +22,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import com.google.inject.BindingAnnotation;
-import com.google.inject.internal.Nullable;
 
 /**
  * Indicates that a variable member of a class (whether static or not) should be

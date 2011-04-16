@@ -25,7 +25,6 @@ import android.view.animation.AnimationUtils;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
-import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 
 import java.lang.reflect.Field;
@@ -114,7 +113,7 @@ public class ResourceListener implements StaticTypeListener {
                     value = resources.getMovie(id);
                 }
                 
-                if (value == null && field.getAnnotation(Nullable.class) == null) {
+                if (value == null && Nullable.notNullable(field) ) {
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
                             .getName()));
                 }

@@ -59,7 +59,6 @@ import android.content.Context;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
-import com.google.inject.internal.Maps;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -156,7 +155,7 @@ public class ContextScope implements Scope {
 
         Map<Key<?>,Object> scopedObjects = values.get(context);
         if (scopedObjects == null) {
-            scopedObjects = Maps.newHashMap();
+            scopedObjects = com.google.inject.internal.util.$Maps.newHashMap();
             values.put(context, scopedObjects);
         }
 

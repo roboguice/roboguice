@@ -18,16 +18,16 @@ package roboguice.inject;
 import android.app.Application;
 import android.content.Context;
 import android.preference.PreferenceActivity;
+
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import static com.google.inject.internal.Preconditions.checkNotNull;
+import static com.google.inject.internal.util.$Preconditions.checkNotNull;
 
 /**
  * 
@@ -101,7 +101,7 @@ class PreferenceMembersInjector<T> implements MembersInjector<T> {
 
             value = ((PreferenceActivity) contextProvider.get()).findPreference(annotation.value());
 
-            if (value == null && field.getAnnotation(Nullable.class) == null)
+            if (value == null && Nullable.notNullable(field) )
                 throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
 

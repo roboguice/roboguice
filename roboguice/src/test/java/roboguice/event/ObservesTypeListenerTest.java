@@ -1,13 +1,19 @@
 package roboguice.event;
 
+import com.xtremelabs.robolectric.Robolectric;
+import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-import roboguice.config.EventManagerModule;
+import org.junit.runner.RunWith;
+import roboguice.RoboGuice;
+import roboguice.inject.ContextScope;
 
+import android.app.Application;
 import android.content.Context;
 
-import com.google.inject.*;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -15,44 +21,31 @@ import java.util.List;
 /**
  * @author John Ericksen
  */
+@RunWith(RobolectricTestRunner.class)
 public class ObservesTypeListenerTest {
 
-    private EventManager eventManager;
-    private Provider<Context> contextProvider;
-    private Context context;
-    private Injector injector;
-    private List<Method> eventOneMethods;
-    private List<Method> eventTwoMethods;
+    protected EventManager eventManager;
+    protected Application app;
+    protected Injector injector;
+    protected List<Method> eventOneMethods;
+    protected List<Method> eventTwoMethods;
 
     @Before
     public void setup() throws NoSuchMethodException {
-        context = EasyMock.createMock(Context.class);
-        
-        contextProvider = new Provider<Context>() {
-            public Context get() {
-                return context;
-            }
-        };
-
-        Module eventManagerModule = new EventManagerModule(new EventManager(), contextProvider);
-
-        Module contextProviderModule = new AbstractModule() {
-            public void configure() {
-                bind(Context.class).toProvider(contextProvider);
-            }
-        };
-
-        injector = Guice.createInjector(eventManagerModule, contextProviderModule);
+        app = Robolectric.application;
+        injector = RoboGuice.getInjector(app);
 
         eventManager = injector.getInstance(EventManager.class);
 
         eventOneMethods = ContextObserverTesterImpl.getMethods(EventOne.class);
         eventTwoMethods = ContextObserverTesterImpl.getMethods(EventTwo.class);
+
+        injector.getInstance(ContextScope.class).enter( EasyMock.createMock(Context.class) );
     }
 
     @Test
     public void simulateInjection() {
-        InjectedTestClass testClass = new InjectedTestClass();
+        final InjectedTestClass testClass = new InjectedTestClass();
         injector.injectMembers(testClass);
 
         eventManager.fire(new EventOne());
@@ -66,7 +59,7 @@ public class ObservesTypeListenerTest {
         injector.getInstance(MalformedObserves.class);
     }
 
-    public class InjectedTestClass{
+    static public class InjectedTestClass{
         @Inject
         public ContextObserverTesterImpl tester;
 

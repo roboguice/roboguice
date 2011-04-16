@@ -36,10 +36,6 @@ public class EventManager {
 
     protected Map<Context, Map<Class<?>, Set<EventListener<?>>>> registrations = new WeakHashMap<Context, Map<Class<?>, Set<EventListener<?>>>>();
 
-    public boolean isEnabled() {
-        return true;
-    }
-
     /**
      * Register an observer EventListener with the current context (provided).
      *
@@ -144,7 +140,6 @@ public class EventManager {
      * @param <T> event type
      */
     public <T> void unregisterObserver(Context context, Class<T> event, EventListener<T> listener ) {
-        if (!isEnabled()) return;
 
         final Map<Class<?>, Set<EventListener<?>>> methods = registrations.get(context);
         if (methods == null) return;
@@ -169,7 +164,6 @@ public class EventManager {
      * @param event observed
      */
     public <T> void unregisterObserver(Context context, Object instance, Class<T> event) {
-        if (!isEnabled()) return;
 
         final Map<Class<?>, Set<EventListener<?>>> methods = registrations.get(context);
         if (methods == null) return;
@@ -211,8 +205,7 @@ public class EventManager {
      * @param event observed
      */
     public void fire(Context context, Object event) {
-        if (!isEnabled()) return;
-        
+
         final Map<Class<?>, Set<EventListener<?>>> methods = registrations.get(context);
         if (methods == null) return;
 
@@ -223,13 +216,6 @@ public class EventManager {
         for (EventListener observer : observers)
             observer.onEvent(event);
 
-    }
-
-    public static class NullEventManager extends EventManager {
-        @Override
-        public boolean isEnabled() {
-            return false;
-        }
     }
 
     public static class ObserverMethodListener<T> implements EventListener<T> {
@@ -247,7 +233,11 @@ public class EventManager {
         public void onEvent(T event) {
             try {
                 final Object instance = instanceReference.get();
-                method.invoke(instance, event);
+                if (instance != null) {
+                    method.invoke(instance, event);
+                } else {
+                    Ln.w("trying to observe event %1$s on disposed context, consider explicitly calling EventManager.unregisterObserver", method.getName());
+                }
             } catch (InvocationTargetException e) {
                 Ln.e(e);
             } catch (IllegalAccessException e) {

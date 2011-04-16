@@ -2,4 +2,9 @@
 <resources>
     <string name="hello">Hello</string>
     <string name="app_name">Astroboy</string>
+
+    <string-array name="roboguice_modules">
+        <item>roboguice.astroboy.AstroboyModule</item>
+    </string-array>
+    
 </resources>

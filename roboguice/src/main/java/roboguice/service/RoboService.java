@@ -10,10 +10,9 @@
  */
 package roboguice.service;
 
-import roboguice.application.RoboApplication;
+import roboguice.RoboGuice;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
 import roboguice.service.event.OnConfigurationChangedEvent;
 import roboguice.service.event.OnCreateEvent;
 import roboguice.service.event.OnDestroyEvent;
@@ -48,14 +47,14 @@ import com.google.inject.Injector;
  * @author Mike Burton
  * @author Christine Karman
  */
-public abstract class RoboService extends Service implements InjectorProvider {
+public abstract class RoboService extends Service {
 
     protected EventManager eventManager;
     protected ContextScope scope;
 
     @Override
     public void onCreate() {
-        final Injector injector = getInjector();
+        final Injector injector = RoboGuice.getInjector(getApplication());
         eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
@@ -73,21 +72,22 @@ public abstract class RoboService extends Service implements InjectorProvider {
 
     @Override
     public void onDestroy() {
-        eventManager.fire(new OnDestroyEvent() );
-        scope.exit(this);
-        super.onDestroy();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnDestroyEvent() );
+        } finally {
+            eventManager.clear(this);
+            scope.exit(this);
+            scope.dispose(this);
+            super.onDestroy();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent() );
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig) );
     }
 
-    /**
-     * @see roboguice.application.RoboApplication#getInjector() 
-     */
-    public Injector getInjector() {
-        return ((RoboApplication) getApplication()).getInjector();
-    }
 }

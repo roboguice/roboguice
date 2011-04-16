@@ -50,52 +50,33 @@ package roboguice.inject;
  * From http://code.google.com/p/google-guice/wiki/CustomScopes
  */
 
-import roboguice.application.RoboApplication;
+import roboguice.util.Ln;
+import roboguice.util.Strings;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
- * 
  * @author Mike Burton
  */
 public class ContextScope implements Scope {
 
-    protected final ThreadLocal<Map<Key<Context>, Object>> values = new ThreadLocal<Map<Key<Context>, Object>>();
+    protected WeakHashMap<Context,Map<Key<?>, Object>> values = new WeakHashMap<Context,Map<Key<?>, Object>>();
+    protected ThreadLocal<WeakActiveStack<Context>> contextStack = new ThreadLocal<WeakActiveStack<Context>>();
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
     protected ArrayList<PreferenceMembersInjector<?>> preferencesForInjection = new ArrayList<PreferenceMembersInjector<?>>();
-    protected RoboApplication app;
 
-    public ContextScope( RoboApplication app ) {
-        this.app = app;
-    }
-
-    /**
-     * Scopes can be entered multiple times with no problems (eg. from
-     * onCreate(), onStart(), etc). However, once they're closed, all their
-     * previous values are gone forever until the scope is reinitialized again
-     * via enter().
-     */
-    public void enter(Context context) {
-        Map<Key<Context>,Object> map = values.get();
-        if( map==null ) {
-            map = new HashMap<Key<Context>,Object>();
-            values.set(map);
-        }
-
-        map.put(Key.get(Context.class), context);
-    }
-
-    @SuppressWarnings({"UnusedParameters"})
-    public void exit(Context ignored) {
-        values.remove();
+    public ContextScope(Application app) {
+        enter(app);
     }
 
     public void registerViewForInjection(ViewMembersInjector<?> injector) {
@@ -106,44 +87,254 @@ public class ContextScope implements Scope {
         preferencesForInjection.add(injector);
     }
 
-
     public void injectViews() {
         for (int i = viewsForInjection.size() - 1; i >= 0; --i)
             viewsForInjection.remove(i).reallyInjectMembers();
     }
 
     public void injectPreferenceViews() {
-        for( int i = preferencesForInjection.size()-1; i>=0; --i)
+        for (int i = preferencesForInjection.size() - 1; i >= 0; --i)
             preferencesForInjection.remove(i).reallyInjectMembers();
+    }
+
+
+    public void enter(Context context) {
+        ensureContextStack();
+        contextStack.get().push(context);
+
+        final Key<Context> key = Key.get(Context.class);
+        getScopedObjectMap(key).put(key, context);
+
+        if( Ln.isVerboseEnabled() ) {
+            final WeakHashMap<Context,Map<Key<?>,Object>> map = values;
+            if( map!=null )
+                Ln.v("Contexts in the %s scope map after inserting %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
+        }
+    }
+
+    public void exit(Context context) {
+        ensureContextStack();
+        contextStack.get().remove(context);
+    }
+
+    public void dispose(Context context) {
+        final WeakHashMap<Context,Map<Key<?>,Object>> map = values;
+        if( map!=null ) {
+            final Map<Key<?>,Object> scopedObjects = map.remove(context);
+            if( scopedObjects!=null )
+                scopedObjects.clear();
+
+            if( Ln.isVerboseEnabled() )
+                Ln.v("Contexts in the %s scope map after removing %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
+        }
     }
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
-            @SuppressWarnings({"SuspiciousMethodCalls", "unchecked"})
             public T get() {
-                final Map<Key<Context>, Object> scopedObjects = getScopedObjectMap(key);
+                Map<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
 
-                @SuppressWarnings("unchecked")
-                T current = (T) scopedObjects.get(key);
+                @SuppressWarnings({"unchecked"}) T current = (T) scopedObjects.get(key);
                 if (current == null && !scopedObjects.containsKey(key)) {
                     current = unscoped.get();
-                    scopedObjects.put((Key<Context>) key, current);
+                    scopedObjects.put(key, current);
                 }
                 return current;
             }
         };
     }
 
-    @SuppressWarnings({"UnusedParameters"})
-    protected <T> Map<Key<Context>, Object> getScopedObjectMap(Key<T> key) {
-        final Map<Key<Context>,Object> map = values.get();
-        return map!=null ? map : initialScopedObjectMap();
+    protected void ensureContextStack() {
+        if (contextStack.get() == null) {
+            contextStack.set(new WeakActiveStack<Context>());
+        }
     }
 
-    protected Map<Key<Context>,Object> initialScopedObjectMap() {
-        final HashMap<Key<Context>,Object> map = new HashMap<Key<Context>,Object>();
-        map.put(Key.get(Context.class),app);
-        return map;
+    protected <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
+        final Context context = contextStack.get().peek();
+
+        Map<Key<?>,Object> scopedObjects = values.get(context);
+        if (scopedObjects == null) {
+            scopedObjects = com.google.inject.internal.util.$Maps.newHashMap();
+            values.put(context, scopedObjects);
+        }
+
+        return scopedObjects;
     }
 
+    /**
+     * A circular stack like structure of weak references.
+     * Calls to push while not add any new items to stack if the item already exists,
+     * it will simply bring the item to the top of the stack.
+     *
+     * Likewise, pop will not remove the item from the stack, it will simply make the next item
+     * the top, move the current top to the bottom.  Thus creating a circular linked list type effect.
+     *
+     * To remove an item explicitly  call the remove method.
+     *
+     * The stack also holds WeakReferences of T, these references will automatically be removed
+     * anytime the stack accessed.  For performance they are only removed as they are encountered.
+     *
+     * So it is possible to get a null value back, even though you thought the stack had items in it.
+     * @param <T>
+     */
+    public static class WeakActiveStack<T> {
+        static class Node<T> {
+            Node<T> previous;
+            Node<T> next;
+            WeakReference<T> value;
+
+            public Node(T value) {
+                this.value = new WeakReference<T>(value);
+            }
+        }
+
+        private Node<T> head;
+        private Node<T> tail;
+
+        /**
+         * Pushes the value onto the top of the stack.
+         * If the value exists in the stack it is simply brought to the top.
+         * @param value
+         */
+        public void push(T value) {
+            if (head == null) {
+                head = new Node<T>(value);
+                tail = head;
+            } else {
+                Node<T> existingNode = findNode(value);
+                if (existingNode == null) {
+                    Node<T> newNode = new Node<T>(value);
+                    newNode.next = head;
+                    head.previous = newNode;
+                    head = newNode;
+                } else {
+                    if (existingNode == head) return;
+
+                    if (existingNode == tail) {
+                        tail = existingNode.previous;
+                        tail.next= null;
+                    }
+
+                    if (existingNode.previous != null) {
+                        existingNode.previous.next = existingNode.next;
+                    }
+
+                    if (existingNode.next != null) {
+                        existingNode.next.previous = existingNode.previous;
+                    }
+
+                    existingNode.next = head;
+                    head.previous = existingNode;
+                    head = existingNode;
+                    head.previous = null;
+                }
+            }
+        }
+
+        /**
+         * Pops the first item off the stack, then moves it to the bottom.
+         * Popping is an infinite operation that will never end, it just keeps moving the top item to the bottom.
+         * Popping will also dispose of items whose weak references have been collected.
+         * @return The value of the item at the top of the stack.
+         */
+        public T pop() {
+            WeakActiveStack.Node<T> node = head;
+            while (node != null) {
+                final T value = node.value.get();
+                if (value == null) {
+                    node = disposeOfNode(node);
+                 } else {
+                    if (node.next != null) {
+                        head = node.next;
+                        node.previous = tail;
+                        tail.next = node;
+                        node.next = null;
+                        head.previous = null;
+                        tail = node;
+                    }
+                    return value;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Non destructive read of the item at the top of stack.
+         * @return the first non collected referent held, or null if nothing is available.
+         */
+        public T peek() {
+            Node<T> node = head;
+            while (node != null) {
+                final T value = node.value.get();
+                if (value == null) {
+                    node = disposeOfNode(node);
+                 } else {
+                    return value;
+                }
+            }
+            return null;
+        }
+
+        /**
+         * Removes the item from the stack.
+         * @param value
+         */
+        public void remove(T value) {
+            Node<T> node = findNode(value);
+            disposeOfNode(node);
+        }
+
+        /**
+         * Removes a node ensuring all links are properly updated.
+         * @param node
+         * @return The next node in the stack.
+         */
+        protected Node<T> disposeOfNode(Node<T> node) {
+            if (node == head) {
+                head = node.next;
+                if (head == null) {
+                    tail = null;
+                } else {
+                    head.previous = null;
+                }
+            }
+
+            if (node.previous != null) {
+                node.previous.next = node.next;
+            }
+
+            if (node.next != null) {
+                node.next.previous = node.previous;
+            }
+
+            if (node == tail) {
+                tail = node.previous;
+                tail.next = null;
+            }
+
+            return node.next;
+        }
+
+        /**
+         * Finds a node given a value
+         * Will dispose of nodes if needed as it iterates the stack.
+         * @param value
+         * @return The node if found or null
+         */
+        protected Node<T> findNode(T value) {
+            Node<T> node = head;
+            while (node != null) {
+                final T nodeValue = node.value.get();
+                if (nodeValue == null) {
+                    node = disposeOfNode(node);
+                } else if (nodeValue.equals(value)) {
+                    return node;
+                } else {
+                    node = node.next;
+                }
+            }
+            return null;
+        }
+    }
 }

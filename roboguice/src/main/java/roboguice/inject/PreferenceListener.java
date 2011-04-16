@@ -27,6 +27,8 @@ import com.google.inject.spi.TypeEncounter;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import static com.google.inject.internal.util.$Preconditions.checkNotNull;
+
 /**
  * 
  * @author Mike Burton
@@ -91,8 +93,7 @@ class PreferenceMembersInjector<T> implements MembersInjector<T> {
     }
 
     public void reallyInjectMembers() {
-        //TODO:Runtime Exception?
-        assert instance != null;
+        checkNotNull(instance);
 
         Object value = null;
 

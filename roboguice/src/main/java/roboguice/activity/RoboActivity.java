@@ -15,11 +15,10 @@
  */
 package roboguice.activity;
 
+import roboguice.RoboGuice;
 import roboguice.activity.event.*;
-import roboguice.application.RoboApplication;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -61,13 +60,13 @@ import com.google.inject.Injector;
  * 
  * @author Mike Burton
  */
-public class RoboActivity extends Activity implements InjectorProvider {
+public class RoboActivity extends Activity {
     protected EventManager eventManager;
     protected ContextScope scope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = getInjector();
+        final Injector injector = RoboGuice.getInjector(getApplication());
         eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
@@ -138,22 +137,33 @@ public class RoboActivity extends Activity implements InjectorProvider {
 
     @Override
     protected void onStop() {
-        eventManager.fire(new OnStopEvent());
-        super.onStop();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnStopEvent());
+        } finally {
+            scope.exit(this);
+            super.onStop();
+        }
     }
 
     @Override
     protected void onDestroy() {
-        eventManager.fire(new OnDestroyEvent());
-        eventManager.clear(this);
-        scope.exit(this);
-        super.onDestroy();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnDestroyEvent());
+        } finally {
+            eventManager.clear(this);
+            scope.exit(this);
+            scope.dispose(this);
+            super.onDestroy();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent(newConfig));
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig));
     }
 
     @Override
@@ -165,14 +175,11 @@ public class RoboActivity extends Activity implements InjectorProvider {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
-    }
-
-    /**
-     * @see roboguice.application.RoboApplication#getInjector()
-     */
-    @Override
-    public Injector getInjector() {
-        return ((RoboApplication) getApplication()).getInjector();
+        scope.enter(this);
+        try {
+            eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+        } finally {
+            scope.exit(this);
+        }
     }
 }

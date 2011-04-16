@@ -1,14 +1,13 @@
 package roboguice.event;
 
+import android.app.Application;
+import android.content.Context;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-
-import android.app.Application;
-import android.content.Context;
+import roboguice.event.eventListener.ObserverMethodListener;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +22,6 @@ public class EventManagerTest {
     private ContextObserverTesterImpl tester;
     private List<Method> eventOneMethods;
     private List<Method> eventTwoMethods;
-    private List<Method> methods;
     private EventOne event;
 
     @Before
@@ -33,9 +31,6 @@ public class EventManagerTest {
         tester = new ContextObserverTesterImpl();
         eventOneMethods = ContextObserverTesterImpl.getMethods(EventOne.class);
         eventTwoMethods = ContextObserverTesterImpl.getMethods(EventTwo.class);
-        methods = new ArrayList<Method>();
-        methods.addAll(eventOneMethods);
-        methods.addAll(eventTwoMethods);
 
         event = new EventOne();
     }
@@ -43,10 +38,10 @@ public class EventManagerTest {
     @Test
     public void testRegistrationLifeCycle(){
         for(Method method : eventOneMethods){
-            eventManager.registerObserver(context, tester, method, EventOne.class);
+            eventManager.registerObserver(context, EventOne.class, new ObserverMethodListener(tester, method));
         }
         for(Method method : eventTwoMethods){
-            eventManager.registerObserver(context, tester, method, EventTwo.class);
+            eventManager.registerObserver(context, EventTwo.class, new ObserverMethodListener(tester, method));
         }
 
         eventManager.fire(context, event);
@@ -71,10 +66,10 @@ public class EventManagerTest {
         Context contextTwo = EasyMock.createMock(Context.class);
 
         for(Method method : eventOneMethods){
-            eventManager.registerObserver(context, tester, method, EventOne.class);
+            eventManager.registerObserver(context, EventOne.class, new ObserverMethodListener(tester, method));
         }
         for(Method method : eventOneMethods){
-            eventManager.registerObserver(contextTwo, tester, method, EventOne.class);
+            eventManager.registerObserver(contextTwo, EventOne.class, new ObserverMethodListener(tester, method));
         }
 
         eventManager.clear(context);
@@ -91,7 +86,7 @@ public class EventManagerTest {
         Context applicationContext = EasyMock.createMock(Application.class);
 
         for(Method method : eventOneMethods){
-            eventManager.registerObserver(applicationContext, tester, method, EventOne.class);
+            eventManager.registerObserver(applicationContext, EventOne.class, new ObserverMethodListener(tester, method));
         }
     }
 }

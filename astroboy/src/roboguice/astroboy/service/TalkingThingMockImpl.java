@@ -15,9 +15,10 @@
  */
 package roboguice.astroboy.service;
 
-import roboguice.astroboy.AstroboyApplication;
 import roboguice.astroboy.R;
 import roboguice.inject.StringResourceFactory;
+
+import android.app.Application;
 
 import com.google.inject.Inject;
 
@@ -26,7 +27,7 @@ import com.google.inject.Inject;
  */
 public class TalkingThingMockImpl implements TalkingThing {
 
-    @Inject protected AstroboyApplication application;
+    @Inject protected Application application;
 
     @Inject
     protected StringResourceFactory stringRF;

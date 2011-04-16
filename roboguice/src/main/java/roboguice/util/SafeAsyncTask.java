@@ -3,6 +3,7 @@ package roboguice.util;
 import android.os.Handler;
 import android.util.Log;
 
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.*;
@@ -121,9 +122,9 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * may be overridden to handle interruptions differently than other
      * exceptions.
      *
-     * @param e the exception thrown from {@link #onPreExecute()}, {@link #call()}, or {@link #onSuccess(Object)}
+     * @param e an InterruptedException or InterruptedIOException
      */
-    protected void onInterrupted( InterruptedException e ) {
+    protected void onInterrupted( Exception e ) {
         onException(e);
     }
 
@@ -162,7 +163,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
             try {
                 doPreExecute();
                 doSuccess(doCall());
-                return null;
 
             } catch( final Exception e ) {
                 try {
@@ -170,13 +170,12 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
                 } catch( Exception f ) {
                     // ignored, throw original instead
                 }
-                throw e;
 
             } finally {
                 doFinally();
             }
 
-
+            return null;
         }
 
         protected void doPreExecute() throws Exception {
@@ -209,8 +208,8 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
             }
             postToUiThreadAndWait( new Callable<Object>() {
                 public Object call() throws Exception {
-                    if( e instanceof InterruptedException )
-                        parent.onInterrupted((InterruptedException)e);
+                    if( e instanceof InterruptedException || e instanceof InterruptedIOException )
+                        parent.onInterrupted(e);
                     else
                         parent.onException(e);
                     return null;

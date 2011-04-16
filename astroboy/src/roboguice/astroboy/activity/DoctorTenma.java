@@ -15,6 +15,7 @@
  */
 package roboguice.astroboy.activity;
 
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.astroboy.AstroboyModule;
 import roboguice.astroboy.R;
@@ -35,6 +36,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.internal.Nullable;
 
 import java.util.Date;
@@ -150,6 +152,8 @@ public class DoctorTenma extends RoboActivity {
 
         backgroundTaskProvider.execute();
 
+        // It's better to use @Inject Injector to get an injector, but you can always use RoboGuice.getInjector() in a pinch
+        final Injector injector = RoboGuice.getInjector(this.getApplication());
     }
 
 

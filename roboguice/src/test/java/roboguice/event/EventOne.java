@@ -1,7 +1,7 @@
 package roboguice.event;
 
 /**
- * Simple Event
+ * Simple Test Event
  *
  * @author John Ericksen
  */

@@ -1,9 +1,8 @@
 package roboguice.service;
 
-import roboguice.application.RoboApplication;
+import roboguice.RoboGuice;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
-import roboguice.inject.InjectorProvider;
 import roboguice.service.event.OnConfigurationChangedEvent;
 import roboguice.service.event.OnCreateEvent;
 import roboguice.service.event.OnDestroyEvent;
@@ -37,7 +36,7 @@ import com.google.inject.Injector;
  *
  * @author Donn Felker
  */
-public abstract class RoboIntentService extends IntentService implements InjectorProvider {
+public abstract class RoboIntentService extends IntentService {
 
     protected EventManager eventManager;
     protected ContextScope scope;
@@ -50,7 +49,7 @@ public abstract class RoboIntentService extends IntentService implements Injecto
 
     @Override
     public void onCreate() {
-        final Injector injector = getInjector();
+        final Injector injector = RoboGuice.getInjector(getApplication());
         eventManager = injector.getInstance(EventManager.class);
         scope = injector.getInstance(ContextScope.class);
         scope.enter(this);
@@ -76,16 +75,9 @@ public abstract class RoboIntentService extends IntentService implements Injecto
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent() );
+        eventManager.fire(new OnConfigurationChangedEvent(currentConfig,newConfig) );
     }
-
-    /**
-     * @see roboguice.application.RoboApplication#getInjector()
-     */
-    public Injector getInjector() {
-        return ((RoboApplication) getApplication()).getInjector();
-    }
-
 
 }

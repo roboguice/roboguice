@@ -71,7 +71,7 @@ import java.util.WeakHashMap;
  */
 public class ContextScope implements Scope {
 
-    protected WeakHashMap<Context,Map<Key<?>, Object>> values = new WeakHashMap<Context,Map<Key<?>, Object>>();
+    protected WeakHashMap<Context,Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context,Map<Key<?>, WeakReference<Object>>>();
     protected ThreadLocal<WeakActiveStack<Context>> contextStack = new ThreadLocal<WeakActiveStack<Context>>();
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
     protected ArrayList<PreferenceMembersInjector<?>> preferencesForInjection = new ArrayList<PreferenceMembersInjector<?>>();
@@ -104,10 +104,10 @@ public class ContextScope implements Scope {
         contextStack.get().push(context);
 
         final Key<Context> key = Key.get(Context.class);
-        getScopedObjectMap(key).put(key, context);
+        getScopedObjectMap(key).put(key, new WeakReference<Object>(context));
 
         if( Ln.isVerboseEnabled() ) {
-            final WeakHashMap<Context,Map<Key<?>,Object>> map = values;
+            final WeakHashMap<Context,Map<Key<?>,WeakReference<Object>>> map = values;
             if( map!=null )
                 Ln.v("Contexts in the %s scope map after inserting %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
         }
@@ -119,9 +119,9 @@ public class ContextScope implements Scope {
     }
 
     public void dispose(Context context) {
-        final WeakHashMap<Context,Map<Key<?>,Object>> map = values;
+        final WeakHashMap<Context,Map<Key<?>,WeakReference<Object>>> map = values;
         if( map!=null ) {
-            final Map<Key<?>,Object> scopedObjects = map.remove(context);
+            final Map<Key<?>,WeakReference<Object>> scopedObjects = map.remove(context);
             if( scopedObjects!=null )
                 scopedObjects.clear();
 
@@ -133,13 +133,12 @@ public class ContextScope implements Scope {
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {
-                Map<Key<?>, Object> scopedObjects = getScopedObjectMap(key);
+                Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(key);
 
-                @SuppressWarnings("unchecked")
-                T current = (T) scopedObjects.get(key);
+                @SuppressWarnings({"unchecked"}) T current = (T) scopedObjects.get(key).get();
                 if (current == null && !scopedObjects.containsKey(key)) {
                     current = unscoped.get();
-                    scopedObjects.put(key, current);
+                    scopedObjects.put(key, new WeakReference<Object>(current));
                 }
                 return current;
             }
@@ -152,10 +151,10 @@ public class ContextScope implements Scope {
         }
     }
 
-    protected <T> Map<Key<?>, Object> getScopedObjectMap(Key<T> key) {
+    protected <T> Map<Key<?>, WeakReference<Object>> getScopedObjectMap(Key<T> key) {
         final Context context = contextStack.get().peek();
 
-        Map<Key<?>,Object> scopedObjects = values.get(context);
+        Map<Key<?>,WeakReference<Object>> scopedObjects = values.get(context);
         if (scopedObjects == null) {
             scopedObjects = Maps.newHashMap();
             values.put(context, scopedObjects);

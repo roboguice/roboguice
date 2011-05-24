@@ -18,16 +18,16 @@ package roboguice.inject;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.internal.Nullable;
 import com.google.inject.spi.TypeEncounter;
 
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
-import static com.google.inject.internal.Preconditions.checkNotNull;
 
 /**
  * 
@@ -77,7 +77,7 @@ class ViewMembersInjector<T> implements MembersInjector<T> {
     protected Provider<Context> contextProvider;
     protected InjectView annotation;
     protected ContextScope scope;
-    protected T instance;
+    protected WeakReference<T> instanceRef;
 
     public ViewMembersInjector(Field field, Provider<Context> contextProvider, InjectView annotation, ContextScope scope) {
         this.field = field;
@@ -88,12 +88,15 @@ class ViewMembersInjector<T> implements MembersInjector<T> {
 
     public void injectMembers(T instance) {
         // Mark instance for injection during setContentView
-        this.instance = instance;
+        this.instanceRef = new WeakReference<T>(instance);
         scope.registerViewForInjection(this);
     }
 
     public void reallyInjectMembers() {
-        checkNotNull(instance);
+
+        final T instance = instanceRef.get();
+        if( instance ==null )
+            return;
 
         Object value = null;
 

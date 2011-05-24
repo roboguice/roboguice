@@ -1,8 +1,6 @@
 package roboguice.inject;
 
-import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.activity.RoboActivity;
@@ -20,13 +18,10 @@ import static org.junit.Assert.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class ViewListenerTest {
 
-    @Ignore("Something is still holding onto the activity, I haven't identified whether it's a problem with the test or something real yet")
     @Test
     public void shouldNotHoldReferencesToContext() {
         final SoftReference<MyActivity> activityRef = new SoftReference<MyActivity>(new MyActivity());
         activityRef.get().onCreate(null);
-
-        Robolectric.resetStaticState();
 
         assertThat(activityRef.get(), not(equalTo(null)));
         assertThat(activityRef.get().v, not(equalTo(null)));

@@ -26,13 +26,11 @@ public class ViewListenerTest {
         assertThat(activityRef.get(), not(equalTo(null)));
         assertThat(activityRef.get().v, not(equalTo(null)));
 
-
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
         try {
             final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
-            int i=0;
-            while(i ==0)
+            while(true)
                 allocations.add( new Object[(int) Runtime.getRuntime().maxMemory()] );
         } catch( OutOfMemoryError e ) {
             // great!
@@ -41,7 +39,6 @@ public class ViewListenerTest {
         assertThat(activityRef.get(), equalTo(null));
 
     }
-
 
 
     public static class MyActivity extends RoboActivity {

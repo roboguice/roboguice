@@ -46,9 +46,9 @@ public class ExtrasListener implements TypeListener {
         Class<?> c = typeLiteral.getRawType();
         while (c != null) {
             for (Field field : c.getDeclaredFields()) {
-                if (field.isAnnotationPresent(InjectExtra.class)) {
+                if (field.isAnnotationPresent(InjectExtra.class))
                     typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
-                }
+
             }
             c = c.getSuperclass();
         }
@@ -71,12 +71,12 @@ public class ExtrasListener implements TypeListener {
         public void injectMembers(T instance) {
             final Context context = contextProvider.get();
 
-            if (!(context instanceof Activity)) {
-                return;
-            }
+            if( !(context instanceof Activity ) )
+                throw new UnsupportedOperationException(String.format("Extras may not be injected into contexts that are not Activities (error in class %s)",contextProvider.get().getClass().getSimpleName()));
+
 
             final Activity activity = (Activity) context;
-            Object value = null;
+            Object value;
 
             final String id = annotation.value();
             final Bundle extras = activity.getIntent().getExtras();

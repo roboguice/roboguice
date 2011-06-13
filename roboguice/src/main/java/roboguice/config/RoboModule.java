@@ -19,6 +19,7 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.PowerManager;
@@ -123,6 +124,7 @@ public class RoboModule extends AbstractModule {
         bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
         bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
         bind(TelephonyManager.class).toProvider( new SystemServiceProvider<TelephonyManager>(Context.TELEPHONY_SERVICE));
+        bind(AudioManager.class).toProvider( new SystemServiceProvider<AudioManager>(Context.AUDIO_SERVICE));
 
 
         // Android Resources, Views and extras require special handling

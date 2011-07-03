@@ -108,7 +108,7 @@ class PreferenceMembersInjector<T> implements MembersInjector<T> {
 
 
             field.setAccessible(true);
-            field.set(instanceRef, value);
+            field.set(instance, value);
 
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);

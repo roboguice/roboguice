@@ -59,6 +59,6 @@ public class ActivityContextLifetimeTest {
     }
 
     protected Injector getInjector() {
-        return RoboGuice.getInjector(Robolectric.application);
+        return RoboGuice.getApplicationInjector(Robolectric.application);
     }
 }

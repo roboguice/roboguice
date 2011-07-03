@@ -5,8 +5,6 @@ import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
 import roboguice.util.Ln;
-import roboguice.util.RoboAsyncTask;
-import roboguice.util.RoboThread;
 import roboguice.util.Strings;
 
 import android.app.*;
@@ -132,7 +130,7 @@ public class RoboModule extends AbstractModule {
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
         bindListener(Matchers.any(), preferenceListener);
-        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager, observerThreadingDecorator));
+        bindListener(Matchers.any(), new ObservesTypeListener(eventManager, observerThreadingDecorator));
 
 
         requestInjection(observerThreadingDecorator);
@@ -140,8 +138,6 @@ public class RoboModule extends AbstractModule {
         
 
         requestStaticInjection(Ln.class);
-        requestStaticInjection(RoboThread.class);
-        requestStaticInjection(RoboAsyncTask.class);
     }
 
 }

@@ -2,8 +2,10 @@ package roboguice;
 
 import roboguice.config.AbstractRoboModule;
 import roboguice.config.RoboModule;
+import roboguice.inject.PerContextInjector;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -26,57 +28,33 @@ public class RoboGuice {
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
-    public static Injector getInjector( Application context) {
-        return getInjector(DEFAULT_STAGE, context);
-    }
-
-    /**
-     * Return the cached Injector instance for this application, or create a new one if necessary.
-     * If specifying your own modules, you must include a RoboModule for most things to work properly.
-     */
-    public static Injector getInjector( Application application, Module... modules ) {
-        return getInjector( DEFAULT_STAGE, application, modules );
-    }
-
-    /**
-     * Return the cached Injector instance for this application, or create a new one if necessary.
-     * If specifying your own modules, you must include a RoboModule for most things to work properly.
-     */
-    public static Injector getInjector( Stage stage, Application application, Module... modules ) {
-
-        Injector rtrn = injectors.get(application);
+    public static Injector getApplicationInjector(Application application) {
+        final Injector rtrn = injectors.get(application);
         if( rtrn!=null )
             return rtrn;
 
-        synchronized (RoboGuice.class) {
-            rtrn = injectors.get(application);
-            if( rtrn!=null )
-                return rtrn;
+        return setApplicationInjector(application, DEFAULT_STAGE);
+    }
 
-            rtrn = Guice.createInjector(stage, modules);
+    /**
+     * Return the cached Injector instance for this application, or create a new one if necessary.
+     * If specifying your own modules, you must include a RoboModule for most things to work properly.
+     */
+    public static Injector setApplicationInjector(Application application, Stage stage, Module... modules) {
+
+        synchronized (RoboGuice.class) {
+            final Injector rtrn = Guice.createInjector(stage, modules);
             injectors.put(application,rtrn);
-
+            return rtrn;
         }
-
-        return rtrn;
     }
-
-
 
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
-    public static Injector getInjector(Stage stage, Application application) {
-
-        Injector rtrn = injectors.get(application);
-        if( rtrn!=null )
-            return rtrn;
+    public static Injector setApplicationInjector(Application application, Stage stage) {
 
         synchronized (RoboGuice.class) {
-            rtrn = injectors.get(application);
-            if( rtrn!=null )
-                return rtrn;
-
             final int id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
             final String[] moduleNames = id>0 ? application.getResources().getStringArray(id) : new String[]{};
             final ArrayList<Module> modules = new ArrayList<Module>();
@@ -93,11 +71,15 @@ public class RoboGuice {
                 throw new RuntimeException(e);
             }
 
-            rtrn = getInjector(stage,application,modules.toArray(new Module[modules.size()]));
+            final Injector rtrn = setApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));
             injectors.put(application,rtrn);
-
+            return rtrn;
         }
 
-        return rtrn;
+    }
+
+
+    public static Injector getPerContextInjector(Context context) {
+        return new PerContextInjector(context, getApplicationInjector((Application)context.getApplicationContext()));
     }
 }

@@ -1,13 +1,12 @@
 package roboguice.event;
 
-import android.content.Context;
-import com.google.inject.Provider;
+import roboguice.event.eventListener.ObserverMethodListener;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-import roboguice.event.eventListener.ObserverMethodListener;
-import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -21,12 +20,10 @@ import java.lang.reflect.Method;
  */
 public class ObservesTypeListener implements TypeListener {
     protected EventManager eventManager;
-    protected Provider<Context> contextProvider;
     protected EventListenerThreadingDecorator observerThreadingDecorator;
 
-    public ObservesTypeListener(Provider<Context> contextProvider, EventManager eventManager, EventListenerThreadingDecorator observerThreadingDecorator) {
+    public ObservesTypeListener(EventManager eventManager, EventListenerThreadingDecorator observerThreadingDecorator) {
         this.eventManager = eventManager;
-        this.contextProvider = contextProvider;
         this.observerThreadingDecorator = observerThreadingDecorator;
     }
 
@@ -67,7 +64,7 @@ public class ObservesTypeListener implements TypeListener {
      */
     protected <I, T> void registerContextObserver(TypeEncounter<I> iTypeEncounter, Method method, Class<T> parameterType, EventThread threadType) {
         checkMethodParameters(method);
-        iTypeEncounter.register(new ContextObserverMethodInjector<I, T>(contextProvider, eventManager, observerThreadingDecorator,
+        iTypeEncounter.register(new ContextObserverMethodInjector<I, T>(eventManager, observerThreadingDecorator,
                 method, parameterType,threadType));
     }
 
@@ -88,17 +85,15 @@ public class ObservesTypeListener implements TypeListener {
      * @param <I>
      */
     public static class ContextObserverMethodInjector<I, T> implements InjectionListener<I> {
-        protected Provider<Context> contextProvider;
         protected EventListenerThreadingDecorator observerThreadingDecorator;
         protected EventManager eventManager;
         protected Method method;
         protected Class<T> event;
         protected EventThread threadType;
 
-        public ContextObserverMethodInjector(Provider<Context> contextProvider, EventManager eventManager,
+        public ContextObserverMethodInjector(EventManager eventManager,
                                              EventListenerThreadingDecorator observerThreadingDecorator,  Method method,
                                              Class<T> event, EventThread threadType) {
-            this.contextProvider = contextProvider;
             this.observerThreadingDecorator = observerThreadingDecorator;
             this.eventManager = eventManager;
             this.method = method;
@@ -107,9 +102,7 @@ public class ObservesTypeListener implements TypeListener {
         }
 
         public void afterInjection(I i) {
-            eventManager.registerObserver(contextProvider.get(), event,
-                    observerThreadingDecorator.decorate(threadType,
-                            new ObserverMethodListener<T>(i, method)));
+            eventManager.registerObserver( event, observerThreadingDecorator.decorate(threadType, new ObserverMethodListener<T>(i, method)));
         }
     }
 }

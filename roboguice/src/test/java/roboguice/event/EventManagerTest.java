@@ -55,11 +55,4 @@ public class EventManagerTest {
         tester.verifyCallCount(eventOneMethods, EventOne.class, 0);
         tester.verifyCallCount(eventTwoMethods, EventTwo.class, 0);
     }
-
-    @Test(expected = RuntimeException.class)
-    public void testApplicationContextEvent(){
-        for(Method method : eventOneMethods){
-            eventManager.registerObserver(EventOne.class, new ObserverMethodListener(tester, method));
-        }
-    }
 }

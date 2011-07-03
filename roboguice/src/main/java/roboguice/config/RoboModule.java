@@ -62,7 +62,7 @@ public class RoboModule extends AbstractModule {
         this.application = application;
         contextScope = new ContextScope(application);
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
-        viewListener = new ViewListener(contextProvider, application, contextScope);
+        viewListener = new ViewListener(contextProvider, application);
         resourceListener = new ResourceListener(application);
         eventManager = new EventManager();
     }
@@ -80,6 +80,13 @@ public class RoboModule extends AbstractModule {
 
         if(Strings.notEmpty(androidId))
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
+
+
+        // Singletons
+        bind(ViewListener.class).toInstance(viewListener);
+        bind(PreferenceListener.class).toInstance(preferenceListener);
+
+
 
         // Context Scope bindings
         bindScope(ContextScoped.class, contextScope);

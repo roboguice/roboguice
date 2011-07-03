@@ -18,6 +18,7 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
+import roboguice.inject.ViewListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -61,11 +62,13 @@ import com.google.inject.Injector;
  */
 public class RoboActivity extends Activity {
     protected EventManager eventManager;
+    protected ViewListener viewListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = RoboGuice.getPerContextInjector(this);
         eventManager = injector.getInstance(EventManager.class);
+        viewListener = injector.getInstance(ViewListener.class);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
@@ -74,18 +77,21 @@ public class RoboActivity extends Activity {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 

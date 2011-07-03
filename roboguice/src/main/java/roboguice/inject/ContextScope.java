@@ -23,7 +23,6 @@ import com.google.inject.Provider;
 import com.google.inject.Scope;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -36,29 +35,9 @@ public class ContextScope implements Scope {
     protected WeakHashMap<Context,Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context,Map<Key<?>, WeakReference<Object>>>();
     protected ThreadLocal<WeakReference<Context>> threadLocal = new ThreadLocal<WeakReference<Context>>();
 
-    protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
-    protected ArrayList<PreferenceMembersInjector<?>> preferencesForInjection = new ArrayList<PreferenceMembersInjector<?>>();
 
     public ContextScope(Application app) {
         enter(app);
-    }
-
-    public void registerViewForInjection(ViewMembersInjector<?> injector) {
-        viewsForInjection.add(injector);
-    }
-
-    public void registerPreferenceForInjection(PreferenceMembersInjector<?> injector) {
-        preferencesForInjection.add(injector);
-    }
-
-    public void injectViews() {
-        for (int i = viewsForInjection.size() - 1; i >= 0; --i)
-            viewsForInjection.remove(i).reallyInjectMembers();
-    }
-
-    public void injectPreferenceViews() {
-        for (int i = preferencesForInjection.size() - 1; i >= 0; --i)
-            preferencesForInjection.remove(i).reallyInjectMembers();
     }
 
 

@@ -18,6 +18,7 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
+import roboguice.inject.ViewListener;
 
 import android.app.ExpandableListActivity;
 import android.content.Intent;
@@ -39,11 +40,13 @@ import com.google.inject.Injector;
  */
 public class RoboExpandableListActivity extends ExpandableListActivity {
     protected EventManager eventManager;
+    protected ViewListener viewListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = RoboGuice.getApplicationInjector(getApplication());
         eventManager = injector.getInstance(EventManager.class);
+        viewListener = injector.getInstance(ViewListener.class);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
@@ -52,18 +55,21 @@ public class RoboExpandableListActivity extends ExpandableListActivity {
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 

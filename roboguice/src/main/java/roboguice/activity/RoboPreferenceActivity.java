@@ -18,6 +18,8 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
+import roboguice.inject.PreferenceListener;
+import roboguice.inject.ViewListener;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -44,12 +46,16 @@ import com.google.inject.Injector;
  */
 public abstract class RoboPreferenceActivity extends PreferenceActivity {
     protected EventManager eventManager;
+    protected ViewListener viewListener;
+    protected PreferenceListener preferenceListener;
 
     /** {@inheritDoc } */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = RoboGuice.getApplicationInjector(getApplication());
         eventManager = injector.getInstance(EventManager.class);
+        viewListener = injector.getInstance(ViewListener.class);
+        preferenceListener = injector.getInstance(PreferenceListener.class);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
@@ -58,23 +64,27 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
     @Override
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);
+        preferenceListener.injectPreferenceViews();
     }
 
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view, LayoutParams params) {
         super.setContentView(view, params);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
     public void setContentView(View view) {
         super.setContentView(view);
+        viewListener.injectViews();
         eventManager.fire(new OnContentViewAvailableEvent());
     }
 

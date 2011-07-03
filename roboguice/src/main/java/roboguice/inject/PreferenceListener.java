@@ -27,12 +27,15 @@ import com.google.inject.spi.TypeEncounter;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 
 /**
  * 
  * @author Mike Burton
  */
 public class PreferenceListener implements StaticTypeListener {
+    protected ArrayList<PreferenceMembersInjector<?>> preferencesForInjection = new ArrayList<PreferenceMembersInjector<?>>();
+
     protected Provider<Context> contextProvider;
     protected Application application;
     protected ContextScope scope;
@@ -69,52 +72,63 @@ public class PreferenceListener implements StaticTypeListener {
         }
 
     }
-}
 
-class PreferenceMembersInjector<T> implements MembersInjector<T> {
-    protected Field field;
-    protected Provider<Context> contextProvider;
-    protected InjectPreference annotation;
-    protected ContextScope scope;
-    protected WeakReference<T> instanceRef;
-
-    public PreferenceMembersInjector(Field field, Provider<Context> contextProvider, InjectPreference annotation, ContextScope scope) {
-        this.field = field;
-        this.annotation = annotation;
-        this.contextProvider = contextProvider;
-        this.scope = scope;
+    public void registerPreferenceForInjection(PreferenceMembersInjector<?> injector) {
+        preferencesForInjection.add(injector);
     }
 
-    public void injectMembers(T instance) {
-        // Mark instance for injection during setContentView
-        this.instanceRef = new WeakReference<T>(instance);
-        scope.registerPreferenceForInjection(this);
+    public void injectPreferenceViews() {
+        for (int i = preferencesForInjection.size() - 1; i >= 0; --i)
+            preferencesForInjection.remove(i).reallyInjectMembers();
     }
 
-    public void reallyInjectMembers() {
-        final T instance = instanceRef.get();
-        if( instance==null )
-            return;
-
-        Object value = null;
-
-        try {
-
-            value = ((PreferenceActivity) contextProvider.get()).findPreference(annotation.value());
-
-            if (value == null && Nullable.notNullable(field) )
-                throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
 
-            field.setAccessible(true);
-            field.set(instance, value);
+    class PreferenceMembersInjector<T> implements MembersInjector<T> {
+        protected Field field;
+        protected Provider<Context> contextProvider;
+        protected InjectPreference annotation;
+        protected ContextScope scope;
+        protected WeakReference<T> instanceRef;
 
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider, InjectPreference annotation, ContextScope scope) {
+            this.field = field;
+            this.annotation = annotation;
+            this.contextProvider = contextProvider;
+            this.scope = scope;
+        }
 
-        } catch (IllegalArgumentException f) {
-            throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
-                    field.getType(), field.getName()));
+        public void injectMembers(T instance) {
+            // Mark instance for injection during setContentView
+            this.instanceRef = new WeakReference<T>(instance);
+            registerPreferenceForInjection(this);
+        }
+
+        public void reallyInjectMembers() {
+            final T instance = instanceRef.get();
+            if( instance==null )
+                return;
+
+            Object value = null;
+
+            try {
+
+                value = ((PreferenceActivity) contextProvider.get()).findPreference(annotation.value());
+
+                if (value == null && Nullable.notNullable(field) )
+                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
+
+
+                field.setAccessible(true);
+                field.set(instance, value);
+
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+
+            } catch (IllegalArgumentException f) {
+                throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
+                        field.getType(), field.getName()));
+            }
         }
     }
 }

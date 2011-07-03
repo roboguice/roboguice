@@ -154,7 +154,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
         protected SafeAsyncTask<ResultT> parent;
         protected Handler handler;
 
-        public Task(SafeAsyncTask parent) {
+        public Task(SafeAsyncTask<ResultT> parent) {
             this.parent = parent;
             this.handler = parent.handler!=null ? parent.handler : new Handler();
         }

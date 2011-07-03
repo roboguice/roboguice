@@ -64,7 +64,7 @@ public class RoboModule extends AbstractModule {
         this.application = application;
         contextScope = new ContextScope(application);
         contextProvider = contextScope.scope(Key.get(Context.class), throwingContextProvider);
-        viewListener = new ViewListener(contextProvider, application, contextScope);
+        viewListener = new ViewListener(contextProvider, application);
         resourceListener = new ResourceListener(application);
         eventManager = new EventManager();
     }
@@ -82,6 +82,13 @@ public class RoboModule extends AbstractModule {
 
         if(Strings.notEmpty(androidId))
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
+
+
+        // Singletons
+        bind(ViewListener.class).toInstance(viewListener);
+        bind(PreferenceListener.class).toInstance(preferenceListener);
+
+
 
         // Context Scope bindings
         bindScope(ContextScoped.class, contextScope);
@@ -132,7 +139,7 @@ public class RoboModule extends AbstractModule {
         bindListener(Matchers.any(), extrasListener);
         bindListener(Matchers.any(), viewListener);
         bindListener(Matchers.any(), preferenceListener);
-        bindListener(Matchers.any(), new ObservesTypeListener(contextProvider, eventManager, observerThreadingDecorator));
+        bindListener(Matchers.any(), new ObservesTypeListener(eventManager, observerThreadingDecorator));
 
 
         requestInjection(observerThreadingDecorator);
@@ -140,8 +147,8 @@ public class RoboModule extends AbstractModule {
         
 
         requestStaticInjection(Ln.class);
-        requestStaticInjection(RoboThread.class);
         requestStaticInjection(RoboAsyncTask.class);
+        requestStaticInjection(RoboThread.class);
     }
 
 }

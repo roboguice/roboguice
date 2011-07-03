@@ -1,7 +1,6 @@
 package roboguice.receiver;
 
 import roboguice.RoboGuice;
-import roboguice.inject.ContextScope;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -14,7 +13,6 @@ import com.google.inject.Injector;
  * To ensure proper ContextScope usage, override the handleReceive method
  */
 public abstract class RoboBroadcastReceiver extends BroadcastReceiver {
-    protected ContextScope scope;
 
     /** Handles the receive event.  This method should not be overridden, instead override
      * the handleReceive method to ensure that the proper ContextScope is maintained.
@@ -23,18 +21,10 @@ public abstract class RoboBroadcastReceiver extends BroadcastReceiver {
      */
     @Override
     public final void onReceive(Context context, Intent intent) {
-        final Injector injector = RoboGuice.getInjector((Application)context.getApplicationContext());
-        final Context current = injector.getInstance(Context.class);
+        final Injector injector = RoboGuice.getApplicationInjector((Application) context.getApplicationContext());
 
-        scope = injector.getInstance(ContextScope.class);
-        scope.enter(context);
-        try {
-            injector.injectMembers(this);
-            handleReceive(context, intent);
-        } finally {
-            scope.exit(context);
-            scope.enter(current);
-        }
+        injector.injectMembers(this);
+        handleReceive(context, intent);
     }
 
     /**

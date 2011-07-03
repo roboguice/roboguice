@@ -7,6 +7,7 @@ import android.content.Context;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+
 /**
  * An extension to {@link Thread} which propogates the current
  * Context to the background thread.
@@ -28,19 +29,13 @@ public class RoboThread extends Thread {
 
     @Override
     public void start() {
-        final ContextScope scope = scopeProvider.get();
-        final Context context = contextProvider.get();
 
         // BUG any parameters set in the RoboThread are ignored other than Runnable.
         // This means that priorities, groups, names, etc. won't be honored. Yet.
         new Thread() {
             public void run() {
-                try {
-                    scope.enter(context);
-                    RoboThread.this.run();
-                } finally {
-                    scope.exit(context);
-                }
+                scopeProvider.get().enter(contextProvider.get());
+                RoboThread.this.run();
             }
         }.start();
 

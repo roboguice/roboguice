@@ -57,9 +57,10 @@ public class ContextScope implements Scope {
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {
-                Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(key);
+                final Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(key);
 
-                T current = (T) scopedObjects.get(key).get();
+                final WeakReference<Object> ref = scopedObjects.get(key);
+                T current = (T) (ref!=null ? ref.get() : null);
                 if (current == null && !scopedObjects.containsKey(key)) {
                     current = unscoped.get();
                     scopedObjects.put(key, new WeakReference<Object>(current));

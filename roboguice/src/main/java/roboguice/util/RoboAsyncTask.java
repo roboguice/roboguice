@@ -7,6 +7,7 @@ import android.os.Handler;
 
 import com.google.inject.Inject;
 
+import javax.inject.Provider;
 import java.util.concurrent.Executor;
 
 /**
@@ -15,8 +16,8 @@ import java.util.concurrent.Executor;
  * @param <ResultT>
  */
 public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
-    @Inject protected Context context;
-    @Inject protected ContextScope scope;
+    @Inject static protected Provider<Context> contextProvider;
+    @Inject static protected Provider<ContextScope> scopeProvider;
 
     protected RoboAsyncTask() {
     }
@@ -35,7 +36,7 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 
     @Override
     protected Task<ResultT> newTask() {
-        return new Task<ResultT>(this, context, scope);
+        return new Task<ResultT>(this, contextProvider.get(), scopeProvider.get());
     }
 
     protected static class Task<ResultT> extends SafeAsyncTask.Task<ResultT> {
@@ -50,7 +51,7 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 
         @Override
         protected ResultT doCall() throws Exception {
-            scope.enter(context);
+            scope.enter(context); // BUG is this even necessary anymore?
             return super.doCall();
         }
     }

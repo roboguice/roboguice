@@ -32,12 +32,12 @@ import java.util.WeakHashMap;
  */
 public class ContextScope implements Scope {
 
-    protected WeakHashMap<Context,Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context,Map<Key<?>, WeakReference<Object>>>();
+    protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
     protected ThreadLocal<WeakReference<Context>> threadLocal = new ThreadLocal<WeakReference<Context>>();
 
 
     public ContextScope(Application app) {
-        enter(app); // BUG I don't think it should set up the context by default
+        enter(app);
     }
 
 
@@ -47,8 +47,7 @@ public class ContextScope implements Scope {
         threadLocal.set(new WeakReference<Context>(context));
 
         // Add the context to the scope
-        final Key<Context> key = Key.get(Context.class);
-        getScopedObjectMap(key).put(key, new WeakReference<Object>(context));
+        getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
 
     }
 
@@ -57,36 +56,36 @@ public class ContextScope implements Scope {
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {
-                final Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(key);
+                final WeakReference<Context> contextRef = threadLocal.get();
+                if (contextRef != null) {
+                    final Context context = contextRef.get();
+                    if (context != null) {
+                        final Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(context);
 
-                final WeakReference<Object> ref = scopedObjects.get(key);
-                T current = (T) (ref!=null ? ref.get() : null);
-                if (current == null && !scopedObjects.containsKey(key)) {
-                    current = unscoped.get();
-                    scopedObjects.put(key, new WeakReference<Object>(current));
+                        final WeakReference<Object> ref = scopedObjects.get(key);
+                        T current = (T) (ref != null ? ref.get() : null);
+                        if (current == null && !scopedObjects.containsKey(key)) {
+                            current = unscoped.get();
+                            scopedObjects.put(key, new WeakReference<Object>(current));
+                        }
+                        return current;
+                    }
                 }
-                return current;
+                
+                throw new UnsupportedOperationException("Can't perform injection outside of a context scope");
             }
         };
+
     }
 
-    @SuppressWarnings({"UnusedParameters"})
-    protected <T> Map<Key<?>, WeakReference<Object>> getScopedObjectMap(Key<T> key) {
+    protected Map<Key<?>, WeakReference<Object>> getScopedObjectMap(Context context) {
 
-        final WeakReference<Context> contextRef = threadLocal.get();
-        if( contextRef!=null ) {
-            final Context context = contextRef.get();
-            if( context!=null ) {
-                Map<Key<?>,WeakReference<Object>> scopedObjects = values.get(context);
-                if (scopedObjects == null) {
-                    scopedObjects = new HashMap<Key<?>, WeakReference<Object>>();
-                    values.put(context, scopedObjects);
-                }
-                return scopedObjects;
-            }
+        Map<Key<?>, WeakReference<Object>> scopedObjects = values.get(context);
+        if (scopedObjects == null) {
+            scopedObjects = new HashMap<Key<?>, WeakReference<Object>>();
+            values.put(context, scopedObjects);
         }
-
-        throw new UnsupportedOperationException("Cannot perform injection outside of a context scope");
+        return scopedObjects;
     }
 
 }

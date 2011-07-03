@@ -29,11 +29,17 @@ public class RoboGuice {
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
     public static Injector getApplicationInjector(Application application) {
-        final Injector rtrn = injectors.get(application);
+        Injector rtrn = injectors.get(application);
         if( rtrn!=null )
             return rtrn;
 
-        return setApplicationInjector(application, DEFAULT_STAGE);
+        synchronized (RoboGuice.class) {
+            rtrn = injectors.get(application);
+            if( rtrn!=null )
+                return rtrn;
+            
+            return setApplicationInjector(application, DEFAULT_STAGE);
+        }
     }
 
     /**

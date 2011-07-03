@@ -79,7 +79,7 @@ public class RoboGuice {
     }
 
 
-    public static Injector getPerContextInjector(Context context) {
+    public static Injector getInjector(Context context) {
         return new PerContextInjector(context, getApplicationInjector((Application)context.getApplicationContext()));
     }
 }

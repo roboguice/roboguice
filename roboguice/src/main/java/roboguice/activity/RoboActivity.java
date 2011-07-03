@@ -66,7 +66,7 @@ public class RoboActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = RoboGuice.getPerContextInjector(this);
+        final Injector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         viewListener = injector.getInstance(ViewListener.class);
         injector.injectMembers(this);

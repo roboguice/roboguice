@@ -43,7 +43,7 @@ public class RoboTabActivity extends TabActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = RoboGuice.getApplicationInjector(getApplication());
+        final Injector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         viewListener = injector.getInstance(ViewListener.class);
         injector.injectMembers(this);

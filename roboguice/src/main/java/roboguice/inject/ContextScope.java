@@ -37,7 +37,7 @@ public class ContextScope implements Scope {
 
 
     public ContextScope(Application app) {
-        enter(app);
+        enter(app); // BUG I don't think it should set up the context by default
     }
 
 

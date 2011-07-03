@@ -10,12 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class PerContextInjector implements Injector {
+public class ContextScopedInjector implements Injector {
     protected Injector delegate;
     protected Context context;
     protected ContextScope scope;
 
-    public PerContextInjector(Context context, Injector applicationInjector) {
+    public ContextScopedInjector(Context context, Injector applicationInjector) {
         this.delegate = applicationInjector;
         this.context = context;
         this.scope = delegate.getInstance(ContextScope.class);

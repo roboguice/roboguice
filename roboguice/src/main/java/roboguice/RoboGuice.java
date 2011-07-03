@@ -2,7 +2,7 @@ package roboguice;
 
 import roboguice.config.AbstractRoboModule;
 import roboguice.config.RoboModule;
-import roboguice.inject.PerContextInjector;
+import roboguice.inject.ContextScopedInjector;
 
 import android.app.Application;
 import android.content.Context;
@@ -80,6 +80,6 @@ public class RoboGuice {
 
 
     public static Injector getInjector(Context context) {
-        return new PerContextInjector(context, getApplicationInjector((Application)context.getApplicationContext()));
+        return new ContextScopedInjector(context, getApplicationInjector((Application)context.getApplicationContext()));
     }
 }

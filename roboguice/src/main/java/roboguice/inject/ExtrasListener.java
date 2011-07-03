@@ -69,9 +69,9 @@ public class ExtrasListener implements TypeListener {
         public void injectMembers(T instance) {
             final Context context = contextProvider.get();
 
-            if (!(context instanceof Activity)) {
-                return;
-            }
+            if( !(context instanceof Activity ) )
+                throw new UnsupportedOperationException(String.format("Extras may not be injected into contexts that are not Activities (error in class %s)",contextProvider.get().getClass().getSimpleName()));
+
 
             final Activity activity = (Activity) context;
             Object value;

@@ -18,9 +18,6 @@ import java.util.concurrent.Executor;
 public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
     @Inject static protected Provider<Context> contextProvider;
     @Inject static protected Provider<ContextScope> scopeProvider;
-    
-    protected ContextScope scope = scopeProvider.get();
-    protected Context context = contextProvider.get();
 
     protected RoboAsyncTask() {
     }
@@ -39,12 +36,17 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 
     @Override
     protected Task<ResultT> newTask() {
-        return new RoboTask<ResultT>(this);
+        return new Task<ResultT>(this);
     }
 
-    protected class RoboTask<ResultT> extends SafeAsyncTask.Task<ResultT> {
-        public RoboTask(SafeAsyncTask parent) {
+    protected static class Task<ResultT> extends SafeAsyncTask.Task<ResultT> {
+        protected Context context;
+        protected ContextScope scope;
+
+        public Task(SafeAsyncTask parent) {
             super(parent);
+            this.context = contextProvider.get();
+            this.scope = scopeProvider.get();
         }
 
         @Override

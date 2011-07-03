@@ -6,8 +6,8 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 
-import javax.inject.Provider;
 import java.util.concurrent.Executor;
 
 /**

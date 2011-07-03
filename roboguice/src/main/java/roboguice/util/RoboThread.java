@@ -5,8 +5,7 @@ import roboguice.inject.ContextScope;
 import android.content.Context;
 
 import com.google.inject.Inject;
-
-import javax.inject.Provider;
+import com.google.inject.Provider;
 
 
 /**

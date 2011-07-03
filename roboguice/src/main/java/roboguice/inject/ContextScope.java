@@ -33,7 +33,7 @@ import java.util.WeakHashMap;
 public class ContextScope implements Scope {
 
     protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
-    protected ThreadLocal<WeakReference<Context>> threadLocal = new ThreadLocal<WeakReference<Context>>();
+    protected ThreadLocal<WeakReference<Context>> contextThreadLocal = new ThreadLocal<WeakReference<Context>>();
 
 
     public ContextScope(Application app) {
@@ -43,8 +43,14 @@ public class ContextScope implements Scope {
 
     public void enter(Context context) {
 
+        final WeakReference<Context> contextRef = contextThreadLocal.get();
+        if( contextRef!=null && contextRef.get()==context )
+            return;
+
+        
+        
         // Mark this thread as for this context
-        threadLocal.set(new WeakReference<Context>(context));
+        contextThreadLocal.set(new WeakReference<Context>(context));
 
         // Add the context to the scope
         getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
@@ -56,7 +62,7 @@ public class ContextScope implements Scope {
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {
-                final WeakReference<Context> contextRef = threadLocal.get();
+                final WeakReference<Context> contextRef = contextThreadLocal.get();
                 if (contextRef != null) {
                     final Context context = contextRef.get();
                     if (context != null) {

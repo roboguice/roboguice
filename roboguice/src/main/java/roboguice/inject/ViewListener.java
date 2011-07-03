@@ -23,6 +23,7 @@ import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
 
 import javax.inject.Singleton;
 import java.lang.ref.WeakReference;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
  * @author Mike Burton
  */
 @Singleton
-public class ViewListener implements StaticTypeListener {
+public class ViewListener implements TypeListener {
     protected ArrayList<ViewMembersInjector<?>> viewsForInjection = new ArrayList<ViewMembersInjector<?>>();
 
     protected Provider<Context> contextProvider;
@@ -55,16 +56,6 @@ public class ViewListener implements StaticTypeListener {
 
     }
 
-    @SuppressWarnings("unchecked")
-    public void requestStaticInjection(Class<?>... types) {
-            
-        for (Class<?> c : types)
-            for( ; c!=Object.class; c=c.getSuperclass() )
-                for (Field field : c.getDeclaredFields())
-                    if (Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class))
-                        new ViewMembersInjector(field, contextProvider, field.getAnnotation(InjectView.class)).injectMembers(null);
-
-    }
 
     public void registerViewForInjection(ViewMembersInjector<?> injector) {
         viewsForInjection.add(injector);

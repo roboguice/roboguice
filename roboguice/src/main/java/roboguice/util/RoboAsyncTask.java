@@ -43,7 +43,7 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
         protected Context context;
         protected ContextScope scope;
 
-        public Task(SafeAsyncTask parent, Context context, ContextScope scope) {
+        public Task(SafeAsyncTask<ResultT> parent, Context context, ContextScope scope) {
             super(parent);
             this.context = context;
             this.scope = scope;

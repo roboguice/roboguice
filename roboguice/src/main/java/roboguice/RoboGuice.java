@@ -1,6 +1,5 @@
 package roboguice;
 
-import roboguice.config.AbstractRoboModule;
 import roboguice.config.RoboModule;
 import roboguice.inject.ContextScopedInjector;
 
@@ -19,8 +18,9 @@ import java.util.WeakHashMap;
  * BUG hashmap should also key off of stage and modules list
  */
 public class RoboGuice {
+    public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
+
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
-    protected static Stage DEFAULT_STAGE = Stage.PRODUCTION;
 
     private RoboGuice() {
     }
@@ -71,7 +71,7 @@ public class RoboGuice {
             try {
                 for (String name : moduleNames) {
                     final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                    modules.add( AbstractRoboModule.class.isAssignableFrom(clazz) ? clazz.getConstructor(RoboModule.class).newInstance(roboModule) : clazz.newInstance() );
+                    modules.add( clazz.newInstance() );
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);

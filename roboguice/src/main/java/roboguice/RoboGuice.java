@@ -1,5 +1,6 @@
 package roboguice;
 
+import roboguice.config.AbstractRoboModule;
 import roboguice.config.RoboModule;
 import roboguice.inject.ContextScopedInjector;
 
@@ -71,7 +72,7 @@ public class RoboGuice {
             try {
                 for (String name : moduleNames) {
                     final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                    modules.add( clazz.newInstance() );
+                    modules.add( AbstractRoboModule.class.isAssignableFrom(clazz) ? clazz.getConstructor(RoboModule.class).newInstance(roboModule) : clazz.newInstance() );
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);

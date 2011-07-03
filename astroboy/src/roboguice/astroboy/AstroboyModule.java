@@ -18,15 +18,19 @@ package roboguice.astroboy;
 import roboguice.astroboy.bean.*;
 import roboguice.astroboy.service.TalkingThing;
 import roboguice.astroboy.service.TalkingThingMockImpl;
+import roboguice.config.AbstractRoboModule;
+import roboguice.config.RoboModule;
 import roboguice.inject.ExtraConverter;
 import roboguice.inject.SharedPreferencesName;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.TypeLiteral;
 
 import java.util.Date;
 
-public class AstroboyModule extends AbstractModule {
+public class AstroboyModule extends AbstractRoboModule {
+    public AstroboyModule(RoboModule roboModule) {
+        super(roboModule);
+    }
 
     @Override
     protected void configure() {

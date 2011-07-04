@@ -24,13 +24,14 @@ import com.google.inject.Scope;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 /**
  * @author Mike Burton
  */
 public class ContextScope implements Scope {
 
-    protected HashMap<Context, Map<Key<?>, Object>> values = new HashMap<Context, Map<Key<?>, Object>>();
+    protected WeakHashMap<Context, Map<Key<?>, Object>> values = new WeakHashMap<Context, Map<Key<?>, Object>>();
     protected ThreadLocal<Context> contextThreadLocal = new ThreadLocal<Context>();
 
 
@@ -57,11 +58,12 @@ public class ContextScope implements Scope {
 
     public void close( Context context ) {
 
+        // Remove our only hard reference to the context.
+        // The values map will remove the context automatically once
+        // everyone is done using the context.
         final Context prevContext = contextThreadLocal.get();
         if( prevContext==context )
             contextThreadLocal.set(null);
-
-        values.remove(context);
     }
 
 

@@ -7,12 +7,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
-import roboguice.config.AbstractRoboModule;
+import com.google.inject.AbstractModule;
 import roboguice.activity.ActivityInjectionTest.ModuleA.A;
 import roboguice.activity.ActivityInjectionTest.ModuleB.B;
 import roboguice.activity.ActivityInjectionTest.ModuleC.C;
 import roboguice.activity.ActivityInjectionTest.ModuleD.D;
-import roboguice.config.RoboModule;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectResource;
@@ -46,8 +45,7 @@ public class ActivityInjectionTest {
     
     @Before
     public void setup() {
-        final RoboModule roboModule = new RoboModule(Robolectric.application);
-        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, roboModule, new ModuleA(roboModule));
+        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleA());
         activity = new DummyActivity();
         activity.setIntent( new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober") );
         activity.onCreate(null);
@@ -94,24 +92,21 @@ public class ActivityInjectionTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
-        final RoboModule roboModule = new RoboModule(Robolectric.application);
-        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, roboModule, new ModuleB(roboModule));
+        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleB());
         final B b = new B();
         b.onCreate(null);
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
-        final RoboModule roboModule = new RoboModule(Robolectric.application);
-        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, roboModule, new ModuleD(roboModule));
+        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleD());
         final D d = new D();
         d.onCreate(null);
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
-        final RoboModule roboModule = new RoboModule(Robolectric.application);
-        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, roboModule, new ModuleC(roboModule));
+        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleC());
         final C c = new C();
         c.onCreate(null);
     }
@@ -153,7 +148,7 @@ public class ActivityInjectionTest {
             try {
                 final Constructor<PreferenceScreen> c = PreferenceScreen.class.getDeclaredConstructor();
                 c.setAccessible(true);
-                final PreferenceScreen screen = c.newInstance();
+                @SuppressWarnings({"UnnecessaryLocalVariable"}) final PreferenceScreen screen = c.newInstance();
 
                 /*
                 final Method m = PreferenceScreen.class.getMethod("onAttachedToHierarchy");
@@ -169,11 +164,7 @@ public class ActivityInjectionTest {
         }
     }
 
-    public static class ModuleA extends AbstractRoboModule {
-        public ModuleA(RoboModule roboModule) {
-            super(roboModule);
-        }
-
+    public static class ModuleA extends AbstractModule {
         @Override
         protected void configure() {
             requestStaticInjection(A.class);
@@ -187,11 +178,7 @@ public class ActivityInjectionTest {
     }
 
 
-    public static class ModuleB extends AbstractRoboModule {
-        public ModuleB(RoboModule roboModule) {
-            super(roboModule);
-        }
-
+    public static class ModuleB extends AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(B.class);
@@ -209,11 +196,7 @@ public class ActivityInjectionTest {
     }
 
 
-    public static class ModuleC extends AbstractRoboModule {
-        public ModuleC(RoboModule roboModule) {
-            super(roboModule);
-        }
-
+    public static class ModuleC extends AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(C.class);
@@ -231,11 +214,7 @@ public class ActivityInjectionTest {
     }
 
 
-    public static class ModuleD extends AbstractRoboModule {
-        public ModuleD(RoboModule roboModule) {
-            super(roboModule);
-        }
-
+    public static class ModuleD extends AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(D.class);

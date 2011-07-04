@@ -10,8 +10,10 @@ import roboguice.activity.RoboActivity;
 import android.os.Bundle;
 
 import com.google.inject.Inject;
+import com.google.inject.Key;
 import com.google.inject.Singleton;
 
+import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -26,7 +28,7 @@ public class ContextScopeTest {
 
         assertThat(scope.getScopedObjectMap(a).size(), equalTo(0));
         a.onCreate(null);
-        assertThat(scope.getScopedObjectMap(a).size(),equalTo(1));
+        assertTrue(scope.getScopedObjectMap(a).containsValue(a));
     }
 
 
@@ -37,7 +39,8 @@ public class ContextScopeTest {
 
         assertThat(scope.getScopedObjectMap(b).size(), equalTo(0));
         b.onCreate(null);
-        assertThat(scope.getScopedObjectMap(b).size(),equalTo(2));
+        assertTrue(scope.getScopedObjectMap(b).containsValue(b));
+        assertTrue(scope.getScopedObjectMap(b).containsKey(Key.get(C.class)));
     }
 
     public static class A extends RoboActivity {

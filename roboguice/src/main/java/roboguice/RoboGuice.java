@@ -1,16 +1,19 @@
 package roboguice;
 
-import roboguice.config.AbstractRoboModule;
 import roboguice.config.RoboModule;
+import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScopedInjector;
+import roboguice.inject.ResourceListener;
+import roboguice.inject.ViewListener;
 
 import android.app.Application;
 import android.content.Context;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Stage;
+import com.google.inject.*;
+import com.google.inject.spi.DefaultElementVisitor;
+import com.google.inject.spi.Element;
+import com.google.inject.spi.Elements;
+import com.google.inject.spi.StaticInjectionRequest;
 
 import java.util.ArrayList;
 import java.util.WeakHashMap;
@@ -18,10 +21,13 @@ import java.util.WeakHashMap;
 /**
  * BUG hashmap should also key off of stage and modules list
  */
+@SuppressWarnings({"ALL"})
 public class RoboGuice {
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
 
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
+    protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
+    protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
 
     private RoboGuice() {
     }
@@ -47,7 +53,19 @@ public class RoboGuice {
      * Return the cached Injector instance for this application, or create a new one if necessary.
      * If specifying your own modules, you must include a RoboModule for most things to work properly.
      */
-    public static Injector setApplicationInjector(Application application, Stage stage, Module... modules) {
+    public static Injector setApplicationInjector(final Application application, Stage stage, Module... modules) {
+
+        // Do a little rewriting on the modules first to
+        // add static resource injection
+        for(Element element : Elements.getElements(modules)) {
+            element.acceptVisitor(new DefaultElementVisitor<Void>() {
+                @Override
+                public Void visit(StaticInjectionRequest element) {
+                    getResourceListener(application).requestStaticInjection(element.getType());
+                    return null;
+                }
+            });
+        }
 
         synchronized (RoboGuice.class) {
             final Injector rtrn = Guice.createInjector(stage, modules);
@@ -65,14 +83,14 @@ public class RoboGuice {
             final int id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
             final String[] moduleNames = id>0 ? application.getResources().getStringArray(id) : new String[]{};
             final ArrayList<Module> modules = new ArrayList<Module>();
-            final RoboModule roboModule = new RoboModule(application);
+            final RoboModule roboModule = createNewDefaultRoboModule(application);
 
             modules.add(roboModule);
 
             try {
                 for (String name : moduleNames) {
                     final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                    modules.add( AbstractRoboModule.class.isAssignableFrom(clazz) ? clazz.getConstructor(RoboModule.class).newInstance(roboModule) : clazz.newInstance() );
+                    modules.add( clazz.newInstance() );
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -88,5 +106,49 @@ public class RoboGuice {
 
     public static ContextScopedInjector getInjector(Context context) {
         return new ContextScopedInjector(context, getApplicationInjector((Application)context.getApplicationContext()));
+    }
+
+
+    
+    public static RoboModule createNewDefaultRoboModule(final Application application) {
+        final ContextScope scope = new ContextScope(application);
+        final Provider<Context> fallbackProvider = new Provider<Context>() {
+            public Context get() {
+                return application; // BUG this should throw an exception
+            }
+        };
+        final Provider<Context> contextProvider = scope.scope(Key.get(Context.class), fallbackProvider);
+        return new RoboModule(application, scope, contextProvider, getViewListener(contextProvider, application), getResourceListener(application));
+    }
+
+
+
+
+
+
+    protected static ResourceListener getResourceListener( Application application ) {
+        ResourceListener resourceListener = resourceListeners.get(application);
+        if( resourceListener==null ) {
+            synchronized (RoboGuice.class) {
+                if( resourceListener==null ) {
+                    resourceListener = new ResourceListener(application);
+                    resourceListeners.put(application,resourceListener);
+                }
+            }
+        }
+        return resourceListener;
+    }
+
+    protected static ViewListener getViewListener( final Provider<Context> contextProvider, final Application application ) {
+        ViewListener viewListener = viewListeners.get(application);
+        if( viewListener==null ) {
+            synchronized (RoboGuice.class) {
+                if( viewListener==null ) {
+                    viewListener = new ViewListener(contextProvider,application);
+                    viewListeners.put(application,viewListener);
+                }
+            }
+        }
+        return viewListener;
     }
 }

@@ -32,7 +32,6 @@ import java.util.WeakHashMap;
  */
 public class ContextScope implements Scope {
 
-    // BUG I think the maps in this weakhashmap only ever have one value in them, so may be redundant.
     protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
     protected ThreadLocal<WeakReference<Context>> contextThreadLocal = new ThreadLocal<WeakReference<Context>>();
 

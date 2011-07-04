@@ -1,10 +1,8 @@
 package roboguice.event;
 
 import roboguice.event.javaassist.RuntimeSupport;
-import roboguice.inject.ContextScoped;
+import roboguice.inject.Context;
 import roboguice.util.Ln;
-
-import android.content.Context;
 
 import com.google.inject.Inject;
 
@@ -28,9 +26,9 @@ import java.util.*;
  * @author John Ericksen
  */
 @SuppressWarnings({"unchecked"})
-@ContextScoped
+@Context
 public class EventManager {
-    @Inject protected Context context;
+    @Inject protected android.content.Context context;
 
     protected Map<Class<?>, Set<EventListener<?>>> registrations = new HashMap<Class<?>, Set<EventListener<?>>>();
 

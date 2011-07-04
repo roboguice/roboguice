@@ -58,7 +58,7 @@ public class ContextScopeTest {
         }
     }
 
-    @ContextScoped
+    @Context
     public static class C {}
 
     public static class D {}

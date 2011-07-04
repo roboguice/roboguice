@@ -31,7 +31,7 @@ public class SharedPreferencesProvider implements Provider<SharedPreferences> {
 
     protected String preferencesName;
 
-    @Inject protected Provider<Context> contextProvider;
+    @Inject protected Provider<Context> contextProvider; // BUG should probably be Application
 
     public SharedPreferencesProvider() {
         preferencesName = DEFAULT;

@@ -17,12 +17,12 @@ package roboguice.astroboy.bean;
 
 import java.util.Date;
 
-import roboguice.inject.ContextScoped;
+import roboguice.inject.Context;
 import roboguice.inject.InjectExtra;
 
 import com.google.inject.Provider;
 
-@ContextScoped
+@Context
 public class PersonFromNameExtraProvider implements Provider<Person> {
 
     @InjectExtra("nameExtra")

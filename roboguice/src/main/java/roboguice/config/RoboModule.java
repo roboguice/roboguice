@@ -49,7 +49,6 @@ public class RoboModule extends AbstractModule {
     protected ContextScope contextScope;
     protected ResourceListener resourceListener;
     protected ViewListener viewListener;
-    //protected EventManager eventManager;
 
 
     public RoboModule( final Application application, ContextScope contextScope, Provider<Context> contextProvider, ViewListener viewListener, ResourceListener resourceListener ) {

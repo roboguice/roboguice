@@ -33,7 +33,7 @@ public class ObservesTypeListenerTest {
     @Before
     public void setup() throws NoSuchMethodException {
         app = Robolectric.application;
-        injector = RoboGuice.getApplicationInjector(app);
+        injector = RoboGuice.getInjector(app);
 
         eventManager = injector.getInstance(EventManager.class);
 
@@ -50,8 +50,8 @@ public class ObservesTypeListenerTest {
 
         eventManager.fire(new EventOne());
 
-        testClass.getTester().verifyCallCount(eventOneMethods, EventOne.class, 1);
-        testClass.getTester().verifyCallCount(eventTwoMethods, EventTwo.class, 0);
+        testClass.tester.verifyCallCount(eventOneMethods, EventOne.class, 1);
+        testClass.tester.verifyCallCount(eventTwoMethods, EventTwo.class, 0);
     }
 
     @Test(expected = RuntimeException.class)
@@ -60,12 +60,7 @@ public class ObservesTypeListenerTest {
     }
 
     static public class InjectedTestClass{
-        @Inject
-        public ContextObserverTesterImpl tester;
-
-        public ContextObserverTesterImpl getTester() {
-            return tester;
-        }
+        @Inject public ContextObserverTesterImpl tester;
     }
 
     public class MalformedObserves{

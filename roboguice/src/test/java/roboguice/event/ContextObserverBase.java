@@ -14,6 +14,7 @@ import static org.junit.Assert.assertTrue;
  *
  * @author John Ericksen
  */
+@SuppressWarnings({"UnusedParameters", "UnusedDeclaration"})
 public class ContextObserverBase {
 
     private Map<String, Map<Class<?>, Integer>> callCount = new HashMap<String, Map<Class<?>, Integer>>();

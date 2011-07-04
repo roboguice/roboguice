@@ -22,6 +22,7 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
+import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -31,7 +32,7 @@ import java.util.WeakHashMap;
  */
 public class ContextScope implements Scope {
 
-    protected WeakHashMap<Context, Map<Key<?>, Object>> values = new WeakHashMap<Context, Map<Key<?>, Object>>();
+    protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
     protected ThreadLocal<Context> contextThreadLocal = new ThreadLocal<Context>();
 
 
@@ -52,7 +53,7 @@ public class ContextScope implements Scope {
         contextThreadLocal.set(context);
 
         // Add the context to the scope
-        getScopedObjectMap(context).put(Key.get(Context.class), context);
+        getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
 
     }
 
@@ -72,13 +73,13 @@ public class ContextScope implements Scope {
             public T get() {
                 final Context context = contextThreadLocal.get();
                 if (context != null) {
-                    final Map<Key<?>, Object> scopedObjects = getScopedObjectMap(context);
+                    final Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(context);
 
-                    @SuppressWarnings({"unchecked"}) T current = (T) scopedObjects.get(key);
-
+                    final WeakReference<Object> ref = scopedObjects.get(key);
+                    @SuppressWarnings({"unchecked"}) T current = (T) (ref!=null ? ref.get() : null);
                     if (current == null && !scopedObjects.containsKey(key)) {
                         current = unscoped.get();
-                        scopedObjects.put(key, current);
+                        scopedObjects.put(key, new WeakReference<Object>(current));
                     }
                     return current;
                 }
@@ -89,11 +90,11 @@ public class ContextScope implements Scope {
 
     }
 
-    protected Map<Key<?>, Object> getScopedObjectMap(Context context) {
+    protected Map<Key<?>, WeakReference<Object>> getScopedObjectMap(Context context) {
 
-        Map<Key<?>, Object> scopedObjects = values.get(context);
+        Map<Key<?>, WeakReference<Object>> scopedObjects = values.get(context);
         if (scopedObjects == null) {
-            scopedObjects = new HashMap<Key<?>, Object>();
+            scopedObjects = new HashMap<Key<?>, WeakReference<Object>>();
             values.put(context, scopedObjects);
         }
         return scopedObjects;

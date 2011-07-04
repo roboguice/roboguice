@@ -89,10 +89,10 @@ public class RoboModule extends AbstractModule {
 
 
 
-        // Context Scope bindings
-        bindScope(Context.class, contextScope);
+        // ContextScoped Scope bindings
+        bindScope(ContextScoped.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
-        bind(android.content.Context.class).toProvider(contextProvider).in(Context.class);
+        bind(android.content.Context.class).toProvider(contextProvider).in(ContextScoped.class);
         bind(Activity.class).toProvider(ActivityProvider.class);
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
 

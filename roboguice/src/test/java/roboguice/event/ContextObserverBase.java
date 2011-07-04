@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Base Context Observer testing class exercising the various implementation combinations.
+ * Base ContextScoped Observer testing class exercising the various implementation combinations.
  *
  * @author John Ericksen
  */

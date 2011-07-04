@@ -57,7 +57,7 @@ import java.text.SimpleDateFormat;
 public class Ln  {
     /**
      * config is initially set to BaseConfig() with sensible defaults, then replaced
-     * by BaseConfig(Context) during guice static injection pass.
+     * by BaseConfig(ContextScoped) during guice static injection pass.
      */
     @Inject protected static BaseConfig config = new BaseConfig();
 

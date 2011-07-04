@@ -1,7 +1,7 @@
 package roboguice.event;
 
 import roboguice.event.javaassist.RuntimeSupport;
-import roboguice.inject.Context;
+import roboguice.inject.ContextScoped;
 import roboguice.util.Ln;
 
 import com.google.inject.Inject;
@@ -26,7 +26,7 @@ import java.util.*;
  * @author John Ericksen
  */
 @SuppressWarnings({"unchecked"})
-@Context
+@ContextScoped
 public class EventManager {
     @Inject protected android.content.Context context;
 

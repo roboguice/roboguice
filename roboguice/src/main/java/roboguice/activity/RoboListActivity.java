@@ -116,6 +116,7 @@ public class RoboListActivity extends ListActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
+            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }

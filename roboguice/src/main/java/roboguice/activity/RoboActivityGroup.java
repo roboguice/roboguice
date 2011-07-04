@@ -116,6 +116,7 @@ public class RoboActivityGroup extends ActivityGroup {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
+            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }

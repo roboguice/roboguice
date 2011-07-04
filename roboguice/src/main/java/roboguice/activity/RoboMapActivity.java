@@ -116,6 +116,7 @@ public abstract class RoboMapActivity extends MapActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
+            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }

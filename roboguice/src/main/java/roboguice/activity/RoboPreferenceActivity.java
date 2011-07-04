@@ -132,6 +132,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
+            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }

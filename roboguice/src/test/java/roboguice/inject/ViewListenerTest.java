@@ -26,10 +26,13 @@ public class ViewListenerTest {
         assertThat(activityRef.get(), not(equalTo(null)));
         assertThat(activityRef.get().v, not(equalTo(null)));
 
+        activityRef.get().onDestroy();
+
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
         try {
-            final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
+            @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"}) final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
+            //noinspection InfiniteLoopStatement
             while(true)
                 allocations.add( new Object[(int) Runtime.getRuntime().maxMemory()] );
         } catch( OutOfMemoryError e ) {
@@ -51,6 +54,11 @@ public class ViewListenerTest {
             final View x = new View(this);
             x.setId(100);
             setContentView(x);
+        }
+
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
         }
     }
 

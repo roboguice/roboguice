@@ -63,8 +63,12 @@ public abstract class RoboIntentService extends IntentService {
 
     @Override
     public void onDestroy() {
-        eventManager.fire(new OnDestroyEvent() );
-        super.onDestroy();
+        try {
+            eventManager.fire(new OnDestroyEvent() );
+        } finally {
+            RoboGuice.getInjector(this).closeScope(this);
+            super.onDestroy();
+        }
     }
 
     @Override

@@ -40,7 +40,7 @@ public class ObservesTypeListenerTest {
         eventOneMethods = ContextObserverTesterImpl.getMethods(EventOne.class);
         eventTwoMethods = ContextObserverTesterImpl.getMethods(EventTwo.class);
 
-        injector.getInstance(ContextScope.class).enter( EasyMock.createMock(Context.class) );
+        injector.getInstance(ContextScope.class).open(EasyMock.createMock(Context.class));
     }
 
     @Test

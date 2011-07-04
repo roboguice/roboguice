@@ -34,7 +34,7 @@ public class RoboThread extends Thread {
         // This means that priorities, groups, names, etc. won't be honored. Yet.
         new Thread() {
             public void run() {
-                scopeProvider.get().enter(contextProvider.get());
+                scopeProvider.get().open(contextProvider.get());
                 RoboThread.this.run();
             }
         }.start();

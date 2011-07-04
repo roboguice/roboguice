@@ -116,6 +116,7 @@ public class RoboLauncherActivity extends LauncherActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
+            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }

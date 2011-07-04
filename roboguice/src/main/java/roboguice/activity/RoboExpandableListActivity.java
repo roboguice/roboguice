@@ -117,6 +117,7 @@ public class RoboExpandableListActivity extends ExpandableListActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
+            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }

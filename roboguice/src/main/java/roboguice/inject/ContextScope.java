@@ -22,60 +22,63 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * @author Mike Burton
  */
 public class ContextScope implements Scope {
 
-    protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
-    protected ThreadLocal<WeakReference<Context>> contextThreadLocal = new ThreadLocal<WeakReference<Context>>();
+    protected HashMap<Context, Map<Key<?>, Object>> values = new HashMap<Context, Map<Key<?>, Object>>();
+    protected ThreadLocal<Context> contextThreadLocal = new ThreadLocal<Context>();
 
 
     public ContextScope(Application app) {
-        enter(app);
+        open(app);
     }
 
 
-    public void enter(Context context) {
+    public void open(Context context) {
 
-        final WeakReference<Context> contextRef = contextThreadLocal.get();
-        if( contextRef!=null && contextRef.get()==context )
+        final Context prevContext = contextThreadLocal.get();
+        if( prevContext==context )
             return;
 
         
         
         // Mark this thread as for this context
-        contextThreadLocal.set(new WeakReference<Context>(context));
+        contextThreadLocal.set(context);
 
         // Add the context to the scope
-        getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
+        getScopedObjectMap(context).put(Key.get(Context.class), context);
 
     }
 
+    public void close( Context context ) {
 
-    @SuppressWarnings({"unchecked"})
+        final Context prevContext = contextThreadLocal.get();
+        if( prevContext==context )
+            contextThreadLocal.set(null);
+
+        values.remove(context);
+    }
+
+
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {
-                final WeakReference<Context> contextRef = contextThreadLocal.get();
-                if (contextRef != null) {
-                    final Context context = contextRef.get();
-                    if (context != null) {
-                        final Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(context);
+                final Context context = contextThreadLocal.get();
+                if (context != null) {
+                    final Map<Key<?>, Object> scopedObjects = getScopedObjectMap(context);
 
-                        final WeakReference<Object> ref = scopedObjects.get(key);
-                        T current = (T) (ref != null ? ref.get() : null);
-                        if (current == null && !scopedObjects.containsKey(key)) {
-                            current = unscoped.get();
-                            scopedObjects.put(key, new WeakReference<Object>(current));
-                        }
-                        return current;
+                    @SuppressWarnings({"unchecked"}) T current = (T) scopedObjects.get(key);
+
+                    if (current == null && !scopedObjects.containsKey(key)) {
+                        current = unscoped.get();
+                        scopedObjects.put(key, current);
                     }
+                    return current;
                 }
                 
                 throw new UnsupportedOperationException("Can't perform injection outside of a context scope");
@@ -84,11 +87,11 @@ public class ContextScope implements Scope {
 
     }
 
-    protected Map<Key<?>, WeakReference<Object>> getScopedObjectMap(Context context) {
+    protected Map<Key<?>, Object> getScopedObjectMap(Context context) {
 
-        Map<Key<?>, WeakReference<Object>> scopedObjects = values.get(context);
+        Map<Key<?>, Object> scopedObjects = values.get(context);
         if (scopedObjects == null) {
-            scopedObjects = new HashMap<Key<?>, WeakReference<Object>>();
+            scopedObjects = new HashMap<Key<?>, Object>();
             values.put(context, scopedObjects);
         }
         return scopedObjects;

@@ -50,8 +50,11 @@ public class ViewListener implements StaticTypeListener {
 
         for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
             for (Field field : c.getDeclaredFields())
-                if (!Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectView.class))
-                    typeEncounter.register(new ViewMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectView.class)));
+                if (field.isAnnotationPresent(InjectView.class))
+                    if( Modifier.isStatic(field.getModifiers()) )
+                        throw new UnsupportedOperationException("Views may not be statically injected");
+                    else
+                        typeEncounter.register(new ViewMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectView.class)));
 
     }
 

@@ -46,7 +46,7 @@ public class ResourceListener implements StaticTypeListener {
         
         for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c = c.getSuperclass() )
             for (Field field : c.getDeclaredFields())
-                if ( field.isAnnotationPresent(InjectResource.class))
+                if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
                     typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
 
     }

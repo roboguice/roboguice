@@ -6,6 +6,13 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import roboguice.RoboGuice;
+import roboguice.config.AbstractRoboModule;
+import roboguice.activity.ActivityInjectionTest.ModuleA.A;
+import roboguice.activity.ActivityInjectionTest.ModuleB.B;
+import roboguice.activity.ActivityInjectionTest.ModuleC.C;
+import roboguice.activity.ActivityInjectionTest.ModuleD.D;
+import roboguice.config.RoboModule;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectResource;
@@ -17,13 +24,17 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
+import com.google.inject.Stage;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -35,6 +46,8 @@ public class ActivityInjectionTest {
     
     @Before
     public void setup() {
+        final RoboModule roboModule = new RoboModule(Robolectric.application);
+        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, roboModule, new ModuleA(roboModule));
         activity = new DummyActivity();
         activity.setIntent( new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober") );
         activity.onCreate(null);
@@ -69,6 +82,39 @@ public class ActivityInjectionTest {
         assertThat(prefsActivity.pref, is(prefsActivity.findPreference("xxx")));
     }
 
+    @Test
+    public void shouldStaticallyInject() {
+        assertThat(A.t, equalTo(""));
+    }
+
+    @Test
+    public void shouldStaticallyInjectResources() {
+        assertThat(A.s,equalTo("Cancel"));
+    }
+
+    @Test(expected = ConfigurationException.class)
+    public void shouldNotStaticallyInjectViews() {
+        final RoboModule roboModule = new RoboModule(Robolectric.application);
+        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, roboModule, new ModuleB(roboModule));
+        final B b = new B();
+        b.onCreate(null);
+    }
+
+    @Test(expected = ConfigurationException.class)
+    public void shouldNotStaticallyInjectExtras() {
+        final RoboModule roboModule = new RoboModule(Robolectric.application);
+        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, roboModule, new ModuleD(roboModule));
+        final D d = new D();
+        d.onCreate(null);
+    }
+
+    @Test(expected = ConfigurationException.class)
+    public void shouldNotStaticallyInjectPreferenceViews() {
+        final RoboModule roboModule = new RoboModule(Robolectric.application);
+        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, roboModule, new ModuleC(roboModule));
+        final C c = new C();
+        c.onCreate(null);
+    }
 
     public static class DummyActivity extends RoboActivity {
         @Inject protected String emptyString;
@@ -119,6 +165,89 @@ public class ActivityInjectionTest {
                 
             } catch( Exception e ) {
                 throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public static class ModuleA extends AbstractRoboModule {
+        public ModuleA(RoboModule roboModule) {
+            super(roboModule);
+        }
+
+        @Override
+        protected void configure() {
+            requestStaticInjection(A.class);
+        }
+
+
+        public static class A {
+            @InjectResource(android.R.string.cancel) static String s;
+            @Inject static String t;
+        }
+    }
+
+
+    public static class ModuleB extends AbstractRoboModule {
+        public ModuleB(RoboModule roboModule) {
+            super(roboModule);
+        }
+
+        @Override
+        public void configure() {
+            requestStaticInjection(B.class);
+        }
+
+
+        public static class B extends RoboActivity{
+            @InjectView(0) static View v;
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+            }
+        }
+    }
+
+
+    public static class ModuleC extends AbstractRoboModule {
+        public ModuleC(RoboModule roboModule) {
+            super(roboModule);
+        }
+
+        @Override
+        public void configure() {
+            requestStaticInjection(C.class);
+        }
+
+
+        public static class C extends RoboActivity{
+            @InjectPreference("xxx") static Preference v;
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+            }
+        }
+    }
+
+
+    public static class ModuleD extends AbstractRoboModule {
+        public ModuleD(RoboModule roboModule) {
+            super(roboModule);
+        }
+
+        @Override
+        public void configure() {
+            requestStaticInjection(D.class);
+        }
+
+
+        public static class D extends RoboActivity{
+            @InjectExtra("xxx") static String s;
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
             }
         }
     }

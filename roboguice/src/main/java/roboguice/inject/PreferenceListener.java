@@ -47,15 +47,14 @@ public class PreferenceListener implements StaticTypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        Class<?> c = typeLiteral.getRawType();
-        while (c != null) {
-            for (Field field : c.getDeclaredFields()) {
-                if (!Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectPreference.class)) {
-                    typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
-                }
-            }
-            c = c.getSuperclass();
-        }
+        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
+            for (Field field : c.getDeclaredFields())
+                if ( field.isAnnotationPresent(InjectPreference.class))
+                    if( Modifier.isStatic(field.getModifiers()) )
+                        throw new UnsupportedOperationException("Preferences may not be statically injected");
+                    else
+                        typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
+
     }
 
     @SuppressWarnings("unchecked")

@@ -27,6 +27,7 @@ import com.google.inject.spi.TypeListener;
 import com.google.inject.util.Types;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
@@ -46,8 +47,11 @@ public class ExtrasListener implements TypeListener {
 
         for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
             for (Field field : c.getDeclaredFields())
-                if (field.isAnnotationPresent(InjectExtra.class))
-                    typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
+                if (field.isAnnotationPresent(InjectExtra.class) )
+                    if( Modifier.isStatic(field.getModifiers()) )
+                        throw new UnsupportedOperationException("Extras may not be statically injected");
+                    else
+                        typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
 
 
     }

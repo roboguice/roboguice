@@ -24,7 +24,6 @@ import com.google.inject.Scope;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -35,7 +34,6 @@ public class ContextScope implements Scope {
 
     protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
     protected ThreadLocal<WeakReference<Context>> contextThreadLocal = new ThreadLocal<WeakReference<Context>>();
-    protected HashSet<Context> contexts = new HashSet<Context>();
 
 
     public ContextScope(Application app) {
@@ -54,23 +52,8 @@ public class ContextScope implements Scope {
         // Mark this thread as for this context
         contextThreadLocal.set(new WeakReference<Context>(context));
 
-        // Hold on to a strong reference to this context to prevent the threadlocal and scopedobjects
-        // from getting garbage collected
-        contexts.add(context);
-
         // Add the context to the scope
         getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
-
-    }
-
-    public void close( Context context ) {
-
-        // Remove our only hard reference to the context.
-        // The values map will remove the context automatically once
-        // everyone is done using the context.
-        // We never remove the context from the threadlocal, since there may be additional
-        // things that this thread needs to do with the objects in the scope map.
-        contexts.remove(context);
 
     }
 

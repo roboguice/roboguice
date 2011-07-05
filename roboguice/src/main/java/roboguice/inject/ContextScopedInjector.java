@@ -130,6 +130,5 @@ public class ContextScopedInjector implements Injector {
     }
 
     public void closeScope( Context context ) {
-        scope.close(context);
     }
 }

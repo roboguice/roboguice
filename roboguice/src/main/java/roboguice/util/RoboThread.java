@@ -20,6 +20,9 @@ public class RoboThread extends Thread {
     @Inject static protected Provider<Context> contextProvider;
     @Inject static protected Provider<ContextScope> scopeProvider;
 
+    protected Context context = contextProvider.get();
+    protected ContextScope scope = scopeProvider.get();
+
     public RoboThread() {
     }
 
@@ -34,7 +37,8 @@ public class RoboThread extends Thread {
         // This means that priorities, groups, names, etc. won't be honored. Yet.
         new Thread() {
             public void run() {
-                scopeProvider.get().open(contextProvider.get());
+                scope.open(context);
+
                 RoboThread.this.run();
             }
         }.start();

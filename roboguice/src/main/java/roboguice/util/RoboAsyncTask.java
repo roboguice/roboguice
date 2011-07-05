@@ -19,6 +19,9 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
     @Inject static protected Provider<Context> contextProvider;
     @Inject static protected Provider<ContextScope> scopeProvider;
 
+    protected Context context = contextProvider.get();
+    protected ContextScope scope = scopeProvider.get();
+
     protected RoboAsyncTask() {
     }
 
@@ -36,7 +39,7 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 
     @Override
     protected Task<ResultT> newTask() {
-        return new Task<ResultT>(this, contextProvider.get(), scopeProvider.get());
+        return new Task<ResultT>(this, context, scope);
     }
 
     protected static class Task<ResultT> extends SafeAsyncTask.Task<ResultT> {

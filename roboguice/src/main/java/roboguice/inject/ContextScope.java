@@ -24,6 +24,7 @@ import com.google.inject.Scope;
 
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -33,7 +34,8 @@ import java.util.WeakHashMap;
 public class ContextScope implements Scope {
 
     protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
-    protected ThreadLocal<Context> contextThreadLocal = new ThreadLocal<Context>();
+    protected ThreadLocal<WeakReference<Context>> contextThreadLocal = new ThreadLocal<WeakReference<Context>>();
+    protected HashSet<Context> contexts = new HashSet<Context>();
 
 
     public ContextScope(Application app) {
@@ -43,14 +45,18 @@ public class ContextScope implements Scope {
 
     public void open(Context context) {
 
-        final Context prevContext = contextThreadLocal.get();
-        if( prevContext==context )
+        final WeakReference<Context> prevContext = contextThreadLocal.get();
+        if( prevContext!=null && prevContext.get()==context )
             return;
 
         
         
         // Mark this thread as for this context
-        contextThreadLocal.set(context);
+        contextThreadLocal.set(new WeakReference<Context>(context));
+
+        // Hold on to a strong reference to this context to prevent the threadlocal and scopedobjects
+        // from getting garbage collected
+        contexts.add(context);
 
         // Add the context to the scope
         getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
@@ -62,29 +68,33 @@ public class ContextScope implements Scope {
         // Remove our only hard reference to the context.
         // The values map will remove the context automatically once
         // everyone is done using the context.
-        final Context prevContext = contextThreadLocal.get();
-        if( prevContext==context )
-            contextThreadLocal.set(null);
+        // We never remove the context from the threadlocal, since there may be additional
+        // things that this thread needs to do with the objects in the scope map.
+        contexts.remove(context);
+
     }
 
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {
-                final Context context = contextThreadLocal.get();
-                if (context != null) {
-                    final Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(context);
+                final WeakReference<Context> contextRef = contextThreadLocal.get();
+                if( contextRef!=null ) {
+                    final Context context = contextRef.get();
+                    if (context != null) {
+                        final Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(context);
 
-                    final WeakReference<Object> ref = scopedObjects.get(key);
-                    @SuppressWarnings({"unchecked"}) T current = (T) (ref!=null ? ref.get() : null);
-                    if (current == null && !scopedObjects.containsKey(key)) {
-                        current = unscoped.get();
-                        scopedObjects.put(key, new WeakReference<Object>(current));
+                        final WeakReference<Object> ref = scopedObjects.get(key);
+                        @SuppressWarnings({"unchecked"}) T current = (T) (ref!=null ? ref.get() : null);
+                        if (current == null && !scopedObjects.containsKey(key)) {
+                            current = unscoped.get();
+                            scopedObjects.put(key, new WeakReference<Object>(current));
+                        }
+                        return current;
                     }
-                    return current;
                 }
                 
-                throw new UnsupportedOperationException("Can't perform injection outside of a context scope. Make sure you don't try to do anything after Robo*.onDestroy() is called.");
+                throw new UnsupportedOperationException("Can't perform injection outside of a context scope.");
             }
         };
 

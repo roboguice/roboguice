@@ -15,6 +15,7 @@ import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
+import roboguice.util.RoboThread;
 
 import android.R;
 import android.content.Context;
@@ -35,9 +36,9 @@ import javax.annotation.Nullable;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -154,14 +155,15 @@ public class ActivityInjectionTest {
         final SoftReference<F> ref = new SoftReference<F>(new F());
         ref.get().onCreate(null);
 
-        final FutureTask<Context> future = new FutureTask<Context>( new Callable<Context>() {
+        final BlockingQueue<Context> queue = new ArrayBlockingQueue<Context>(1);
+        new RoboThread()  {
             Provider<Context> contextProvider = RoboGuice.getInjector(ref.get()).getProvider(Context.class);
 
             @Override
-            public Context call() throws Exception {
-                return contextProvider.get();
+            public void run() {
+                queue.add( contextProvider.get() );
             }
-        });
+        }.start();
 
         ref.get().onDestroy();
 
@@ -176,10 +178,7 @@ public class ActivityInjectionTest {
             // great!
         }
 
-        Executors.newSingleThreadExecutor().execute(future);
-
-
-        assertNotNull(future.get());
+        assertNotNull(queue.poll(10, TimeUnit.SECONDS));
 
     }
 

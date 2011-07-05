@@ -84,7 +84,7 @@ public class ContextScope implements Scope {
                     return current;
                 }
                 
-                throw new UnsupportedOperationException("Can't perform injection outside of a context scope");
+                throw new UnsupportedOperationException("Can't perform injection outside of a context scope. Make sure you don't try to do anything after Robo*.onDestroy() is called.");
             }
         };
 

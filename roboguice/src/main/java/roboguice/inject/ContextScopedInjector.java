@@ -129,6 +129,4 @@ public class ContextScopedInjector implements Injector {
         delegate.injectMembers(instance);
     }
 
-    public void closeScope( Context context ) {
-    }
 }

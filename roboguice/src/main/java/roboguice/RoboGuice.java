@@ -144,7 +144,7 @@ public class RoboGuice {
         if( viewListener==null ) {
             synchronized (RoboGuice.class) {
                 if( viewListener==null ) {
-                    viewListener = new ViewListener(contextProvider,application);
+                    viewListener = new ViewListener();
                     viewListeners.put(application,viewListener);
                 }
             }

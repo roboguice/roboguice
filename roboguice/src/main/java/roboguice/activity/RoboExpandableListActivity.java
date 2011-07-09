@@ -24,8 +24,6 @@ import android.app.ExpandableListActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 
 import com.google.inject.Injector;
 
@@ -50,27 +48,6 @@ public class RoboExpandableListActivity extends ExpandableListActivity {
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
-    public void setContentView(View view, LayoutParams params) {
-        super.setContentView(view, params);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
@@ -117,7 +94,6 @@ public class RoboExpandableListActivity extends ExpandableListActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
-            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }
@@ -132,6 +108,7 @@ public class RoboExpandableListActivity extends ExpandableListActivity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
+        viewListener.injectViews(this);
         eventManager.fire(new OnContentChangedEvent());
     }
 

@@ -70,7 +70,6 @@ public abstract class RoboService extends Service {
         try {
             eventManager.fire(new OnDestroyEvent() );
         } finally {
-            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }

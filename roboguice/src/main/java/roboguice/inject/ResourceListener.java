@@ -26,6 +26,7 @@ import android.view.animation.AnimationUtils;
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -35,7 +36,7 @@ import java.lang.reflect.Modifier;
  * Resource listener.
  * @author Mike Burton
  */
-public class ResourceListener implements StaticTypeListener {
+public class ResourceListener implements TypeListener {
     protected Application application;
 
     public ResourceListener(Application application) {

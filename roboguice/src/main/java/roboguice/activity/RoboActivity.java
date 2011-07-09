@@ -24,8 +24,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 
 import com.google.inject.Injector;
 
@@ -75,27 +73,6 @@ public class RoboActivity extends Activity {
     }
 
     @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
-    public void setContentView(View view, LayoutParams params) {
-        super.setContentView(view, params);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
     protected void onRestart() {
         super.onRestart();
         eventManager.fire(new OnRestartEvent());
@@ -139,7 +116,6 @@ public class RoboActivity extends Activity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
-            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }
@@ -154,6 +130,7 @@ public class RoboActivity extends Activity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
+        viewListener.injectViews(this);
         eventManager.fire(new OnContentChangedEvent());
     }
 

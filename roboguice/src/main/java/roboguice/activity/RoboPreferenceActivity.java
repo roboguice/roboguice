@@ -26,8 +26,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 
 import com.google.inject.Injector;
 
@@ -65,27 +63,6 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);
         preferenceListener.injectPreferenceViews();
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
-    public void setContentView(View view, LayoutParams params) {
-        super.setContentView(view, params);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
@@ -132,7 +109,6 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
-            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }
@@ -147,6 +123,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
+        viewListener.injectViews(this);
         eventManager.fire(new OnContentChangedEvent());
     }
 

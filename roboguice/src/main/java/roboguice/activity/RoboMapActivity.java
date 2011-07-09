@@ -23,8 +23,6 @@ import roboguice.inject.ViewListener;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 
 import com.google.android.maps.MapActivity;
 import com.google.inject.Injector;
@@ -49,27 +47,6 @@ public abstract class RoboMapActivity extends MapActivity {
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
-    public void setContentView(View view, LayoutParams params) {
-        super.setContentView(view, params);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
-    }
-
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-        viewListener.injectViews();
-        eventManager.fire(new OnContentViewAvailableEvent());
     }
 
     @Override
@@ -116,7 +93,6 @@ public abstract class RoboMapActivity extends MapActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
-            RoboGuice.getInjector(this).closeScope(this);
             super.onDestroy();
         }
     }
@@ -131,6 +107,7 @@ public abstract class RoboMapActivity extends MapActivity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
+        viewListener.injectViews(this);
         eventManager.fire(new OnContentChangedEvent());
     }
 

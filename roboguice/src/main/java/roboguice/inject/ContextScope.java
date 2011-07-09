@@ -37,11 +37,11 @@ public class ContextScope implements Scope {
 
 
     public ContextScope(Application app) {
-        open(app);
+        enter(app);
     }
 
 
-    public void open(Context context) {
+    public void enter(Context context) {
 
         final WeakReference<Context> prevContext = contextThreadLocal.get();
         if( prevContext!=null && prevContext.get()==context )

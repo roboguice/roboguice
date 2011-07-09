@@ -25,7 +25,6 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
 import javax.inject.Singleton;
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ import java.util.WeakHashMap;
 
 @Singleton
 public class ViewListener implements TypeListener {
-    protected WeakHashMap<Context,ArrayList<ViewMembersInjector<?>>> viewsForInjection = new WeakHashMap<Context, ArrayList<ViewMembersInjector<?>>>();
+    protected WeakHashMap<Context,ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Context, ArrayList<ViewMembersInjector<?>>>();
 
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -52,19 +51,19 @@ public class ViewListener implements TypeListener {
     }
 
     public void registerViewForInjection(Context context, ViewMembersInjector<?> injector) {
-        ArrayList<ViewMembersInjector<?>> viewMembersInjectors = viewsForInjection.get(context);
+        ArrayList<ViewMembersInjector<?>> viewMembersInjectors = this.viewMembersInjectors.get(context);
         if( viewMembersInjectors==null ) {
             viewMembersInjectors = new ArrayList<ViewMembersInjector<?>>();
-            viewsForInjection.put(context, viewMembersInjectors);
+            this.viewMembersInjectors.put(context, viewMembersInjectors);
         }
         viewMembersInjectors.add(injector);
     }
 
     public void injectViews(Context context) {
-        final ArrayList<ViewMembersInjector<?>> viewMembersInjectors = viewsForInjection.get(context);
+        final ArrayList<ViewMembersInjector<?>> viewMembersInjectors = this.viewMembersInjectors.get(context);
         if(viewMembersInjectors!=null)
             for(ViewMembersInjector<?> viewMembersInjector : viewMembersInjectors)
-                viewMembersInjector.reallyInjectMembers();
+                viewMembersInjector.reallyInjectMembers(context);
     }
 
 
@@ -73,24 +72,18 @@ public class ViewListener implements TypeListener {
     class ViewMembersInjector<T extends Context> implements MembersInjector<T> {
         protected Field field;
         protected InjectView annotation;
-        protected WeakReference<T> instanceRef;
 
         public ViewMembersInjector(Field field, InjectView annotation) {
             this.field = field;
             this.annotation = annotation;
         }
 
-        public void injectMembers(T instance) {
-            // Mark instance for injection during setContentView
-            this.instanceRef = new WeakReference<T>(instance);
-            registerViewForInjection(instance,this);
+        public void injectMembers(T context) {
+            // Mark context for injection during onContentChanged
+            registerViewForInjection(context,this);
         }
 
-        public void reallyInjectMembers() {
-
-            final T context = instanceRef.get();
-            if( context ==null )
-                return;
+        public void reallyInjectMembers(Context context) {
 
             Object value = null;
 

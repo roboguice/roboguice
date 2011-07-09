@@ -1,6 +1,8 @@
 package roboguice.inject;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.View;
 
 import com.google.inject.*;
 import com.google.inject.spi.TypeConverterBinding;
@@ -10,14 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ContextScopedInjector implements Injector {
+public class ContextScopedInjector implements RoboInjector {
     protected Injector delegate;
     protected Context context;
     protected ContextScope scope;
+    protected ViewListener viewListener;
 
-    public ContextScopedInjector(Context context, Injector applicationInjector) {
+    public ContextScopedInjector(Context context, Injector applicationInjector, ViewListener viewListener) {
         this.delegate = applicationInjector;
         this.context = context;
+        this.viewListener = viewListener;
         this.scope = delegate.getInstance(ContextScope.class);
     }
 
@@ -129,4 +133,13 @@ public class ContextScopedInjector implements Injector {
         delegate.injectMembers(instance);
     }
 
+    @Override
+    public void injectViewMembers(Activity activity) {
+        viewListener.injectViews(activity);
+    }
+
+    @Override
+    public void injectViewMembers(View root) {
+        throw new UnsupportedOperationException();
+    }
 }

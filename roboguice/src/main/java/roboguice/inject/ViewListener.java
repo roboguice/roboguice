@@ -50,23 +50,14 @@ public class ViewListener implements TypeListener {
 
     }
 
-    public void registerViewForInjection(Context context, ViewMembersInjector<?> injector) {
-        ArrayList<ViewMembersInjector<?>> viewMembersInjectors = this.viewMembersInjectors.get(context);
-        if( viewMembersInjectors==null ) {
-            viewMembersInjectors = new ArrayList<ViewMembersInjector<?>>();
-            this.viewMembersInjectors.put(context, viewMembersInjectors);
-        }
-        viewMembersInjectors.add(injector);
-    }
-
     public void injectViews(Context context) {
-        final ArrayList<ViewMembersInjector<?>> viewMembersInjectors = this.viewMembersInjectors.get(context);
-        if(viewMembersInjectors!=null)
-            for(ViewMembersInjector<?> viewMembersInjector : viewMembersInjectors)
-                viewMembersInjector.reallyInjectMembers(context);
+        synchronized ( ViewListener.class ) {
+            final ArrayList<ViewMembersInjector<?>> viewMembersInjectors = this.viewMembersInjectors.get(context);
+            if(viewMembersInjectors!=null)
+                for(ViewMembersInjector<?> viewMembersInjector : viewMembersInjectors)
+                    viewMembersInjector.reallyInjectMembers(context);
+        }
     }
-
-
 
 
     class ViewMembersInjector<T extends Context> implements MembersInjector<T> {
@@ -79,8 +70,14 @@ public class ViewListener implements TypeListener {
         }
 
         public void injectMembers(T context) {
-            // Mark context for injection during onContentChanged
-            registerViewForInjection(context,this);
+            synchronized (ViewListener.class) {
+                ArrayList<ViewMembersInjector<?>> injectors = ViewListener.this.viewMembersInjectors.get(context);
+                if( injectors ==null ) {
+                    injectors = new ArrayList<ViewMembersInjector<?>>();
+                    ViewListener.this.viewMembersInjectors.put(context, injectors);
+                }
+                injectors.add(this);
+            }
         }
 
         public void reallyInjectMembers(Context context) {

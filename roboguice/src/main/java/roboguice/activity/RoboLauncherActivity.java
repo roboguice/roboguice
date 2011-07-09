@@ -18,7 +18,6 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
-import roboguice.inject.ViewListener;
 
 import android.app.LauncherActivity;
 import android.content.Intent;
@@ -37,13 +36,11 @@ import com.google.inject.Injector;
  */
 public class RoboLauncherActivity extends LauncherActivity {
     protected EventManager eventManager;
-    protected ViewListener viewListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
-        viewListener = injector.getInstance(ViewListener.class);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
@@ -107,7 +104,7 @@ public class RoboLauncherActivity extends LauncherActivity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        viewListener.injectViews(this);
+        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent());
     }
 

@@ -19,7 +19,6 @@ import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
 import roboguice.inject.PreferenceListener;
-import roboguice.inject.ViewListener;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -44,7 +43,6 @@ import com.google.inject.Injector;
  */
 public abstract class RoboPreferenceActivity extends PreferenceActivity {
     protected EventManager eventManager;
-    protected ViewListener viewListener;
     protected PreferenceListener preferenceListener;
 
     /** {@inheritDoc } */
@@ -52,7 +50,6 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         final Injector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
-        viewListener = injector.getInstance(ViewListener.class);
         preferenceListener = injector.getInstance(PreferenceListener.class);
         injector.injectMembers(this);
         super.onCreate(savedInstanceState);
@@ -123,7 +120,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        viewListener.injectViews(this);
+        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent());
     }
 

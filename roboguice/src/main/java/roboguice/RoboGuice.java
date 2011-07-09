@@ -1,10 +1,7 @@
 package roboguice;
 
 import roboguice.config.RoboModule;
-import roboguice.inject.ContextScope;
-import roboguice.inject.ContextScopedInjector;
-import roboguice.inject.ResourceListener;
-import roboguice.inject.ViewListener;
+import roboguice.inject.*;
 
 import android.app.Application;
 import android.content.Context;
@@ -104,8 +101,9 @@ public class RoboGuice {
     }
 
 
-    public static ContextScopedInjector getInjector(Context context) {
-        return new ContextScopedInjector(context, getApplicationInjector((Application)context.getApplicationContext()));
+    public static RoboInjector getInjector(Context context) {
+        final Application application = (Application)context.getApplicationContext();
+        return new ContextScopedInjector(context, getApplicationInjector(application), getViewListener(application));
     }
 
 
@@ -118,7 +116,7 @@ public class RoboGuice {
             }
         };
         final Provider<Context> contextProvider = scope.scope(Key.get(Context.class), fallbackProvider);
-        return new RoboModule(application, scope, contextProvider, getViewListener(contextProvider, application), getResourceListener(application));
+        return new RoboModule(application, scope, contextProvider, getViewListener(application), getResourceListener(application));
     }
 
 
@@ -139,7 +137,7 @@ public class RoboGuice {
         return resourceListener;
     }
 
-    protected static ViewListener getViewListener( final Provider<Context> contextProvider, final Application application ) {
+    protected static ViewListener getViewListener( final Application application ) {
         ViewListener viewListener = viewListeners.get(application);
         if( viewListener==null ) {
             synchronized (RoboGuice.class) {

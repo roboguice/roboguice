@@ -50,17 +50,19 @@ public class ViewListener implements TypeListener {
 
     }
 
-    public void injectViews(Context context) {
+
+    public void injectViews(Activity activity, View root) {
         synchronized ( ViewListener.class ) {
-            final ArrayList<ViewMembersInjector<?>> viewMembersInjectors = this.viewMembersInjectors.get(context);
+            final ArrayList<ViewMembersInjector<?>> viewMembersInjectors = this.viewMembersInjectors.get(activity);
             if(viewMembersInjectors!=null)
                 for(ViewMembersInjector<?> viewMembersInjector : viewMembersInjectors)
-                    viewMembersInjector.reallyInjectMembers(context);
+                    viewMembersInjector.reallyInjectMembers(activity,root);
         }
     }
 
 
-    class ViewMembersInjector<T extends Context> implements MembersInjector<T> {
+
+    class ViewMembersInjector<T extends Activity> implements MembersInjector<T> {
         protected Field field;
         protected InjectView annotation;
 
@@ -80,19 +82,19 @@ public class ViewListener implements TypeListener {
             }
         }
 
-        public void reallyInjectMembers(Context context) {
+        public void reallyInjectMembers(Activity activity, View root) {
 
             Object value = null;
 
             try {
 
-                value = ((Activity)context).findViewById(annotation.value());
+                value = root!=null ? root.findViewById(annotation.value()) : activity.findViewById(annotation.value());
 
                 if (value == null && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
                 field.setAccessible(true);
-                field.set(context, value);
+                field.set(activity, value);
 
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);

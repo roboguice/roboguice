@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class ContextScopedInjector implements RoboInjector {
+public class ContextScopedRoboInjector implements RoboInjector {
     protected Injector delegate;
     protected Context context;
     protected ContextScope scope;
     protected ViewListener viewListener;
 
-    public ContextScopedInjector(Context context, Injector applicationInjector, ViewListener viewListener) {
+    public ContextScopedRoboInjector(Context context, Injector applicationInjector, ViewListener viewListener) {
         this.delegate = applicationInjector;
         this.context = context;
         this.viewListener = viewListener;
@@ -135,11 +135,11 @@ public class ContextScopedInjector implements RoboInjector {
 
     @Override
     public void injectViewMembers(Activity activity) {
-        viewListener.injectViews(activity);
+        viewListener.injectViews(activity,null);
     }
 
     @Override
     public void injectViewMembers(View root) {
-        throw new UnsupportedOperationException();
+        viewListener.injectViews((Activity)root.getContext(),root);
     }
 }

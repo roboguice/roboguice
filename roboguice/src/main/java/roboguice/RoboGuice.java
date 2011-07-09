@@ -103,7 +103,7 @@ public class RoboGuice {
 
     public static RoboInjector getInjector(Context context) {
         final Application application = (Application)context.getApplicationContext();
-        return new ContextScopedInjector(context, getApplicationInjector(application), getViewListener(application));
+        return new ContextScopedRoboInjector(context, getApplicationInjector(application), getViewListener(application));
     }
 
 

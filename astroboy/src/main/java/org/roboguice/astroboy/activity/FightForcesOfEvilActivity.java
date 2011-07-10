@@ -1,5 +1,6 @@
-package org.roboguice;
+package org.roboguice.astroboy.activity;
 
+import org.roboguice.astroboy.activity.AstroboyRemoteControl;
 import roboguice.activity.RoboActivity;
 
 import android.os.Bundle;

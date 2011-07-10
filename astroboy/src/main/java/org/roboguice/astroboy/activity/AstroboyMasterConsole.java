@@ -1,6 +1,6 @@
-package org.roboguice;
+package org.roboguice.astroboy.activity;
 
-import org.roboguice.R.id;
+import org.roboguice.astroboy.R;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContextScoped;
 import roboguice.inject.InjectView;
@@ -35,7 +35,7 @@ public class AstroboyMasterConsole extends RoboActivity {
     @InjectView(R.id.self_destruct) Button selfDestructButton;
     @InjectView(R.id.say_text)      EditText sayText;
     @InjectView(R.id.brush_teeth)   Button brushTeethButton;
-    @InjectView(id.fight_evil)      Button fightEvilButton;
+    @InjectView(R.id.fight_evil)      Button fightEvilButton;
 
 
     // Standard Guice injection of Plain Old Java Objects (POJOs)
@@ -107,6 +107,7 @@ class AstroboyRemoteControl {
     @Inject Context context;
 
     public void brushTeeth() {
+        // More info about logging available here: http://code.google.com/p/roboguice/wiki/Logging
         Ln.d("Sent brushTeeth command to Astroboy");
         astroboy.brushTeeth();
     }

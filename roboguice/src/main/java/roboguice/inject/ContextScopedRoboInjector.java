@@ -135,11 +135,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
 
     @Override
     public void injectViewMembers(Activity activity) {
-        viewListener.injectViews(activity,null);
+        viewListener.injectViews(activity);
     }
 
     @Override
     public void injectViewMembers(View root) {
-        viewListener.injectViews((Activity)root.getContext(),root);
+        viewListener.injectViews(root);
     }
 }

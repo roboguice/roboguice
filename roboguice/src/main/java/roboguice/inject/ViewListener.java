@@ -15,6 +15,8 @@
  */
 package roboguice.inject;
 
+import roboguice.RoboGuice;
+
 import android.app.Activity;
 import android.view.View;
 
@@ -31,7 +33,6 @@ import java.util.WeakHashMap;
 
 @Singleton
 public class ViewListener implements TypeListener {
-    protected WeakHashMap<Object,ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>>();
 
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -44,24 +45,28 @@ public class ViewListener implements TypeListener {
                     else if( !View.class.isAssignableFrom(field.getType()))
                         throw new UnsupportedOperationException("You may only use @InjectView on fields descended from type View");
                     else
-                        //noinspection unchecked
-                        typeEncounter.register(new ViewMembersInjector(field, field.getAnnotation(InjectView.class)));
+                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class)));
 
     }
 
 
-    public void injectViews(Activity activity, View root) {
-        synchronized ( ViewListener.class ) {
-            final ArrayList<ViewMembersInjector<?>> viewMembersInjectors = this.viewMembersInjectors.get(activity);
-            if(viewMembersInjectors!=null)
-                for(ViewMembersInjector<?> viewMembersInjector : viewMembersInjectors)
-                    viewMembersInjector.reallyInjectMembers(activity,root);
-        }
+    public void injectViews(Activity activity) {
+        ViewMembersInjector.injectViews(activity);
+    }
+
+    public void injectViews(View root) {
+        RoboGuice.getInjector(root.getContext()).injectMembers(root); // We need to do this to have hear() called on this object
+        ViewMembersInjector.injectViews(root);
     }
 
 
+    
 
-    class ViewMembersInjector<T> implements MembersInjector<T> {
+
+
+    public static class ViewMembersInjector<T> implements MembersInjector<T> {
+        protected static WeakHashMap<Object,ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>>();
+
         protected Field field;
         protected InjectView annotation;
 
@@ -71,7 +76,7 @@ public class ViewListener implements TypeListener {
         }
 
         public void injectMembers(T activityOrView) {
-            synchronized (ViewListener.class) {
+            synchronized (ViewMembersInjector.class) {
                 ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activityOrView);
                 if( injectors ==null ) {
                     injectors = new ArrayList<ViewMembersInjector<?>>();
@@ -81,19 +86,19 @@ public class ViewListener implements TypeListener {
             }
         }
 
-        public void reallyInjectMembers(Activity activity, View root) {
+        public void reallyInjectMembers(Object activityOrView) {
 
             Object value = null;
 
             try {
 
-                value = root!=null ? root.findViewById(annotation.value()) : activity.findViewById(annotation.value());
+                value = activityOrView instanceof View ? ((View)activityOrView).findViewById(annotation.value()) : ((Activity)activityOrView).findViewById(annotation.value());
 
                 if (value == null && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
                 field.setAccessible(true);
-                field.set(activity, value);
+                field.set(activityOrView, value);
 
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
@@ -103,6 +108,17 @@ public class ViewListener implements TypeListener {
                         field.getType(), field.getName()));
             }
         }
+
+        protected static void injectViews(Object instance) {
+            synchronized ( ViewMembersInjector.class ) {
+                final ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(instance);
+                if(injectors!=null)
+                    for(ViewMembersInjector<?> viewMembersInjector : injectors)
+                        viewMembersInjector.reallyInjectMembers(instance);
+            }
+        }
+
+
 
 
     }

@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android">
-  <EditTextPreference android:key="text_pref" android:title="Text preference" android:summary="Meh." android:persistent="false"/>
-  <CheckBoxPreference android:summary="Toggle me" android:title="Check me" android:key="bool_pref" android:persistent="false"/>
-</PreferenceScreen>

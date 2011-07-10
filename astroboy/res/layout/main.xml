@@ -33,6 +33,14 @@
         />
 
     <Button
+        android:id="@+id/fight_evil"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Fight Forces of Evil"
+        />
+
+
+    <Button
         android:id="@+id/self_destruct"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

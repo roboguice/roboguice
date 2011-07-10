@@ -1,11 +1,13 @@
 package org.roboguice;
 
+import org.roboguice.R.id;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContextScoped;
 import roboguice.inject.InjectView;
 import roboguice.util.Ln;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.KeyEvent;
@@ -31,8 +33,9 @@ public class AstroboyMasterConsole extends RoboActivity {
     // Various views that we inject into the activity.
     // Equivalent to calling findViewById() in your onCreate(), except more succinct
     @InjectView(R.id.self_destruct) Button selfDestructButton;
-    @InjectView(R.id.say_text) EditText sayText;
-    @InjectView(R.id.brush_teeth) Button brushTeethButton;
+    @InjectView(R.id.say_text)      EditText sayText;
+    @InjectView(R.id.brush_teeth)   Button brushTeethButton;
+    @InjectView(id.fight_evil)      Button fightEvilButton;
 
 
     // Standard Guice injection of Plain Old Java Objects (POJOs)
@@ -77,6 +80,13 @@ public class AstroboyMasterConsole extends RoboActivity {
             }
         });
 
+        // Fighting the forces of evil deserves its own activity
+        fightEvilButton.setOnClickListener( new OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(AstroboyMasterConsole.this, FightForcesOfEvilActivity.class));
+            }
+        });
+
     }
 
 }
@@ -96,10 +106,6 @@ class AstroboyRemoteControl {
     @Inject Astroboy astroboy;
     @Inject Context context;
 
-    public void goToSleep() {
-
-    }
-
     public void brushTeeth() {
         Ln.d("Sent brushTeeth command to Astroboy");
         astroboy.brushTeeth();
@@ -113,6 +119,16 @@ class AstroboyRemoteControl {
     public void selfDestruct() {
         Toast.makeText(context,"Your evil remote control has exploded! Now Astroboy is FREEEEEEEEEE!",Toast.LENGTH_LONG).show();
     }
+
+
+    // Note: this method may take a long time to execute, so you
+    // probably want to run it in a background thread
+    public void fightForcesOfEvil() {
+
+    }
+
+
+
 }
 
 

@@ -18,24 +18,22 @@ import java.util.concurrent.Executor;
 public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
     @Inject static protected Provider<Context> contextProvider;
 
-    protected Context context = contextProvider.get();
-
     protected RoboAsyncTask() {
-        RoboGuice.getInjector(context).injectMembers(this);
+        RoboGuice.getInjector(contextProvider.get()).injectMembers(this);
     }
 
     protected RoboAsyncTask(Handler handler) {
         super(handler);
-        RoboGuice.getInjector(context).injectMembers(this);
+        RoboGuice.getInjector(contextProvider.get()).injectMembers(this);
     }
 
     protected RoboAsyncTask(Handler handler, Executor executor) {
         super(handler, executor);
-        RoboGuice.getInjector(context).injectMembers(this);
+        RoboGuice.getInjector(contextProvider.get()).injectMembers(this);
     }
 
     protected RoboAsyncTask(Executor executor) {
         super(executor);
-        RoboGuice.getInjector(context).injectMembers(this);
+        RoboGuice.getInjector(contextProvider.get()).injectMembers(this);
     }
 }

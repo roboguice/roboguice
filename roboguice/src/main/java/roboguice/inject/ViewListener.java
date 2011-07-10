@@ -16,7 +16,6 @@
 package roboguice.inject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.View;
 
 import com.google.inject.MembersInjector;
@@ -32,7 +31,7 @@ import java.util.WeakHashMap;
 
 @Singleton
 public class ViewListener implements TypeListener {
-    protected WeakHashMap<Context,ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Context, ArrayList<ViewMembersInjector<?>>>();
+    protected WeakHashMap<Object,ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>>();
 
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -62,7 +61,7 @@ public class ViewListener implements TypeListener {
 
 
 
-    class ViewMembersInjector<T extends Activity> implements MembersInjector<T> {
+    class ViewMembersInjector<T> implements MembersInjector<T> {
         protected Field field;
         protected InjectView annotation;
 
@@ -71,12 +70,12 @@ public class ViewListener implements TypeListener {
             this.annotation = annotation;
         }
 
-        public void injectMembers(T context) {
+        public void injectMembers(T activityOrView) {
             synchronized (ViewListener.class) {
-                ArrayList<ViewMembersInjector<?>> injectors = ViewListener.this.viewMembersInjectors.get(context);
+                ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activityOrView);
                 if( injectors ==null ) {
                     injectors = new ArrayList<ViewMembersInjector<?>>();
-                    ViewListener.this.viewMembersInjectors.put(context, injectors);
+                    viewMembersInjectors.put(activityOrView, injectors);
                 }
                 injectors.add(this);
             }

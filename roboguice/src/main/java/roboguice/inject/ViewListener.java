@@ -15,8 +15,6 @@
  */
 package roboguice.inject;
 
-import roboguice.RoboGuice;
-
 import android.app.Activity;
 import android.view.View;
 
@@ -50,14 +48,10 @@ public class ViewListener implements TypeListener {
     }
 
 
-    public void injectViews(Activity activity) {
-        ViewMembersInjector.injectViews(activity);
+    public void injectViews(Object instance) {
+        ViewMembersInjector.injectViews(instance);
     }
 
-    public void injectViews(View root) {
-        RoboGuice.getInjector(root.getContext()).injectMembers(root); // We need to do this to have hear() called on this object
-        ViewMembersInjector.injectViews(root);
-    }
 
 
     

@@ -311,7 +311,7 @@ public class ActivityInjectionTest {
             child.setId(100);
             addView(child);
 
-            RoboGuice.getInjector(context).injectViewMembers(this);
+            RoboGuice.getInjector(context).injectMembers(this);
         }
     }
 }

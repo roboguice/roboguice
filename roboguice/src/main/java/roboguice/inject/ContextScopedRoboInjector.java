@@ -1,6 +1,7 @@
 package roboguice.inject;
 
-import android.app.Activity;
+import roboguice.inject.ViewListener.ViewMembersInjector;
+
 import android.content.Context;
 import android.view.View;
 
@@ -131,15 +132,14 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public void injectMembers(Object instance) {
         scope.enter(context);
         delegate.injectMembers(instance);
+
+        // Sort of weird.  If instance is a view, assume we also want to evalute any @InjectView() annotations now rather than later
+        if( instance instanceof View )
+            injectViewMembers(instance);
     }
 
     @Override
-    public void injectViewMembers(Activity activity) {
-        viewListener.injectViews(activity);
-    }
-
-    @Override
-    public void injectViewMembers(View root) {
-        viewListener.injectViews(root);
+    public void injectViewMembers(Object instance) {
+        ViewMembersInjector.injectViews(instance);
     }
 }

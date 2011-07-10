@@ -134,6 +134,7 @@ public class ContextScopedRoboInjector implements RoboInjector {
         delegate.injectMembers(instance);
 
         // Sort of weird.  If instance is a view, assume we also want to evalute any @InjectView() annotations now rather than later
+        // BUG this might need to be !(instance instanceof Activity)
         if( instance instanceof View )
             injectViewMembers(instance);
     }

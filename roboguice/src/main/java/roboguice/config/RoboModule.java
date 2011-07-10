@@ -32,7 +32,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
 
@@ -86,7 +88,7 @@ public class RoboModule extends AbstractModule {
         bindScope(ContextScoped.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
         bind(Context.class).toProvider(contextProvider).in(ContextScoped.class);
-        bind(Activity.class).toProvider(ActivityProvider.class);
+        bind(Activity.class).toProvider(Key.get(new TypeLiteral<ContextProvider<Activity>>(){}));
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
 
         

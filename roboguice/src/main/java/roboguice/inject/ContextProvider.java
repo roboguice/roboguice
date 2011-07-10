@@ -15,24 +15,22 @@
  */
 package roboguice.inject;
 
+import android.content.Context;
+
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.Singleton;
-
-import android.app.Activity;
-import android.content.Context;
 
 /**
  * 
  * @author Mike Burton
  */
-@Singleton
-public class ActivityProvider implements Provider<Activity> {
-    @Inject
-    Provider<Context> contextProvider;
+@ContextScoped
+public class ContextProvider<T extends Context> implements Provider<T> {
+    @Inject protected Context context;
 
-    public Activity get() {
-        return (Activity) contextProvider.get();
+    @SuppressWarnings({"unchecked"})
+    public T get() {
+        return (T) context;
     }
 
 }

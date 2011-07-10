@@ -1,12 +1,10 @@
 package org.roboguice.astroboy.activity;
 
 import org.roboguice.astroboy.R;
+import org.roboguice.astroboy.controller.AstroboyRemoteControl;
 import roboguice.activity.RoboActivity;
-import roboguice.inject.ContextScoped;
 import roboguice.inject.InjectView;
-import roboguice.util.Ln;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -17,11 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import android.widget.Toast;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
 
 
 /**
@@ -92,68 +87,5 @@ public class AstroboyMasterConsole extends RoboActivity {
 }
 
 
-/**
- * A class to control Astroboy remotely.
- *
- * This class uses the current context, so we must make it @ContextScoped.
- * This means that there will be one AstroboyRemoteControl for every activity or
- * service that requires one.
- *
- * It also asks RoboGuice to inject the Astroboy instance so we can control him.
- */
-@ContextScoped
-class AstroboyRemoteControl {
-    @Inject Astroboy astroboy;
-    @Inject Context context;
-
-    public void brushTeeth() {
-        // More info about logging available here: http://code.google.com/p/roboguice/wiki/Logging
-        Ln.d("Sent brushTeeth command to Astroboy");
-        astroboy.brushTeeth();
-    }
-
-    public void say( String something ) {
-        Ln.d("Sent say(%d) command to Astroboy",something);
-        astroboy.say(something);
-    }
-
-    public void selfDestruct() {
-        Toast.makeText(context,"Your evil remote control has exploded! Now Astroboy is FREEEEEEEEEE!",Toast.LENGTH_LONG).show();
-    }
 
 
-    // Note: this method may take a long time to execute, so you
-    // probably want to run it in a background thread
-    public void fightForcesOfEvil() {
-
-    }
-
-
-
-}
-
-
-
-
-// There's only one Astroboy, so make it a @Singleton.
-// This means that there will be only one instance of Astroboy in the entire app.
-// Any class that requires an instance of Astroboy will get the same instance.
-@Singleton
-class Astroboy {
-
-    // Because Astroboy is a Singleton, we can't directly inject the current Context
-    // since the current context may change depending on what activity is using Astroboy
-    // at the time.  Instead, inject a PROVIDER of the current context, then we can
-    // ask the provider for the context when we need it.
-    @Inject Provider<Context> contextProvider;
-    @Inject Vibrator vibrator;
-
-    public void say(String something) {
-        // Make a Toast, using the current context as returned by the Context Provider
-        Toast.makeText(contextProvider.get(),"Astroboy says, \"" + something + "\"",Toast.LENGTH_LONG).show();
-    }
-
-    public void brushTeeth() {
-        vibrator.vibrate(new long[]{0, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50,  }, -1);
-    }
-}

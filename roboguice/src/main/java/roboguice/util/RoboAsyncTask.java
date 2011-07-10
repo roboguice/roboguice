@@ -1,6 +1,6 @@
 package roboguice.util;
 
-import roboguice.inject.ContextScope;
+import roboguice.RoboGuice;
 
 import android.content.Context;
 import android.os.Handler;
@@ -17,45 +17,25 @@ import java.util.concurrent.Executor;
  */
 public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
     @Inject static protected Provider<Context> contextProvider;
-    @Inject static protected Provider<ContextScope> scopeProvider;
 
     protected Context context = contextProvider.get();
-    protected ContextScope scope = scopeProvider.get();
 
     protected RoboAsyncTask() {
+        RoboGuice.getInjector(context).injectMembers(this);
     }
 
     protected RoboAsyncTask(Handler handler) {
         super(handler);
+        RoboGuice.getInjector(context).injectMembers(this);
     }
 
     protected RoboAsyncTask(Handler handler, Executor executor) {
         super(handler, executor);
+        RoboGuice.getInjector(context).injectMembers(this);
     }
 
     protected RoboAsyncTask(Executor executor) {
         super(executor);
-    }
-
-    @Override
-    protected Task<ResultT> newTask() {
-        return new Task<ResultT>(this, context, scope);
-    }
-
-    protected static class Task<ResultT> extends SafeAsyncTask.Task<ResultT> {
-        protected Context context;
-        protected ContextScope scope;
-
-        public Task(SafeAsyncTask<ResultT> parent, Context context, ContextScope scope) {
-            super(parent);
-            this.context = context;
-            this.scope = scope;
-        }
-
-        @Override
-        protected ResultT doCall() throws Exception {
-            scope.enter(context); // BUG is this even necessary anymore?
-            return super.doCall();
-        }
+        RoboGuice.getInjector(context).injectMembers(this);
     }
 }

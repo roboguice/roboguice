@@ -120,36 +120,6 @@ public class ActivityInjectionTest {
     }
 
 
-    /*
-    'This is supposed to reflect the failure Im seeing in MyGroupons where context goes out of scope'
-    "E/COM.GROUPON/Tracking.java:94(30516): Caused by: java.lang.UnsupportedOperationException: Can't perform injection outside of a context scope\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat roboguice.inject.ContextScope$1.get(ContextScope.java:87)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.google.inject.InternalFactoryToProviderAdapter.get(InternalFactoryToProviderAdapter.java:48)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.google.inject.InjectorImpl$4$1.call(InjectorImpl.java:758)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.google.inject.InjectorImpl.callInContext(InjectorImpl.java:811)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.google.inject.InjectorImpl$4.get(InjectorImpl.java:754)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat roboguice.inject.SharedPreferencesProvider.get(SharedPreferencesProvider.java:50)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat roboguice.inject.SharedPreferencesProvider.get(SharedPreferencesProvider.java:29)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.google.inject.BoundProviderFactory.get(BoundProviderFactory.java:58)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.google.inject.InjectorImpl$4$1.call(InjectorImpl.java:758)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.google.inject.InjectorImpl.callInContext(InjectorImpl.java:804)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.google.inject.InjectorImpl$4.get(InjectorImpl.java:754)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.groupon.service.CountryService.getCurrentCountryData(CountryService.java:134)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.groupon.service.CountryService.isUSACompatible(CountryService.java:186)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.groupon.service.CountryService.getCurrentBaseUrl(CountryService.java:66)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.groupon.http.synchronous.SyncHttp.getURI(SyncHttp.java:167)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.groupon.http.synchronous.SyncHttp.call(SyncHttp.java:96)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.groupon.http.synchronous.SyncHttp.callOnlyUsingRemote(SyncHttp.java:91)\n"+
-            "E/COM.GROUPON/Tracking.java:94(30516): \tat com.groupon.http.synchronous.HttpO\n"+
-            "D/COM.GROUPON/Tracking.java:110(30516): 01:47:47.090 pool-1-thread-17 Sending exception (Guice provision errors:\n"+
-            "D/COM.GROUPON/Tracking.java:110(30516): \n"+
-            "D/COM.GROUPON/Tracking.java:110(30516): 1) Error in custom provider, java.lang.UnsupportedOperationException: Can't perform injection outside of a context scope\n"+
-            "D/COM.GROUPON/Tracking.java:110(30516):   while locating android.content.Context\n"+
-            "D/COM.GROUPON/Tracking.java:110(30516):   while locating roboguice.inject.SharedPreferencesProvider\n"+
-            "D/COM.GROUPON/Tracking.java:110(30516):   while locating android.content.SharedPreferences\n"+
-            "D/COM.GROUPON/Tracking.java:110(30516): \n"+
-            "D/COM.GROUPON/Tracking.java:110(30516): 1 error) to flurry"
-            */
     @Test
     public void shouldAllowBackgroundThreadsToFinishUsingContextAfterOnDestroy() throws Exception {
         final SoftReference<F> ref = new SoftReference<F>(new F());

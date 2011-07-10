@@ -25,6 +25,7 @@ import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.google.inject.ConfigurationException;
@@ -75,6 +76,12 @@ public class ActivityInjectionTest {
     @Test
     public void shouldInjectStringResource() {
         assertThat(activity.cancel,is("Cancel"));
+    }
+
+    @Test
+    public void shouldInjectViewsIntoViews() {
+        final InjectedView v = new InjectedView(activity);
+        assertThat(v.v,equalTo(v.child));
     }
 
     @Test
@@ -290,6 +297,21 @@ public class ActivityInjectionTest {
         @Override
         protected void onDestroy() {
             super.onDestroy();
+        }
+    }
+
+    public class InjectedView extends FrameLayout {
+        @InjectView(100) View v;
+
+        View child;
+
+        public InjectedView(Context context) {
+            super(context);
+            child = new View(context);
+            child.setId(100);
+            addView(child);
+
+            RoboGuice.getInjector(context).injectViewMembers(this);
         }
     }
 }

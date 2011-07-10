@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.roboguice" android:versionCode="1" android:versionName="0.1-SNAPSHOT">
+          package="org.roboguice" android:versionCode="1" android:versionName="0.1-SNAPSHOT">
 
-  <application android:icon="@drawable/icon" android:label="@string/app_name">
-    <activity android:name=".HelloAndroidActivity">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-    </activity>
-  </application>
+    <application android:icon="@drawable/icon" android:label="Astroboy Master Console">
+        <activity android:name=".AstroboyMasterConsole">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+    </application>
+
+    <uses-permission android:name="android.permission.VIBRATE" />
 
 </manifest>
 

@@ -30,14 +30,14 @@ public class ObservesTypeListener implements TypeListener {
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
         for( Class<?> c = iTypeLiteral.getRawType(); c!=Object.class ; c = c.getSuperclass() ) {
-            for (Method method : c.getDeclaredMethods()) {
+            for (Method method : c.getDeclaredMethods())
                 findContextObserver(method, iTypeEncounter);
-            }
-            for( Class<?> interfaceClass : c.getInterfaces()){
-                for (Method method : interfaceClass.getDeclaredMethods()){
+
+            for( Class<?> interfaceClass : c.getInterfaces())
+                for (Method method : interfaceClass.getDeclaredMethods())
                     findContextObserver(method, iTypeEncounter);
-                }
-            }
+
+            
         }
     }
 
@@ -65,8 +65,7 @@ public class ObservesTypeListener implements TypeListener {
      */
     protected <I, T> void registerContextObserver(TypeEncounter<I> iTypeEncounter, Method method, Class<T> parameterType, EventThread threadType) {
         checkMethodParameters(method);
-        iTypeEncounter.register(new ContextObserverMethodInjector<I, T>(eventManagerProvider, observerThreadingDecorator,
-                method, parameterType,threadType));
+        iTypeEncounter.register(new ContextObserverMethodInjector<I, T>(eventManagerProvider, observerThreadingDecorator, method, parameterType,threadType));
     }
 
     /**

@@ -3,7 +3,6 @@ package roboguice.util;
 import java.io.*;
 import java.security.InvalidParameterException;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 public class Strings {
@@ -24,7 +23,7 @@ public class Strings {
           return "";
 
         final Iterator<T> iter = objs.iterator();
-        final StringBuffer buffer = new StringBuffer(Strings.toString(iter.next()));
+        final StringBuilder buffer = new StringBuilder(Strings.toString(iter.next()));
         int i=1;
         while (iter.hasNext()) {
             final T obj = iter.next();
@@ -42,7 +41,7 @@ public class Strings {
         return "";
 
       final Iterator<T> iter = objs.iterator();
-      final StringBuffer buffer = new StringBuffer(Strings.toString(iter.next()));
+      final StringBuilder buffer = new StringBuilder(Strings.toString(iter.next()));
 
       while (iter.hasNext()) {
           final T obj = iter.next();
@@ -108,19 +107,27 @@ public class Strings {
     }
 
     public static String md5(String s) {
+        // http://stackoverflow.com/questions/1057041/difference-between-java-and-php5-md5-hash
+        // http://code.google.com/p/roboguice/issues/detail?id=89
         try {
-            // Create MD5 Hash
-            final MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            final byte messageDigest[] = digest.digest();
 
-            // Create Hex String
-            final StringBuffer hexString = new StringBuffer();
-            for (byte aMessageDigest : messageDigest)
-                hexString.append(Integer.toHexString(0xFF & aMessageDigest));
-            return hexString.toString();
+            final byte[] hash = MessageDigest.getInstance( "MD5" ).digest(s.getBytes("UTF-8"));
+            final StringBuilder hashString = new StringBuilder();
 
-        } catch (NoSuchAlgorithmException e) {
+            for (byte aHash : hash) {
+                String hex = Integer.toHexString(aHash);
+
+                if (hex.length() == 1) {
+                    hashString.append('0');
+                    hashString.append(hex.charAt(hex.length() - 1));
+                } else {
+                    hashString.append(hex.substring(hex.length() - 2));
+                }
+            }
+
+            return hashString.toString();
+
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

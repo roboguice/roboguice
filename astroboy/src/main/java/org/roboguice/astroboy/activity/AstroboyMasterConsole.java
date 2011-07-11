@@ -22,6 +22,13 @@ import com.google.inject.Inject;
 /**
  * This activity uses an AstroboyRemoteControl to control Astroboy remotely!
  *
+ * What you'll learn in this class:
+ *   - How to use @InjectView as a typesafe version of findViewById()
+ *   - How to inject plain old java objects as well (POJOs)
+ *   - When injection happens
+ *   - Some basics about injection, including when injection results in a call to
+ *     an object's default constructor, versus when it does something "special"
+ *     like call getSystemService()
  */
 public class AstroboyMasterConsole extends RoboActivity {
 
@@ -30,7 +37,7 @@ public class AstroboyMasterConsole extends RoboActivity {
     @InjectView(R.id.self_destruct) Button selfDestructButton;
     @InjectView(R.id.say_text)      EditText sayText;
     @InjectView(R.id.brush_teeth)   Button brushTeethButton;
-    @InjectView(R.id.fight_evil)      Button fightEvilButton;
+    @InjectView(R.id.fight_evil)    Button fightEvilButton;
 
 
     // Standard Guice injection of Plain Old Java Objects (POJOs)

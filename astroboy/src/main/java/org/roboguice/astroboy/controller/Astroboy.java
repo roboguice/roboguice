@@ -10,6 +10,17 @@ import com.google.inject.Singleton;
 
 import java.util.Random;
 
+
+/**
+ * What you'll learn in this class:
+ *   - What it means to be a @Singleton
+ *   - That Singletons must use Provider<Context> instead of Context to get
+ *     the current context
+ *   - Some basics about injection, including when injection results in a call to
+ *     an object's default constructor, versus when it does something "special" like
+ *     call getSystemService()
+ */
+
 // There's only one Astroboy, so make it a @Singleton.
 // This means that there will be only one instance of Astroboy in the entire app.
 // Any class that requires an instance of Astroboy will get the same instance.
@@ -19,7 +30,7 @@ public class Astroboy {
 
     // Because Astroboy is a Singleton, we can't directly inject the current Context
     // since the current context may change depending on what activity is using Astroboy
-    // at the time.  Instead, inject a PROVIDER of the current context, then we can
+    // at the time.  Instead, inject a Provider of the current context, then we can
     // ask the provider for the context when we need it.
     // Vibrator is bound to context.getSystemService(VIBRATOR_SERVICE) in RoboModule.
     // Random has no special bindings, so Guice will create a new instance for us.

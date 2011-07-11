@@ -14,6 +14,12 @@ import android.widget.TextView;
 import javax.inject.Inject;
 import java.util.Random;
 
+/**
+ * Things you'll learn in this class:
+ *     - How to inject Resources
+ *     - How to use RoboAsyncTask to do background tasks with injection
+ *     - What it means to be a @Singleton
+ */
 public class FightForcesOfEvilActivity extends RoboActivity {
 
     @InjectView(R.id.expletive) TextView expletiveText;

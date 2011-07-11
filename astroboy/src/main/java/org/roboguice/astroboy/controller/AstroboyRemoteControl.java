@@ -19,11 +19,25 @@ import com.google.inject.Inject;
  * saves us from having to downcast to an Activity manually.
  *
  * It also asks RoboGuice to inject the Astroboy instance so we can control him.
+ *
+ * What you'll learn in this class
+ *   - What @ContextScope means and when to use it
+ *   - How to inject an Activity instead of a Context (which is really the same thing)
+ *   - How to use RoboGuice's convenient and flexible logging facility, Ln.
  */
 @ContextScoped
 public class AstroboyRemoteControl {
+
+
+    // The Astroboy class has been decorated with @Singleton, so this instance of
+    // Astroboy will be the same instance used elsewhere in our app.
+    // Injecting an Activity is basically equivalent to "@Inject Context context",
+    // and thus also requires @ContextScope. If you wanted, you could also
+    // @Inject Application, Service, etc. wherever appropriate.
     @Inject Astroboy astroboy;
-    @Inject Activity activity; // equivalent to @Inject Context context, also requires @ContextScope
+    @Inject Activity activity;
+
+
 
     public void brushTeeth() {
         // More info about logging available here: http://code.google.com/p/roboguice/wiki/Logging
@@ -40,14 +54,4 @@ public class AstroboyRemoteControl {
         Toast.makeText(activity, "Your evil remote control has exploded! Now Astroboy is FREEEEEEEEEE!", Toast.LENGTH_LONG).show();
         activity.finish();
     }
-
-
-    // Note: this method may take a long time to execute, so you
-    // probably want to run it in a background thread
-    public void fightForcesOfEvil() {
-
-    }
-
-
-
 }

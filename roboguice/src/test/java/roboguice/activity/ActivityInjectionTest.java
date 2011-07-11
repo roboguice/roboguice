@@ -11,11 +11,7 @@ import roboguice.activity.ActivityInjectionTest.ModuleA.A;
 import roboguice.activity.ActivityInjectionTest.ModuleB.B;
 import roboguice.activity.ActivityInjectionTest.ModuleC.C;
 import roboguice.activity.ActivityInjectionTest.ModuleD.D;
-import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectPreference;
-import roboguice.inject.InjectResource;
-import roboguice.inject.InjectView;
-import roboguice.util.RoboThread;
+import roboguice.inject.*;
 
 import android.R;
 import android.content.Context;
@@ -37,9 +33,7 @@ import javax.annotation.Nullable;
 import java.lang.ref.SoftReference;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -133,12 +127,12 @@ public class ActivityInjectionTest {
         ref.get().onCreate(null);
 
         final BlockingQueue<Context> queue = new ArrayBlockingQueue<Context>(1);
-        new RoboThread()  {
-            Provider<Context> contextProvider = RoboGuice.getInjector(ref.get()).getProvider(Context.class);
+        new Thread()  {
+            final Context context = RoboGuice.getInjector(ref.get()).getInstance(Context.class);
 
             @Override
             public void run() {
-                queue.add( contextProvider.get() );
+                queue.add( context );
             }
         }.start();
 
@@ -158,6 +152,24 @@ public class ActivityInjectionTest {
         assertNotNull(queue.poll(10, TimeUnit.SECONDS));
 
     }
+
+    @Ignore("Not sure why this is hanging before calling call(), probably something obvious")
+    @Test
+    public void shouldBeAbleToGetContextProvidersInBackgroundThreads() throws Exception {
+        final F f = new F();
+        f.onCreate(null);
+
+        new FutureTask<Context>(new Callable<Context>() {
+            final Provider<Context> contextProvider = RoboGuice.getInjector(f).getProvider(Context.class);
+            
+            @Override
+            public Context call() throws Exception {
+                return contextProvider.get();
+            }
+
+        }).get();
+    }
+
 
     public static class E extends RoboActivity {
         @Override

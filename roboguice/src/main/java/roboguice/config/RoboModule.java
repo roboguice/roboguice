@@ -6,7 +6,6 @@ import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
 import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
-import roboguice.util.RoboThread;
 import roboguice.util.Strings;
 
 import android.app.*;
@@ -142,7 +141,6 @@ public class RoboModule extends AbstractModule {
 
         requestStaticInjection(Ln.class);
         requestStaticInjection(RoboAsyncTask.class);
-        requestStaticInjection(RoboThread.class);
     }
 
 }

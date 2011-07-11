@@ -14,3 +14,7 @@ The first time you build using maven, you will be prompted to locate the android
         -Dfile=/path/to/file
 
 Where /path/to/file is the path to maps.jar in your Android SDK.  If you don't have v3 handy, you can probably point it to just about any version
+
+
+
+(PS. Want to start a new android project from scratch using maven? https://github.com/akquinet/android-archetypes/wiki/android-quickstart-archetype )

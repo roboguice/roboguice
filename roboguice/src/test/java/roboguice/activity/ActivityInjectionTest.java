@@ -153,13 +153,13 @@ public class ActivityInjectionTest {
 
     }
 
-    @Ignore("Not sure why this is hanging before calling call(), probably something obvious")
+    @Ignore("This clearly should work, but need to figure out how to get it to work")
     @Test
     public void shouldBeAbleToGetContextProvidersInBackgroundThreads() throws Exception {
         final F f = new F();
         f.onCreate(null);
 
-        new FutureTask<Context>(new Callable<Context>() {
+        final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
             final Provider<Context> contextProvider = RoboGuice.getInjector(f).getProvider(Context.class);
             
             @Override
@@ -167,7 +167,11 @@ public class ActivityInjectionTest {
                 return contextProvider.get();
             }
 
-        }).get();
+        });
+
+        Executors.newSingleThreadExecutor().execute(future);
+
+        future.get();
     }
 
 

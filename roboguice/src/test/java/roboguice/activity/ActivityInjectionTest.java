@@ -11,7 +11,10 @@ import roboguice.activity.ActivityInjectionTest.ModuleA.A;
 import roboguice.activity.ActivityInjectionTest.ModuleB.B;
 import roboguice.activity.ActivityInjectionTest.ModuleC.C;
 import roboguice.activity.ActivityInjectionTest.ModuleD.D;
-import roboguice.inject.*;
+import roboguice.inject.InjectExtra;
+import roboguice.inject.InjectPreference;
+import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
 
 import android.R;
 import android.content.Context;
@@ -22,6 +25,7 @@ import android.preference.Preference;
 import android.preference.PreferenceScreen;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.inject.ConfigurationException;
@@ -55,6 +59,17 @@ public class ActivityInjectionTest {
 
         prefsActivity = new DummyPreferenceActivity();
         prefsActivity.onCreate(null);
+    }
+
+    @Test
+    public void shouldInjectScopedViews() {
+        assertThat((String) activity.scopedTextView1.getText(), is("OK"));
+        assertThat((String) activity.scopedTextView2.getText(), equalTo("Cancel"));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void shouldThrowNullPointerWhenInjectedViewIdIsNotPresent() {
+        new BadInjectViewAnnotationActivity().onCreate(null);
     }
 
     @Test
@@ -189,14 +204,37 @@ public class ActivityInjectionTest {
         @InjectView(R.id.text1) protected TextView text1;
         @InjectResource(R.string.cancel) protected String cancel;
         @InjectExtra("foobar") protected String foobar;
+        @InjectView({R.id.summary, R.id.text2}) protected TextView scopedTextView1;
+        @InjectView({R.id.title, R.id.text2}) protected TextView scopedTextView2;
 
+        
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            final TextView root = new TextView(this);
-            root.setId(R.id.text1);                       
+            final LinearLayout root = new LinearLayout(this);
+
+            final TextView text1 = new TextView(this);
+            root.addView(text1);
+            text1.setId(R.id.text1);
+
+            final LinearLayout included1 = addIncludedView(R.id.summary, R.string.ok);
+            root.addView(included1);
+            final LinearLayout included2 = addIncludedView(R.id.title, R.string.no);
+            root.addView(included2);
+
             setContentView(root);
+        }
+
+        protected LinearLayout addIncludedView(int includedRootId, int stringResId) {
+            LinearLayout container = new LinearLayout(this);
+            container.setId(includedRootId);
+
+            TextView textView = new TextView(this);
+            container.addView(textView);
+            textView.setId(R.id.text2);
+            textView.setText(stringResId);
+            return container;
         }
     }
 
@@ -328,6 +366,16 @@ public class ActivityInjectionTest {
             addView(child);
 
             RoboGuice.getInjector(context).injectMembers(this);
+        }
+    }
+
+    public static class BadInjectViewAnnotationActivity extends RoboActivity {
+        @InjectView({}) protected View badAnnotationView;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(new LinearLayout(this));
         }
     }
 }

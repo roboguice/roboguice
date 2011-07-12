@@ -82,13 +82,18 @@ public class ViewListener implements TypeListener {
 
         public void reallyInjectMembers(Object activityOrView) {
 
-            Object value = null;
+            Object value = activityOrView;
 
             try {
+                final int[] viewIds = annotation.value();
+                
+                if( viewIds.length<1 )
+                    throw new NullPointerException(String.format("Cant inject view into %s.%s when view id is not specified", field.getDeclaringClass(), field.getName()));
 
-                value = activityOrView instanceof View ? ((View)activityOrView).findViewById(annotation.value()) : ((Activity)activityOrView).findViewById(annotation.value());
+                for (int viewId : viewIds)
+                    value = value instanceof View ? ((View) value).findViewById(viewId) : ((Activity) value).findViewById(viewId);
 
-                if (value == null && Nullable.notNullable(field))
+                if (value == activityOrView && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
                 field.setAccessible(true);

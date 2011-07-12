@@ -15,13 +15,13 @@
  */
 package roboguice.inject;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.google.inject.BindingAnnotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.google.inject.BindingAnnotation;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Indicates that a variable member of a class (whether static or not) should be
@@ -35,5 +35,5 @@ import com.google.inject.BindingAnnotation;
 @Target( { ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
 @BindingAnnotation
 public @interface InjectView {
-    int value();
+    int[] value();
 }

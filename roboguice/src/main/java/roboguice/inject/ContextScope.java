@@ -28,12 +28,27 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
+ * Scopes the injector based on the current context.
+ *
+ * Any usage of this class must call #enter(Context) before performing any operations with the
+ * injector, and do so within a synchronized block on the ContextScope.class, eg:
+ *
+ * synchronized(ContextScope.class) {
+ *     scope.enter(context);
+ *
+ *     // do something, eg.
+ *     // injector.injectMembers(this);
+ * }
+ *
+ * If you're using ContextScopedRoboInjector (which is the RoboGuice default), this is done for you automatically.
+ *
+ * @see ContextScopedRoboInjector
  * @author Mike Burton
  */
 public class ContextScope implements Scope {
 
     protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
-    protected ThreadLocal<WeakReference<Context>> contextThreadLocal = new ThreadLocal<WeakReference<Context>>();
+    protected WeakReference<Context> contextRef = new WeakReference<Context>(null);
 
 
     public ContextScope(Application app) {
@@ -41,16 +56,23 @@ public class ContextScope implements Scope {
     }
 
 
+    /**
+     * You MUST perform any injector operations inside a synchronized(ContextScope.class) block that starts with
+     * scope.enter(context) if working in a multithreaded environment
+     *
+     * @see ContextScope
+     * @see ContextScopedRoboInjector
+     * @param context the context to enter
+     */
     public void enter(Context context) {
 
-        final WeakReference<Context> prevContext = contextThreadLocal.get();
-        if( prevContext!=null && prevContext.get()==context )
+        if( contextRef !=null && contextRef.get()==context )
             return;
 
         
         
         // Mark this thread as for this context
-        contextThreadLocal.set(new WeakReference<Context>(context));
+        contextRef = new WeakReference<Context>(context);
 
         // Add the context to the scope
         getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
@@ -61,7 +83,6 @@ public class ContextScope implements Scope {
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {
-                final WeakReference<Context> contextRef = contextThreadLocal.get();
                 if( contextRef!=null ) {
                     final Context context = contextRef.get();
                     if (context != null) {

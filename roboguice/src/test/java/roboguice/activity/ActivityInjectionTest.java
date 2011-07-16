@@ -168,7 +168,6 @@ public class ActivityInjectionTest {
 
     }
 
-    @Ignore("This clearly should work, but need to figure out how to get it to work")
     @Test
     public void shouldBeAbleToGetContextProvidersInBackgroundThreads() throws Exception {
         final F f = new F();

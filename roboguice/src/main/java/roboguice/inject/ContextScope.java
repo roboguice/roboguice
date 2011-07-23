@@ -42,6 +42,9 @@ import java.util.WeakHashMap;
  *
  * If you're using ContextScopedRoboInjector (which is the RoboGuice default), this is done for you automatically.
  *
+ * If you're trying to use a Provider, you must either use RoboProvider instead, or do your own synchronization
+ * and scope.enter() call.
+ *
  * @see ContextScopedRoboInjector
  * @author Mike Burton
  */
@@ -69,7 +72,7 @@ public class ContextScope implements Scope {
         if( contextRef !=null && contextRef.get()==context )
             return;
 
-        
+
         
         // Mark this thread as for this context
         contextRef = new WeakReference<Context>(context);

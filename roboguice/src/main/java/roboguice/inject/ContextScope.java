@@ -47,7 +47,7 @@ import java.util.WeakHashMap;
  */
 public class ContextScope implements Scope {
 
-    protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> values = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
+    protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> scopedObjects = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
     protected WeakReference<Context> contextRef = new WeakReference<Context>(null);
 
 
@@ -97,8 +97,8 @@ public class ContextScope implements Scope {
                         return current;
                     }
                 }
-                
-                throw new UnsupportedOperationException("Can't perform injection outside of a context scope.");
+
+                throw new UnsupportedOperationException("Can't perform injection outside of a context scope. Did you intend to use RoboProvider instead of Provider?");
             }
         };
 
@@ -106,10 +106,10 @@ public class ContextScope implements Scope {
 
     protected Map<Key<?>, WeakReference<Object>> getScopedObjectMap(Context context) {
 
-        Map<Key<?>, WeakReference<Object>> scopedObjects = values.get(context);
+        Map<Key<?>, WeakReference<Object>> scopedObjects = this.scopedObjects.get(context);
         if (scopedObjects == null) {
             scopedObjects = new HashMap<Key<?>, WeakReference<Object>>();
-            values.put(context, scopedObjects);
+            this.scopedObjects.put(context, scopedObjects);
         }
         return scopedObjects;
     }

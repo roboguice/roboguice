@@ -10,11 +10,6 @@ import com.google.inject.Provider;
 
 import java.util.concurrent.Executor;
 
-/**
- * Allows injection to happen for tasks that execute in a background thread.
- * 
- * @param <ResultT>
- */
 public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
     @Inject static protected Provider<Context> contextProvider;
     @Inject static protected Provider<ContextScope> scopeProvider;

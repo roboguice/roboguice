@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-ObservesTypeListener (roboguice 1.1-SNAPSHOT API)
+ObservesTypeListener (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ ObservesTypeListener (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="ObservesTypeListener (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="ObservesTypeListener (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -186,13 +186,26 @@ Guice driven type listener which scans for the @Observes annotations.
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#checkMethodParameters(java.lang.reflect.Method, java.lang.Class)">checkMethodParameters</A></B>(java.lang.reflect.Method&nbsp;method,
-                      java.lang.Class&nbsp;parameterType)</CODE>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#checkMethodParameters(java.lang.reflect.Method)">checkMethodParameters</A></B>(java.lang.reflect.Method&nbsp;method)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Error checking method, verifies:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Error checking method, verifies that the method has the correct number of parameters.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected 
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;I&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/ObservesTypeListener.html#findContextObserver(java.lang.reflect.Method, com.google.inject.spi.TypeEncounter)">findContextObserver</A></B>(java.lang.reflect.Method&nbsp;method,
+                    com.google.inject.spi.TypeEncounter&lt;I&gt;&nbsp;iTypeEncounter)</CODE>
 
- 1.</TD>
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
@@ -312,6 +325,21 @@ public &lt;I&gt; void <B>hear</B>(com.google.inject.TypeLiteral&lt;I&gt;&nbsp;iT
 </DL>
 <HR>
 
+<A NAME="findContextObserver(java.lang.reflect.Method, com.google.inject.spi.TypeEncounter)"><!-- --></A><H3>
+findContextObserver</H3>
+<PRE>
+protected &lt;I&gt; void <B>findContextObserver</B>(java.lang.reflect.Method&nbsp;method,
+                                       com.google.inject.spi.TypeEncounter&lt;I&gt;&nbsp;iTypeEncounter)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
 <A NAME="registerContextObserver(com.google.inject.spi.TypeEncounter, java.lang.reflect.Method, java.lang.Class)"><!-- --></A><H3>
 registerContextObserver</H3>
 <PRE>
@@ -330,22 +358,18 @@ protected &lt;I&gt; void <B>registerContextObserver</B>(com.google.inject.spi.Ty
 </DL>
 <HR>
 
-<A NAME="checkMethodParameters(java.lang.reflect.Method, java.lang.Class)"><!-- --></A><H3>
+<A NAME="checkMethodParameters(java.lang.reflect.Method)"><!-- --></A><H3>
 checkMethodParameters</H3>
 <PRE>
-protected void <B>checkMethodParameters</B>(java.lang.reflect.Method&nbsp;method,
-                                     java.lang.Class&nbsp;parameterType)</PRE>
+protected void <B>checkMethodParameters</B>(java.lang.reflect.Method&nbsp;method)</PRE>
 <DL>
-<DD>Error checking method, verifies:
-
- 1.  The method has the correct number of parameters, 0 or 1
- 2.  If the method has a parameter, it is of the proper type.
+<DD>Error checking method, verifies that the method has the correct number of parameters.
 <P>
 <DD><DL>
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>method</CODE> - <DD><CODE>parameterType</CODE> - </DL>
+<DT><B>Parameters:</B><DD><CODE>method</CODE> - </DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->

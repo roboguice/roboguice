@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-ContextScope (roboguice 1.1-SNAPSHOT API)
+ContextScope (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ ContextScope (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="ContextScope (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="ContextScope (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -55,7 +55,7 @@ function windowTitle()
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../roboguice/inject/ContentResolverProvider.html" title="class in roboguice.inject"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/inject/ContextScoped.html" title="annotation in roboguice.inject"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/inject/ContextScope.WeakActiveStack.html" title="class in roboguice.inject"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/inject/ContextScope.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="ContextScope.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -75,7 +75,7 @@ function windowTitle()
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
 DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>
@@ -110,7 +110,24 @@ java.lang.Object
 <HR>
 
 <P>
-<!-- =========== FIELD SUMMARY =========== -->
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+
+<A NAME="nested_class_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Nested Class Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;class</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.WeakActiveStack.html" title="class in roboguice.inject">ContextScope.WeakActiveStack</A>&lt;<A HREF="../../roboguice/inject/ContextScope.WeakActiveStack.html" title="type parameter in ContextScope.WeakActiveStack">T</A>&gt;</B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A circular stack like structure of weak references.</TD>
+</TR>
+</TABLE>
+&nbsp;<!-- =========== FIELD SUMMARY =========== -->
 
 <A NAME="field_summary"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -120,15 +137,23 @@ java.lang.Object
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="../../roboguice/application/RoboApplication.html" title="class in roboguice.application">RoboApplication</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#app">app</A></B></CODE>
+<CODE>protected &nbsp;java.lang.ThreadLocal&lt;<A HREF="../../roboguice/inject/ContextScope.WeakActiveStack.html" title="class in roboguice.inject">ContextScope.WeakActiveStack</A>&lt;android.content.Context&gt;&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#contextStack">contextStack</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.lang.ThreadLocal&lt;java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt;&gt;</CODE></FONT></TD>
+<CODE>protected &nbsp;java.util.ArrayList&lt;roboguice.inject.PreferenceMembersInjector&lt;?&gt;&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#preferencesForInjection">preferencesForInjection</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;java.util.WeakHashMap&lt;android.content.Context,java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.ref.WeakReference&lt;java.lang.Object&gt;&gt;&gt;</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#values">values</A></B></CODE>
 
 <BR>
@@ -171,15 +196,31 @@ java.lang.Object
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#enter(android.content.Context)">enter</A></B>(android.content.Context&nbsp;context)</CODE>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#dispose(android.content.Context)">dispose</A></B>(android.content.Context&nbsp;context)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Scopes can be entered multiple times with no problems (eg.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#ensureContextStack()">ensureContextStack</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#exit(android.content.Context)">exit</A></B>(android.content.Context&nbsp;ignored)</CODE>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#enter(android.content.Context)">enter</A></B>(android.content.Context&nbsp;context)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#exit(android.content.Context)">exit</A></B>(android.content.Context&nbsp;context)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -190,7 +231,7 @@ java.lang.Object
 <TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
 <TR ALIGN="right" VALIGN="">
 <TD NOWRAP><FONT SIZE="-1">
-<CODE>&lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt;</CODE></FONT></TD>
+<CODE>&lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.ref.WeakReference&lt;java.lang.Object&gt;&gt;</CODE></FONT></TD>
 </TR>
 </TABLE>
 </CODE></FONT></TD>
@@ -201,8 +242,8 @@ java.lang.Object
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt;</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#initialScopedObjectMap()">initialScopedObjectMap</A></B>()</CODE>
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#injectPreferenceViews()">injectPreferenceViews</A></B>()</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -211,6 +252,14 @@ java.lang.Object
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>&nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#injectViews()">injectViews</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/ContextScope.html#registerPreferenceForInjection(roboguice.inject.PreferenceMembersInjector)">registerPreferenceForInjection</A></B>(roboguice.inject.PreferenceMembersInjector&lt;?&gt;&nbsp;injector)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -274,7 +323,17 @@ java.lang.Object
 <A NAME="values"><!-- --></A><H3>
 values</H3>
 <PRE>
-protected final java.lang.ThreadLocal&lt;java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt;&gt; <B>values</B></PRE>
+protected java.util.WeakHashMap&lt;android.content.Context,java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.ref.WeakReference&lt;java.lang.Object&gt;&gt;&gt; <B>values</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="contextStack"><!-- --></A><H3>
+contextStack</H3>
+<PRE>
+protected java.lang.ThreadLocal&lt;<A HREF="../../roboguice/inject/ContextScope.WeakActiveStack.html" title="class in roboguice.inject">ContextScope.WeakActiveStack</A>&lt;android.content.Context&gt;&gt; <B>contextStack</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -291,10 +350,10 @@ protected java.util.ArrayList&lt;roboguice.inject.ViewMembersInjector&lt;?&gt;&g
 </DL>
 <HR>
 
-<A NAME="app"><!-- --></A><H3>
-app</H3>
+<A NAME="preferencesForInjection"><!-- --></A><H3>
+preferencesForInjection</H3>
 <PRE>
-protected <A HREF="../../roboguice/application/RoboApplication.html" title="class in roboguice.application">RoboApplication</A> <B>app</B></PRE>
+protected java.util.ArrayList&lt;roboguice.inject.PreferenceMembersInjector&lt;?&gt;&gt; <B>preferencesForInjection</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -327,39 +386,6 @@ public <B>ContextScope</B>(<A HREF="../../roboguice/application/RoboApplication.
 </TR>
 </TABLE>
 
-<A NAME="enter(android.content.Context)"><!-- --></A><H3>
-enter</H3>
-<PRE>
-public void <B>enter</B>(android.content.Context&nbsp;context)</PRE>
-<DL>
-<DD>Scopes can be entered multiple times with no problems (eg. from
- onCreate(), onStart(), etc). However, once they're closed, all their
- previous values are gone forever until the scope is reinitialized again
- via enter().
-<P>
-<DD><DL>
-</DL>
-</DD>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
-<A NAME="exit(android.content.Context)"><!-- --></A><H3>
-exit</H3>
-<PRE>
-public void <B>exit</B>(android.content.Context&nbsp;ignored)</PRE>
-<DL>
-<DD><DL>
-</DL>
-</DD>
-<DD><DL>
-</DL>
-</DD>
-</DL>
-<HR>
-
 <A NAME="registerViewForInjection(roboguice.inject.ViewMembersInjector)"><!-- --></A><H3>
 registerViewForInjection</H3>
 <PRE>
@@ -374,10 +400,80 @@ public void <B>registerViewForInjection</B>(roboguice.inject.ViewMembersInjector
 </DL>
 <HR>
 
+<A NAME="registerPreferenceForInjection(roboguice.inject.PreferenceMembersInjector)"><!-- --></A><H3>
+registerPreferenceForInjection</H3>
+<PRE>
+public void <B>registerPreferenceForInjection</B>(roboguice.inject.PreferenceMembersInjector&lt;?&gt;&nbsp;injector)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
 <A NAME="injectViews()"><!-- --></A><H3>
 injectViews</H3>
 <PRE>
 public void <B>injectViews</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="injectPreferenceViews()"><!-- --></A><H3>
+injectPreferenceViews</H3>
+<PRE>
+public void <B>injectPreferenceViews</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="enter(android.content.Context)"><!-- --></A><H3>
+enter</H3>
+<PRE>
+public void <B>enter</B>(android.content.Context&nbsp;context)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="exit(android.content.Context)"><!-- --></A><H3>
+exit</H3>
+<PRE>
+public void <B>exit</B>(android.content.Context&nbsp;context)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="dispose(android.content.Context)"><!-- --></A><H3>
+dispose</H3>
+<PRE>
+public void <B>dispose</B>(android.content.Context&nbsp;context)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -403,10 +499,10 @@ public &lt;T&gt; com.google.inject.Provider&lt;T&gt; <B>scope</B>(com.google.inj
 </DL>
 <HR>
 
-<A NAME="getScopedObjectMap(com.google.inject.Key)"><!-- --></A><H3>
-getScopedObjectMap</H3>
+<A NAME="ensureContextStack()"><!-- --></A><H3>
+ensureContextStack</H3>
 <PRE>
-protected &lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt; <B>getScopedObjectMap</B>(com.google.inject.Key&lt;T&gt;&nbsp;key)</PRE>
+protected void <B>ensureContextStack</B>()</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -417,10 +513,10 @@ protected &lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;android.content.Co
 </DL>
 <HR>
 
-<A NAME="initialScopedObjectMap()"><!-- --></A><H3>
-initialScopedObjectMap</H3>
+<A NAME="getScopedObjectMap(com.google.inject.Key)"><!-- --></A><H3>
+getScopedObjectMap</H3>
 <PRE>
-protected java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,java.lang.Object&gt; <B>initialScopedObjectMap</B>()</PRE>
+protected &lt;T&gt; java.util.Map&lt;com.google.inject.Key&lt;?&gt;,java.lang.ref.WeakReference&lt;java.lang.Object&gt;&gt; <B>getScopedObjectMap</B>(com.google.inject.Key&lt;T&gt;&nbsp;key)</PRE>
 <DL>
 <DD><DL>
 </DL>
@@ -461,7 +557,7 @@ protected java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../roboguice/inject/ContentResolverProvider.html" title="class in roboguice.inject"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/inject/ContextScoped.html" title="annotation in roboguice.inject"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/inject/ContextScope.WeakActiveStack.html" title="class in roboguice.inject"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/inject/ContextScope.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="ContextScope.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -481,7 +577,7 @@ protected java.util.Map&lt;com.google.inject.Key&lt;android.content.Context&gt;,
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
 DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>

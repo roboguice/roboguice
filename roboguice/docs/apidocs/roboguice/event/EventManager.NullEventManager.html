@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-EventManager.NullEventManager (roboguice 1.1-SNAPSHOT API)
+EventManager.NullEventManager (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ EventManager.NullEventManager (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="EventManager.NullEventManager (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="EventManager.NullEventManager (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -55,7 +55,7 @@ function windowTitle()
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/event/EventManager.ObserverMethodListener.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/event/EventManager.NullEventManager.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="EventManager.NullEventManager.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -104,13 +104,6 @@ java.lang.Object
 </PRE>
 
 <P>
-Raises the event's class' event on the given context.  This event object is passed (if configured) to the
- registered observer's method.
-
- A result handler can be provided to deal with the return values from the invoked observer methods.
-<P>
-
-<P>
 <HR>
 
 <P>
@@ -129,7 +122,7 @@ Raises the event's class' event on the given context.  This event object is pass
 <TH ALIGN="left"><B>Nested classes/interfaces inherited from class roboguice.event.<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../roboguice/event/EventManager.NullEventManager.html" title="class in roboguice.event">EventManager.NullEventManager</A>, <A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event">EventManager.ObserverReference</A>&lt;<A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="type parameter in EventManager.ObserverReference">ResultType</A>&gt;</CODE></TD>
+<TD><CODE><A HREF="../../roboguice/event/EventManager.NullEventManager.html" title="class in roboguice.event">EventManager.NullEventManager</A>, <A HREF="../../roboguice/event/EventManager.ObserverMethodListener.html" title="class in roboguice.event">EventManager.ObserverMethodListener</A>&lt;<A HREF="../../roboguice/event/EventManager.ObserverMethodListener.html" title="type parameter in EventManager.ObserverMethodListener">T</A>&gt;</CODE></TD>
 </TR>
 </TABLE>
 &nbsp;
@@ -191,7 +184,7 @@ Raises the event's class' event on the given context.  This event object is pass
 <TH ALIGN="left"><B>Methods inherited from class roboguice.event.<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../roboguice/event/EventManager.html#clear(android.content.Context)">clear</A>, <A HREF="../../roboguice/event/EventManager.html#fire(android.content.Context, java.lang.Object)">fire</A>, <A HREF="../../roboguice/event/EventManager.html#fire(java.lang.Object)">fire</A>, <A HREF="../../roboguice/event/EventManager.html#registerObserver(android.content.Context, java.lang.Object, java.lang.reflect.Method, java.lang.Class)">registerObserver</A>, <A HREF="../../roboguice/event/EventManager.html#unregisterObserver(android.content.Context, java.lang.Object, java.lang.Class)">unregisterObserver</A></CODE></TD>
+<TD><CODE><A HREF="../../roboguice/event/EventManager.html#clear(android.content.Context)">clear</A>, <A HREF="../../roboguice/event/EventManager.html#fire(android.content.Context, java.lang.Object)">fire</A>, <A HREF="../../roboguice/event/EventManager.html#fire(java.lang.Object)">fire</A>, <A HREF="../../roboguice/event/EventManager.html#registerObserver(java.lang.Class, roboguice.event.EventListener)">registerObserver</A>, <A HREF="../../roboguice/event/EventManager.html#registerObserver(android.content.Context, java.lang.Class, roboguice.event.EventListener)">registerObserver</A>, <A HREF="../../roboguice/event/EventManager.html#registerObserver(android.content.Context, java.lang.Object, java.lang.reflect.Method, java.lang.Class)">registerObserver</A>, <A HREF="../../roboguice/event/EventManager.html#registerObserver(java.lang.Object, java.lang.reflect.Method, java.lang.Class)">registerObserver</A>, <A HREF="../../roboguice/event/EventManager.html#unregisterObserver(java.lang.Class, roboguice.event.EventListener)">unregisterObserver</A>, <A HREF="../../roboguice/event/EventManager.html#unregisterObserver(android.content.Context, java.lang.Class, roboguice.event.EventListener)">unregisterObserver</A>, <A HREF="../../roboguice/event/EventManager.html#unregisterObserver(android.content.Context, java.lang.Object, java.lang.Class)">unregisterObserver</A>, <A HREF="../../roboguice/event/EventManager.html#unregisterObserver(java.lang.Object, java.lang.Class)">unregisterObserver</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -277,7 +270,7 @@ public boolean <B>isEnabled</B>()</PRE>
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/event/EventManager.ObserverMethodListener.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/event/EventManager.NullEventManager.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="EventManager.NullEventManager.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;

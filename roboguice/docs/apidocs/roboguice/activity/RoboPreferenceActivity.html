@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-RoboPreferenceActivity (roboguice 1.1-SNAPSHOT API)
+RoboPreferenceActivity (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ RoboPreferenceActivity (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="RoboPreferenceActivity (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="RoboPreferenceActivity (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -111,12 +111,15 @@ java.lang.Object
 <P>
 A <A HREF="../../roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity"><CODE>RoboPreferenceActivity</CODE></A> extends from <CODE>PreferenceActivity</CODE> to provide
  dynamic injection of collaborators, using Google Guice.<br />
+
+ Note: there is currently a limitation that prevents you from using @InjectView if you use setContentView.
+ http://code.google.com/p/roboguice/issues/detail?id=70
 <P>
 
 <P>
 <DL>
 <DT><B>Author:</B></DT>
-  <DD>Toly Pochkin, Rodrigo Damazio</DD>
+  <DD>Toly Pochkin, Rodrigo Damazio, Mike Burton</DD>
 <DT><B>See Also:</B><DD><A HREF="../../roboguice/activity/RoboActivity.html" title="class in roboguice.activity"><CODE>RoboActivity</CODE></A></DL>
 <HR>
 
@@ -133,14 +136,6 @@ A <A HREF="../../roboguice/activity/RoboPreferenceActivity.html" title="class in
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/activity/RoboPreferenceActivity.html#eventManager">eventManager</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;android.widget.ListView</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/activity/RoboPreferenceActivity.html#listView">listView</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -242,14 +237,6 @@ A <A HREF="../../roboguice/activity/RoboPreferenceActivity.html" title="class in
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/activity/RoboPreferenceActivity.html#onCreatePreferences()">onCreatePreferences</A></B>()</CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Override this method to specify how your preferences will be loaded.</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;void</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/activity/RoboPreferenceActivity.html#onDestroy()">onDestroy</A></B>()</CODE>
 
 <BR>
@@ -336,6 +323,14 @@ A <A HREF="../../roboguice/activity/RoboPreferenceActivity.html" title="class in
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/activity/RoboPreferenceActivity.html#setPreferenceScreen(android.preference.PreferenceScreen)">setPreferenceScreen</A></B>(android.preference.PreferenceScreen&nbsp;preferenceScreen)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_android.preference.PreferenceActivity"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -343,7 +338,7 @@ A <A HREF="../../roboguice/activity/RoboPreferenceActivity.html" title="class in
 <TH ALIGN="left"><B>Methods inherited from class android.preference.PreferenceActivity</B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE>addPreferencesFromIntent, addPreferencesFromResource, findPreference, getPreferenceManager, getPreferenceScreen, onPreferenceTreeClick, onRestoreInstanceState, onSaveInstanceState, setPreferenceScreen</CODE></TD>
+<TD><CODE>addPreferencesFromIntent, addPreferencesFromResource, findPreference, getPreferenceManager, getPreferenceScreen, onPreferenceTreeClick, onRestoreInstanceState, onSaveInstanceState</CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_android.app.ListActivity"><!-- --></A>
@@ -431,16 +426,6 @@ protected <A HREF="../../roboguice/inject/ContextScope.html" title="class in rob
 <DL>
 </DL>
 </DL>
-<HR>
-
-<A NAME="listView"><!-- --></A><H3>
-listView</H3>
-<PRE>
-protected android.widget.ListView <B>listView</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
 
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 
@@ -485,19 +470,13 @@ protected void <B>onCreate</B>(android.os.Bundle&nbsp;savedInstanceState)</PRE>
 </DL>
 <HR>
 
-<A NAME="onCreatePreferences()"><!-- --></A><H3>
-onCreatePreferences</H3>
+<A NAME="setPreferenceScreen(android.preference.PreferenceScreen)"><!-- --></A><H3>
+setPreferenceScreen</H3>
 <PRE>
-protected void <B>onCreatePreferences</B>()</PRE>
+public void <B>setPreferenceScreen</B>(android.preference.PreferenceScreen&nbsp;preferenceScreen)</PRE>
 <DL>
-<DD>Override this method to specify how your preferences will be loaded.
- This is called before injecting the preference member fields, and will
- usually contain a call to <CODE>PreferenceActivity.addPreferencesFromResource(int)</CODE>. This
- method must load or create all preferences which will be injected by
- <A HREF="../../roboguice/inject/InjectPreference.html" title="annotation in roboguice.inject"><CODE>InjectPreference</CODE></A> annotations.
-<P>
 <DD><DL>
-</DL>
+<DT><B>Overrides:</B><DD><CODE>setPreferenceScreen</CODE> in class <CODE>android.preference.PreferenceActivity</CODE></DL>
 </DD>
 <DD><DL>
 </DL>

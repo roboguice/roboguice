@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-roboguice.receiver (roboguice 1.1-SNAPSHOT API)
+roboguice.receiver (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ roboguice.receiver (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="roboguice.receiver (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="roboguice.receiver (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -89,7 +89,7 @@ Package roboguice.receiver
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD WIDTH="15%"><B><A HREF="../../roboguice/receiver/RoboBroadcastReceiver.html" title="class in roboguice.receiver">RoboBroadcastReceiver</A></B></TD>
-<TD>Please be sure to call super.onReceive() when overriding onReceive()</TD>
+<TD>To ensure proper ContextScope usage, override the handleReceive method</TD>
 </TR>
 </TABLE>
 &nbsp;

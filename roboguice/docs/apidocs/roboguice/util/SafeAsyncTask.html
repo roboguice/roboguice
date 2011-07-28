@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-SafeAsyncTask (roboguice 1.1-SNAPSHOT API)
+SafeAsyncTask (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ SafeAsyncTask (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="SafeAsyncTask (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="SafeAsyncTask (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -336,7 +336,7 @@ A class similar but unrelated to android's <CODE>AsyncTask</CODE>.
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#onInterrupted(java.lang.InterruptedException)">onInterrupted</A></B>(java.lang.InterruptedException&nbsp;e)</CODE>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#onInterrupted(java.lang.Exception)">onInterrupted</A></B>(java.lang.Exception&nbsp;e)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called when the thread has been interrupted, likely because
@@ -656,10 +656,10 @@ protected void <B>onSuccess</B>(<A HREF="../../roboguice/util/SafeAsyncTask.html
 </DL>
 <HR>
 
-<A NAME="onInterrupted(java.lang.InterruptedException)"><!-- --></A><H3>
+<A NAME="onInterrupted(java.lang.Exception)"><!-- --></A><H3>
 onInterrupted</H3>
 <PRE>
-protected void <B>onInterrupted</B>(java.lang.InterruptedException&nbsp;e)</PRE>
+protected void <B>onInterrupted</B>(java.lang.Exception&nbsp;e)</PRE>
 <DL>
 <DD>Called when the thread has been interrupted, likely because
  the task was canceled.
@@ -672,7 +672,7 @@ protected void <B>onInterrupted</B>(java.lang.InterruptedException&nbsp;e)</PRE>
 </DL>
 </DD>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>e</CODE> - the exception thrown from <A HREF="../../roboguice/util/SafeAsyncTask.html#onPreExecute()"><CODE>onPreExecute()</CODE></A>, <CODE>Callable.call()</CODE>, or <A HREF="../../roboguice/util/SafeAsyncTask.html#onSuccess(ResultT)"><CODE>onSuccess(Object)</CODE></A></DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - an InterruptedException or InterruptedIOException</DL>
 </DD>
 </DL>
 <HR>

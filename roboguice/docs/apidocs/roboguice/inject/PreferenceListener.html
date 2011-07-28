@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-PreferenceListener (roboguice 1.1-SNAPSHOT API)
+PreferenceListener (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ PreferenceListener (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="PreferenceListener (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="PreferenceListener (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -55,7 +55,7 @@ function windowTitle()
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../roboguice/inject/InjectView.html" title="annotation in roboguice.inject"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/inject/ResourceFactory.html" title="interface in roboguice.inject"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/inject/PreferenceListener.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="PreferenceListener.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -75,7 +75,7 @@ function windowTitle()
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
 DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>
@@ -95,43 +95,22 @@ java.lang.Object
   <IMG SRC="../../resources/inherit.gif" ALT="extended by "><B>roboguice.inject.PreferenceListener</B>
 </PRE>
 <DL>
-<DT><B>All Implemented Interfaces:</B> <DD>com.google.inject.spi.TypeListener</DD>
+<DT><B>All Implemented Interfaces:</B> <DD>com.google.inject.spi.TypeListener, <A HREF="../../roboguice/inject/StaticTypeListener.html" title="interface in roboguice.inject">StaticTypeListener</A></DD>
 </DL>
 <HR>
 <DL>
-<DT><PRE>public class <B>PreferenceListener</B><DT>extends java.lang.Object<DT>implements com.google.inject.spi.TypeListener</DL>
+<DT><PRE>public class <B>PreferenceListener</B><DT>extends java.lang.Object<DT>implements <A HREF="../../roboguice/inject/StaticTypeListener.html" title="interface in roboguice.inject">StaticTypeListener</A></DL>
 </PRE>
-
-<P>
-Listener for preference injection.
-<P>
 
 <P>
 <DL>
 <DT><B>Author:</B></DT>
-  <DD>Rodrigo Damazio</DD>
+  <DD>Mike Burton</DD>
 </DL>
 <HR>
 
 <P>
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-
-<A NAME="nested_class_summary"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
-<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
-<B>Nested Class Summary</B></FONT></TH>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected static&nbsp;class</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject">PreferenceListener.PreferenceMembersInjector</A>&lt;<A HREF="../../roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="type parameter in PreferenceListener.PreferenceMembersInjector">T</A>&gt;</B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-</TABLE>
-&nbsp;<!-- =========== FIELD SUMMARY =========== -->
+<!-- =========== FIELD SUMMARY =========== -->
 
 <A NAME="field_summary"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -141,8 +120,24 @@ Listener for preference injection.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;android.app.Application</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/PreferenceListener.html#application">application</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected &nbsp;com.google.inject.Provider&lt;android.content.Context&gt;</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/inject/PreferenceListener.html#contextProvider">contextProvider</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/PreferenceListener.html#scope">scope</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -158,7 +153,9 @@ Listener for preference injection.
 <B>Constructor Summary</B></FONT></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><B><A HREF="../../roboguice/inject/PreferenceListener.html#PreferenceListener(com.google.inject.Provider)">PreferenceListener</A></B>(com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider)</CODE>
+<TD><CODE><B><A HREF="../../roboguice/inject/PreferenceListener.html#PreferenceListener(com.google.inject.Provider, android.app.Application, roboguice.inject.ContextScope)">PreferenceListener</A></B>(com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider,
+                   android.app.Application&nbsp;application,
+                   <A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>&nbsp;scope)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -185,6 +182,14 @@ Listener for preference injection.
 </CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/inject/PreferenceListener.html#hear(com.google.inject.TypeLiteral, com.google.inject.spi.TypeEncounter)">hear</A></B>(com.google.inject.TypeLiteral&lt;I&gt;&nbsp;typeLiteral,
      com.google.inject.spi.TypeEncounter&lt;I&gt;&nbsp;typeEncounter)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/inject/PreferenceListener.html#requestStaticInjection(java.lang.Class...)">requestStaticInjection</A></B>(java.lang.Class&lt;?&gt;...&nbsp;types)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -220,6 +225,26 @@ protected com.google.inject.Provider&lt;android.content.Context&gt; <B>contextPr
 <DL>
 </DL>
 </DL>
+<HR>
+
+<A NAME="application"><!-- --></A><H3>
+application</H3>
+<PRE>
+protected android.app.Application <B>application</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="scope"><!-- --></A><H3>
+scope</H3>
+<PRE>
+protected <A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A> <B>scope</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
 
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 
@@ -231,10 +256,12 @@ protected com.google.inject.Provider&lt;android.content.Context&gt; <B>contextPr
 </TR>
 </TABLE>
 
-<A NAME="PreferenceListener(com.google.inject.Provider)"><!-- --></A><H3>
+<A NAME="PreferenceListener(com.google.inject.Provider, android.app.Application, roboguice.inject.ContextScope)"><!-- --></A><H3>
 PreferenceListener</H3>
 <PRE>
-public <B>PreferenceListener</B>(com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider)</PRE>
+public <B>PreferenceListener</B>(com.google.inject.Provider&lt;android.content.Context&gt;&nbsp;contextProvider,
+                          android.app.Application&nbsp;application,
+                          <A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>&nbsp;scope)</PRE>
 <DL>
 </DL>
 
@@ -256,6 +283,20 @@ public &lt;I&gt; void <B>hear</B>(com.google.inject.TypeLiteral&lt;I&gt;&nbsp;ty
 <DL>
 <DD><DL>
 <DT><B>Specified by:</B><DD><CODE>hear</CODE> in interface <CODE>com.google.inject.spi.TypeListener</CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="requestStaticInjection(java.lang.Class...)"><!-- --></A><H3>
+requestStaticInjection</H3>
+<PRE>
+public void <B>requestStaticInjection</B>(java.lang.Class&lt;?&gt;...&nbsp;types)</PRE>
+<DL>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../roboguice/inject/StaticTypeListener.html#requestStaticInjection(java.lang.Class...)">requestStaticInjection</A></CODE> in interface <CODE><A HREF="../../roboguice/inject/StaticTypeListener.html" title="interface in roboguice.inject">StaticTypeListener</A></CODE></DL>
 </DD>
 <DD><DL>
 </DL>
@@ -293,7 +334,7 @@ public &lt;I&gt; void <B>hear</B>(com.google.inject.TypeLiteral&lt;I&gt;&nbsp;ty
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../roboguice/inject/InjectView.html" title="annotation in roboguice.inject"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/inject/PreferenceListener.PreferenceMembersInjector.html" title="class in roboguice.inject"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/inject/ResourceFactory.html" title="interface in roboguice.inject"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/inject/PreferenceListener.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="PreferenceListener.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -313,7 +354,7 @@ public &lt;I&gt; void <B>hear</B>(com.google.inject.TypeLiteral&lt;I&gt;&nbsp;ty
 </TR>
 <TR>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
-  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
 <TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
 DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
 </TR>

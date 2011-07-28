@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-EventManager (roboguice 1.1-SNAPSHOT API)
+EventManager (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ EventManager (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="EventManager (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="EventManager (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -54,7 +54,7 @@ function windowTitle()
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;PREV CLASS&nbsp;
+&nbsp;<A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
 &nbsp;<A HREF="../../roboguice/event/EventManager.NullEventManager.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/event/EventManager.html" target="_top"><B>FRAMES</B></A>  &nbsp;
@@ -136,12 +136,12 @@ Manager class handling the following:
 <TD><CODE><B><A HREF="../../roboguice/event/EventManager.NullEventManager.html" title="class in roboguice.event">EventManager.NullEventManager</A></B></CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Raises the event's class' event on the given context.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>static&nbsp;class</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event">EventManager.ObserverReference</A>&lt;<A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="type parameter in EventManager.ObserverReference">ResultType</A>&gt;</B></CODE>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.ObserverMethodListener.html" title="class in roboguice.event">EventManager.ObserverMethodListener</A>&lt;<A HREF="../../roboguice/event/EventManager.ObserverMethodListener.html" title="type parameter in EventManager.ObserverMethodListener">T</A>&gt;</B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -165,7 +165,7 @@ Manager class handling the following:
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;java.util.Map&lt;android.content.Context,java.util.Map&lt;java.lang.Class&lt;?&gt;,java.util.Set&lt;<A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event">EventManager.ObserverReference</A>&lt;?&gt;&gt;&gt;&gt;</CODE></FONT></TD>
+<CODE>protected &nbsp;java.util.Map&lt;android.content.Context,java.util.Map&lt;java.lang.Class&lt;?&gt;,java.util.Set&lt;<A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&lt;?&gt;&gt;&gt;&gt;</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#registrations">registrations</A></B></CODE>
 
 <BR>
@@ -232,24 +232,137 @@ Manager class handling the following:
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;void</CODE></FONT></TD>
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;T&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#registerObserver(java.lang.Class, roboguice.event.EventListener)">registerObserver</A></B>(java.lang.Class&lt;T&gt;&nbsp;event,
+                 <A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Register an observer EventListener with the current context (provided).</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;T&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#registerObserver(android.content.Context, java.lang.Class, roboguice.event.EventListener)">registerObserver</A></B>(android.content.Context&nbsp;context,
+                 java.lang.Class&lt;T&gt;&nbsp;event,
+                 <A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Register the given EventListener to the contest and event class.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;T&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#registerObserver(android.content.Context, java.lang.Object, java.lang.reflect.Method, java.lang.Class)">registerObserver</A></B>(android.content.Context&nbsp;context,
                  java.lang.Object&nbsp;instance,
                  java.lang.reflect.Method&nbsp;method,
-                 java.lang.Class&nbsp;event)</CODE>
+                 java.lang.Class&lt;T&gt;&nbsp;event)</CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Registers given method with provided context and event.</TD>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>&nbsp;void</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#unregisterObserver(android.content.Context, java.lang.Object, java.lang.Class)">unregisterObserver</A></B>(android.content.Context&nbsp;context,
-                   java.lang.Object&nbsp;instance,
-                   java.lang.Class&nbsp;event)</CODE>
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;T&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#registerObserver(java.lang.Object, java.lang.reflect.Method, java.lang.Class)">registerObserver</A></B>(java.lang.Object&nbsp;instance,
+                 java.lang.reflect.Method&nbsp;method,
+                 java.lang.Class&lt;T&gt;&nbsp;event)</CODE>
 
 <BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unregisters all methods observing the given event from the provided context.</TD>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Register a method observer with the current context (provided).</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;T&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#unregisterObserver(java.lang.Class, roboguice.event.EventListener)">unregisterObserver</A></B>(java.lang.Class&lt;T&gt;&nbsp;event,
+                   <A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&lt;T&gt;&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unregister the given EventListener with the current context (provided).</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;T&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#unregisterObserver(android.content.Context, java.lang.Class, roboguice.event.EventListener)">unregisterObserver</A></B>(android.content.Context&nbsp;context,
+                   java.lang.Class&lt;T&gt;&nbsp;event,
+                   <A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&lt;T&gt;&nbsp;listener)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unregisters the provided event listener from the given event</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;T&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#unregisterObserver(android.content.Context, java.lang.Object, java.lang.Class)">unregisterObserver</A></B>(android.content.Context&nbsp;context,
+                   java.lang.Object&nbsp;instance,
+                   java.lang.Class&lt;T&gt;&nbsp;event)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unregister all methods observing the given event from the provided context.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
+<TR ALIGN="right" VALIGN="">
+<TD NOWRAP><FONT SIZE="-1">
+<CODE>&lt;T&gt; void</CODE></FONT></TD>
+</TR>
+</TABLE>
+</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/event/EventManager.html#unregisterObserver(java.lang.Object, java.lang.Class)">unregisterObserver</A></B>(java.lang.Object&nbsp;instance,
+                   java.lang.Class&lt;T&gt;&nbsp;event)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Unregister the given event from the current context (provided).</TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -288,7 +401,7 @@ contextProvider</H3>
 <A NAME="registrations"><!-- --></A><H3>
 registrations</H3>
 <PRE>
-protected java.util.Map&lt;android.content.Context,java.util.Map&lt;java.lang.Class&lt;?&gt;,java.util.Set&lt;<A HREF="../../roboguice/event/EventManager.ObserverReference.html" title="class in roboguice.event">EventManager.ObserverReference</A>&lt;?&gt;&gt;&gt;&gt; <B>registrations</B></PRE>
+protected java.util.Map&lt;android.content.Context,java.util.Map&lt;java.lang.Class&lt;?&gt;,java.util.Set&lt;<A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&lt;?&gt;&gt;&gt;&gt; <B>registrations</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -332,46 +445,59 @@ public boolean <B>isEnabled</B>()</PRE>
 </DL>
 <HR>
 
-<A NAME="registerObserver(android.content.Context, java.lang.Object, java.lang.reflect.Method, java.lang.Class)"><!-- --></A><H3>
+<A NAME="registerObserver(java.lang.Class, roboguice.event.EventListener)"><!-- --></A><H3>
 registerObserver</H3>
 <PRE>
-public void <B>registerObserver</B>(android.content.Context&nbsp;context,
-                             java.lang.Object&nbsp;instance,
-                             java.lang.reflect.Method&nbsp;method,
-                             java.lang.Class&nbsp;event)</PRE>
+public &lt;T&gt; void <B>registerObserver</B>(java.lang.Class&lt;T&gt;&nbsp;event,
+                                 <A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&nbsp;listener)</PRE>
 <DL>
-<DD>Registers given method with provided context and event.
+<DD>Register an observer EventListener with the current context (provided).
 <P>
 <DD><DL>
-</DL>
+<DT><B>Type Parameters:</B><DD><CODE>T</CODE> - event type<DT><B>Parameters:</B><DD><CODE>event</CODE> - to observe<DD><CODE>listener</CODE> - to be triggered</DL>
 </DD>
 </DL>
 <HR>
 
-<A NAME="unregisterObserver(android.content.Context, java.lang.Object, java.lang.Class)"><!-- --></A><H3>
+<A NAME="registerObserver(java.lang.Object, java.lang.reflect.Method, java.lang.Class)"><!-- --></A><H3>
+registerObserver</H3>
+<PRE>
+public &lt;T&gt; void <B>registerObserver</B>(java.lang.Object&nbsp;instance,
+                                 java.lang.reflect.Method&nbsp;method,
+                                 java.lang.Class&lt;T&gt;&nbsp;event)</PRE>
+<DL>
+<DD>Register a method observer with the current context (provided).
+<P>
+<DD><DL>
+<DT><B>Type Parameters:</B><DD><CODE>T</CODE> - event type<DT><B>Parameters:</B><DD><CODE>instance</CODE> - to be called<DD><CODE>method</CODE> - to be called<DD><CODE>event</CODE> - observed</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="unregisterObserver(java.lang.Class, roboguice.event.EventListener)"><!-- --></A><H3>
 unregisterObserver</H3>
 <PRE>
-public void <B>unregisterObserver</B>(android.content.Context&nbsp;context,
-                               java.lang.Object&nbsp;instance,
-                               java.lang.Class&nbsp;event)</PRE>
+public &lt;T&gt; void <B>unregisterObserver</B>(java.lang.Class&lt;T&gt;&nbsp;event,
+                                   <A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&lt;T&gt;&nbsp;listener)</PRE>
 <DL>
-<DD>Unregisters all methods observing the given event from the provided context.
+<DD>Unregister the given EventListener with the current context (provided).
 <P>
 <DD><DL>
-</DL>
+<DT><B>Type Parameters:</B><DD><CODE>T</CODE> - event type<DT><B>Parameters:</B><DD><CODE>event</CODE> - observed<DD><CODE>listener</CODE> - to be unregistered</DL>
 </DD>
 </DL>
 <HR>
 
-<A NAME="clear(android.content.Context)"><!-- --></A><H3>
-clear</H3>
+<A NAME="unregisterObserver(java.lang.Object, java.lang.Class)"><!-- --></A><H3>
+unregisterObserver</H3>
 <PRE>
-public void <B>clear</B>(android.content.Context&nbsp;context)</PRE>
+public &lt;T&gt; void <B>unregisterObserver</B>(java.lang.Object&nbsp;instance,
+                                   java.lang.Class&lt;T&gt;&nbsp;event)</PRE>
 <DL>
-<DD>Clears all observers of the given context.
+<DD>Unregister the given event from the current context (provided).
 <P>
 <DD><DL>
-</DL>
+<DT><B>Type Parameters:</B><DD><CODE>T</CODE> - event type<DT><B>Parameters:</B><DD><CODE>instance</CODE> - to be unregistered<DD><CODE>event</CODE> - observed</DL>
 </DD>
 </DL>
 <HR>
@@ -385,7 +511,81 @@ public void <B>fire</B>(java.lang.Object&nbsp;event)</PRE>
  registered observer's method.
 <P>
 <DD><DL>
+<DT><B>Parameters:</B><DD><CODE>event</CODE> - observed</DL>
+</DD>
 </DL>
+<HR>
+
+<A NAME="registerObserver(android.content.Context, java.lang.Class, roboguice.event.EventListener)"><!-- --></A><H3>
+registerObserver</H3>
+<PRE>
+public &lt;T&gt; void <B>registerObserver</B>(android.content.Context&nbsp;context,
+                                 java.lang.Class&lt;T&gt;&nbsp;event,
+                                 <A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&nbsp;listener)</PRE>
+<DL>
+<DD>Register the given EventListener to the contest and event class.
+<P>
+<DD><DL>
+<DT><B>Type Parameters:</B><DD><CODE>T</CODE> - event type<DT><B>Parameters:</B><DD><CODE>context</CODE> - associated with event<DD><CODE>event</CODE> - observed<DD><CODE>listener</CODE> - to be triggered</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="registerObserver(android.content.Context, java.lang.Object, java.lang.reflect.Method, java.lang.Class)"><!-- --></A><H3>
+registerObserver</H3>
+<PRE>
+public &lt;T&gt; void <B>registerObserver</B>(android.content.Context&nbsp;context,
+                                 java.lang.Object&nbsp;instance,
+                                 java.lang.reflect.Method&nbsp;method,
+                                 java.lang.Class&lt;T&gt;&nbsp;event)</PRE>
+<DL>
+<DD>Registers given method with provided context and event.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>context</CODE> - associated with event<DD><CODE>instance</CODE> - to be called<DD><CODE>method</CODE> - to be called<DD><CODE>event</CODE> - observed</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="unregisterObserver(android.content.Context, java.lang.Class, roboguice.event.EventListener)"><!-- --></A><H3>
+unregisterObserver</H3>
+<PRE>
+public &lt;T&gt; void <B>unregisterObserver</B>(android.content.Context&nbsp;context,
+                                   java.lang.Class&lt;T&gt;&nbsp;event,
+                                   <A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event">EventListener</A>&lt;T&gt;&nbsp;listener)</PRE>
+<DL>
+<DD>Unregisters the provided event listener from the given event
+<P>
+<DD><DL>
+<DT><B>Type Parameters:</B><DD><CODE>T</CODE> - event type<DT><B>Parameters:</B><DD><CODE>context</CODE> - associated with event<DD><CODE>event</CODE> - observed<DD><CODE>listener</CODE> - to be unregistered</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="unregisterObserver(android.content.Context, java.lang.Object, java.lang.Class)"><!-- --></A><H3>
+unregisterObserver</H3>
+<PRE>
+public &lt;T&gt; void <B>unregisterObserver</B>(android.content.Context&nbsp;context,
+                                   java.lang.Object&nbsp;instance,
+                                   java.lang.Class&lt;T&gt;&nbsp;event)</PRE>
+<DL>
+<DD>Unregister all methods observing the given event from the provided context.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>context</CODE> - associated with event<DD><CODE>instance</CODE> - to be unregistered<DD><CODE>event</CODE> - observed</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="clear(android.content.Context)"><!-- --></A><H3>
+clear</H3>
+<PRE>
+public void <B>clear</B>(android.content.Context&nbsp;context)</PRE>
+<DL>
+<DD>Clears all observers of the given context.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>context</CODE> - associated with event</DL>
 </DD>
 </DL>
 <HR>
@@ -400,7 +600,7 @@ public void <B>fire</B>(android.content.Context&nbsp;context,
  registered observer's method.
 <P>
 <DD><DL>
-<DT><B>Parameters:</B><DD><CODE>context</CODE> - <DD><CODE>event</CODE> - </DL>
+<DT><B>Parameters:</B><DD><CODE>context</CODE> - associated with event<DD><CODE>event</CODE> - observed</DL>
 </DD>
 </DL>
 <!-- ========= END OF CLASS DATA ========= -->
@@ -434,7 +634,7 @@ public void <B>fire</B>(android.content.Context&nbsp;context,
 
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
-&nbsp;PREV CLASS&nbsp;
+&nbsp;<A HREF="../../roboguice/event/EventListener.html" title="interface in roboguice.event"><B>PREV CLASS</B></A>&nbsp;
 &nbsp;<A HREF="../../roboguice/event/EventManager.NullEventManager.html" title="class in roboguice.event"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/event/EventManager.html" target="_top"><B>FRAMES</B></A>  &nbsp;

@@ -4,6 +4,7 @@ roboguice.adapter
 roboguice.application
 roboguice.config
 roboguice.event
+roboguice.event.javaassist
 roboguice.inject
 roboguice.receiver
 roboguice.service

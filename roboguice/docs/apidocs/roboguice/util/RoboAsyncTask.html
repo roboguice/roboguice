@@ -4,7 +4,7 @@
 <HEAD>
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <TITLE>
-RoboAsyncTask (roboguice 1.1-SNAPSHOT API)
+RoboAsyncTask (RoboGuice 1.1.3-SNAPSHOT API)
 </TITLE>
 
 
@@ -14,7 +14,7 @@ RoboAsyncTask (roboguice 1.1-SNAPSHOT API)
 function windowTitle()
 {
     if (location.href.indexOf('is-external=true') == -1) {
-        parent.document.title="RoboAsyncTask (roboguice 1.1-SNAPSHOT API)";
+        parent.document.title="RoboAsyncTask (RoboGuice 1.1.3-SNAPSHOT API)";
     }
 }
 </SCRIPT>
@@ -55,7 +55,7 @@ function windowTitle()
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/util/RoboAsyncTask.RoboTask.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/util/RoboAsyncTask.Task.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/RoboAsyncTask.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="RoboAsyncTask.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
@@ -96,18 +96,12 @@ java.lang.Object
       <IMG SRC="../../resources/inherit.gif" ALT="extended by "><B>roboguice.util.RoboAsyncTask&lt;ResultT&gt;</B>
 </PRE>
 <DL>
-<DT><DT><B>Type Parameters:</B><DD><CODE>ResultT</CODE> - </DL>
-<DL>
 <DT><B>All Implemented Interfaces:</B> <DD>java.util.concurrent.Callable&lt;ResultT&gt;</DD>
 </DL>
 <HR>
 <DL>
 <DT><PRE>public abstract class <B>RoboAsyncTask&lt;ResultT&gt;</B><DT>extends <A HREF="../../roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>&lt;ResultT&gt;</DL>
 </PRE>
-
-<P>
-Allows injection to happen for tasks that execute in a background thread.
-<P>
 
 <P>
 <HR>
@@ -123,24 +117,14 @@ Allows injection to happen for tasks that execute in a background thread.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;class</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/RoboAsyncTask.RoboTask.html" title="class in roboguice.util">RoboAsyncTask.RoboTask</A>&lt;<A HREF="../../roboguice/util/RoboAsyncTask.RoboTask.html" title="type parameter in RoboAsyncTask.RoboTask">ResultT</A>&gt;</B></CODE>
+<CODE>protected static&nbsp;class</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/RoboAsyncTask.Task.html" title="class in roboguice.util">RoboAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/RoboAsyncTask.Task.html" title="type parameter in RoboAsyncTask.Task">ResultT</A>&gt;</B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
 </TR>
 </TABLE>
-&nbsp;<A NAME="nested_classes_inherited_from_class_roboguice.util.SafeAsyncTask"><!-- --></A>
-<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
-<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
-<TH ALIGN="left"><B>Nested classes/interfaces inherited from class roboguice.util.<A HREF="../../roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A></B></TH>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="type parameter in SafeAsyncTask.Task">ResultT</A>&gt;</CODE></TD>
-</TR>
-</TABLE>
-&nbsp;
-<!-- =========== FIELD SUMMARY =========== -->
+&nbsp;<!-- =========== FIELD SUMMARY =========== -->
 
 <A NAME="field_summary"><!-- --></A>
 <TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
@@ -150,24 +134,8 @@ Allows injection to happen for tasks that execute in a background thread.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;android.content.Context</CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/RoboAsyncTask.html#context">context</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
 <CODE>protected static&nbsp;com.google.inject.Provider&lt;android.content.Context&gt;</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/RoboAsyncTask.html#contextProvider">contextProvider</A></B></CODE>
-
-<BR>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
-</TR>
-<TR BGCOLOR="white" CLASS="TableRowColor">
-<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A></CODE></FONT></TD>
-<TD><CODE><B><A HREF="../../roboguice/util/RoboAsyncTask.html#scope">scope</A></B></CODE>
 
 <BR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
@@ -244,7 +212,7 @@ Allows injection to happen for tasks that execute in a background thread.
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
 <TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
-<CODE>protected &nbsp;<A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/RoboAsyncTask.html" title="type parameter in RoboAsyncTask">ResultT</A>&gt;</CODE></FONT></TD>
+<CODE>protected &nbsp;<A HREF="../../roboguice/util/RoboAsyncTask.Task.html" title="class in roboguice.util">RoboAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/RoboAsyncTask.html" title="type parameter in RoboAsyncTask">ResultT</A>&gt;</CODE></FONT></TD>
 <TD><CODE><B><A HREF="../../roboguice/util/RoboAsyncTask.html#newTask()">newTask</A></B>()</CODE>
 
 <BR>
@@ -257,7 +225,7 @@ Allows injection to happen for tasks that execute in a background thread.
 <TH ALIGN="left"><B>Methods inherited from class roboguice.util.<A HREF="../../roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A></B></TH>
 </TR>
 <TR BGCOLOR="white" CLASS="TableRowColor">
-<TD><CODE><A HREF="../../roboguice/util/SafeAsyncTask.html#cancel(boolean)">cancel</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#execute()">execute</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#execute(java.lang.StackTraceElement[])">execute</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#executor()">executor</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#executor(java.util.concurrent.Executor)">executor</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#future()">future</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#handler()">handler</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#handler(android.os.Handler)">handler</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onException(java.lang.Exception)">onException</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onFinally()">onFinally</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onInterrupted(java.lang.InterruptedException)">onInterrupted</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onPreExecute()">onPreExecute</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onSuccess(ResultT)">onSuccess</A></CODE></TD>
+<TD><CODE><A HREF="../../roboguice/util/SafeAsyncTask.html#cancel(boolean)">cancel</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#execute()">execute</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#execute(java.lang.StackTraceElement[])">execute</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#executor()">executor</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#executor(java.util.concurrent.Executor)">executor</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#future()">future</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#handler()">handler</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#handler(android.os.Handler)">handler</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onException(java.lang.Exception)">onException</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onFinally()">onFinally</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onInterrupted(java.lang.Exception)">onInterrupted</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onPreExecute()">onPreExecute</A>, <A HREF="../../roboguice/util/SafeAsyncTask.html#onSuccess(ResultT)">onSuccess</A></CODE></TD>
 </TR>
 </TABLE>
 &nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
@@ -307,26 +275,6 @@ scopeProvider</H3>
 <PRE>
 <FONT SIZE="-1">@Inject
 </FONT>protected static com.google.inject.Provider&lt;<A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A>&gt; <B>scopeProvider</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<A NAME="scope"><!-- --></A><H3>
-scope</H3>
-<PRE>
-protected <A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A> <B>scope</B></PRE>
-<DL>
-<DL>
-</DL>
-</DL>
-<HR>
-
-<A NAME="context"><!-- --></A><H3>
-context</H3>
-<PRE>
-protected android.content.Context <B>context</B></PRE>
 <DL>
 <DL>
 </DL>
@@ -387,7 +335,7 @@ protected <B>RoboAsyncTask</B>(java.util.concurrent.Executor&nbsp;executor)</PRE
 <A NAME="newTask()"><!-- --></A><H3>
 newTask</H3>
 <PRE>
-protected <A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/RoboAsyncTask.html" title="type parameter in RoboAsyncTask">ResultT</A>&gt; <B>newTask</B>()</PRE>
+protected <A HREF="../../roboguice/util/RoboAsyncTask.Task.html" title="class in roboguice.util">RoboAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/RoboAsyncTask.html" title="type parameter in RoboAsyncTask">ResultT</A>&gt; <B>newTask</B>()</PRE>
 <DL>
 <DD><DL>
 <DT><B>Overrides:</B><DD><CODE><A HREF="../../roboguice/util/SafeAsyncTask.html#newTask()">newTask</A></CODE> in class <CODE><A HREF="../../roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>&lt;<A HREF="../../roboguice/util/RoboAsyncTask.html" title="type parameter in RoboAsyncTask">ResultT</A>&gt;</CODE></DL>
@@ -428,7 +376,7 @@ protected <A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in
 <TR>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
 &nbsp;<A HREF="../../roboguice/util/Ln.Print.html" title="class in roboguice.util"><B>PREV CLASS</B></A>&nbsp;
-&nbsp;<A HREF="../../roboguice/util/RoboAsyncTask.RoboTask.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+&nbsp;<A HREF="../../roboguice/util/RoboAsyncTask.Task.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
 <TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
   <A HREF="../../index.html?roboguice/util/RoboAsyncTask.html" target="_top"><B>FRAMES</B></A>  &nbsp;
 &nbsp;<A HREF="RoboAsyncTask.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;

@@ -7,6 +7,7 @@ import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import roboguice.util.RoboAsyncTask;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ public class FightForcesOfEvilActivity extends RoboActivity {
 
         // Throw some punches
         for( int i=0; i<10; ++i )
-            new AsyncPunch() {
+            new AsyncPunch(this) {
                 @Override
                 protected void onSuccess(String expletive) throws Exception {
                     expletiveText.setText(expletive);
@@ -65,6 +66,10 @@ public class FightForcesOfEvilActivity extends RoboActivity {
         // we haven't specified any special binding instructions anywhere
         @Inject Astroboy astroboy;
         @Inject Random random;
+
+        public AsyncPunch(Context context) {
+            super(context);
+        }
 
         public String call() throws Exception {
             Thread.sleep(random.nextInt(5*1000));

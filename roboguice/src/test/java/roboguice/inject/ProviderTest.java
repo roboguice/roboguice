@@ -8,8 +8,6 @@ import roboguice.activity.RoboActivity;
 import android.content.Context;
 import android.os.Bundle;
 
-import com.google.inject.Provider;
-
 import javax.inject.Inject;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -33,7 +31,7 @@ public class ProviderTest {
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
             @Override
             public Context call() throws Exception {
-                return a.contextProvider.get();
+                return a.contextProvider.get(b);
             }
         });
         Executors.newSingleThreadExecutor().execute(future);
@@ -63,7 +61,7 @@ public class ProviderTest {
 
 
     public static class A extends RoboActivity {
-        @Inject Provider<Context> contextProvider;
+        @Inject ContextScopedProvider<Context> contextProvider;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {

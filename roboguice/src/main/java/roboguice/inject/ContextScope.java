@@ -50,7 +50,7 @@ import java.util.WeakHashMap;
 public class ContextScope implements Scope {
 
     protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> scopedObjects = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
-    protected WeakReference<Context> contextRef = new WeakReference<Context>(null);
+    protected WeakReference<Context> contextRef = null;
 
 
     /**

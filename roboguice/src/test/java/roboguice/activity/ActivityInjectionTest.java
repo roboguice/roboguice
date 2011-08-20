@@ -3,7 +3,6 @@ package roboguice.activity;
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
@@ -11,10 +10,7 @@ import roboguice.activity.ActivityInjectionTest.ModuleA.A;
 import roboguice.activity.ActivityInjectionTest.ModuleB.B;
 import roboguice.activity.ActivityInjectionTest.ModuleC.C;
 import roboguice.activity.ActivityInjectionTest.ModuleD.D;
-import roboguice.inject.InjectExtra;
-import roboguice.inject.InjectPreference;
-import roboguice.inject.InjectResource;
-import roboguice.inject.InjectView;
+import roboguice.inject.*;
 
 import android.R;
 import android.content.Context;
@@ -28,10 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.inject.ConfigurationException;
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.google.inject.Stage;
+import com.google.inject.*;
 
 import javax.annotation.Nullable;
 import java.lang.ref.SoftReference;
@@ -48,17 +41,13 @@ import static org.junit.Assert.assertThat;
 public class ActivityInjectionTest {
 
     protected DummyActivity activity;
-    protected DummyPreferenceActivity prefsActivity;
-    
+
     @Before
     public void setup() {
         RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleA());
         activity = new DummyActivity();
         activity.setIntent( new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober") );
         activity.onCreate(null);
-
-        prefsActivity = new DummyPreferenceActivity();
-        prefsActivity.onCreate(null);
     }
 
     @Test
@@ -96,12 +85,6 @@ public class ActivityInjectionTest {
     @Test
     public void shouldInjectExtras() {
         assertThat(activity.foobar,is("goober"));
-    }
-
-    // BUG This doesn't work yet because createNewPreferenceScreen doesn't properly model whatever's goign on
-    @Test @Ignore
-    public void shouldInjectPreference() {
-        assertThat(prefsActivity.pref, is(prefsActivity.findPreference("xxx")));
     }
 
     @Test
@@ -174,11 +157,11 @@ public class ActivityInjectionTest {
         f.onCreate(null);
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
-            final Provider<Context> contextProvider = RoboGuice.getInjector(f).getProvider(Context.class);
+            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(Key.get(new TypeLiteral<ContextScopedProvider<Context>>(){}));
             
             @Override
             public Context call() throws Exception {
-                return contextProvider.get();
+                return contextProvider.get(f);
             }
 
         });

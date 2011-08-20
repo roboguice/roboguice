@@ -15,7 +15,6 @@
  */
 package roboguice.inject;
 
-import android.app.Application;
 import android.content.Context;
 
 import com.google.inject.Key;
@@ -42,7 +41,7 @@ import java.util.WeakHashMap;
  *
  * If you're using ContextScopedRoboInjector (which is the RoboGuice default), this is done for you automatically.
  *
- * If you're trying to use a Provider, you must either use RoboProvider instead, or do your own synchronization
+ * If you're trying to use a Provider, you must either use ContextScopedProvider instead, or do your own synchronization
  * and scope.enter() call.
  *
  * @see ContextScopedRoboInjector
@@ -54,25 +53,19 @@ public class ContextScope implements Scope {
     protected WeakReference<Context> contextRef = new WeakReference<Context>(null);
 
 
-    public ContextScope(Application app) {
-        enter(app);
-    }
-
-
     /**
      * You MUST perform any injector operations inside a synchronized(ContextScope.class) block that starts with
      * scope.enter(context) if working in a multithreaded environment
      *
      * @see ContextScope
      * @see ContextScopedRoboInjector
+     * @see ContextScopedProvider
      * @param context the context to enter
      */
     public void enter(Context context) {
 
-        if( contextRef !=null && contextRef.get()==context )
-            return;
-
-
+        if( contextRef!=null )
+            throw new IllegalArgumentException(String.format("Scope for %s must be closed before scope for %s may be opened",contextRef.get(),context));
         
         // Mark this thread as for this context
         contextRef = new WeakReference<Context>(context);
@@ -80,6 +73,14 @@ public class ContextScope implements Scope {
         // Add the context to the scope
         getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
 
+    }
+
+    public void exit(Context context) {
+        final Context prev = contextRef.get();
+        if( prev!=context )
+            throw new IllegalArgumentException(String.format("Scope for %s must be opened before it can be closed",context));
+
+        contextRef = null;
     }
 
 
@@ -101,7 +102,7 @@ public class ContextScope implements Scope {
                     }
                 }
 
-                throw new UnsupportedOperationException("Can't perform injection outside of a context scope. Did you intend to use RoboProvider instead of Provider?");
+                throw new UnsupportedOperationException(String.format("%s is context-scoped and can't be injected outside of a context scope. Did you intend to make the referencing class @ContextScoped or use ContextScopedProvider instead of Provider?",key.getTypeLiteral().getType()));
             }
         };
 

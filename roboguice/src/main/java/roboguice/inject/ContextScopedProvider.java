@@ -6,14 +6,18 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 
-public class RoboProvider<T> {
+public class ContextScopedProvider<T> {
     @Inject protected ContextScope scope;
     @Inject protected Provider<T> provider;
 
-    T get(Context context) {
+    public T get(Context context) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return provider.get();
+            try {
+                return provider.get();
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 }

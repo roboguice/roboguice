@@ -1,6 +1,6 @@
 package roboguice.util;
 
-import android.content.Context;
+import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 
@@ -210,7 +210,7 @@ public class Ln  {
         }
 
         @Inject
-        public BaseConfig(Context context) {
+        public BaseConfig(Application context) {
             try {
                 packageName = context.getPackageName();
                 final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;

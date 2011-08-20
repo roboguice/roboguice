@@ -30,7 +30,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public Injector createChildInjector(Iterable<? extends Module> modules) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.createChildInjector(modules);
+            try {
+                return delegate.createChildInjector(modules);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -38,7 +42,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public Injector createChildInjector(Module... modules) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.createChildInjector(modules);
+            try {
+                return delegate.createChildInjector(modules);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -46,7 +54,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> List<Binding<T>> findBindingsByType(TypeLiteral<T> type) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.findBindingsByType(type);
+            try {
+                return delegate.findBindingsByType(type);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -54,7 +66,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public Map<Key<?>, Binding<?>> getAllBindings() {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getAllBindings();
+            try {
+                return delegate.getAllBindings();
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -62,7 +78,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> Binding<T> getBinding(Key<T> key) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getBinding(key);
+            try {
+                return delegate.getBinding(key);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -70,7 +90,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> Binding<T> getBinding(Class<T> type) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getBinding(type);
+            try {
+                return delegate.getBinding(type);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -78,7 +102,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public Map<Key<?>, Binding<?>> getBindings() {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getBindings();
+            try {
+                return delegate.getBindings();
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -86,7 +114,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> Binding<T> getExistingBinding(Key<T> key) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getExistingBinding(key);
+            try {
+                return delegate.getExistingBinding(key);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -94,7 +126,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> T getInstance(Key<T> key) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getInstance(key);
+            try {
+                return delegate.getInstance(key);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -102,7 +138,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> T getInstance(Class<T> type) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getInstance(type);
+            try {
+                return delegate.getInstance(type);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -110,7 +150,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> MembersInjector<T> getMembersInjector(Class<T> type) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getMembersInjector(type);
+            try {
+                return delegate.getMembersInjector(type);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -118,7 +162,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> MembersInjector<T> getMembersInjector(TypeLiteral<T> typeLiteral) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getMembersInjector(typeLiteral);
+            try {
+                return delegate.getMembersInjector(typeLiteral);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -126,7 +174,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public Injector getParent() {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getParent();
+            try {
+                return delegate.getParent();
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -134,7 +186,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> Provider<T> getProvider(Key<T> key) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getProvider(key);
+            try {
+                return delegate.getProvider(key);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -142,7 +198,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public <T> Provider<T> getProvider(Class<T> type) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getProvider(type);
+            try {
+                return delegate.getProvider(type);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -150,7 +210,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public Map<Class<? extends Annotation>, Scope> getScopeBindings() {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getScopeBindings();
+            try {
+                return delegate.getScopeBindings();
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -158,7 +222,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public Set<TypeConverterBinding> getTypeConverterBindings() {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            return delegate.getTypeConverterBindings();
+            try {
+                return delegate.getTypeConverterBindings();
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 
@@ -166,7 +234,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public void injectMembers(Object instance) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            delegate.injectMembers(instance);
+            try {
+                delegate.injectMembers(instance);
+            }finally {
+                scope.exit(context);
+            }
 
             // Sort of weird.  If instance is a view, assume we also want to evalute any @InjectView() annotations now rather than later
             if( instance instanceof View )
@@ -178,7 +250,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     public void injectViewMembers(Object instance) {
         synchronized (ContextScope.class) {
             scope.enter(context);
-            ViewMembersInjector.injectViews(instance);
+            try {
+                ViewMembersInjector.injectViews(instance);
+            } finally {
+                scope.exit(context);
+            }
         }
     }
 }

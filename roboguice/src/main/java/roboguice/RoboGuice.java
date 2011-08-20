@@ -109,14 +109,7 @@ public class RoboGuice {
 
     
     public static RoboModule createNewDefaultRoboModule(final Application application) {
-        final ContextScope scope = new ContextScope(application);
-        final Provider<Context> fallbackProvider = new Provider<Context>() {
-            public Context get() {
-                return application; // BUG this should throw an exception
-            }
-        };
-        final Provider<Context> contextProvider = scope.scope(Key.get(Context.class), fallbackProvider);
-        return new RoboModule(application, scope, contextProvider, getViewListener(application), getResourceListener(application));
+        return new RoboModule(application, new ContextScope(), getViewListener(application), getResourceListener(application));
     }
 
 

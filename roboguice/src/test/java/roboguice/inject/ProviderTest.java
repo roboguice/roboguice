@@ -79,7 +79,7 @@ public class ProviderTest {
     }
 
     public static class C extends RoboActivity {
-        @Inject RoboProvider<Context> contextProvider;
+        @Inject ContextScopedProvider<Context> contextProvider;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {

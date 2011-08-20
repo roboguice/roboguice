@@ -17,23 +17,21 @@ package roboguice.inject;
 
 import android.content.Context;
 
-import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-@ContextScoped
 public class ContextScopedSystemServiceProvider<T> implements Provider<T> {
 
-    @Inject protected Context context; // Needs to be context for at least a few of the services, eg. LayoutInflater, which gets styling from current context
-
+    protected Provider<Context> contextProvider;
     protected String serviceName;
 
-    public ContextScopedSystemServiceProvider(String serviceName) {
+    public ContextScopedSystemServiceProvider(Provider<Context> contextProvider, String serviceName) {
+        this.contextProvider = contextProvider;
         this.serviceName = serviceName;
     }
 
     @SuppressWarnings("unchecked")
     public T get() {
-        return (T) context.getSystemService(serviceName);
+        return (T) contextProvider.get().getSystemService(serviceName);
     }
 
 }

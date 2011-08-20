@@ -31,9 +31,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Key;
 import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
 
@@ -46,18 +44,16 @@ import com.google.inject.name.Names;
 public class RoboModule extends AbstractModule {
 
     protected Application application;
-    protected Provider<Context> contextProvider;
     protected ContextScope contextScope;
     protected ResourceListener resourceListener;
     protected ViewListener viewListener;
 
 
-    public RoboModule( final Application application, ContextScope contextScope, Provider<Context> contextProvider, ViewListener viewListener, ResourceListener resourceListener ) {
+    public RoboModule( final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener ) {
 
 
         this.application = application;
         this.contextScope = contextScope;
-        this.contextProvider = contextProvider;
         this.viewListener = viewListener;
         this.resourceListener = resourceListener;
     }
@@ -68,6 +64,7 @@ public class RoboModule extends AbstractModule {
     @Override
     protected void configure() {
 
+        final Provider<Context> contextProvider = getProvider(Context.class);
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
@@ -86,9 +83,13 @@ public class RoboModule extends AbstractModule {
         // ContextScoped Scope bindings
         bindScope(ContextScoped.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
-        bind(Context.class).toProvider(contextProvider).in(ContextScoped.class);
-        bind(Activity.class).toProvider(Key.get(new TypeLiteral<ContextProvider<Activity>>(){}));
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
+        bind(Context.class).toProvider( new Provider<Context>() {
+            @Override
+            public Context get() {
+                return null;
+            }
+        }).in(ContextScoped.class);
 
         
         // Sundry Android Classes
@@ -125,7 +126,7 @@ public class RoboModule extends AbstractModule {
         bind(AudioManager.class).toProvider( new SystemServiceProvider<AudioManager>(Context.AUDIO_SERVICE));
 
         // System Services that must be scoped to current context
-        bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(Context.LAYOUT_INFLATER_SERVICE));
+        bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
 
 
         // Android Resources, Views and extras require special handling

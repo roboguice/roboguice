@@ -18,6 +18,7 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
 
 import android.app.ActivityGroup;
 import android.content.Intent;
@@ -90,7 +91,11 @@ public class RoboActivityGroup extends ActivityGroup {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
-            super.onDestroy();
+            try {
+                RoboGuice.getInjector(this).getInstance(ContextScope.class).destroy(this);
+            } finally {
+                super.onDestroy();
+            }
         }
     }
 

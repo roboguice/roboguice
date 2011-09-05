@@ -18,6 +18,7 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -90,7 +91,11 @@ public abstract class RoboMapActivity extends MapActivity {
         try {
             eventManager.fire(new OnDestroyEvent());
         } finally {
-            super.onDestroy();
+            try {
+                RoboGuice.getInjector(this).getInstance(ContextScope.class).destroy(this);
+            } finally {
+                super.onDestroy();
+            }
         }
     }
 

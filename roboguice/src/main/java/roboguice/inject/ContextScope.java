@@ -21,10 +21,8 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
-import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 
 /**
  * Scopes the injector based on the current context.
@@ -49,7 +47,7 @@ import java.util.WeakHashMap;
  */
 public class ContextScope implements Scope {
 
-    protected WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>> scopedObjects = new WeakHashMap<Context, Map<Key<?>, WeakReference<Object>>>();
+    protected HashMap<Context, Map<Key<?>, Object>> scopedObjects = new HashMap<Context, Map<Key<?>, Object>>();
     protected ThreadLocal<Context> contextThreadLocal = new ThreadLocal<Context>();
 
 
@@ -64,41 +62,59 @@ public class ContextScope implements Scope {
      */
     public void enter(Context context) {
 
-        final Context prev = contextThreadLocal.get();
-        if( prev!=null )
-            throw new IllegalArgumentException(String.format("Scope for %s must be closed before scope for %s may be opened",prev,context));
-        
-        // Mark this thread as for this context
-        contextThreadLocal.set( context );
+        // BUG synchronizing on ContextScope.class may be overly conservative
+        synchronized (ContextScope.class) {
+            final Context prev = contextThreadLocal.get();
+            if( prev!=null )
+                throw new IllegalArgumentException(String.format("Scope for %s must be closed before scope for %s may be opened",prev,context));
 
-        // Add the context to the scope
-        getScopedObjectMap(context).put(Key.get(Context.class), new WeakReference<Object>(context));
+            // Mark this thread as for this context
+            contextThreadLocal.set( context );
+
+            // Add the context to the scope
+            getScopedObjectMap(context).put(Key.get(Context.class), context);
+        }
 
     }
 
     public void exit(Context context) {
-        final Context prev = contextThreadLocal.get();
-        if( prev!=context )
-            throw new IllegalArgumentException(String.format("Scope for %s must be opened before it can be closed",context));
+        synchronized (ContextScope.class) {
+            final Context prev = contextThreadLocal.get();
+            if( prev!=context )
+                throw new IllegalArgumentException(String.format("Scope for %s must be opened before it can be closed",context));
 
-        contextThreadLocal.set(null);
+            contextThreadLocal.set(null);
+        }
+    }
+
+    /**
+     * MUST be called when a context is destroyed, otherwise will leak memory
+     */
+    public void destroy(Context context) {
+        synchronized (ContextScope.class) {
+            contextThreadLocal.set(null);
+            final Map<Key<?>,Object> contextMap = scopedObjects.remove(context);
+            contextMap.clear();
+        }
     }
 
 
     public <T> Provider<T> scope(final Key<T> key, final Provider<T> unscoped) {
         return new Provider<T>() {
             public T get() {
-                final Context context = contextThreadLocal.get();
-                if (context != null) {
-                    final Map<Key<?>, WeakReference<Object>> scopedObjects = getScopedObjectMap(context);
+                synchronized (ContextScope.class) {
+                    final Context context = contextThreadLocal.get();
+                    if (context != null) {
+                        final Map<Key<?>, Object> scopedObjects = getScopedObjectMap(context);
 
-                    final WeakReference<Object> ref = scopedObjects.get(key);
-                    @SuppressWarnings({"unchecked"}) T current = (T) (ref!=null ? ref.get() : null);
-                    if (current == null && !scopedObjects.containsKey(key)) {
-                        current = unscoped.get();
-                        scopedObjects.put(key, new WeakReference<Object>(current));
+                        @SuppressWarnings({"unchecked"}) T current = (T) scopedObjects.get(key);
+                        if (current==null && !scopedObjects.containsKey(key)) {
+                            current = unscoped.get();
+                            scopedObjects.put(key, current);
+                        }
+                        
+                        return current;
                     }
-                    return current;
                 }
 
                 throw new UnsupportedOperationException(String.format("%s is context-scoped and can't be injected outside of a context scope. Did you intend to make the referencing class @ContextScoped or use ContextScopedProvider instead of Provider?",key.getTypeLiteral().getType()));
@@ -107,11 +123,11 @@ public class ContextScope implements Scope {
 
     }
 
-    protected Map<Key<?>, WeakReference<Object>> getScopedObjectMap(Context context) {
+    protected Map<Key<?>, Object> getScopedObjectMap(Context context) {
 
-        Map<Key<?>, WeakReference<Object>> scopedObjects = this.scopedObjects.get(context);
+        Map<Key<?>, Object> scopedObjects = this.scopedObjects.get(context);
         if (scopedObjects == null) {
-            scopedObjects = new HashMap<Key<?>, WeakReference<Object>>();
+            scopedObjects = new HashMap<Key<?>, Object>();
             this.scopedObjects.put(context, scopedObjects);
         }
         return scopedObjects;

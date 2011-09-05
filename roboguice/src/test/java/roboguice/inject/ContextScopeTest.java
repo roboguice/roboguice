@@ -13,8 +13,6 @@ import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Singleton;
 
-import java.lang.ref.WeakReference;
-
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -32,8 +30,8 @@ public class ContextScopeTest {
         a.onCreate(null);
 
         boolean found=false;
-        for( WeakReference<Object> ref : scope.getScopedObjectMap(a).values() )
-            if( ref.get()==a )
+        for( Object o : scope.getScopedObjectMap(a).values() )
+            if( o==a )
                 found = true;
 
         assertTrue("Couldn't find context in scope map", found);
@@ -49,8 +47,8 @@ public class ContextScopeTest {
         b.onCreate(null);
 
         boolean found=false;
-        for( WeakReference<Object> ref : scope.getScopedObjectMap(b).values() )
-            if( ref.get()==b )
+        for( Object o : scope.getScopedObjectMap(b).values() )
+            if( o==b )
                 found = true;
 
         assertTrue("Couldn't find context in scope map", found);

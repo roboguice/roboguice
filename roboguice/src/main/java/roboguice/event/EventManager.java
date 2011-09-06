@@ -143,7 +143,7 @@ public class EventManager {
                     Ln.w("trying to observe event %1$s on disposed context, consider explicitly calling EventManager.unregisterObserver", method.getName());
                 }
             } catch (InvocationTargetException e) {
-                Ln.e(e);
+                throw new RuntimeException(e);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

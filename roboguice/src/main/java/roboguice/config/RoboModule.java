@@ -31,7 +31,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Key;
 import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
 
@@ -84,12 +86,9 @@ public class RoboModule extends AbstractModule {
         bindScope(ContextScoped.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
-        bind(Context.class).toProvider( new Provider<Context>() {
-            @Override
-            public Context get() {
-                return null;
-            }
-        }).in(ContextScoped.class);
+        bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>(){})).in(ContextScoped.class);
+        bind(Activity.class).toProvider(Key.get(new TypeLiteral<NullProvider<Activity>>(){})).in(ContextScoped.class);
+        bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>(){})).in(ContextScoped.class);
 
         
         // Sundry Android Classes

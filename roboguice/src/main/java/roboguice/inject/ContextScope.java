@@ -65,14 +65,20 @@ public class ContextScope implements Scope {
         // BUG synchronizing on ContextScope.class may be overly conservative
         synchronized (ContextScope.class) {
             final Context prev = contextThreadLocal.get();
+            final Map<Key<?>,Object> map = getScopedObjectMap(context);
+
             if( prev!=null )
                 throw new IllegalArgumentException(String.format("Scope for %s must be closed before scope for %s may be opened",prev,context));
 
             // Mark this thread as for this context
             contextThreadLocal.set( context );
 
-            // Add the context to the scope
-            getScopedObjectMap(context).put(Key.get(Context.class), context);
+            // Add the context to the scope for key Context, Activity, etc.
+            Class<?> c = context.getClass();
+            do {
+                map.put(Key.get(c), context);
+                c = c.getSuperclass();
+            } while( c!=Object.class );
         }
 
     }

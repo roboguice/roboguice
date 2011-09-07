@@ -16,6 +16,7 @@
 package roboguice.inject;
 
 import android.app.Activity;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.google.inject.MembersInjector;
@@ -69,20 +70,20 @@ public class ViewListener implements TypeListener {
             this.annotation = annotation;
         }
 
-        public void injectMembers(T activityOrView) {
+        public void injectMembers(T activityOrFragmentOrView) {
             synchronized (ViewMembersInjector.class) {
-                ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activityOrView);
+                ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activityOrFragmentOrView);
                 if( injectors ==null ) {
                     injectors = new ArrayList<ViewMembersInjector<?>>();
-                    viewMembersInjectors.put(activityOrView, injectors);
+                    viewMembersInjectors.put(activityOrFragmentOrView, injectors);
                 }
                 injectors.add(this);
             }
         }
 
-        public void reallyInjectMembers(Object activityOrView) {
+        public void reallyInjectMembers(Object activityOrFragmentOrView) {
 
-            Object value = activityOrView;
+            Object value = activityOrFragmentOrView;
 
             try {
                 final int[] viewIds = annotation.value();
@@ -91,13 +92,13 @@ public class ViewListener implements TypeListener {
                     throw new NullPointerException(String.format("Cant inject view into %s.%s when view id is not specified", field.getDeclaringClass(), field.getName()));
 
                 for (int viewId : viewIds)
-                    value = value instanceof View ? ((View) value).findViewById(viewId) : ((Activity) value).findViewById(viewId);
+                    value = value instanceof View ? ((View) value).findViewById(viewId) : value instanceof Fragment ? ((Fragment)value).getView().findViewById(viewId) : ((Activity) value).findViewById(viewId);
 
-                if (value == activityOrView && Nullable.notNullable(field))
+                if (value == activityOrFragmentOrView && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
                 field.setAccessible(true);
-                field.set(activityOrView, value);
+                field.set(activityOrFragmentOrView, value);
 
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);

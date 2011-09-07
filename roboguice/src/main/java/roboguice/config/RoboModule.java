@@ -25,6 +25,7 @@ import android.os.PowerManager;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
+import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
@@ -44,6 +45,16 @@ import com.google.inject.name.Names;
  * @author Mike Burton
  */
 public class RoboModule extends AbstractModule {
+    protected static final boolean hasCompatibilityLibrarySupport;
+
+    static {
+        boolean found = false;
+        try {
+            Class.forName("android.support.v4.app.Fragment");
+            found = true;
+        } catch( Exception ignored ) {}
+        hasCompatibilityLibrarySupport = found;
+    }
 
     protected Application application;
     protected ContextScope contextScope;
@@ -141,6 +152,11 @@ public class RoboModule extends AbstractModule {
 
         requestStaticInjection(Ln.class);
         requestStaticInjection(RoboAsyncTask.class);
+
+        // Compatibility library bindings
+        if(hasCompatibilityLibrarySupport) {
+            bind(FragmentManager.class).toProvider(FragmentManagerProvider.class);
+        }
     }
 
 }

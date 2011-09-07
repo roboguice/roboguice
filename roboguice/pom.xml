@@ -135,7 +135,7 @@
         <dependency>
             <groupId>com.pivotallabs</groupId>
             <artifactId>robolectric</artifactId>
-            <version>0.9.7</version>
+            <version>1.0-RC1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -155,6 +155,11 @@
             <artifactId>jsr305</artifactId>
             <version>1.3.9</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v13</artifactId>
+            <version>r3</version>
         </dependency>
 
     </dependencies>

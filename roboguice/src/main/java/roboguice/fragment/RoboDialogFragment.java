@@ -16,6 +16,6 @@ public abstract class RoboDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectViewMembers(view);
+        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
     }
 }

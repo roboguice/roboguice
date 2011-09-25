@@ -1,12 +1,15 @@
 package roboguice.service;
 
 import com.xtremelabs.robolectric.RobolectricTestRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import roboguice.inject.InjectView;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.view.View;
 
 import javax.inject.Inject;
 
@@ -18,7 +21,7 @@ public class ServiceInjectionTest {
 
     @Test
     public void shouldBeAbleToInjectInRoboService() {
-        final MyRoboService roboService = new MyRoboService();
+        final RoboServiceA roboService = new RoboServiceA();
         roboService.onCreate();
 
         assertThat( roboService.context, equalTo((Context)roboService) );
@@ -26,13 +29,20 @@ public class ServiceInjectionTest {
 
     @Test
     public void shouldBeAbleToInjectInRoboIntentService() {
-        final MyRoboIntentService roboService = new MyRoboIntentService("");
+        final RoboIntentServiceA roboService = new RoboIntentServiceA("");
         roboService.onCreate();
 
         assertThat( roboService.context, equalTo((Context)roboService) );
     }
 
-    static public class MyRoboService extends RoboService {
+    @Ignore("This isn't supported just yet")
+    @Test(expected=UnsupportedOperationException.class)
+    public void shouldNotAllowViewsInServices() {
+        final RoboServiceB roboService = new RoboServiceB();
+        roboService.onCreate();
+    }
+
+    static public class RoboServiceA extends RoboService {
         @Inject Context context;
 
         @Override
@@ -41,10 +51,10 @@ public class ServiceInjectionTest {
         }
     }
 
-    static public class MyRoboIntentService extends RoboIntentService {
+    static public class RoboIntentServiceA extends RoboIntentService {
         @Inject Context context;
 
-        public MyRoboIntentService(String name) {
+        public RoboIntentServiceA(String name) {
             super(name);
         }
 
@@ -52,4 +62,14 @@ public class ServiceInjectionTest {
         protected void onHandleIntent(Intent intent) {
         }
     }
+
+    static public class RoboServiceB extends RoboService {
+        @InjectView(100) View v;
+
+        @Override
+        public IBinder onBind(Intent intent) {
+            return null;
+        }
+    }
+
 }

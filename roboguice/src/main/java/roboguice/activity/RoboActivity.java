@@ -19,6 +19,7 @@ import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
+import roboguice.inject.RoboInjector;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -63,9 +64,9 @@ public class RoboActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = RoboGuice.getInjector(this);
+        final RoboInjector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
-        injector.injectMembers(this);
+        injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
     }

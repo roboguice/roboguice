@@ -20,14 +20,13 @@ import roboguice.activity.event.*;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.PreferenceListener;
+import roboguice.inject.RoboInjector;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
-
-import com.google.inject.Injector;
 
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
@@ -49,10 +48,10 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
     /** {@inheritDoc } */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = RoboGuice.getInjector(this);
+        final RoboInjector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         preferenceListener = injector.getInstance(PreferenceListener.class);
-        injector.injectMembers(this);
+        injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
     }

@@ -232,6 +232,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
 
     @Override
     public void injectMembers(Object instance) {
+        injectMembersWithoutViews(instance);
+        injectViewMembers(instance);
+    }
+
+    public void injectMembersWithoutViews( Object instance ) {
         synchronized (ContextScope.class) {
             scope.enter(context);
             try {
@@ -244,6 +249,7 @@ public class ContextScopedRoboInjector implements RoboInjector {
             if( instance instanceof View )
                 injectViewMembers(instance);
         }
+
     }
 
     @Override

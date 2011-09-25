@@ -19,13 +19,13 @@ import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
+import roboguice.inject.RoboInjector;
 
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.google.android.maps.MapActivity;
-import com.google.inject.Injector;
 
 /**
  * A {@link RoboMapActivity} extends from {@link MapActivity} to provide
@@ -40,9 +40,9 @@ public abstract class RoboMapActivity extends MapActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = RoboGuice.getInjector(this);
+        final RoboInjector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
-        injector.injectMembers(this);
+        injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
         eventManager.fire(new OnCreateEvent(savedInstanceState));
     }

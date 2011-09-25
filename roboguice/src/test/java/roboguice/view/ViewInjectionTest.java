@@ -58,9 +58,7 @@ public class ViewInjectionTest {
             ref.setId(101);
             addView(ref);
 
-            //BUG simplify this
             RoboGuice.getInjector(getContext()).injectMembers(this);
-            RoboGuice.getInjector(getContext()).injectViewMembers(this);
         }
     }
 }

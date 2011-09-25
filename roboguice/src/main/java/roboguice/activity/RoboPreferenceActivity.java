@@ -18,7 +18,6 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
-import roboguice.inject.ContextScope;
 import roboguice.inject.PreferenceListener;
 import roboguice.inject.RoboInjector;
 
@@ -107,7 +106,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
             eventManager.fire(new OnDestroyEvent());
         } finally {
             try {
-                RoboGuice.getInjector(this).getInstance(ContextScope.class).destroy(this);
+                RoboGuice.destroyInjector(this);
             } finally {
                 super.onDestroy();
             }

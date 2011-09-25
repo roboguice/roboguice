@@ -18,7 +18,6 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
-import roboguice.inject.ContextScope;
 import roboguice.inject.RoboInjector;
 
 import android.content.Intent;
@@ -83,7 +82,7 @@ public class RoboFragmentActivity extends FragmentActivity {
             eventManager.fire(new OnDestroyEvent());
         } finally {
             try {
-                RoboGuice.getInjector(this).getInstance(ContextScope.class).destroy(this);
+                RoboGuice.destroyInjector(this);
             } finally {
                 super.onDestroy();
             }

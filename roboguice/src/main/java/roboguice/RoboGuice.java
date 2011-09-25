@@ -6,7 +6,10 @@ import roboguice.inject.*;
 import android.app.Application;
 import android.content.Context;
 
-import com.google.inject.*;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.Stage;
 import com.google.inject.spi.DefaultElementVisitor;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.Elements;
@@ -141,5 +144,9 @@ public class RoboGuice {
             }
         }
         return viewListener;
+    }
+
+    public static void destroyInjector(Context context) {
+        getInjector(context).getInstance(ContextScope.class).destroy(context);
     }
 }

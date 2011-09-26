@@ -1,7 +1,6 @@
 package roboguice.service;
 
 import com.xtremelabs.robolectric.RobolectricTestRunner;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.inject.InjectView;
@@ -35,7 +34,6 @@ public class ServiceInjectionTest {
         assertThat( roboService.context, equalTo((Context)roboService) );
     }
 
-    @Ignore("This isn't supported just yet")
     @Test(expected=UnsupportedOperationException.class)
     public void shouldNotAllowViewsInServices() {
         final RoboServiceB roboService = new RoboServiceB();

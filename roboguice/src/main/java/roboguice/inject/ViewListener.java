@@ -16,6 +16,7 @@
 package roboguice.inject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -85,11 +86,14 @@ public class ViewListener implements TypeListener {
 
             Object value = activityOrFragmentOrView;
 
+            if( value instanceof Context && !(value instanceof Activity ))
+                throw new UnsupportedOperationException("Can't inject view into a non-Activity context");
+
             try {
                 final int[] viewIds = annotation.value();
                 
                 if( viewIds.length<1 )
-                    throw new NullPointerException(String.format("Cant inject view into %s.%s when view id is not specified", field.getDeclaringClass(), field.getName()));
+                    throw new NullPointerException(String.format("Can't inject view into %s.%s when view id is not specified", field.getDeclaringClass(), field.getName()));
 
                 for (int viewId : viewIds)
                     value = value instanceof View ? ((View) value).findViewById(viewId) : value instanceof Fragment ? ((Fragment)value).getView().findViewById(viewId) : ((Activity) value).findViewById(viewId);

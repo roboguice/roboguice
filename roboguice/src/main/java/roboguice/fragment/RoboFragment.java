@@ -10,7 +10,7 @@ public abstract class RoboFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectMembers(this);
+        RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
     }
 
     @Override

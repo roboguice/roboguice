@@ -16,9 +16,7 @@ import android.R;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.Preference;
-import android.preference.PreferenceScreen;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -26,9 +24,7 @@ import android.widget.TextView;
 
 import com.google.inject.*;
 
-import javax.annotation.Nullable;
 import java.lang.ref.SoftReference;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
@@ -171,11 +167,27 @@ public class ActivityInjectionTest {
         future.get();
     }
 
+    @Test
+    public void shouldBeAbleToInjectViewsIntoPojos() {
+        final E activity = new E();
+        activity.onCreate(null);
+        assertThat(activity.a.v,equalTo(activity.ref));
+    }
+
 
     public static class E extends RoboActivity {
+
+        @Inject PojoA a;
+
+        View ref;
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+
+            ref = new View(this);
+            ref.setId(100);
+            setContentView(ref);
         }
     }
 
@@ -217,43 +229,6 @@ public class ActivityInjectionTest {
             textView.setId(R.id.text2);
             textView.setText(stringResId);
             return container;
-        }
-    }
-
-    public static class DummyPreferenceActivity extends RoboPreferenceActivity {
-        @Nullable @InjectPreference("xxx") protected Preference pref;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            final PreferenceScreen screen = createNewPreferenceScreen();
-
-            final Preference p = new CheckBoxPreference(this);
-            p.setKey("xxx");
-
-            screen.addPreference(p);
-
-            setPreferenceScreen(screen);
-        }
-
-        protected PreferenceScreen createNewPreferenceScreen() {
-
-            try {
-                final Constructor<PreferenceScreen> c = PreferenceScreen.class.getDeclaredConstructor();
-                c.setAccessible(true);
-                @SuppressWarnings({"UnnecessaryLocalVariable"}) final PreferenceScreen screen = c.newInstance();
-
-                /*
-                final Method m = PreferenceScreen.class.getMethod("onAttachedToHierarchy");
-                m.setAccessible(true);
-                m.invoke(this);
-                */
-
-                return screen;
-                
-            } catch( Exception e ) {
-                throw new RuntimeException(e);
-            }
         }
     }
 
@@ -359,5 +334,9 @@ public class ActivityInjectionTest {
             super.onCreate(savedInstanceState);
             setContentView(new LinearLayout(this));
         }
+    }
+
+    public static class PojoA {
+        @InjectView(100) View v;
     }
 }

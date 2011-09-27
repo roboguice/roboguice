@@ -13,6 +13,7 @@ import roboguice.activity.ActivityInjectionTest.ModuleD.D;
 import roboguice.inject.*;
 
 import android.R;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -114,6 +115,14 @@ public class ActivityInjectionTest {
         c.onCreate(null);
     }
 
+    @Test
+    public void shouldInjectApplication() {
+        
+        final G g = new G();
+        g.onCreate(null);
+
+        assertThat(g.application, equalTo(Robolectric.application));
+    }
 
     @Test
     public void shouldAllowBackgroundThreadsToFinishUsingContextAfterOnDestroy() throws Exception {
@@ -338,5 +347,15 @@ public class ActivityInjectionTest {
 
     public static class PojoA {
         @InjectView(100) View v;
+    }
+
+
+    public static class G extends RoboActivity {
+        @Inject Application application;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
     }
 }

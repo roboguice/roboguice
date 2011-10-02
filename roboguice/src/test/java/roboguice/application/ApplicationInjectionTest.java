@@ -1,26 +1,25 @@
 package roboguice.application;
 
 import com.xtremelabs.robolectric.Robolectric;
-import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
 import roboguice.RobolectricRoboTestRunner;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.google.inject.Inject;
 
 import java.util.Random;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricRoboTestRunner.class)
 public class ApplicationInjectionTest {
-
-    @Before
-    public void setup() {
-    }
 
     @Test
     public void shouldBeAbleToInjectIntoApplication() {
@@ -28,14 +27,24 @@ public class ApplicationInjectionTest {
         Robolectric.application.onCreate();
 
         final AppA a = (AppA)Robolectric.application;
-        //assertThat( a.context, equalTo((Context)a) );
         assertNotNull(a.random);
     }
 
 
+    @Ignore("Gah, isn't supported yet")
+    @Test
+    public void shouldBeAbleToInjectContextScopedItemsIntoApplication() {
+        Robolectric.application = new AppB();
+        Robolectric.application.onCreate();
+
+        final AppB a = (AppB)Robolectric.application;
+        assertThat( a.context, equalTo((Context)a) );
+    }
+
+
+
 
     public static class AppA extends Application {
-        //@Inject Context context; // ContextScoped injection is not yet supported
         @Inject Random random;
 
         @Override
@@ -44,4 +53,16 @@ public class ApplicationInjectionTest {
             RoboGuice.getInjector(this).injectMembers(this);
         }
     }
+
+    public static class AppB extends Application {
+        @Inject Context context;
+
+        @Override
+        public void onCreate() {
+            super.onCreate();
+            RoboGuice.getInjector(this).injectMembers(this);
+        }
+    }
+
+
 }

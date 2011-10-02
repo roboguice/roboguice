@@ -1,7 +1,6 @@
 package roboguice.fragment;
 
 import junit.framework.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RobolectricRoboTestRunner;
@@ -30,7 +29,6 @@ public class FragmentInjectionTest {
         Assert.assertNotNull(new FragmentActivity().getApplicationContext());
     }
 
-    @Ignore("My FragmentManagerImpl shadow doesn't work yet")
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
         final RoboFragmentActivityA activity = new RoboFragmentActivityA();

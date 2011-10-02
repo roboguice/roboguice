@@ -1,10 +1,11 @@
-package roboguice.shadow;
+package android.support.v4.app;
 
 import com.xtremelabs.robolectric.internal.Implementation;
+import com.xtremelabs.robolectric.internal.Implements;
 
 import android.support.v4.app.FragmentTransaction;
 
-//@Implements(FragmentManagerImpl.class) This implements FragmentManagerImpl.class, but FragmentManagerImpl.class is not public so we can't reference it directly
+@Implements(FragmentManagerImpl.class)
 public class ShadowFragmentManagerImpl {
 
     @Implementation

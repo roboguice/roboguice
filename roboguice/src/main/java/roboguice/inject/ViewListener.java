@@ -82,12 +82,15 @@ public class ViewListener implements TypeListener {
          */
         public void injectMembers(T instance) {
             synchronized (ViewMembersInjector.class) {
-                final Activity activity = activityProvider.get(); // BUG need to do same for fragments
+                final Activity activity = activityProvider.get();
 
                 ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activity);
                 if( injectors ==null ) {
                     injectors = new ArrayList<ViewMembersInjector<?>>();
                     viewMembersInjectors.put(activity, injectors);
+
+                    if( instance instanceof Fragment )
+                        viewMembersInjectors.put(instance,injectors);
                 }
                 injectors.add(this);
                 this.instanceRef = new WeakReference<T>(instance);

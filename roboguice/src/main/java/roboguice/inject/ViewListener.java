@@ -46,6 +46,8 @@ public class ViewListener implements TypeListener {
                         throw new UnsupportedOperationException("Views may not be statically injected");
                     else if( !View.class.isAssignableFrom(field.getType()))
                         throw new UnsupportedOperationException("You may only use @InjectView on fields descended from type View");
+                    else if( Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
+                        throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
                     else
                         typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class), typeEncounter.getProvider(Activity.class)));
 

@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.view.View;
 
+import com.google.inject.ConfigurationException;
+
 import javax.inject.Inject;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -34,7 +36,7 @@ public class ServiceInjectionTest {
         assertThat( roboService.context, equalTo((Context)roboService) );
     }
 
-    @Test(expected=UnsupportedOperationException.class)
+    @Test(expected=ConfigurationException.class)
     public void shouldNotAllowViewsInServices() {
         final RoboServiceB roboService = new RoboServiceB();
         roboService.onCreate();

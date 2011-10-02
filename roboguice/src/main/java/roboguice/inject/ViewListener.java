@@ -21,11 +21,13 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.google.inject.MembersInjector;
+import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
 import javax.inject.Singleton;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -45,14 +47,10 @@ public class ViewListener implements TypeListener {
                     else if( !View.class.isAssignableFrom(field.getType()))
                         throw new UnsupportedOperationException("You may only use @InjectView on fields descended from type View");
                     else
-                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class)));
+                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class), typeEncounter.getProvider(Activity.class)));
 
     }
 
-
-    public void injectViews(Object instance) {
-        ViewMembersInjector.injectViews(instance);
-    }
 
 
 
@@ -65,28 +63,48 @@ public class ViewListener implements TypeListener {
 
         protected Field field;
         protected InjectView annotation;
+        protected WeakReference<T> instanceRef;
+        protected Provider<Activity> activityProvider;
 
-        public ViewMembersInjector(Field field, InjectView annotation) {
+        public ViewMembersInjector(Field field, InjectView annotation, Provider<Activity> activityProvider ) {
             this.field = field;
             this.annotation = annotation;
+            this.activityProvider = activityProvider;
         }
 
-        public void injectMembers(T activityOrFragmentOrView) {
+        /**
+         * This is called when instance is injected by guice.  Because the views may or may not be set up yet,
+         * we don't do the real view injection until later.
+         *
+         * @param instance the instance being injected by guice
+         */
+        public void injectMembers(T instance) {
             synchronized (ViewMembersInjector.class) {
-                ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activityOrFragmentOrView);
+                final Activity activity = activityProvider.get(); // BUG need to do same for fragments
+
+                ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activity);
                 if( injectors ==null ) {
                     injectors = new ArrayList<ViewMembersInjector<?>>();
-                    viewMembersInjectors.put(activityOrFragmentOrView, injectors);
+                    viewMembersInjectors.put(activity, injectors);
                 }
                 injectors.add(this);
+                this.instanceRef = new WeakReference<T>(instance);
             }
         }
 
-        public void reallyInjectMembers(Object activityOrFragmentOrView) {
+        /**
+         * This is when the view references are actually evaluated.
+         * @param activityOrFragment an activity or fragment
+         */
+        public void reallyInjectMembers(Object activityOrFragment) {
 
-            Object value = activityOrFragmentOrView;
+            final T instance = instanceRef.get();
+            if( instance==null )
+                return;
 
-            if( value instanceof Context && !(value instanceof Activity ))
+            Object view = activityOrFragment;
+
+            if( view instanceof Context && !(view instanceof Activity ))
                 throw new UnsupportedOperationException("Can't inject view into a non-Activity context");
 
             try {
@@ -96,29 +114,30 @@ public class ViewListener implements TypeListener {
                     throw new NullPointerException(String.format("Can't inject view into %s.%s when view id is not specified", field.getDeclaringClass(), field.getName()));
 
                 for (int viewId : viewIds)
-                    value = value instanceof View ? ((View) value).findViewById(viewId) : value instanceof Fragment ? ((Fragment)value).getView().findViewById(viewId) : ((Activity) value).findViewById(viewId);
+                    view = view instanceof View ? ((View) view).findViewById(viewId) : view instanceof Fragment ? ((Fragment)view).getView().findViewById(viewId) : ((Activity)activityOrFragment).findViewById(viewId);
 
-                if (value == activityOrFragmentOrView && Nullable.notNullable(field))
+                if (view == activityOrFragment && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
                 field.setAccessible(true);
-                field.set(activityOrFragmentOrView, value);
+                field.set(instance, view);
 
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
 
             } catch (IllegalArgumentException f) {
-                throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
-                        field.getType(), field.getName()));
+                throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", view != null ? view.getClass() : "(null)", view,
+                        field.getType(), field.getName()), f);
             }
         }
 
-        protected static void injectViews(Object instance) {
+        protected static void injectViews(Object activityOrFragment) {
             synchronized ( ViewMembersInjector.class ) {
-                final ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(instance);
+
+                final ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activityOrFragment);
                 if(injectors!=null)
                     for(ViewMembersInjector<?> viewMembersInjector : injectors)
-                        viewMembersInjector.reallyInjectMembers(instance);
+                        viewMembersInjector.reallyInjectMembers(activityOrFragment);
             }
         }
 

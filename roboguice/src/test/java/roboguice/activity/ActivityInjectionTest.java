@@ -19,7 +19,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -71,12 +70,6 @@ public class ActivityInjectionTest {
     @Test
     public void shouldInjectStringResource() {
         assertThat(activity.cancel,is("Cancel"));
-    }
-
-    @Test
-    public void shouldInjectViewsIntoViews() {
-        final InjectedView v = new InjectedView(activity);
-        assertThat(v.v,equalTo(v.child));
     }
 
     @Test
@@ -175,32 +168,6 @@ public class ActivityInjectionTest {
 
         future.get();
     }
-
-    @Test
-    public void shouldBeAbleToInjectViewsIntoPojos() {
-        final E activity = new E();
-        activity.onCreate(null);
-        assertThat(activity.a.v,equalTo(activity.ref));
-    }
-
-
-    public static class E extends RoboActivity {
-
-        @Inject PojoA a;
-
-        View ref;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            ref = new View(this);
-            ref.setId(100);
-            setContentView(ref);
-        }
-    }
-
-
 
     public static class DummyActivity extends RoboActivity {
         @Inject protected String emptyString;
@@ -317,21 +284,6 @@ public class ActivityInjectionTest {
         @Override
         protected void onDestroy() {
             super.onDestroy();
-        }
-    }
-
-    public class InjectedView extends FrameLayout {
-        @InjectView(100) View v;
-
-        View child;
-
-        public InjectedView(Context context) {
-            super(context);
-            child = new View(context);
-            child.setId(100);
-            addView(child);
-
-            RoboGuice.getInjector(context).injectMembers(this);
         }
     }
 

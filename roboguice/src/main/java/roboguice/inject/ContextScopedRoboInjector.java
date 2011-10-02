@@ -3,7 +3,6 @@ package roboguice.inject;
 import roboguice.inject.ViewListener.ViewMembersInjector;
 
 import android.content.Context;
-import android.view.View;
 
 import com.google.inject.*;
 import com.google.inject.spi.TypeConverterBinding;
@@ -233,7 +232,7 @@ public class ContextScopedRoboInjector implements RoboInjector {
     @Override
     public void injectMembers(Object instance) {
         injectMembersWithoutViews(instance);
-        injectViewMembers(instance);
+        injectViewMembers(context);
     }
 
     public void injectMembersWithoutViews( Object instance ) {
@@ -244,12 +243,7 @@ public class ContextScopedRoboInjector implements RoboInjector {
             }finally {
                 scope.exit(context);
             }
-
-            // Sort of weird.  If instance is a view, assume we also want to evalute any @InjectView() annotations now rather than later
-            if( instance instanceof View )
-                injectViewMembers(instance);
         }
-
     }
 
     @Override

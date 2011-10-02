@@ -14,7 +14,11 @@ import android.widget.LinearLayout;
 
 import com.google.inject.Inject;
 
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
@@ -22,24 +26,70 @@ public class ViewInjectionTest {
 
     @Test
     public void shouldInjectViewsIntoActivitiesAndViews() {
-        final RoboActivityA a = new RoboActivityA();
-        a.onCreate(null);
+        final C activity = new C();
+        activity.onCreate(null);
 
-        assertThat( a.v, equalTo((View)a.ref));
-        assertThat( a.v.w, equalTo(a.v.ref) );
+        assertThat( activity.v, equalTo((View)activity.ref));
+        assertThat(activity.v.w, equalTo(activity.v.ref));
     }
 
 
     @Test
     public void shouldBeAbleToInjectViewsIntoPojos() {
-        final E activity = new E();
+        final B activity = new B();
         activity.onCreate(null);
         assertThat(activity.a.v,equalTo(activity.ref));
     }
 
 
 
-    public static class E extends RoboActivity {
+    @Test
+    public void shouldNotHoldReferencesToContext() {
+        final SoftReference<A> activityRef = new SoftReference<A>(new A());
+        activityRef.get().onCreate(null);
+
+        assertThat(activityRef.get(), not(equalTo(null)));
+        assertThat(activityRef.get().v, not(equalTo(null)));
+
+        activityRef.get().onDestroy();
+
+        // Force an OoM
+        // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
+        try {
+            @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"}) final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
+            //noinspection InfiniteLoopStatement
+            while(true)
+                allocations.add( new Object[(int) Runtime.getRuntime().maxMemory()] );
+        } catch( OutOfMemoryError e ) {
+            // great!
+        }
+
+        assertThat(activityRef.get(), equalTo(null));
+
+    }
+
+
+    public static class A extends RoboActivity {
+        @InjectView(100) protected View v;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            final View x = new View(this);
+            x.setId(100);
+            setContentView(x);
+        }
+
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+        }
+    }
+
+
+
+    public static class B extends RoboActivity {
 
         @Inject PojoA a;
 
@@ -63,7 +113,7 @@ public class ViewInjectionTest {
 
 
 
-    public static class RoboActivityA extends RoboActivity {
+    public static class C extends RoboActivity {
         @InjectView(100) ViewA v;
         
         LinearLayout ref;

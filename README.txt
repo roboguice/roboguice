@@ -1,20 +1,37 @@
-We use maven to build roboguice.
+RoboGuice
+---------
 
-Simply type "mvn clean install" to do a clean build of the various roboguice artifacts, including the astroboy tutorial application.
+Please visit the site  wiki, issue tracker and more at
 
-The first time you build using maven, you will be prompted to locate the android maps.jar library, which due to licensing restrictions isn't available in the public maven repositories.  To help maven locate this dependency, simply point it at the jar in your sdk by running the following command:
+http://roboguice.org
 
-    mvn install:install-file \
-        -DgroupId=com.google.android.maps \
-        -DartifactId=maps \
-        -Dversion=3_r3 \
-        -Dpackaging=jar \
-        -DcreateChecksum=true \
-        -DgeneratePom=true \
-        -Dfile=/path/to/file
+and join the mailing list.
 
-Where /path/to/file is the path to maps.jar in your Android SDK.  If you don't have v3 handy, you can probably point it to just about any version
+https://groups.google.com/forum/#!forum/roboguice
 
+Build source
+------------
 
+We use Apache Maven and the Android Maven Plugin to build roboguice and the sample application.
 
-(PS. Want to start a new android project from scratch using maven? https://github.com/akquinet/android-archetypes/wiki/android-quickstart-archetype )
+- Install Apache Maven from http://maven.apache.org/
+
+- Install the Android SDK
+
+- Install the Android artifacts from the SDK in the Maven repository using the  Maven Android SDK Deployer
+  https://github.com/mosabua/maven-android-sdk-deployer
+
+  This is due maps.jar and the compatibility library not being available in any public repo.
+
+- Run
+  mvn clean install
+  to build roboguice and the sample astroboy.
+
+- Deploy astroboy on a connected devitce/emulator with
+  cd astroboy
+  mvn android:deploy
+  and run it with
+  mvn android:run
+
+Documentation about using the Android Maven Plugin including the sdk deployer, archetypes for project creation,
+issues tracker, mailing list of oon thers users  and more can be found at http://code.google.com/p/maven-android-plugin/

@@ -50,6 +50,8 @@ public class FragmentInjectionTest {
             super.onCreate(savedInstanceState);
 
             ref = new RoboFragmentA();
+            ref.onAttach(this);
+            ref.onCreate(null);
 
             final FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.add(100,ref);

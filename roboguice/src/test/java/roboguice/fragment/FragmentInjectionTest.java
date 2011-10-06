@@ -37,39 +37,94 @@ public class FragmentInjectionTest {
     }
 
 
+    @Test
+    public void shouldBeAbleToInjectViewsIntoActivityAndFragment() {
+        final ActivityB activity = new ActivityB();
+        activity.onCreate(null);
+
+        assertThat(activity.fragmentRef.v, equalTo(activity.fragmentRef.viewRef));
+        assertThat(activity.v, equalTo(activity.viewRef));
+    }
+
+
+
+
+
 
     public static class ActivityA extends RoboFragmentActivity {
-        RoboFragmentA ref;
+        FragmentA ref;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            ref = new RoboFragmentA();
+            ref = new FragmentA();
             ref.onAttach(this);
             ref.onCreate(null);
 
         }
+
+        public static class FragmentA extends RoboFragment {
+            @InjectView(101) View v;
+            @Inject Context context;
+
+            View ref;
+
+            @Override
+            public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+                ref = new View(getActivity());
+                ref.setId(101);
+                return ref;
+            }
+
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+            }
+        }
+
     }
 
-    public static class RoboFragmentA extends RoboFragment {
-        @InjectView(101) View v;
-        @Inject Context context;
+    public static class ActivityB extends RoboFragmentActivity {
+        @InjectView(100) View v;
 
-        View ref;
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            ref = new View(getActivity());
-            ref.setId(101);
-            return ref;
-        }
+        View viewRef;
+        FragmentB fragmentRef;
 
         @Override
-        public void onCreate(Bundle savedInstanceState) {
+        protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
+            viewRef =  new View(this);
+            viewRef.setId(100);
+            setContentView(viewRef);
+
+            fragmentRef = new FragmentB();
+            fragmentRef.onAttach(this);
+            fragmentRef.onCreate(null);
+
         }
+
+        public static class FragmentB extends RoboFragment {
+            @InjectView(101) View v;
+
+            View viewRef;
+
+            @Override
+            public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+                viewRef = new View(getActivity());
+                viewRef.setId(101);
+                return viewRef;
+            }
+
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
+            }
+        }
+
     }
 
 }

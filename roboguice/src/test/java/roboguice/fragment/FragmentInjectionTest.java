@@ -10,8 +10,6 @@ import roboguice.inject.InjectView;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +29,7 @@ public class FragmentInjectionTest {
 
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
-        final RoboFragmentActivityA activity = new RoboFragmentActivityA();
+        final ActivityA activity = new ActivityA();
         activity.onCreate(null);
 
         assertThat(activity.ref.v, equalTo(activity.ref.ref));
@@ -40,9 +38,7 @@ public class FragmentInjectionTest {
 
 
 
-    public static class RoboFragmentActivityA extends RoboFragmentActivity {
-        @Inject FragmentManager fragmentManager;
-
+    public static class ActivityA extends RoboFragmentActivity {
         RoboFragmentA ref;
 
         @Override
@@ -53,9 +49,6 @@ public class FragmentInjectionTest {
             ref.onAttach(this);
             ref.onCreate(null);
 
-            final FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.add(100,ref);
-            transaction.commit();
         }
     }
 

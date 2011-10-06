@@ -84,15 +84,26 @@ public class ViewListener implements TypeListener {
             synchronized (ViewMembersInjector.class) {
                 final Activity activity = activityProvider.get();
 
+                // Add a view injector for the activity
                 ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activity);
                 if( injectors ==null ) {
                     injectors = new ArrayList<ViewMembersInjector<?>>();
                     viewMembersInjectors.put(activity, injectors);
-
-                    if( instance instanceof Fragment )
-                        viewMembersInjectors.put(instance,injectors);
                 }
                 injectors.add(this);
+
+
+                // Add a view injector for the fragment, if appropriate
+                if( instance instanceof Fragment ) {
+                    injectors = viewMembersInjectors.get(instance);
+                    if( injectors ==null ) {
+                        injectors = new ArrayList<ViewMembersInjector<?>>();
+                        viewMembersInjectors.put(instance, injectors);
+                    }
+                    injectors.add(this);
+                }
+
+
                 this.instanceRef = new WeakReference<T>(instance);
             }
         }

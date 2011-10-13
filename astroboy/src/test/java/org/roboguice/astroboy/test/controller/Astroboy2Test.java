@@ -46,7 +46,6 @@ public class Astroboy2Test {
     public void brushingTeethShouldCausePhoneToVibrate() {
         // tell easymock what we expect, then switch easymock to "replay" mode: http://easymock.org/EasyMock3_0_Documentation.html
         vibratorMock.vibrate(aryEq(new long[]{0, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50}), eq(-1));
-        expectLastCall().once();
         replay(vibratorMock);
         
 

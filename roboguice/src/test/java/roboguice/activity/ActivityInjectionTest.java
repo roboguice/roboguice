@@ -40,7 +40,7 @@ public class ActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleA());
+        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         activity = new DummyActivity();
         activity.setIntent( new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober") );
         activity.onCreate(null);
@@ -89,21 +89,21 @@ public class ActivityInjectionTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
-        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleB());
+        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
         final B b = new B();
         b.onCreate(null);
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
-        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleD());
+        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
         final D d = new D();
         d.onCreate(null);
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
-        RoboGuice.setApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.createNewDefaultRoboModule(Robolectric.application), new ModuleC());
+        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
         final C c = new C();
         c.onCreate(null);
     }

@@ -24,7 +24,7 @@ public class ContextScopeTest {
     @Test
     public void shouldHaveContextInScopeMapAfterOnCreate() throws Exception {
         final A a = new A();
-        final ContextScope scope = RoboGuice.getApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
+        final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
 
         assertThat(scope.getScopedObjectMap(a).size(), equalTo(0));
         a.onCreate(null);
@@ -41,7 +41,7 @@ public class ContextScopeTest {
     @Test
     public void shouldHaveTwoItemsInScopeMapAfterOnCreate() throws Exception {
         final B b = new B();
-        final ContextScope scope = RoboGuice.getApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
+        final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
 
         assertThat(scope.getScopedObjectMap(b).size(), equalTo(0));
         b.onCreate(null);

@@ -45,11 +45,11 @@ import com.google.inject.name.Names;
  * If you wish to add your own bindings, DO NOT subclass this class.  Instead, create a new
  * module that extends AbstractModule with your own bindings, then do something like the following:
  *
- * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.createNewDefaultRoboModule(app)).with(new MyModule() );
+ * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
  *
  * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
- * @see roboguice.RoboGuice#setApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
- * @see roboguice.RoboGuice#createNewDefaultRoboModule(android.app.Application)
+ * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+ * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
  * @see roboguice.RoboGuice#DEFAULT_STAGE
  *
  * @author Mike Burton

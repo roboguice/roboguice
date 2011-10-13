@@ -19,6 +19,15 @@ import java.util.ArrayList;
 import java.util.WeakHashMap;
 
 /**
+ *
+ * Manages injectors for RoboGuice applications.
+ *
+ * There are two types of injectors:
+ *
+ * 1. The base application injector, which is not typically used directly by the user.
+ * 2. The ContextScopedInjector, which is obtained by calling {@link #getInjector(android.content.Context)}, and knows about
+ *    your current context, whether it's an activity, service, or something else.
+ * 
  * BUG hashmap should also key off of stage and modules list
  */
 @SuppressWarnings({"ALL"})
@@ -35,7 +44,7 @@ public class RoboGuice {
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
-    public static Injector getApplicationInjector(Application application) {
+    public static Injector getBaseApplicationInjector(Application application) {
         Injector rtrn = injectors.get(application);
         if( rtrn!=null )
             return rtrn;
@@ -45,7 +54,7 @@ public class RoboGuice {
             if( rtrn!=null )
                 return rtrn;
             
-            return setApplicationInjector(application, DEFAULT_STAGE);
+            return setBaseApplicationInjector(application, DEFAULT_STAGE);
         }
     }
 
@@ -54,15 +63,15 @@ public class RoboGuice {
      * If specifying your own modules, you must include a DefaultRoboModule for most things to work properly.
      * Do something like the following:
      *
-     * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.createNewDefaultRoboModule(app)).with(new MyModule() );
+     * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
      *
      * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
-     * @see roboguice.RoboGuice#setApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
-     * @see roboguice.RoboGuice#createNewDefaultRoboModule(android.app.Application)
+     * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+     * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
      * @see roboguice.RoboGuice#DEFAULT_STAGE
      *
      */
-    public static Injector setApplicationInjector(final Application application, Stage stage, Module... modules) {
+    public static Injector setBaseApplicationInjector(final Application application, Stage stage, Module... modules) {
 
         // Do a little rewriting on the modules first to
         // add static resource injection
@@ -86,13 +95,13 @@ public class RoboGuice {
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
-    public static Injector setApplicationInjector(Application application, Stage stage) {
+    public static Injector setBaseApplicationInjector(Application application, Stage stage) {
 
         synchronized (RoboGuice.class) {
             final int id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
             final String[] moduleNames = id>0 ? application.getResources().getStringArray(id) : new String[]{};
             final ArrayList<Module> modules = new ArrayList<Module>();
-            final DefaultRoboModule defaultRoboModule = createNewDefaultRoboModule(application);
+            final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
 
             modules.add(defaultRoboModule);
 
@@ -105,7 +114,7 @@ public class RoboGuice {
                 throw new RuntimeException(e);
             }
 
-            final Injector rtrn = setApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));
+            final Injector rtrn = setBaseApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));
             injectors.put(application,rtrn);
             return rtrn;
         }
@@ -115,12 +124,12 @@ public class RoboGuice {
 
     public static RoboInjector getInjector(Context context) {
         final Application application = (Application)context.getApplicationContext();
-        return new ContextScopedRoboInjector(context, getApplicationInjector(application), getViewListener(application));
+        return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application), getViewListener(application));
     }
 
 
     
-    public static DefaultRoboModule createNewDefaultRoboModule(final Application application) {
+    public static DefaultRoboModule newDefaultRoboModule(final Application application) {
         return new DefaultRoboModule(application, new ContextScope(), getViewListener(application), getResourceListener(application));
     }
 

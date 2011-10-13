@@ -21,7 +21,7 @@ public abstract class RoboBroadcastReceiver extends BroadcastReceiver {
      */
     @Override
     public final void onReceive(Context context, Intent intent) {
-        final Injector injector = RoboGuice.getApplicationInjector((Application) context.getApplicationContext());
+        final Injector injector = RoboGuice.getBaseApplicationInjector((Application) context.getApplicationContext());
 
         injector.injectMembers(this);
         handleReceive(context, intent);
@@ -34,6 +34,7 @@ public abstract class RoboBroadcastReceiver extends BroadcastReceiver {
      * @param context
      * @param intent
      */
+    @SuppressWarnings("UnusedParameters")
     protected void handleReceive(Context context, Intent intent) {
         // proper template method to handle the receive
     }

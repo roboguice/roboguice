@@ -28,7 +28,7 @@ public abstract class RoboSplashActivity extends Activity {
 
         new Thread(new Runnable() {
             public void run() {
-                // Set up a new thread since app.getApplicationInjector() takes so long
+                // Set up a new thread since app.getBaseApplicationInjector() takes so long
                 // Set the execution context for this thread in case the user
                 // want to use the injector
                 final Application app = getApplication();

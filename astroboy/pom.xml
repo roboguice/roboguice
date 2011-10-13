@@ -9,6 +9,34 @@
     <name>astroboy</name>
 
     <dependencies>
+
+        <!-- REGULAR DEPENDENCIES -->
+        
+        <dependency>
+            <groupId>org.roboguice</groupId>
+            <artifactId>roboguice</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>3.0</version>
+            <classifier>no_aop</classifier>
+        </dependency>
+
+
+        <!-- TEST DEPENDENCIES -->
+
+        <dependency>
+            <groupId>com.pivotallabs</groupId>
+            <artifactId>robolectric</artifactId>
+            <version>1.0-RC1</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <!-- PROVIDED DEPENDENCIES -->
+
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
@@ -16,9 +44,17 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.roboguice</groupId>
-            <artifactId>roboguice</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>  <!-- needed to prevent warnings in robolectric tests -->
+            <groupId>com.google.android.maps</groupId>
+            <artifactId>maps</artifactId>
+            <version>3_r3</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

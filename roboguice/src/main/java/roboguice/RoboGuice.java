@@ -70,6 +70,9 @@ public class RoboGuice {
      * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
      * @see roboguice.RoboGuice#DEFAULT_STAGE
      *
+     * If using this method with test cases, be sure to call {@link roboguice.RoboGuice.util#reset()} in your test teardown methods
+     * to avoid polluting our other tests with your custom injector.  Don't do this in your real application though.
+     *
      */
     public static Injector setBaseApplicationInjector(final Application application, Stage stage, Module... modules) {
 

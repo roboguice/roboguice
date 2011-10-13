@@ -1,6 +1,6 @@
 package roboguice;
 
-import roboguice.config.RoboModule;
+import roboguice.config.DefaultRoboModule;
 import roboguice.inject.*;
 
 import android.app.Application;
@@ -51,7 +51,16 @@ public class RoboGuice {
 
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
-     * If specifying your own modules, you must include a RoboModule for most things to work properly.
+     * If specifying your own modules, you must include a DefaultRoboModule for most things to work properly.
+     * Do something like the following:
+     *
+     * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.createNewDefaultRoboModule(app)).with(new MyModule() );
+     *
+     * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
+     * @see roboguice.RoboGuice#setApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+     * @see roboguice.RoboGuice#createNewDefaultRoboModule(android.app.Application)
+     * @see roboguice.RoboGuice#DEFAULT_STAGE
+     *
      */
     public static Injector setApplicationInjector(final Application application, Stage stage, Module... modules) {
 
@@ -83,9 +92,9 @@ public class RoboGuice {
             final int id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
             final String[] moduleNames = id>0 ? application.getResources().getStringArray(id) : new String[]{};
             final ArrayList<Module> modules = new ArrayList<Module>();
-            final RoboModule roboModule = createNewDefaultRoboModule(application);
+            final DefaultRoboModule defaultRoboModule = createNewDefaultRoboModule(application);
 
-            modules.add(roboModule);
+            modules.add(defaultRoboModule);
 
             try {
                 for (String name : moduleNames) {
@@ -111,8 +120,8 @@ public class RoboGuice {
 
 
     
-    public static RoboModule createNewDefaultRoboModule(final Application application) {
-        return new RoboModule(application, new ContextScope(), getViewListener(application), getResourceListener(application));
+    public static DefaultRoboModule createNewDefaultRoboModule(final Application application) {
+        return new DefaultRoboModule(application, new ContextScope(), getViewListener(application), getResourceListener(application));
     }
 
 

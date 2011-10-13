@@ -46,7 +46,7 @@ public class AstroboyMasterConsole extends RoboActivity {
     // will create a new instance for us using AstroboyRemoteControl's default constructor.
     // Contrast this with Vibrator, which is an Android service that is pre-bound by RoboGuice.
     // Injecting a Vibrator will return a new instance of a Vibrator obtained by calling
-    // context.getSystemService(VIBRATOR_SERVICE).  This is configured in RoboModule, which is
+    // context.getSystemService(VIBRATOR_SERVICE).  This is configured in DefaultRoboModule, which is
     // used by default to configure every RoboGuice injector.
     @Inject AstroboyRemoteControl remoteControl;
     @Inject Vibrator vibrator;

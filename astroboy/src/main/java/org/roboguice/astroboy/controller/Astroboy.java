@@ -32,7 +32,7 @@ public class Astroboy {
     // since the current context may change depending on what activity is using Astroboy
     // at the time.  Instead, inject a Provider of the current context, then we can
     // ask the provider for the context when we need it.
-    // Vibrator is bound to context.getSystemService(VIBRATOR_SERVICE) in RoboModule.
+    // Vibrator is bound to context.getSystemService(VIBRATOR_SERVICE) in DefaultRoboModule.
     // Random has no special bindings, so Guice will create a new instance for us.
     @Inject Provider<Context> contextProvider;
     @Inject Vibrator vibrator;

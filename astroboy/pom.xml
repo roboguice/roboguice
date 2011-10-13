@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.roboguice</groupId>
     <artifactId>astroboy</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>apk</packaging>
     <name>astroboy</name>
 
@@ -52,4 +52,11 @@
             </plugin>
         </plugins>
     </build>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>6</version>
+    </parent>
+
 </project>

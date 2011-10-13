@@ -1,4 +1,4 @@
-package org.roboguice.astroboy.test.controller;
+package org.roboguice.astroboy.controller;
 
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
@@ -7,7 +7,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.roboguice.astroboy.controller.Astroboy;
 import roboguice.RoboGuice;
 
 import android.app.Activity;

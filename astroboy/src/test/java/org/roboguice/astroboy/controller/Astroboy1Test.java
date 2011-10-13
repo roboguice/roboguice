@@ -1,4 +1,4 @@
-package org.roboguice.astroboy.test.controller;
+package org.roboguice.astroboy.controller;
 
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Test;

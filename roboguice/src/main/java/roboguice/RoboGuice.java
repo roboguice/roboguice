@@ -168,4 +168,19 @@ public class RoboGuice {
         getInjector(context).getInstance(ContextScope.class).destroy(context);
         injectors.remove(context);
     }
+    
+    
+    public static class util {
+        private util() {}
+
+        /**
+         * This method is provided to reset RoboGuice in testcases.
+         * It should not be called in a real application.
+         */
+        public static void reset() {
+            injectors.clear();
+            resourceListeners.clear();
+            viewListeners.clear();
+        }
+    }
 }

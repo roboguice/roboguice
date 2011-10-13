@@ -37,8 +37,7 @@ public class Astroboy2Test {
     
     @After
     public void teardown() {
-        // BUG! need to clear our custom injector
-        //RoboGuice.
+        RoboGuice.destroyInjector(Robolectric.application);
     }
     
     @Test

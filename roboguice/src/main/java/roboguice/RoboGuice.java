@@ -166,5 +166,6 @@ public class RoboGuice {
 
     public static void destroyInjector(Context context) {
         getInjector(context).getInstance(ContextScope.class).destroy(context);
+        injectors.remove(context);
     }
 }

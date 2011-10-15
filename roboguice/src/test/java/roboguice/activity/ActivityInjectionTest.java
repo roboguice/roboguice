@@ -47,17 +47,6 @@ public class ActivityInjectionTest {
     }
 
     @Test
-    public void shouldInjectScopedViews() {
-        assertThat((String) activity.scopedTextView1.getText(), is("OK"));
-        assertThat((String) activity.scopedTextView2.getText(), equalTo("Cancel"));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void shouldThrowNullPointerWhenInjectedViewIdIsNotPresent() {
-        new BadInjectViewAnnotationActivity().onCreate(null);
-    }
-
-    @Test
     public void shouldInjectUsingDefaultConstructor() {
         assertThat(activity.emptyString,is(""));
     }
@@ -174,8 +163,6 @@ public class ActivityInjectionTest {
         @InjectView(R.id.text1) protected TextView text1;
         @InjectResource(R.string.cancel) protected String cancel;
         @InjectExtra("foobar") protected String foobar;
-        @InjectView({R.id.summary, R.id.text2}) protected TextView scopedTextView1;
-        @InjectView({R.id.title, R.id.text2}) protected TextView scopedTextView2;
 
         
         @Override
@@ -284,16 +271,6 @@ public class ActivityInjectionTest {
         @Override
         protected void onDestroy() {
             super.onDestroy();
-        }
-    }
-
-    public static class BadInjectViewAnnotationActivity extends RoboActivity {
-        @InjectView({}) protected View badAnnotationView;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(new LinearLayout(this));
         }
     }
 

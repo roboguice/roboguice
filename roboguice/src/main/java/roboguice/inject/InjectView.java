@@ -35,5 +35,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target( { ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
 @BindingAnnotation
 public @interface InjectView {
-    int[] value();
+    int value();
 }

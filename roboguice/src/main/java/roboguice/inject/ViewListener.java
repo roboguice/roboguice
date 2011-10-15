@@ -124,13 +124,9 @@ public class ViewListener implements TypeListener {
                 throw new UnsupportedOperationException("Can't inject view into a non-Activity context");
 
             try {
-                final int[] viewIds = annotation.value();
+                final int viewId = annotation.value();
                 
-                if( viewIds.length<1 )
-                    throw new NullPointerException(String.format("Can't inject view into %s.%s when view id is not specified", field.getDeclaringClass(), field.getName()));
-
-                for (int viewId : viewIds)
-                    view = view instanceof View ? ((View) view).findViewById(viewId) : view instanceof Fragment ? ((Fragment)view).getView().findViewById(viewId) : ((Activity)activityOrFragment).findViewById(viewId);
+                view = view instanceof View ? ((View) view).findViewById(viewId) : view instanceof Fragment ? ((Fragment)view).getView().findViewById(viewId) : ((Activity)activityOrFragment).findViewById(viewId);
 
                 if (view == activityOrFragment && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));

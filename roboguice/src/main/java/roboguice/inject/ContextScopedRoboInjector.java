@@ -234,9 +234,6 @@ public class ContextScopedRoboInjector implements RoboInjector {
     @Override
     public void injectMembers(Object instance) {
         injectMembersWithoutViews(instance);
-        
-        if( context instanceof Activity )
-            injectViewMembers((Activity)context);
     }
 
     public void injectMembersWithoutViews( Object instance ) {

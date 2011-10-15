@@ -29,7 +29,7 @@ public class ViewInjectionTest {
         final C activity = new C();
         activity.onCreate(null);
 
-        assertThat( activity.v, equalTo((View)activity.ref));
+        assertThat(activity.v, equalTo((View)activity.ref));
         assertThat(activity.v.w, equalTo(activity.v.ref));
     }
 
@@ -128,22 +128,24 @@ public class ViewInjectionTest {
             setContentView(ref);
         }
 
+        public static class ViewA extends LinearLayout {
+            @InjectView(101) View w;
 
-    }
+            View ref;
 
-    public static class ViewA extends LinearLayout {
-        @InjectView(101) View w;
+            public ViewA(Context context) {
+                super(context);
 
-        View ref;
-        
-        public ViewA(Context context) {
-            super(context);
+                ref = new View(getContext());
+                ref.setId(101);
+                addView(ref);
 
-            ref = new View(getContext());
-            ref.setId(101);
-            addView(ref);
+                RoboGuice.getInjector(getContext()).injectMembers(this);
+            }
 
-            RoboGuice.getInjector(getContext()).injectMembers(this);
         }
+
+
     }
+
 }

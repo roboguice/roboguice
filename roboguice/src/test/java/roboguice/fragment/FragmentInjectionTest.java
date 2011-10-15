@@ -18,7 +18,6 @@ import com.google.inject.Inject;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricRoboTestRunner.class)
@@ -54,15 +53,11 @@ public class FragmentInjectionTest {
     }
 
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void shouldNotBeAbleToInjectFragmentViewsIntoActivity() {
         final ActivityC activity = new ActivityC();
         activity.onCreate(null);
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
-
-        assertNotNull(activity.fragmentRef.viewRef);
-        assertThat(activity.fragmentRef.v, equalTo(activity.fragmentRef.viewRef));
-        assertNull(activity.v);
 }
 
 
@@ -172,12 +167,6 @@ public class FragmentInjectionTest {
                 viewRef = new View(getActivity());
                 viewRef.setId(101);
                 return viewRef;
-            }
-
-            @Override
-            public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-
             }
         }
 

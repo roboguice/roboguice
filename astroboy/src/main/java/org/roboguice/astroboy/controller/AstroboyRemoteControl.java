@@ -46,7 +46,7 @@ public class AstroboyRemoteControl {
     }
 
     public void say( String something ) {
-        Ln.d("Sent say(%d) command to Astroboy",something);
+        Ln.d("Sent say(%s) command to Astroboy",something);
         astroboy.say(something);
     }
 

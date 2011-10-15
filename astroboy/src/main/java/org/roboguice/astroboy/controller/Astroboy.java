@@ -1,11 +1,10 @@
 package org.roboguice.astroboy.controller;
 
-import android.content.Context;
+import android.app.Application;
 import android.os.Vibrator;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import java.util.Random;
@@ -30,17 +29,16 @@ public class Astroboy {
 
     // Because Astroboy is a Singleton, we can't directly inject the current Context
     // since the current context may change depending on what activity is using Astroboy
-    // at the time.  Instead, inject a Provider of the current context, then we can
-    // ask the provider for the context when we need it.
+    // at the time.  Instead we use the application context.
     // Vibrator is bound to context.getSystemService(VIBRATOR_SERVICE) in DefaultRoboModule.
     // Random has no special bindings, so Guice will create a new instance for us.
-    @Inject Provider<Context> contextProvider;
+    @Inject Application application;
     @Inject Vibrator vibrator;
     @Inject Random random;
 
     public void say(String something) {
         // Make a Toast, using the current context as returned by the Context Provider
-        Toast.makeText(contextProvider.get(), "Astroboy says, \"" + something + "\"", Toast.LENGTH_LONG).show();
+        Toast.makeText(application, "Astroboy says, \"" + something + "\"", Toast.LENGTH_LONG).show();
     }
 
     public void brushTeeth() {

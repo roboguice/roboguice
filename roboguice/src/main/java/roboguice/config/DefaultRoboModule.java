@@ -8,6 +8,7 @@ import roboguice.util.Ln;
 import roboguice.util.RoboAsyncTask;
 import roboguice.util.Strings;
 
+import android.accounts.AccountManager;
 import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Build.VERSION;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -93,6 +95,15 @@ public class DefaultRoboModule extends AbstractModule {
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
         final String androidId = Secure.getString(application.getContentResolver(), Secure.ANDROID_ID);
 
+        // Package Info
+        try {
+            final PackageInfo info = application.getPackageManager().getPackageInfo(application.getPackageName(),0);
+            bind(PackageInfo.class).toInstance(info);
+        } catch( PackageManager.NameNotFoundException e ) {
+            throw new RuntimeException(e);
+        }
+
+
         if(Strings.notEmpty(androidId))
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
 
@@ -120,13 +131,6 @@ public class DefaultRoboModule extends AbstractModule {
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
 
 
-        // Package Info
-        try {
-            final PackageInfo info = application.getPackageManager().getPackageInfo(application.getPackageName(),0);
-            bind(PackageInfo.class).toInstance(info);
-        } catch( PackageManager.NameNotFoundException e ) {
-            throw new RuntimeException(e);
-        }
 
         // System Services
         bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));
@@ -167,6 +171,13 @@ public class DefaultRoboModule extends AbstractModule {
         if(hasCompatibilityLibrarySupport) {
             bind(FragmentManager.class).toProvider(FragmentManagerProvider.class);
         }
+
+        // 2.0 Eclair
+        if( VERSION.SDK_INT>=5 ) {
+            bind(AccountManager.class).toProvider(AccountManagerProvider.class);
+        }
+
+
     }
 
 }

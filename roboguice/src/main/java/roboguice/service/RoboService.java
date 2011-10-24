@@ -68,7 +68,8 @@ public abstract class RoboService extends Service {
     @Override
     public void onDestroy() {
         try {
-            eventManager.fire(new OnDestroyEvent() );
+            if(eventManager!=null) // may be null during test: http://code.google.com/p/roboguice/issues/detail?id=140
+                eventManager.fire(new OnDestroyEvent() );
         } finally {
             try {
                 RoboGuice.destroyInjector(this);

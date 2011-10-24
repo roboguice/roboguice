@@ -23,6 +23,7 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build.VERSION;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -129,6 +130,7 @@ public class DefaultRoboModule extends AbstractModule {
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
         bind(Application.class).toInstance(application);
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
+        bind(Handler.class).toProvider(HandlerProvider.class);
 
 
 

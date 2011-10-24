@@ -1,6 +1,7 @@
 package roboguice.util;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import java.io.InterruptedIOException;
@@ -156,7 +157,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
         public Task(SafeAsyncTask<ResultT> parent) {
             this.parent = parent;
-            this.handler = parent.handler!=null ? parent.handler : new Handler();
+            this.handler = parent.handler!=null ? parent.handler : new Handler(Looper.getMainLooper());
         }
 
         public Void call() throws Exception {

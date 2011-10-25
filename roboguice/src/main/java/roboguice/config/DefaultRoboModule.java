@@ -5,7 +5,6 @@ import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
 import roboguice.util.Ln;
-import roboguice.util.RoboAsyncTask;
 import roboguice.util.Strings;
 
 import android.accounts.AccountManager;
@@ -167,7 +166,6 @@ public class DefaultRoboModule extends AbstractModule {
 
 
         requestStaticInjection(Ln.class);
-        requestStaticInjection(RoboAsyncTask.class);
 
         // Compatibility library bindings
         if(hasCompatibilityLibrarySupport) {

@@ -18,6 +18,7 @@ package roboguice.inject;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 
 import com.google.inject.MembersInjector;
@@ -27,6 +28,7 @@ import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
 import javax.inject.Singleton;
+import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -49,29 +51,41 @@ public class ViewListener implements TypeListener {
                     else if( Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
                         throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
                     else
-                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class), typeEncounter.getProvider(Activity.class)));
+                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class), typeEncounter));
+                
+                
+                else if (field.isAnnotationPresent(InjectFragment.class))
+                    if( Modifier.isStatic(field.getModifiers()) )
+                        throw new UnsupportedOperationException("Fragments may not be statically injected");
+                    else if( !Fragment.class.isAssignableFrom(field.getType()))
+                        throw new UnsupportedOperationException("You may only use @InjectFragment on fields descended from type Fragment");
+                    else if( Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
+                        throw new UnsupportedOperationException("You may only use @InjectFragment in Activity contexts");
+                    else
+                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter));
 
     }
 
 
-
-
-    
-
-
-
+    /**
+     * This class gets twice as many providers as necessary to do its job, look into optimizations in the future if this is a bottleneck
+     */
     public static class ViewMembersInjector<T> implements MembersInjector<T> {
         protected static WeakHashMap<Object,ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>>();
 
         protected Field field;
-        protected InjectView annotation;
+        protected Annotation annotation;
         protected WeakReference<T> instanceRef;
+        protected Provider<FragmentManager> fragmentManagerProvider;
         protected Provider<Activity> activityProvider;
+        
 
-        public ViewMembersInjector(Field field, InjectView annotation, Provider<Activity> activityProvider ) {
+        public ViewMembersInjector(Field field, Annotation annotation, TypeEncounter<T> typeEncounter ) {
             this.field = field;
             this.annotation = annotation;
-            this.activityProvider = activityProvider;
+            this.activityProvider = typeEncounter.getProvider(Activity.class);
+            this.fragmentManagerProvider = typeEncounter.getProvider(FragmentManager.class); 
+
         }
 
         /**
@@ -107,12 +121,19 @@ public class ViewListener implements TypeListener {
                 this.instanceRef = new WeakReference<T>(instance);
             }
         }
+        
+        public void reallyInjectMembers( Object activityOrFragment ) {
+            if( annotation instanceof InjectView )
+                reallyInjectMemberViews(activityOrFragment);
+            else
+                reallyInjectMemberFragments(activityOrFragment);
+        }
 
         /**
          * This is when the view references are actually evaluated.
          * @param activityOrFragment an activity or fragment
          */
-        public void reallyInjectMembers(Object activityOrFragment) {
+        protected void reallyInjectMemberViews(Object activityOrFragment) {
 
             final T instance = instanceRef.get();
             if( instance==null )
@@ -124,9 +145,9 @@ public class ViewListener implements TypeListener {
             View view = null;
 
             try {
-                final int viewId = annotation.value();
+                final int id = ((InjectView)annotation).value();
                 
-                view = activityOrFragment instanceof Fragment ? ((Fragment)activityOrFragment).getView().findViewById(viewId) : ((Activity)activityOrFragment).findViewById(viewId);
+                view = activityOrFragment instanceof Fragment ? ((Fragment)activityOrFragment).getView().findViewById(id) : ((Activity)activityOrFragment).findViewById(id);
 
                 if (view == null && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
@@ -143,6 +164,42 @@ public class ViewListener implements TypeListener {
             }
         }
 
+        /**
+         * This is when the view references are actually evaluated.
+         * @param activityOrFragment an activity or fragment
+         */
+        protected void reallyInjectMemberFragments(Object activityOrFragment) {
+
+            final T instance = instanceRef.get();
+            if( instance==null )
+                return;
+
+            if( activityOrFragment instanceof Context && !(activityOrFragment instanceof Activity ))
+                throw new UnsupportedOperationException("Can't inject fragment into a non-Activity context");
+
+            Fragment fragment = null;
+
+            try {
+                final int id = ((InjectFragment)annotation).value();
+                
+                fragment = fragmentManagerProvider.get().findFragmentById(id);
+
+                if (fragment == null && Nullable.notNullable(field))
+                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
+
+                field.setAccessible(true);
+                field.set(instance, fragment);
+
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+
+            } catch (IllegalArgumentException f) {
+                throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", fragment != null ? fragment.getClass() : "(null)", fragment,
+                        field.getType(), field.getName()), f);
+            }
+        }
+
+        
         protected static void injectViews(Object activityOrFragment) {
             synchronized ( ViewMembersInjector.class ) {
 

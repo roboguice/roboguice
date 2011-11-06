@@ -73,7 +73,7 @@ public class ContextScopeTest {
         }
     }
 
-    @ContextScoped
+    @ContextSingleton
     public static class C {}
 
     public static class D {}

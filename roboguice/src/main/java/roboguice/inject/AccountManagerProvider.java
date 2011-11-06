@@ -5,7 +5,7 @@ import android.content.Context;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-@ContextScoped
+@ContextSingleton
 public class AccountManagerProvider implements Provider<AccountManager> {
     @Inject protected Context context;
 

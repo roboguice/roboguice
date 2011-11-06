@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ContextScoped Observer testing class exercising the various implementation combinations.
+ * ContextSingleton Observer testing class exercising the various implementation combinations.
  *
  * @author John Ericksen
  */

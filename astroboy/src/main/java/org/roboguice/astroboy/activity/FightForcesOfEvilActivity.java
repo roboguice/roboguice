@@ -28,7 +28,7 @@ public class FightForcesOfEvilActivity extends RoboActivity {
     // You can also inject resources such as Strings, Drawables, and Animations
     @InjectResource(R.anim.expletive_animation) Animation expletiveAnimation;
 
-    // AstroboyRemoteControl is annotated as @ContextScoped, so the instance
+    // AstroboyRemoteControl is annotated as @ContextSingleton, so the instance
     // we get in FightForcesOfEvilActivity will be a different instance than
     // the one we got in AstroboyMasterConsole
     //@Inject AstroboyRemoteControl remoteControl;

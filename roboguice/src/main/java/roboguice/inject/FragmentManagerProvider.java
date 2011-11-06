@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-@ContextScoped
+@ContextSingleton
 public class FragmentManagerProvider implements Provider<FragmentManager> {
     @Inject protected Activity activity;
 

@@ -52,7 +52,7 @@ import com.google.inject.Injector;
  * <br />
  * You can have access to the Guice {@link Injector} at any time, by calling
  * {@link #getInjector()}.<br />
- * However, you will not have access to ContextScoped scoped beans until
+ * However, you will not have access to ContextSingleton scoped beans until
  * {@link #onCreate(Bundle)} is called. <br />
  * <br />
  * 

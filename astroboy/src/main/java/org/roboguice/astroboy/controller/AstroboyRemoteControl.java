@@ -1,6 +1,6 @@
 package org.roboguice.astroboy.controller;
 
-import roboguice.inject.ContextScoped;
+import roboguice.inject.ContextSingleton;
 import roboguice.util.Ln;
 
 import android.app.Activity;
@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 /**
  * A class to control Astroboy remotely.
  *
- * This class uses the current context, so we must make it @ContextScoped.
+ * This class uses the current context, so we must make it @ContextSingleton.
  * This means that there will be one AstroboyRemoteControl for every activity or
  * service that requires one.
  * Note that we actually ask for the Activity, rather than the Context (which is
@@ -25,7 +25,7 @@ import com.google.inject.Inject;
  *   - How to inject an Activity instead of a Context (which is really the same thing)
  *   - How to use RoboGuice's convenient and flexible logging facility, Ln.
  */
-@ContextScoped
+@ContextSingleton
 public class AstroboyRemoteControl {
 
 

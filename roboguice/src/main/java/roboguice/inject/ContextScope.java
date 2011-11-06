@@ -123,7 +123,7 @@ public class ContextScope implements Scope {
                     }
                 }
 
-                throw new UnsupportedOperationException(String.format("%s is context-scoped and can't be injected outside of a context scope. Did you intend to make the referencing class @ContextScoped or use ContextScopedProvider instead of Provider?",key.getTypeLiteral().getType()));
+                throw new UnsupportedOperationException(String.format("%s is context-scoped and can't be injected outside of a context scope. Did you intend to make the referencing class @ContextSingleton or use ContextScopedProvider instead of Provider?",key.getTypeLiteral().getType()));
             }
         };
 

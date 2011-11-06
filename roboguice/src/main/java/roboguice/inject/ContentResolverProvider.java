@@ -24,7 +24,7 @@ import android.content.ContentResolver;
  * 
  * @author Mike Burton
  */
-@ContextScoped
+@ContextSingleton
 public class ContentResolverProvider implements Provider<ContentResolver> {
     @Inject
     protected android.content.Context context;

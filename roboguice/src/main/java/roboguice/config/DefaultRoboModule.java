@@ -114,13 +114,13 @@ public class DefaultRoboModule extends AbstractModule {
 
 
 
-        // ContextScoped Scope bindings
-        bindScope(ContextScoped.class, contextScope);
+        // ContextSingleton Scope bindings
+        bindScope(ContextSingleton.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
-        bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>(){})).in(ContextScoped.class);
-        bind(Activity.class).toProvider(Key.get(new TypeLiteral<NullProvider<Activity>>(){})).in(ContextScoped.class);
-        bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>(){})).in(ContextScoped.class);
+        bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>(){})).in(ContextSingleton.class);
+        bind(Activity.class).toProvider(Key.get(new TypeLiteral<NullProvider<Activity>>(){})).in(ContextSingleton.class);
+        bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>(){})).in(ContextSingleton.class);
 
         
         // Sundry Android Classes

@@ -114,7 +114,7 @@ public class DefaultRoboModule extends AbstractModule {
 
 
 
-        // ContextSingleton Scope bindings
+        // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);

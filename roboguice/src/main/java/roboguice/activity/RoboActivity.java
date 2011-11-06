@@ -18,6 +18,7 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
+import roboguice.inject.ContentViewListener;
 import roboguice.inject.RoboInjector;
 
 import android.app.Activity;
@@ -25,6 +26,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 
 /**
@@ -60,6 +62,8 @@ import com.google.inject.Injector;
  */
 public class RoboActivity extends Activity {
     protected EventManager eventManager;
+
+    @Inject ContentViewListener ignored; // BUG find a better place to put this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

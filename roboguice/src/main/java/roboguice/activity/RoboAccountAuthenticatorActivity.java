@@ -20,12 +20,15 @@ package roboguice.activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
+import roboguice.inject.ContentViewListener;
 import roboguice.inject.RoboInjector;
 
 import android.accounts.AccountAuthenticatorActivity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
+import com.google.inject.Inject;
 
 /**
  * A subclass of {@link AccountAuthenticatorActivity} that provides dependency injection
@@ -35,6 +38,8 @@ import android.os.Bundle;
  */
 public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivity {
     protected EventManager eventManager;
+
+    @Inject ContentViewListener ignored; // BUG find a better place to put this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

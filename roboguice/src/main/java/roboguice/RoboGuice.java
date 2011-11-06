@@ -130,6 +130,14 @@ public class RoboGuice {
         return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application), getViewListener(application));
     }
 
+    /**
+     * A shortcut for RoboGuice.getInjector(context).injectMembers(o);
+     */
+    public static <T> T injectMembers( Context context, T t ) {
+        getInjector(context).injectMembers(t);
+        return t;
+    }
+
 
     
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {

@@ -42,7 +42,7 @@ public class EventManager {
     public <T> void registerObserver( Class<T> event, EventListener listener ) {
         Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) {
-            observers = new HashSet<EventListener<?>>();
+            observers = new LinkedHashSet<EventListener<?>>();
             registrations.put(event, observers);
         }
 

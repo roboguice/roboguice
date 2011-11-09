@@ -141,6 +141,11 @@ public class ShadowFragmentActivity extends ShadowActivity {
                     public int commitAllowingStateLoss() {
                         return 0;
                     }
+
+                    @Override
+                    public FragmentTransaction setCustomAnimations(int i, int i1, int i2, int i3) {
+                        return this;
+                    }
                 };
             }
 
@@ -219,4 +224,6 @@ public class ShadowFragmentActivity extends ShadowActivity {
             }
         };
     }
+
+
 }

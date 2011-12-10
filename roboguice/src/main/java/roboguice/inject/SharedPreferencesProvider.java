@@ -18,6 +18,7 @@ package roboguice.inject;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -28,15 +29,11 @@ import com.google.inject.Provider;
  * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
-    protected static final String DEFAULT = "default";
-
     protected String preferencesName;
 
     @Inject protected Application application;
 
-    public SharedPreferencesProvider() {
-        preferencesName = DEFAULT;
-    }
+    public SharedPreferencesProvider() {}
 
     @Inject
     public SharedPreferencesProvider(PreferencesNameHolder preferencesNameHolder) {
@@ -48,14 +45,14 @@ public class SharedPreferencesProvider implements Provider<SharedPreferences> {
     }
 
     public SharedPreferences get() {
-        return application.getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
+        return preferencesName!=null ? application.getSharedPreferences(preferencesName, Context.MODE_PRIVATE) : PreferenceManager.getDefaultSharedPreferences(application) ;
     }
 
     // http://code.google.com/p/google-guice/wiki/FrequentlyAskedQuestions => How can I inject optional parameters into a constructor?
     public static class PreferencesNameHolder {
         @Inject(optional = true)
         @SharedPreferencesName
-        protected String value = DEFAULT;
+        protected String value;
     }
 
 }

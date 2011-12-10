@@ -4,8 +4,8 @@ import roboguice.RoboGuice;
 import roboguice.inject.ContextScope;
 
 import android.app.Activity;
-import android.app.Application;
 import android.os.Bundle;
+import android.os.Handler;
 
 /**
  * An activity that can be used to display a splash page while initializing the
@@ -27,44 +27,25 @@ public abstract class RoboSplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        final long start = System.currentTimeMillis();
+        final Handler handler = new Handler();
 
-        new Thread(new Runnable() {
+        // Give the UI thread a few ms to display the splash, then initialize roboguice
+        handler.postDelayed(new Runnable() {
+            @Override
             public void run() {
-                // Set up a new thread since app.getBaseApplicationInjector() takes so long
-                // Set the execution context for this thread in case the user
-                // want to use the injector
-                final Application app = getApplication();
                 RoboGuice.getInjector(RoboSplashActivity.this).getInstance(ContextScope.class);
+            }
+        }, 50);
 
-
-                doStuffInBackground(app);
-
-                // Make sure we display splash for MIN_DISPLAY_MS
-                final long duration = System.currentTimeMillis() - start;
-                if (duration < minDisplayMs) {
-                    try {
-                        Thread.sleep(minDisplayMs - duration);
-                    } catch (InterruptedException e) {
-                        Thread.interrupted();
-                    }
-                }
-
+        // Start the next activity and finish this one after minDisplayMs
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
                 startNextActivity();
                 andFinishThisOne();
-
             }
+        },minDisplayMs);
 
-        }).start();
-    }
-
-    /**
-     * Is there anything you want to do in the background? Add it here.
-     * 
-     * @param app
-     */
-    @SuppressWarnings({"UnusedParameters"})
-    protected void doStuffInBackground(Application app) {
     }
 
     /**

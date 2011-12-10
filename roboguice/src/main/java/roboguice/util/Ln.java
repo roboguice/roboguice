@@ -6,8 +6,6 @@ import android.util.Log;
 
 import com.google.inject.Inject;
 
-import java.text.SimpleDateFormat;
-
 /**
  * A more natural android logging facility.
  *
@@ -261,7 +259,7 @@ public class Ln  {
 
         protected String processMessage(String msg) {
             if( config.minimumLogLevel <= Log.DEBUG )
-                msg = String.format("%s %s %s", new SimpleDateFormat("HH:mm:ss.SSS").format(System.currentTimeMillis()), Thread.currentThread().getName(), msg);
+                msg = String.format("%s %s", Thread.currentThread().getName(), msg);
             return msg;
         }
 

@@ -27,7 +27,6 @@ import android.os.PowerManager;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
-import android.support.v4.app.FragmentManager;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
@@ -57,15 +56,14 @@ import com.google.inject.name.Names;
  * @author Mike Burton
  */
 public class DefaultRoboModule extends AbstractModule {
-    protected static final boolean hasCompatibilityLibrarySupport;
+    protected static final Class fragmentManagerClass;
 
     static {
-        boolean found = false;
+        Class c = null;
         try {
-            Class.forName("android.support.v4.app.Fragment");
-            found = true;
+            c = Class.forName("android.support.v4.app.FragmentManager");
         } catch( Exception ignored ) {}
-        hasCompatibilityLibrarySupport = found;
+        fragmentManagerClass = c;
     }
 
     protected Application application;
@@ -168,8 +166,8 @@ public class DefaultRoboModule extends AbstractModule {
         requestStaticInjection(Ln.class);
 
         // Compatibility library bindings
-        if(hasCompatibilityLibrarySupport) {
-            bind(FragmentManager.class).toProvider(FragmentManagerProvider.class);
+        if(fragmentManagerClass!=null) {
+            bind(fragmentManagerClass).toProvider(FragmentManagerProvider.class);
         }
 
         // 2.0 Eclair

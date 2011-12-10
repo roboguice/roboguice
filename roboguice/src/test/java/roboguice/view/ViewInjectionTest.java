@@ -1,6 +1,7 @@
 package roboguice.view;
 
 import com.xtremelabs.robolectric.RobolectricTestRunner;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
@@ -66,6 +67,18 @@ public class ViewInjectionTest {
 
         assertThat(activityRef.get(), equalTo(null));
 
+    }
+
+
+
+    @Ignore("getWindow().getDecoreView() doesn't seem to return the root view in robolectric?")
+    @Test
+    public void shouldBeAbleToInjectReferencesToTaggedViews() {
+        final D activity = new D();
+        activity.onCreate(null);
+
+        assertThat(activity.v, equalTo((View)activity.ref));
+        assertThat(activity.v.w, equalTo(activity.v.ref));
     }
 
 
@@ -138,6 +151,41 @@ public class ViewInjectionTest {
 
                 ref = new View(getContext());
                 ref.setId(101);
+                addView(ref);
+
+                RoboGuice.getInjector(getContext()).injectMembers(this);
+            }
+
+        }
+
+
+    }
+
+    public static class D extends RoboActivity {
+        @InjectView(tag="100") ViewA v;
+
+        LinearLayout ref;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            ref = new ViewA(this);
+            ref.setTag("100");
+
+            setContentView(ref);
+        }
+
+        public static class ViewA extends LinearLayout {
+            @InjectView(tag="101") View w;
+
+            View ref;
+
+            public ViewA(Context context) {
+                super(context);
+
+                ref = new View(getContext());
+                ref.setTag("101");
                 addView(ref);
 
                 RoboGuice.getInjector(getContext()).injectMembers(this);

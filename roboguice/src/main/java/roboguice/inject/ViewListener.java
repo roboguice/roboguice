@@ -145,9 +145,15 @@ public class ViewListener implements TypeListener {
             View view = null;
 
             try {
-                final int id = ((InjectView)annotation).value();
-                
-                view = activityOrFragment instanceof Fragment ? ((Fragment)activityOrFragment).getView().findViewById(id) : ((Activity)activityOrFragment).findViewById(id);
+                final InjectView injectView = (InjectView) annotation;
+                final int id = injectView.value();
+
+                if( id>=0 )
+                    view = activityOrFragment instanceof Fragment ? ((Fragment)activityOrFragment).getView().findViewById(id) : ((Activity)activityOrFragment).findViewById(id);
+
+                else
+                    view = activityOrFragment instanceof Fragment ? ((Fragment)activityOrFragment).getView().findViewWithTag(injectView.tag()) : ((Activity)activityOrFragment).getWindow().getDecorView().findViewWithTag(injectView.tag());
+
 
                 if (view == null && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));

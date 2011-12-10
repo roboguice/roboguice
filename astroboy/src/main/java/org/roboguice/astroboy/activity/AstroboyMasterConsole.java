@@ -39,7 +39,7 @@ public class AstroboyMasterConsole extends RoboActivity {
     @InjectView(R.id.self_destruct) Button selfDestructButton;
     @InjectView(R.id.say_text)      EditText sayText;
     @InjectView(R.id.brush_teeth)   Button brushTeethButton;
-    @InjectView(R.id.fight_evil)    Button fightEvilButton;
+    @InjectView(tag="fightevil")    Button fightEvilButton;     // we can also use tags if we want
 
 
     // Standard Guice injection of Plain Old Java Objects (POJOs)

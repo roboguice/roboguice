@@ -34,6 +34,7 @@
 
     <Button
         android:id="@+id/fight_evil"
+        android:tag="fightevil"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Fight Forces of Evil"

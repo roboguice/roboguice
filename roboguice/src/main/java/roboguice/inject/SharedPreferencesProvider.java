@@ -23,12 +23,18 @@ import android.preference.PreferenceManager;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
+import java.io.File;
+
 /**
+ * To override the name of the file, bindConstant().annotatedWith(SharedPreferencesName.class).to...
  *
+ * @see {@link SharedPreferencesName}
  * @author Mike Burton
  * @author Pierre-Yves Ricau (py.ricau+roboguice@gmail.com)
  */
 public class SharedPreferencesProvider implements Provider<SharedPreferences> {
+    protected static final String ROBOGUICE_1_DEFAULT_FILENAME = "default.xml";
+    
     protected String preferencesName;
 
     @Inject protected Application application;
@@ -45,7 +51,15 @@ public class SharedPreferencesProvider implements Provider<SharedPreferences> {
     }
 
     public SharedPreferences get() {
-        return preferencesName!=null ? application.getSharedPreferences(preferencesName, Context.MODE_PRIVATE) : PreferenceManager.getDefaultSharedPreferences(application) ;
+        
+        // If the user specified an alternate name, OR if the old roboguice 1 file is around, use that
+        if( preferencesName!=null )
+            return application.getSharedPreferences(preferencesName, Context.MODE_PRIVATE);
+
+        if(  new File("shared_prefs/"+ROBOGUICE_1_DEFAULT_FILENAME).canRead() )
+            return application.getSharedPreferences(ROBOGUICE_1_DEFAULT_FILENAME, Context.MODE_PRIVATE);
+
+        return PreferenceManager.getDefaultSharedPreferences(application) ;
     }
 
     // http://code.google.com/p/google-guice/wiki/FrequentlyAskedQuestions => How can I inject optional parameters into a constructor?

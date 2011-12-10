@@ -15,26 +15,34 @@
  */
 package roboguice.inject;
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import com.google.inject.BindingAnnotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import com.google.inject.BindingAnnotation;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Indicates that a variable member of a class (whether static or not) should be
- * injected with an Android resource. The value is compulsory, and correspond to
- * the id of the resource.<br />
- * Usage example:<br /> {@code @InjectResource(R.string.hello) protected String
- * hello;}
- * 
+ * injected with an Android resource.
+ *
+ * The value corresponds to the id of the resource.<br />
+ *
+ * You may specify the name of the resource instead of the id using {@link #name()},
+ * which will use {@link android.content.res.Resources#getIdentifier(String, String, String)} to
+ * resolve the resource by name.
+ *
+ * Usage example:<br />
+ * {@code @InjectResource(R.string.hello) protected String hello;} <br/>
+ * {@code @InjectResource(name="com.myapp:string/hello") protected String hello;}
+ *
  * @author Mike Burton
  */
 @Retention(RUNTIME)
 @Target( { ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
 @BindingAnnotation
 public @interface InjectResource {
-    int value();
+    int value() default -1;
+    String name() default "";
 }

@@ -90,9 +90,9 @@ public class ResourceListener implements TypeListener {
 
             try {
 
-                final int id = annotation.value();
-                final Class<?> t = field.getType();
                 final Resources resources = application.getResources();
+                final int id = getId(resources,annotation);
+                final Class<?> t = field.getType();
 
                 if (String.class.isAssignableFrom(t)) {
                     value = resources.getString(id);
@@ -129,6 +129,11 @@ public class ResourceListener implements TypeListener {
                 throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", value != null ? value.getClass() : "(null)", value,
                         field.getType(), field.getName()));
             }
+        }
+
+        protected int getId(Resources resources, InjectResource annotation) {
+            int id = annotation.value();
+            return id>=0 ? id : resources.getIdentifier(annotation.name(),null,null);
         }
     }
 }

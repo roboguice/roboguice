@@ -9,7 +9,6 @@ import roboguice.service.RoboService;
 import roboguice.util.Ln;
 import roboguice.util.Strings;
 
-import android.accounts.AccountManager;
 import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -59,6 +58,7 @@ import com.google.inject.name.Names;
  */
 public class DefaultRoboModule extends AbstractModule {
     protected static final Class fragmentManagerClass;
+    protected static final Class accountManagerClass;
 
     static {
         Class c = null;
@@ -67,6 +67,15 @@ public class DefaultRoboModule extends AbstractModule {
         } catch( Exception ignored ) {}
         fragmentManagerClass = c;
     }
+
+    static {
+        Class c = null;
+        try {
+            c = Class.forName("android.accounts.AccountManager");
+        } catch( Exception ignored ) {}
+        accountManagerClass = c;
+    }
+
 
     protected Application application;
     protected ContextScope contextScope;
@@ -174,9 +183,10 @@ public class DefaultRoboModule extends AbstractModule {
             bind(fragmentManagerClass).toProvider(FragmentManagerProvider.class);
         }
 
+
         // 2.0 Eclair
         if( VERSION.SDK_INT>=5 ) {
-            bind(AccountManager.class).toProvider(AccountManagerProvider.class);
+            bind(accountManagerClass).toProvider(AccountManagerProvider.class);
         }
 
 

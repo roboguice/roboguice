@@ -1,9 +1,11 @@
 package roboguice.config;
 
+import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
+import roboguice.service.RoboService;
 import roboguice.util.Ln;
 import roboguice.util.Strings;
 
@@ -118,7 +120,9 @@ public class DefaultRoboModule extends AbstractModule {
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
         bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>(){})).in(ContextSingleton.class);
         bind(Activity.class).toProvider(Key.get(new TypeLiteral<NullProvider<Activity>>(){})).in(ContextSingleton.class);
+        bind(RoboActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboActivity>>(){})).in(ContextSingleton.class);
         bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>(){})).in(ContextSingleton.class);
+        bind(RoboService.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboService>>(){})).in(ContextSingleton.class);
 
         
         // Sundry Android Classes

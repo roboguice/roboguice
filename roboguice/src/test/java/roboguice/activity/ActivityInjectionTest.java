@@ -13,6 +13,7 @@ import roboguice.activity.ActivityInjectionTest.ModuleD.D;
 import roboguice.inject.*;
 
 import android.R;
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.concurrent.*;
 
+import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -74,6 +76,12 @@ public class ActivityInjectionTest {
     @Test
     public void shouldStaticallyInjectResources() {
         assertThat(A.s,equalTo("Cancel"));
+    }
+    
+    @Test
+    public void shouldInjectActivityAndRoboActivity() {
+        assertEquals(activity,activity.activity);
+        assertEquals(activity,activity.roboActivity);
     }
 
     @Test(expected = ConfigurationException.class)
@@ -160,6 +168,8 @@ public class ActivityInjectionTest {
 
     public static class DummyActivity extends RoboActivity {
         @Inject protected String emptyString;
+        @Inject protected Activity activity;
+        @Inject protected RoboActivity roboActivity;
         @InjectView(R.id.text1) protected TextView text1;
         @InjectResource(R.string.cancel) protected String cancel;
         @InjectExtra("foobar") protected String foobar;

@@ -24,16 +24,26 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Indicates that a variable member of a class (whether static or not) should be
- * injected with an Android view. The value is compulsory, and correspond to the
- * id of the view.<br />
- * Usage example:<br /> {@code @InjectView(R.string.hello) protected TextView hello;}
- * 
+ * Indicates that a variable member of a class should be
+ * injected with an Android fragment.
+ *
+ * The value corresponds to the id of the fragment.<br />
+ *
+ * As an alternative to the id, you can supply a tag to identify the desired fragment.
+ * ID will always take precendence over tag, if specified.
+ *
+ * You must specify either an ID or a tag.
+ *
+ * Usage example:<br />
+ * {@code @InjectFragment(R.id.hello) protected MyFragment hello;}<br/>
+ * {@code @InjectFragment(tag="hello") protected Fragment hello;}
+ *
  * @author Mike Burton
  */
 @Retention(RUNTIME)
 @Target( { ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
 @BindingAnnotation
 public @interface InjectFragment {
-    int value();
+    int value() default -1;
+    String tag() default "";
 }

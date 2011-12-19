@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.google.inject.Inject;
 
@@ -58,8 +59,30 @@ public class FragmentInjectionTest {
         final ActivityC activity = new ActivityC();
         activity.onCreate(null);
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
-}
+    }
 
+
+    @Test
+    public void shouldNotCrashWhenRotatingScreen() {
+        final ActivityD activity1 = new ActivityD();
+        final ActivityD activity2 = new ActivityD();
+
+        activity1.onCreate(null);
+        activity1.onResume();
+        activity1.fragmentRef.onViewCreated(activity1.fragmentRef.onCreateView(null,null,null), null);
+
+        assertNotNull(activity1.fragmentRef.ref);
+        assertThat(activity1.fragmentRef.v, equalTo(activity1.fragmentRef.ref));
+
+        activity1.onPause();
+
+        activity2.onCreate(null); // crash here?
+        activity2.onResume();
+        activity2.fragmentRef.onViewCreated(activity2.fragmentRef.onCreateView(null,null,null), null);
+
+        assertNotNull(activity2.fragmentRef.ref);
+        assertThat(activity2.fragmentRef.v, equalTo(activity2.fragmentRef.ref));
+    }
 
 
 
@@ -97,6 +120,7 @@ public class FragmentInjectionTest {
         }
 
     }
+
 
     public static class ActivityB extends RoboFragmentActivity {
         @InjectView(100) View v;
@@ -167,6 +191,64 @@ public class FragmentInjectionTest {
                 viewRef = new View(getActivity());
                 viewRef.setId(101);
                 return viewRef;
+            }
+        }
+
+    }
+
+
+
+    public static class ActivityD extends RoboFragmentActivity {
+        FragmentD fragmentRef;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            fragmentRef = new FragmentD();
+            fragmentRef.onAttach(this);
+            fragmentRef.onCreate(null);
+
+            setContentView(new FrameLayout(this));
+            
+        }
+
+        @Override
+        protected void onPause() {
+            super.onPause();
+        }
+
+        @Override
+        protected void onResume() {
+            super.onResume();
+        }
+
+        @Override
+        protected void onStop() {
+            super.onStop();
+        }
+
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+        }
+
+        public static class FragmentD extends RoboFragment {
+            @InjectView(101) View v;
+
+            View ref;
+
+            @Override
+            public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+                ref = new View(getActivity());
+                ref.setId(101);
+                return ref;
+            }
+
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+
             }
         }
 

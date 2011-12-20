@@ -25,7 +25,6 @@ import java.util.*;
  * @author Adam Tybor
  * @author John Ericksen
  */
-@SuppressWarnings({"unchecked"})
 @ContextSingleton
 public class EventManager {
     @Inject protected android.content.Context context;

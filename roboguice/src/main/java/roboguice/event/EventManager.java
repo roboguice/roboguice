@@ -30,7 +30,7 @@ import java.util.*;
 public class EventManager {
     @Inject protected android.content.Context context;
 
-    protected Map<Class<?>, Set<EventListener<?>>> registrations = new HashMap<Class<?>, Set<EventListener<?>>>();
+    protected Map<Class<?>, Set<EventListener<?>>> registrations = new HashMap<Class<?>, Set<EventListener<?>>>(); // synchronized set
 
     /**
      * Register the given EventListener to the contest and event class.
@@ -42,7 +42,7 @@ public class EventManager {
     public <T> void registerObserver( Class<T> event, EventListener listener ) {
         Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) {
-            observers = new LinkedHashSet<EventListener<?>>();
+            observers = Collections.synchronizedSet(new LinkedHashSet<EventListener<?>>());
             registrations.put(event, observers);
         }
 
@@ -73,11 +73,15 @@ public class EventManager {
         final Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) return;
 
-        for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-            final EventListener registeredListener = iterator.next();
-            if (registeredListener == listener) {
-                iterator.remove();
-                break;
+        // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (observers) {
+            for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
+                final EventListener registeredListener = iterator.next();
+                if (registeredListener == listener) {
+                    iterator.remove();
+                    break;
+                }
             }
         }
     }
@@ -93,14 +97,18 @@ public class EventManager {
         final Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) return;
 
-        for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-            final EventListener listener = iterator.next();
-            if( listener instanceof ObserverMethodListener ) {
-                final ObserverMethodListener observer = ((ObserverMethodListener)listener);
-                final Object registeredInstance = observer.instanceReference.get();
-                if (registeredInstance == instance) {
-                    iterator.remove();
-                    break;
+        // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (observers) {
+            for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
+                final EventListener listener = iterator.next();
+                if( listener instanceof ObserverMethodListener ) {
+                    final ObserverMethodListener observer = ((ObserverMethodListener)listener);
+                    final Object registeredInstance = observer.instanceReference.get();
+                    if (registeredInstance == instance) {
+                        iterator.remove();
+                        break;
+                    }
                 }
             }
         }
@@ -117,8 +125,12 @@ public class EventManager {
         final Set<EventListener<?>> observers = registrations.get(event.getClass());
         if (observers == null) return;
 
-        for (EventListener observer : observers)
-            observer.onEvent(event);
+        // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (observers) {
+            for (EventListener observer : observers)
+                observer.onEvent(event);
+        }
 
     }
 

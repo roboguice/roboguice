@@ -51,8 +51,6 @@ package roboguice.inject;
  */
 
 import roboguice.application.RoboApplication;
-import roboguice.util.Ln;
-import roboguice.util.Strings;
 
 import android.content.Context;
 
@@ -105,12 +103,6 @@ public class ContextScope implements Scope {
 
         final Key<Context> key = Key.get(Context.class);
         getScopedObjectMap(key).put(key, new WeakReference<Object>(context));
-
-        if( Ln.isVerboseEnabled() ) {
-            final WeakHashMap<Context,Map<Key<?>,WeakReference<Object>>> map = values;
-            if( map!=null )
-                Ln.v("Contexts in the %s scope map after inserting %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
-        }
     }
 
     public void exit(Context context) {
@@ -124,9 +116,6 @@ public class ContextScope implements Scope {
             final Map<Key<?>,WeakReference<Object>> scopedObjects = map.remove(context);
             if( scopedObjects!=null )
                 scopedObjects.clear();
-
-            if( Ln.isVerboseEnabled() )
-                Ln.v("Contexts in the %s scope map after removing %s: %s", Thread.currentThread().getName(), context, Strings.join( ", ", map.keySet()));
         }
     }
 

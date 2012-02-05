@@ -173,14 +173,16 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
                 try {
                     doException(e);
                 } catch( Exception f ) {
-                    // ignored, throw original instead
+                    // logged but ignored
+                    Ln.e(f);
                 }
 
             } catch( final Throwable t ) {
                 try {
                     doThrowable(t);
                 } catch( Exception f ) {
-                    // ignored, throw original instead
+                    // logged but ignored
+                    Ln.e(f);
                 }
             } finally {
                 doFinally();

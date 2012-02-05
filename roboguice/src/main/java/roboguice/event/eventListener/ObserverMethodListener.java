@@ -4,7 +4,6 @@ import roboguice.event.EventListener;
 import roboguice.event.eventListener.javaassist.RuntimeSupport;
 import roboguice.util.Ln;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -17,10 +16,10 @@ import java.lang.reflect.Method;
 public class ObserverMethodListener<T> implements EventListener<T> {
     protected String descriptor;
     protected Method method;
-    protected WeakReference<Object> instanceReference;
+    protected Object instance;
 
     public ObserverMethodListener(Object instance, Method method) {
-        this.instanceReference = new WeakReference<Object>(instance);
+        this.instance = instance;
         this.method = method;
         //This descriptor is used in the equals and hashcode method to compare
         //methods between super-classes, subclasses and interface declarations.
@@ -30,7 +29,6 @@ public class ObserverMethodListener<T> implements EventListener<T> {
 
     public void onEvent(Object event) {
         try {
-            final Object instance = instanceReference.get();
             method.invoke(instance, event);
         } catch (InvocationTargetException e) {
             Ln.e(e);
@@ -39,8 +37,8 @@ public class ObserverMethodListener<T> implements EventListener<T> {
         }
     }
 
-    public WeakReference<Object> getInstanceReference() {
-        return instanceReference;
+    public Object getInstance() {
+        return instance;
     }
 
     @Override
@@ -51,17 +49,14 @@ public class ObserverMethodListener<T> implements EventListener<T> {
         ObserverMethodListener that = (ObserverMethodListener) o;
 
         if (descriptor != null ? !descriptor.equals(that.descriptor) : that.descriptor != null) return false;
-        Object thisInstance = instanceReference.get();
-        Object thatInstance = that.instanceReference.get();
-        return !(thisInstance != null ? !thisInstance.equals(thatInstance) : thatInstance != null);
+        return !(instance != null ? !instance.equals(that.instance) : that.instance != null);
 
     }
 
     @Override
     public int hashCode() {
         int result = descriptor != null ? descriptor.hashCode() : 0;
-        Object thisInstance = instanceReference.get();
-        result = 31 * result + (thisInstance != null ? thisInstance.hashCode() : 0);
+        result = 31 * result + (instance != null ? instance.hashCode() : 0);
         return result;
     }
 

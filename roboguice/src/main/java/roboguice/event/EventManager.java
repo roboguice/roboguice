@@ -1,15 +1,15 @@
 package roboguice.event;
 
-import roboguice.event.javaassist.RuntimeSupport;
+import roboguice.event.eventListener.ObserverMethodListener;
 import roboguice.inject.ContextSingleton;
-import roboguice.util.Ln;
+
+import android.content.Context;
 
 import com.google.inject.Inject;
 
-import java.lang.ref.WeakReference;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.Map.Entry;
 
 /**
  * Manager class handling the following:
@@ -27,7 +27,7 @@ import java.util.*;
  */
 @ContextSingleton
 public class EventManager {
-    @Inject protected android.content.Context context;
+    @Inject protected Context context;
 
     protected Map<Class<?>, Set<EventListener<?>>> registrations = new HashMap<Class<?>, Set<EventListener<?>>>(); // synchronized set
 
@@ -103,8 +103,7 @@ public class EventManager {
                 final EventListener listener = iterator.next();
                 if( listener instanceof ObserverMethodListener ) {
                     final ObserverMethodListener observer = ((ObserverMethodListener)listener);
-                    final Object registeredInstance = observer.instanceReference.get();
-                    if (registeredInstance == instance) {
+                    if (observer.getInstance() == instance) {
                         iterator.remove();
                         break;
                     }
@@ -132,55 +131,12 @@ public class EventManager {
         }
 
     }
-
-    public static class ObserverMethodListener<T> implements EventListener<T> {
-        protected String descriptor;
-        protected Method method;
-        protected WeakReference<Object> instanceReference;
-
-        public ObserverMethodListener(Object instance, Method method) {
-            this.instanceReference = new WeakReference<Object>(instance);
-            this.method = method;
-            this.descriptor = method.getName() + ':' + RuntimeSupport.makeDescriptor(method);
-            method.setAccessible(true);
-        }
-
-        public void onEvent(T event) {
-            try {
-                final Object instance = instanceReference.get();
-                if (instance != null) {
-                    method.invoke(instance, event);
-                } else {
-                    Ln.w("trying to observe event %1$s on disposed context, consider explicitly calling EventManager.unregisterObserver", method.getName());
-                }
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-            } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            final ObserverMethodListener that = (ObserverMethodListener) o;
-
-            if (descriptor != null ? !descriptor.equals(that.descriptor) : that.descriptor != null) return false;
-            final Object thisInstance = instanceReference.get();
-            final Object thatInstance = that.instanceReference.get();
-            return !(thisInstance != null ? !thisInstance.equals(thatInstance) : thatInstance != null);
-
-        }
-
-        @Override
-        public int hashCode() {
-            int result = descriptor != null ? descriptor.hashCode() : 0;
-            final Object thisInstance = instanceReference.get();
-            result = 31 * result + (thisInstance != null ? thisInstance.hashCode() : 0);
-            return result;
-        }
-
+    
+    
+    public void destroy() {
+        for( Entry<Class<?>, Set<EventListener<?>>> e : registrations.entrySet() )
+            e.getValue().clear();
+        registrations.clear();
     }
+
 }

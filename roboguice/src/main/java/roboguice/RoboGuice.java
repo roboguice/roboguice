@@ -1,6 +1,7 @@
 package roboguice;
 
 import roboguice.config.DefaultRoboModule;
+import roboguice.event.EventManager;
 import roboguice.inject.*;
 
 import android.app.Application;
@@ -176,7 +177,9 @@ public class RoboGuice {
     }
 
     public static void destroyInjector(Context context) {
-        getInjector(context).getInstance(ContextScope.class).destroy(context);
+        final RoboInjector injector = getInjector(context);
+        injector.getInstance(EventManager.class).destroy();
+        injector.getInstance(ContextScope.class).destroy(context);
         injectors.remove(context);
     }
     

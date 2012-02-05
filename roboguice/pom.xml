@@ -145,9 +145,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>android.support</groupId>
-            <artifactId>compatibility-v4</artifactId>
-            <version>r4</version>
+            <groupId>com.google.android</groupId>
+            <artifactId>support-v4</artifactId>
+            <version>r6</version>
             <optional>true</optional>
         </dependency>
 

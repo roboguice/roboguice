@@ -137,9 +137,13 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * @throws RuntimeException, ignored
      */
     protected void onException( Exception e ) throws RuntimeException {
-        Log.e("roboguice", "Exception caught during background processing", e);
+        onThrowable(e);
     }
 
+    protected void onThrowable( Throwable t ) throws RuntimeException {
+        Log.e("roboguice", "Throwable caught during background processing", t);
+    }
+    
     /**
      * @throws RuntimeException, ignored
      */
@@ -172,6 +176,12 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
                     // ignored, throw original instead
                 }
 
+            } catch( final Throwable t ) {
+                try {
+                    doThrowable(t);
+                } catch( Exception f ) {
+                    // ignored, throw original instead
+                }
             } finally {
                 doFinally();
             }
@@ -218,6 +228,20 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
             });
         }
 
+        protected void doThrowable( final Throwable e ) throws Exception {
+            if( parent.launchLocation!=null ) {
+                final ArrayList<StackTraceElement> stack = new ArrayList<StackTraceElement>(Arrays.asList(e.getStackTrace()));
+                stack.addAll(Arrays.asList(parent.launchLocation));
+                e.setStackTrace(stack.toArray(new StackTraceElement[stack.size()]));
+            }
+            postToUiThreadAndWait( new Callable<Object>() {
+                public Object call() throws Exception {
+                    parent.onThrowable(e);
+                    return null;
+                }
+            });
+        }
+        
         protected void doFinally() throws Exception {
             postToUiThreadAndWait( new Callable<Object>() {
                 public Object call() throws Exception {

@@ -51,7 +51,7 @@ public class ViewListener implements TypeListener {
             fragmentGetViewMethod = fragmentClass.getDeclaredMethod("getView");
             fragmentFindFragmentByIdMethod = fragmentManagerClass.getMethod("findFragmentById", int.class);
             fragmentFindFragmentByTagMethod = fragmentManagerClass.getMethod("findFragmentByTag",Object.class);
-        } catch( Exception ignored ) {}
+        } catch( Throwable ignored ) {}
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {

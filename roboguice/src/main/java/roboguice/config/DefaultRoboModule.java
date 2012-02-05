@@ -64,7 +64,7 @@ public class DefaultRoboModule extends AbstractModule {
         Class c = null;
         try {
             c = Class.forName("android.support.v4.app.FragmentManager");
-        } catch( Exception ignored ) {}
+        } catch( Throwable ignored ) {}
         fragmentManagerClass = c;
     }
 
@@ -72,7 +72,7 @@ public class DefaultRoboModule extends AbstractModule {
         Class c = null;
         try {
             c = Class.forName("android.accounts.AccountManager");
-        } catch( Exception ignored ) {}
+        } catch( Throwable ignored ) {}
         accountManagerClass = c;
     }
 

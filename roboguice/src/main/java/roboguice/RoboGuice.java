@@ -112,7 +112,13 @@ public class RoboGuice {
             try {
                 for (String name : moduleNames) {
                     final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                    modules.add( clazz.newInstance() );
+
+                    try {
+                        modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
+                    } catch( NoSuchMethodException ignored ) {
+                        modules.add( clazz.newInstance() );
+                    }
+
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);

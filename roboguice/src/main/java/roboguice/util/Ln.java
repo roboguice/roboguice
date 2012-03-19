@@ -254,7 +254,7 @@ public class Ln  {
     /** Default implementation logs to android.util.Log */
     public static class Print {
         public int println(int priority, String msg ) {
-            return Log.println(priority,getScope(), processMessage(msg));
+            return Log.println(priority,getScope(5), processMessage(msg));
         }
 
         protected String processMessage(String msg) {
@@ -263,9 +263,9 @@ public class Ln  {
             return msg;
         }
 
-        protected static String getScope() {
+        protected static String getScope(int skipDepth) {
             if( config.minimumLogLevel <= Log.DEBUG ) {
-                final StackTraceElement trace = Thread.currentThread().getStackTrace()[5];
+                final StackTraceElement trace = Thread.currentThread().getStackTrace()[skipDepth];
                 return config.scope + "/" + trace.getFileName() + ":" + trace.getLineNumber();
             }
 

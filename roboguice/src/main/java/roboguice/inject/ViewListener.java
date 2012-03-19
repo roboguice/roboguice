@@ -114,28 +114,19 @@ public class ViewListener implements TypeListener {
         public void injectMembers(T instance) {
             synchronized (ViewMembersInjector.class) {
                 final Activity activity = activityProvider.get();
+                final Object key = fragmentClass!=null && fragmentClass.isInstance(instance) ? instance : activity;
+                if( key==null )
+                    return;
 
-
-                if( fragmentClass!=null && fragmentClass.isInstance(instance) ) {
-                    // Add a view injector for the fragment, if appropriate
-                    ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(instance);
-                    if( injectors ==null ) {
-                        injectors = new ArrayList<ViewMembersInjector<?>>();
-                        viewMembersInjectors.put(instance, injectors);
-                    }
-                    injectors.add(this);
-
-
-                } else {
-                    // Add a view injector for the activity
-                    ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activity);
-                    if( injectors ==null ) {
-                        injectors = new ArrayList<ViewMembersInjector<?>>();
-                        viewMembersInjectors.put(activity, injectors);
-                    }
-                    injectors.add(this);
-
+                // Add a view injector for the key
+                ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(key);
+                if( injectors==null ) {
+                    injectors = new ArrayList<ViewMembersInjector<?>>();
+                    viewMembersInjectors.put(key, injectors);
                 }
+                injectors.add(this);
+
+
 
 
                 this.instanceRef = new WeakReference<T>(instance);

@@ -30,7 +30,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
@@ -66,8 +65,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);
 
-        Injector injector = RoboGuice.getInjector(this);
-        ContextScope scope = injector.getInstance(ContextScope.class);
+        final ContextScope scope = RoboGuice.getInjector(this).getInstance(ContextScope.class);
         synchronized (ContextScope.class) {
             scope.enter(this);
             try {

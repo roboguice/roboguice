@@ -19,6 +19,7 @@ import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.event.EventManager;
 import roboguice.inject.ContentViewListener;
+import roboguice.inject.ContextScope;
 import roboguice.inject.PreferenceListener;
 import roboguice.inject.RoboInjector;
 
@@ -29,6 +30,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
@@ -63,7 +65,17 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity {
     @Override
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);
-        preferenceListener.injectPreferenceViews();
+
+        Injector injector = RoboGuice.getInjector(this);
+        ContextScope scope = injector.getInstance(ContextScope.class);
+        synchronized (ContextScope.class) {
+            scope.enter(this);
+            try {
+                preferenceListener.injectPreferenceViews();
+            } finally {
+                scope.exit(this);
+            }
+        }
     }
 
     @Override

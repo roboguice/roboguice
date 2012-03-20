@@ -23,6 +23,7 @@ import com.google.inject.Scope;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * Scopes the injector based on the current context.
@@ -48,7 +49,7 @@ import java.util.Map;
 public class ContextScope implements Scope {
 
     protected HashMap<Context, Map<Key<?>, Object>> scopedObjects = new HashMap<Context, Map<Key<?>, Object>>();
-    protected ThreadLocal<Context> contextThreadLocal = new ThreadLocal<Context>();
+    protected ThreadLocal<Stack<Context>> contextThreadLocal = new ThreadLocal<Stack<Context>>();
 
 
     /**
@@ -64,14 +65,11 @@ public class ContextScope implements Scope {
 
         // BUG synchronizing on ContextScope.class may be overly conservative
         synchronized (ContextScope.class) {
-            final Context prev = contextThreadLocal.get();
+            final Stack<Context> stack = getContextStack();
             final Map<Key<?>,Object> map = getScopedObjectMap(context);
 
-            if( prev!=null )
-                throw new IllegalArgumentException(String.format("Scope for %s must be closed before scope for %s may be opened",prev,context));
-
             // Mark this thread as for this context
-            contextThreadLocal.set( context );
+            stack.push(context);
 
             // Add the context to the scope for key Context, Activity, etc.
             Class<?> c = context.getClass();
@@ -85,22 +83,21 @@ public class ContextScope implements Scope {
 
     public void exit(Context context) {
         synchronized (ContextScope.class) {
-            final Context prev = contextThreadLocal.get();
-            if( prev!=context )
-                throw new IllegalArgumentException(String.format("Scope for %s must be opened before it can be closed",context));
+            final Stack<Context> stack = getContextStack();
 
-            contextThreadLocal.set(null);
+            if( stack.pop()!=context )
+                throw new IllegalArgumentException(String.format("Scope for %s must be opened before it can be closed",context));
         }
     }
 
     /**
      * MUST be called when a context is destroyed, otherwise will leak memory
+     * BUG I don't think this is necessary anymore.
      */
     public void destroy(Context context) {
         synchronized (ContextScope.class) {
             contextThreadLocal.set(null);
-            final Map<Key<?>,Object> contextMap = scopedObjects.remove(context);
-            contextMap.clear();
+            scopedObjects.remove(context).clear();
         }
     }
 
@@ -109,7 +106,8 @@ public class ContextScope implements Scope {
         return new Provider<T>() {
             public T get() {
                 synchronized (ContextScope.class) {
-                    final Context context = contextThreadLocal.get();
+                    final Stack<Context> stack = getContextStack();
+                    final Context context = stack.peek();
                     if (context != null) {
                         final Map<Key<?>, Object> scopedObjects = getScopedObjectMap(context);
 
@@ -139,4 +137,12 @@ public class ContextScope implements Scope {
         return scopedObjects;
     }
 
+    public Stack<Context> getContextStack() {
+        Stack<Context> stack = contextThreadLocal.get();
+        if( stack==null ) {
+            stack = new Stack<Context>();
+            contextThreadLocal.set(stack);
+        }
+        return stack;
+    }
 }

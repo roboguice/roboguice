@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 import com.google.inject.Inject;
@@ -37,6 +38,28 @@ public class ContextScopeTest {
         assertTrue("Couldn't find context in scope map", found);
     }
 
+    @Test
+    public void shouldBeAbleToOpenMultipleScopes() {
+        final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
+        final Activity a = new A();
+        final Activity b = new B();
+
+        scope.enter(a);
+        scope.enter(b);
+        scope.exit(b);
+        scope.exit(a);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void shouldNotBeAbleToExitTheWrongScope() {
+        final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
+        final Activity a = new A();
+        final Activity b = new B();
+
+        scope.enter(a);
+        scope.enter(b);
+        scope.exit(a);
+    }
 
     @Test
     public void shouldHaveTwoItemsInScopeMapAfterOnCreate() throws Exception {

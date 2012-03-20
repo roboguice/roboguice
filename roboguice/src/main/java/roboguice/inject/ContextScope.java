@@ -15,6 +15,7 @@
  */
 package roboguice.inject;
 
+import android.app.Application;
 import android.content.Context;
 
 import com.google.inject.Key;
@@ -50,7 +51,12 @@ public class ContextScope implements Scope {
 
     protected HashMap<Context, Map<Key<?>, Object>> scopedObjects = new HashMap<Context, Map<Key<?>, Object>>();
     protected ThreadLocal<Stack<Context>> contextThreadLocal = new ThreadLocal<Stack<Context>>();
+    protected Application application;
 
+    public ContextScope(Application application) {
+        this.application = application;
+        enter(application);
+    }
 
     /**
      * You MUST perform any injector operations inside a synchronized(ContextScope.class) block that starts with
@@ -92,7 +98,7 @@ public class ContextScope implements Scope {
 
     /**
      * MUST be called when a context is destroyed, otherwise will leak memory
-     * BUG I don't think this is necessary anymore.
+     * BUG I don't know if this is necessary anymore
      */
     public void destroy(Context context) {
         synchronized (ContextScope.class) {
@@ -108,20 +114,16 @@ public class ContextScope implements Scope {
                 synchronized (ContextScope.class) {
                     final Stack<Context> stack = getContextStack();
                     final Context context = stack.peek();
-                    if (context != null) {
-                        final Map<Key<?>, Object> scopedObjects = getScopedObjectMap(context);
+                    final Map<Key<?>, Object> scopedObjects = getScopedObjectMap(context);
 
-                        @SuppressWarnings({"unchecked"}) T current = (T) scopedObjects.get(key);
-                        if (current==null && !scopedObjects.containsKey(key)) {
-                            current = unscoped.get();
-                            scopedObjects.put(key, current);
-                        }
-                        
-                        return current;
+                    @SuppressWarnings({"unchecked"}) T current = (T) scopedObjects.get(key);
+                    if (current==null && !scopedObjects.containsKey(key)) {
+                        current = unscoped.get();
+                        scopedObjects.put(key, current);
                     }
-                }
 
-                throw new UnsupportedOperationException(String.format("%s is context-scoped and can't be injected outside of a context scope. Did you intend to make the referencing class @ContextSingleton or use ContextScopedProvider instead of Provider?",key.getTypeLiteral().getType()));
+                    return current;
+                }
             }
         };
 

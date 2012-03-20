@@ -1,7 +1,6 @@
 package roboguice.application;
 
 import com.xtremelabs.robolectric.Robolectric;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
@@ -31,7 +30,6 @@ public class ApplicationInjectionTest {
     }
 
 
-    @Ignore("Gah, isn't supported yet")
     @Test
     public void shouldBeAbleToInjectContextScopedItemsIntoApplication() {
         Robolectric.application = new AppB();

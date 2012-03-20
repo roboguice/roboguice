@@ -160,7 +160,7 @@ public class RoboGuice {
 
     
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
-        return new DefaultRoboModule(application, new ContextScope(), getViewListener(application), getResourceListener(application));
+        return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
     }
 
 

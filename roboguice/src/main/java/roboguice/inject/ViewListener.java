@@ -142,11 +142,20 @@ public class ViewListener implements TypeListener {
 
         /**
          * This is when the view references are actually evaluated.
+         *
+         * I don't like all the hacks I had to put into this method.  Instance is the object you're
+         * injecting into.  ActivityOrFragment is the activity or fragment that you're injecting
+         * views into.  Instance must equal activityOrFragment is activityOrFragment is a fragment,
+         * but they may differ if activityOrFragment is an activity.  They should be allowed to differ
+         * so that you can inject views into arbitrary objects, but I don't know how to determine whether
+         * to get the view from the fragment or the activity for an arbitrary object, so I'm artificially
+         * limiting injection targets to the fragment itself for fragments.
+         *
          * @param activityOrFragment an activity or fragment
          */
         protected void reallyInjectMemberViews(Object activityOrFragment) {
 
-            final T instance = instanceRef.get();
+            final T instance = fragmentClass!=null && fragmentClass.isInstance(activityOrFragment) ? (T)activityOrFragment : instanceRef.get();
             if( instance==null )
                 return;
 

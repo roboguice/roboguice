@@ -72,7 +72,7 @@ public class ContextScope implements Scope {
         // BUG synchronizing on ContextScope.class may be overly conservative
         synchronized (ContextScope.class) {
             final Stack<Context> stack = getContextStack();
-            final Map<Key<?>,Object> map = getScopedObjectMap(context);
+            final Map<Key<?>,Object> map = getOrCreateScopedObjectMap(context);
 
             // Mark this thread as for this context
             stack.push(context);
@@ -98,11 +98,11 @@ public class ContextScope implements Scope {
 
     /**
      * MUST be called when a context is destroyed, otherwise will leak memory
-     * BUG I don't know if this is necessary anymore
      */
     public void destroy(Context context) {
         synchronized (ContextScope.class) {
-            contextThreadLocal.set(null);
+            //noinspection StatementWithEmptyBody
+            while(getContextStack().remove(context)) ;
             scopedObjects.remove(context).clear();
         }
     }
@@ -114,12 +114,14 @@ public class ContextScope implements Scope {
                 synchronized (ContextScope.class) {
                     final Stack<Context> stack = getContextStack();
                     final Context context = stack.peek();
-                    final Map<Key<?>, Object> scopedObjects = getScopedObjectMap(context);
+                    final Map<Key<?>, Object> objectsForScope = scopedObjects.get(context);
+                    if( objectsForScope==null )
+                        return null;  // May want to consider throwing an exception here (if provider is used after onDestroy())
 
-                    @SuppressWarnings({"unchecked"}) T current = (T) scopedObjects.get(key);
-                    if (current==null && !scopedObjects.containsKey(key)) {
+                    @SuppressWarnings({"unchecked"}) T current = (T) objectsForScope.get(key);
+                    if (current==null && !objectsForScope.containsKey(key)) {
                         current = unscoped.get();
-                        scopedObjects.put(key, current);
+                        objectsForScope.put(key, current);
                     }
 
                     return current;
@@ -129,7 +131,7 @@ public class ContextScope implements Scope {
 
     }
 
-    protected Map<Key<?>, Object> getScopedObjectMap(Context context) {
+    protected Map<Key<?>, Object> getOrCreateScopedObjectMap(Context context) {
 
         Map<Key<?>, Object> scopedObjects = this.scopedObjects.get(context);
         if (scopedObjects == null) {

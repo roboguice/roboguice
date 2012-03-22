@@ -8,10 +8,12 @@ import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.inject.Inject;
 import com.google.inject.Key;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 
 import static junit.framework.Assert.assertTrue;
@@ -27,11 +29,11 @@ public class ContextScopeTest {
         final A a = new A();
         final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
 
-        assertThat(scope.getScopedObjectMap(a).size(), equalTo(0));
+        assertThat(scope.getOrCreateScopedObjectMap(a).size(), equalTo(0));
         a.onCreate(null);
 
         boolean found=false;
-        for( Object o : scope.getScopedObjectMap(a).values() )
+        for( Object o : scope.getOrCreateScopedObjectMap(a).values() )
             if( o==a )
                 found = true;
 
@@ -66,16 +68,16 @@ public class ContextScopeTest {
         final B b = new B();
         final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
 
-        assertThat(scope.getScopedObjectMap(b).size(), equalTo(0));
+        assertThat(scope.getOrCreateScopedObjectMap(b).size(), equalTo(0));
         b.onCreate(null);
 
         boolean found=false;
-        for( Object o : scope.getScopedObjectMap(b).values() )
+        for( Object o : scope.getOrCreateScopedObjectMap(b).values() )
             if( o==b )
                 found = true;
 
         assertTrue("Couldn't find context in scope map", found);
-        assertTrue(scope.getScopedObjectMap(b).containsKey(Key.get(C.class)));
+        assertTrue(scope.getOrCreateScopedObjectMap(b).containsKey(Key.get(C.class)));
     }
 
     public static class A extends RoboActivity {
@@ -103,4 +105,19 @@ public class ContextScopeTest {
 
     @Singleton
     public static class E {}
+
+    public static class F extends RoboActivity {
+        @Inject Provider<SharedPreferences> sharedPrefsProvider;
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+        }
+
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+        }
+    }
+
 }

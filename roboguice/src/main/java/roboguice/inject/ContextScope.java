@@ -23,6 +23,7 @@ import com.google.inject.Provider;
 import com.google.inject.Scope;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
 
@@ -50,6 +51,7 @@ import java.util.Stack;
 public class ContextScope implements Scope {
 
     protected HashMap<Context, Map<Key<?>, Object>> scopedObjects = new HashMap<Context, Map<Key<?>, Object>>();
+    protected LinkedList<String> deadToMe = new LinkedList<String>();
     protected ThreadLocal<Stack<Context>> contextThreadLocal = new ThreadLocal<Stack<Context>>();
     protected Application application;
 
@@ -73,6 +75,9 @@ public class ContextScope implements Scope {
         synchronized (ContextScope.class) {
             final Stack<Context> stack = getContextStack();
             final Map<Key<?>,Object> map = getOrCreateScopedObjectMap(context);
+
+            if( deadToMe.contains(context.toString()) )
+                throw new UnsupportedOperationException(String.format("Attempt to enter scope for %s after onDestroy has already been called",context));
 
             // Mark this thread as for this context
             stack.push(context);
@@ -104,6 +109,13 @@ public class ContextScope implements Scope {
             //noinspection StatementWithEmptyBody
             while(getContextStack().remove(context)) ;
             scopedObjects.remove(context).clear();
+
+            // Keep track of the last 5 contexts that we destroyed so we can throw
+            // an error in enter() if a user attempts to open a scope for one of these
+            // contexts after it's been destroyed
+            while( deadToMe.size()>5 )
+                deadToMe.removeLast();
+            deadToMe.addFirst(context.toString());
         }
     }
 

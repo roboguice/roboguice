@@ -74,7 +74,7 @@ public class ContextScope implements Scope {
         // BUG synchronizing on ContextScope.class may be overly conservative
         synchronized (ContextScope.class) {
             if( deadToMe.contains(context.toString()) )
-                throw new UnsupportedOperationException(String.format("Attempt to enter scope for %s after onDestroy has already been called",context));
+                throw new IllegalStateException(String.format("Attempt to enter scope for %s after onDestroy has already been called",context));
 
             final Stack<Context> stack = getContextStack();
             final Map<Key<?>,Object> map = getOrCreateScopedObjectMap(context);

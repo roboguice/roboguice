@@ -2,6 +2,7 @@ package roboguice.service;
 
 import roboguice.RoboGuice;
 import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
 import roboguice.service.event.OnConfigurationChangedEvent;
 import roboguice.service.event.OnCreateEvent;
 import roboguice.service.event.OnDestroyEvent;
@@ -47,6 +48,7 @@ public abstract class RoboIntentService extends IntentService {
 
     @Override
     public void onCreate() {
+        ContextScope.onCreate(this);
         final Injector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembers(this);

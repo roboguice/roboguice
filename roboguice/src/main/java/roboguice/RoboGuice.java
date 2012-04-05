@@ -102,7 +102,7 @@ public class RoboGuice {
      * This is a static value.
      */
     public static void setModulesResourceId(int modulesResourceId) {
-        modulesResourceId = modulesResourceId;
+        RoboGuice.modulesResourceId = modulesResourceId;
     }
 
     /**

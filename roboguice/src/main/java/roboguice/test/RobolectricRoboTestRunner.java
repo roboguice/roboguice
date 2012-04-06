@@ -1,4 +1,4 @@
-package roboguice;
+package roboguice.test;
 
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricConfig;
@@ -6,8 +6,11 @@ import com.xtremelabs.robolectric.RobolectricTestRunner;
 import com.xtremelabs.robolectric.bytecode.ClassHandler;
 import com.xtremelabs.robolectric.bytecode.RobolectricClassLoader;
 import org.junit.runners.model.InitializationError;
-import roboguice.shadow.ShadowFragment;
-import roboguice.shadow.ShadowFragmentActivity;
+import roboguice.application.RoboApplication;
+import roboguice.test.shadow.ShadowFragment;
+import roboguice.test.shadow.ShadowFragmentActivity;
+
+import android.app.Application;
 
 import java.io.File;
 
@@ -42,5 +45,10 @@ public class RobolectricRoboTestRunner extends RobolectricTestRunner {
         super.bindShadowClasses();
         Robolectric.bindShadowClass(ShadowFragmentActivity.class);
         Robolectric.bindShadowClass(ShadowFragment.class);
+    }
+
+    @Override
+    protected Application createApplication() {
+        return new RoboApplication();
     }
 }

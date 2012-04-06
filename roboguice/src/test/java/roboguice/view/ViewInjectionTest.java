@@ -1,12 +1,12 @@
 package roboguice.view;
 
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
+import roboguice.test.RobolectricRoboTestRunner;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricRoboTestRunner.class)
 public class ViewInjectionTest {
 
     @Test

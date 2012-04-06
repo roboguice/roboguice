@@ -12,17 +12,21 @@ package roboguice.service;
 
 import roboguice.RoboGuice;
 import roboguice.event.EventManager;
-import roboguice.inject.ContextScope;
 import roboguice.service.event.OnConfigurationChangedEvent;
 import roboguice.service.event.OnCreateEvent;
 import roboguice.service.event.OnDestroyEvent;
 import roboguice.service.event.OnStartEvent;
+import roboguice.util.ScopedObjectMapProvider;
 
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
 
 import com.google.inject.Injector;
+import com.google.inject.Key;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A {@link RoboService} extends from {@link Service} to provide dynamic
@@ -47,13 +51,13 @@ import com.google.inject.Injector;
  * @author Mike Burton
  * @author Christine Karman
  */
-public abstract class RoboService extends Service {
+public abstract class RoboService extends Service implements ScopedObjectMapProvider {
 
     protected EventManager eventManager;
+    protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>, Object>();
 
     @Override
     public void onCreate() {
-        ContextScope.onCreate(this);
         final Injector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembers(this);
@@ -86,6 +90,11 @@ public abstract class RoboService extends Service {
         final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
         eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig) );
+    }
+
+    @Override
+    public Map<Key<?>, Object> getScopedObjectMap() {
+        return scopedObjects;
     }
 
 }

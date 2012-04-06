@@ -3,9 +3,9 @@ package roboguice.fragment;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import roboguice.RobolectricRoboTestRunner;
 import roboguice.activity.RoboFragmentActivity;
 import roboguice.inject.InjectView;
+import roboguice.test.RobolectricRoboTestRunner;
 
 import android.content.Context;
 import android.os.Bundle;

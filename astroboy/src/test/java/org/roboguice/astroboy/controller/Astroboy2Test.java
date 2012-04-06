@@ -1,15 +1,15 @@
 package org.roboguice.astroboy.controller;
 
 import com.xtremelabs.robolectric.Robolectric;
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
+import roboguice.activity.RoboActivity;
+import roboguice.test.RobolectricRoboTestRunner;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Vibrator;
 
@@ -23,10 +23,10 @@ import static org.easymock.EasyMock.*;
  * Astroboy's {@link org.roboguice.astroboy.controller.Astroboy#brushTeeth()} method
  * works properly.
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricRoboTestRunner.class)
 public class Astroboy2Test {
     
-    protected Context context = new Activity();
+    protected Context context = new RoboActivity();
     protected Vibrator vibratorMock = EasyMock.createMock(Vibrator.class);
 
     @Before

@@ -5,8 +5,8 @@ import com.xtremelabs.robolectric.tester.android.content.TestSharedPreferences;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
-import roboguice.RobolectricRoboTestRunner;
 import roboguice.activity.RoboActivity;
+import roboguice.test.RobolectricRoboTestRunner;
 import roboguice.util.Strings;
 
 import android.content.SharedPreferences;

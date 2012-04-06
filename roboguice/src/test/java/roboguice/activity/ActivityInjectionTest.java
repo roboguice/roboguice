@@ -1,7 +1,6 @@
 package roboguice.activity;
 
 import com.xtremelabs.robolectric.Robolectric;
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +10,7 @@ import roboguice.activity.ActivityInjectionTest.ModuleB.B;
 import roboguice.activity.ActivityInjectionTest.ModuleC.C;
 import roboguice.activity.ActivityInjectionTest.ModuleD.D;
 import roboguice.inject.*;
+import roboguice.test.RobolectricRoboTestRunner;
 
 import android.R;
 import android.app.Activity;
@@ -35,7 +35,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricRoboTestRunner.class)
 public class ActivityInjectionTest {
 
     protected DummyActivity activity;

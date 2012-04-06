@@ -1,11 +1,11 @@
 package roboguice.event;
 
 import com.xtremelabs.robolectric.Robolectric;
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
+import roboguice.test.RobolectricRoboTestRunner;
 
 import android.app.Activity;
 import android.app.Application;
@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author John Ericksen
  */
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricRoboTestRunner.class)
 public class ObservesTypeListenerTest {
 
     protected EventManager eventManager;

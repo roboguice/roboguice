@@ -64,7 +64,7 @@
         <dependency>  <!-- needed to prevent warnings in robolectric tests -->
             <groupId>com.google.android.maps</groupId>
             <artifactId>maps</artifactId>
-            <version>3_r3</version>
+            <version>2.3.3</version>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
@@ -105,5 +105,12 @@
         <artifactId>oss-parent</artifactId>
         <version>6</version>
     </parent>
+
+    <repositories>
+        <repository>
+            <id>third.party.closed.source.repo</id>
+            <url>file://${basedir}/../maven_repo_3rd_party</url>
+        </repository>
+    </repositories>
 
 </project>

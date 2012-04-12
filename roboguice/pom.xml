@@ -51,6 +51,15 @@
         <defaultGoal>package</defaultGoal>
         <plugins>
             <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <version>1.1</version>
+              <configuration>
+                <useAgent>true</useAgent>
+                <executable>gpg2</executable>
+              </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
@@ -164,15 +173,6 @@
                     <destDir>apidocs</destDir>
                     <notimestamp>true</notimestamp>
                 </configuration>
-            </plugin>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-gpg-plugin</artifactId>
-              <version>1.4</version>
-              <configuration>
-                <useAgent>true</useAgent>
-                <executable>gpg2</executable>
-              </configuration>
             </plugin>
         </plugins>
     </reporting>

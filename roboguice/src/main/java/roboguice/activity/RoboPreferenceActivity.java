@@ -22,7 +22,7 @@ import roboguice.inject.ContentViewListener;
 import roboguice.inject.ContextScope;
 import roboguice.inject.PreferenceListener;
 import roboguice.inject.RoboInjector;
-import roboguice.util.ScopedObjectMapProvider;
+import roboguice.util.RoboContext;
 
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -49,7 +49,7 @@ import java.util.Map;
  * @author Rodrigo Damazio
  * @author Mike Burton
  */
-public abstract class RoboPreferenceActivity extends PreferenceActivity implements ScopedObjectMapProvider{
+public abstract class RoboPreferenceActivity extends PreferenceActivity implements RoboContext {
     protected EventManager eventManager;
     protected PreferenceListener preferenceListener;
     protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>, Object>();

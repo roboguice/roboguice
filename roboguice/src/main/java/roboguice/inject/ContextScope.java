@@ -15,7 +15,7 @@
  */
 package roboguice.inject;
 
-import roboguice.util.ScopedObjectMapProvider;
+import roboguice.util.RoboContext;
 
 import android.app.Application;
 import android.content.Context;
@@ -135,12 +135,12 @@ public class ContextScope implements Scope {
 
     protected Map<Key<?>,Object> getScopedObjectMap(final Context origContext) {
         Context context = origContext;
-        while( !(context instanceof ScopedObjectMapProvider) && context instanceof ContextWrapper )
+        while( !(context instanceof RoboContext) && context instanceof ContextWrapper )
             context = ((ContextWrapper)context).getBaseContext();
 
-        if( !(context instanceof ScopedObjectMapProvider) )
-            throw new IllegalArgumentException(String.format("%s does not appear to be a RoboGuice context (instanceof ScopedObjectMapProvider)",origContext));
+        if( !(context instanceof RoboContext) )
+            throw new IllegalArgumentException(String.format("%s does not appear to be a RoboGuice context (instanceof RoboContext)",origContext));
 
-        return ((ScopedObjectMapProvider)context).getScopedObjectMap();
+        return ((RoboContext)context).getScopedObjectMap();
     }
 }

@@ -26,6 +26,7 @@ import com.google.inject.Provider;
 import com.google.inject.Scope;
 
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
@@ -52,6 +53,7 @@ import java.util.Stack;
  */
 public class ContextScope implements Scope {
     protected ThreadLocal<Stack<WeakReference<Context>>> contextThreadLocal = new ThreadLocal<Stack<WeakReference<Context>>>();
+    protected Map<Key<?>,Object> applicationScopedObjects = new HashMap<Key<?>, Object>();
     protected Application application;
 
     public ContextScope(Application application) {
@@ -92,8 +94,6 @@ public class ContextScope implements Scope {
     public void exit(Context context) {
         synchronized (ContextScope.class) {
             final Stack<WeakReference<Context>> stack = getContextStack();
-
-
             final Context c = stack.pop().get();
             if( c!=null && c!=context )
                 throw new IllegalArgumentException(String.format("Scope for %s must be opened before it can be closed",context));
@@ -135,8 +135,13 @@ public class ContextScope implements Scope {
 
     protected Map<Key<?>,Object> getScopedObjectMap(final Context origContext) {
         Context context = origContext;
-        while( !(context instanceof RoboContext) && context instanceof ContextWrapper )
+        while( !(context instanceof RoboContext) && !(context instanceof Application) && context instanceof ContextWrapper )
             context = ((ContextWrapper)context).getBaseContext();
+
+        // Special case for application so that users don't have to manually set up application subclasses
+        if( context instanceof Application )
+            return applicationScopedObjects;
+
 
         if( !(context instanceof RoboContext) )
             throw new IllegalArgumentException(String.format("%s does not appear to be a RoboGuice context (instanceof RoboContext)",origContext));

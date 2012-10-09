@@ -11,14 +11,14 @@ and join the mailing list.
 
 https://groups.google.com/forum/#!forum/roboguice
 
-Build source
-------------
+How to build the source
+-----------------------
 
 We use Apache Maven and the Android Maven Plugin to build roboguice and the sample application.
 
 - Install Apache Maven from http://maven.apache.org/
 
-- Install the Android SDK
+- Install the Android SDK including all platform versions and all extras
 
 - Install the Android artifacts from the SDK in the Maven repository using the  Maven Android SDK Deployer
   https://github.com/mosabua/maven-android-sdk-deployer
@@ -29,7 +29,7 @@ We use Apache Maven and the Android Maven Plugin to build roboguice and the samp
   mvn clean install
   to build roboguice and the sample astroboy.
 
-- Deploy astroboy on a connected devitce/emulator with
+- Deploy astroboy on a connected device/emulator with
   cd astroboy
   mvn android:deploy
   and run it with

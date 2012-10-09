@@ -152,12 +152,22 @@
             <version>1.3.9</version>
             <scope>test</scope>
         </dependency>
+        <!-- this is in the Central repo, but old
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>support-v4</artifactId>
-            <version>r6</version>
+            <version>r7</version>
             <optional>true</optional>
         </dependency>
+        newest release is version 10 and is available via the Maven Android SDK Deployer
+        -->
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v4</artifactId>
+            <version>10</version>
+            <optional>true</optional>
+        </dependency>
+
 
     </dependencies>
 

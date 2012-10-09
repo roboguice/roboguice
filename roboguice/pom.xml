@@ -182,12 +182,4 @@
         <artifactId>oss-parent</artifactId>
         <version>6</version>
     </parent>
-
-    <repositories>
-        <repository>
-            <id>third.party.closed.source.repo</id>
-            <url>file://${basedir}/../maven_repo_3rd_party</url>
-        </repository>
-    </repositories>
-
 </project>

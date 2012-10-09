@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.roboguice</groupId>
     <artifactId>astroboy</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.1-SNAPSHOT</version>
     <packaging>apk</packaging>
     <name>astroboy</name>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>org.roboguice</groupId>
             <artifactId>roboguice</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -64,7 +64,7 @@
         <dependency>  <!-- needed to prevent warnings in robolectric tests -->
             <groupId>com.google.android.maps</groupId>
             <artifactId>maps</artifactId>
-            <version>2.3.3</version>
+            <version>8_r2</version>
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
@@ -75,7 +75,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.0.0-alpha-13</version>
+                <version>3.2.0</version>
                 <configuration>
                     <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
                     <assetsDirectory>${project.basedir}/assets</assetsDirectory>

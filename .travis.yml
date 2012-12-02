@@ -6,4 +6,4 @@ before_install:
   - tar -zxf android-sdk_r18-linux.tgz
   - export ANDROID_HOME=~/builds/emmby/roboguice/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-  - android update sdk --filter 1,2,9 --no-ui --force
+  - android update sdk --filter 1,2,13 --no-ui --force

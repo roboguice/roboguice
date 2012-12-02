@@ -1,5 +1,9 @@
 language: java
-jdk:
-  - oraclejdk7
-  - openjdk7
-  - openjdk6
+
+# http://levi-wilson.blogspot.com/2012/06/maven-android-travis-ci-and-more.html
+before_install:
+  - wget http://dl.google.com/android/android-sdk_r18-linux.tgz
+  - tar -zxf android-sdk_r18-linux.tgz
+  - export ANDROID_HOME=~/builds/emmby/roboguice/android-sdk-linux
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+  - android update sdk --filter 1,2,9 --no-ui --force

@@ -1,12 +1,7 @@
 package roboguice;
 
-import roboguice.config.DefaultRoboModule;
-import roboguice.event.EventManager;
-import roboguice.inject.*;
-
 import android.app.Application;
 import android.content.Context;
-
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -15,6 +10,9 @@ import com.google.inject.spi.DefaultElementVisitor;
 import com.google.inject.spi.Element;
 import com.google.inject.spi.Elements;
 import com.google.inject.spi.StaticInjectionRequest;
+import roboguice.config.DefaultRoboModule;
+import roboguice.event.EventManager;
+import roboguice.inject.*;
 
 import java.util.ArrayList;
 import java.util.WeakHashMap;
@@ -65,7 +63,7 @@ public class RoboGuice {
      * If specifying your own modules, you must include a DefaultRoboModule for most things to work properly.
      * Do something like the following:
      *
-     * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
+     * RoboGuice.setApplicationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
      *
      * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
      * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)

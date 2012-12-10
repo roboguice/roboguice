@@ -1,5 +1,10 @@
 package roboguice.service;
 
+import android.app.IntentService;
+import android.content.Intent;
+import android.content.res.Configuration;
+import com.google.inject.Injector;
+import com.google.inject.Key;
 import roboguice.RoboGuice;
 import roboguice.event.EventManager;
 import roboguice.service.event.OnConfigurationChangedEvent;
@@ -7,13 +12,6 @@ import roboguice.service.event.OnCreateEvent;
 import roboguice.service.event.OnDestroyEvent;
 import roboguice.service.event.OnStartEvent;
 import roboguice.util.RoboContext;
-
-import android.app.IntentService;
-import android.content.Intent;
-import android.content.res.Configuration;
-
-import com.google.inject.Injector;
-import com.google.inject.Key;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -62,11 +60,11 @@ public abstract class RoboIntentService extends IntentService implements RoboCon
     }
 
     @Override
-    public void onStart(Intent intent, int startId) {
-        super.onStart(intent, startId);
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        final int startCont = super.onStartCommand(intent, flags, startId);
         eventManager.fire(new OnStartEvent() );
+        return startCont;
     }
-
 
     @Override
     public void onDestroy() {

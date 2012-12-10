@@ -16,5 +16,9 @@ tmp/
 
 # Local configuration file (sdk path, etc)
 local.properties
-.idea/
+
+# IntelliJ IDEA files
 *.iml
+.idea/
+
+

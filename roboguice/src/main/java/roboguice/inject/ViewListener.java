@@ -50,7 +50,7 @@ public class ViewListener implements TypeListener {
             fragmentManagerClass = Class.forName("android.support.v4.app.FragmentManager");
             fragmentGetViewMethod = fragmentClass.getDeclaredMethod("getView");
             fragmentFindFragmentByIdMethod = fragmentManagerClass.getMethod("findFragmentById", int.class);
-            fragmentFindFragmentByTagMethod = fragmentManagerClass.getMethod("findFragmentByTag",Object.class);
+            fragmentFindFragmentByTagMethod = fragmentManagerClass.getMethod("findFragmentByTag", String.class);
         } catch( Throwable ignored ) {}
     }
 

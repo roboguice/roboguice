@@ -10,3 +10,4 @@ before_install:
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
   - android update sdk --filter 1,2 --no-ui --force --all
   - android update sdk --filter 13 --no-ui --force --all
+  - aapt

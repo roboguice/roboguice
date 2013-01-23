@@ -3,7 +3,6 @@ package roboguice.util;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
-
 import com.google.inject.Inject;
 
 /**
@@ -218,7 +217,11 @@ public class Ln  {
                 Ln.d("Configuring Logging, minimum log level is %s", logLevelToString(minimumLogLevel) );
 
             } catch( Exception e ) {
-                Log.e(packageName, "Error configuring logger", e);
+                try {
+                    Log.e(packageName, "Error configuring logger", e);
+                } catch( RuntimeException f ) {
+                    // HACK ignore Stub! errors in mock objects during testing
+                }
             }
         }
 

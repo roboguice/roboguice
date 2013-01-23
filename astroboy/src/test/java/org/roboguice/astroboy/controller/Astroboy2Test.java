@@ -1,38 +1,36 @@
 package org.roboguice.astroboy.controller;
 
-import com.xtremelabs.robolectric.Robolectric;
-import org.easymock.EasyMock;
+import android.app.Application;
+import android.content.Context;
+import android.os.Vibrator;
+import com.google.inject.AbstractModule;
+import com.google.inject.util.Modules;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
-import roboguice.test.RobolectricRoboTestRunner;
 
-import android.content.Context;
-import android.os.Vibrator;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.util.Modules;
-
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 
 /**
  * A testcase that swaps in a TestVibrator to verify that
  * Astroboy's {@link org.roboguice.astroboy.controller.Astroboy#brushTeeth()} method
  * works properly.
  */
-@RunWith(RobolectricRoboTestRunner.class)
 public class Astroboy2Test {
-    
-    protected Context context = new RoboActivity();
-    protected Vibrator vibratorMock = EasyMock.createMock(Vibrator.class);
+    protected Application application = mock(Application.class, RETURNS_DEEP_STUBS);
+    protected Context context = mock(RoboActivity.class, RETURNS_DEEP_STUBS);
+    protected Vibrator vibratorMock = mock(Vibrator.class);
 
     @Before
     public void setup() {
         // Override the default RoboGuice module
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(Robolectric.application)).with(new MyTestModule()));
+        RoboGuice.setBaseApplicationInjector(application, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(application)).with(new MyTestModule()));
+
+        when(context.getApplicationContext()).thenReturn(application);
+        when(application.getApplicationContext()).thenReturn(application);
+
     }
     
     @After
@@ -43,10 +41,6 @@ public class Astroboy2Test {
     
     @Test
     public void brushingTeethShouldCausePhoneToVibrate() {
-        // tell easymock what we expect, then switch easymock to "replay" mode: http://easymock.org/EasyMock3_0_Documentation.html
-        vibratorMock.vibrate(aryEq(new long[]{0, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50}), eq(-1));
-        replay(vibratorMock);
-        
 
         // get the astroboy instance
         final Astroboy astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
@@ -55,7 +49,7 @@ public class Astroboy2Test {
         astroboy.brushTeeth();
 
         // verify that by doing the thing, vibratorMock.vibrate was called
-        verify(vibratorMock);
+        verify(vibratorMock).vibrate(new long[]{0, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50, 200, 50},-1);
 
     }
 

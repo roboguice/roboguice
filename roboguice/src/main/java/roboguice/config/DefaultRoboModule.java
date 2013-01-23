@@ -1,14 +1,5 @@
 package roboguice.config;
 
-import roboguice.activity.RoboActivity;
-import roboguice.event.EventManager;
-import roboguice.event.ObservesTypeListener;
-import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
-import roboguice.inject.*;
-import roboguice.service.RoboService;
-import roboguice.util.Ln;
-import roboguice.util.Strings;
-
 import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -32,13 +23,20 @@ import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
+import roboguice.activity.RoboActivity;
+import roboguice.event.EventManager;
+import roboguice.event.ObservesTypeListener;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+import roboguice.inject.*;
+import roboguice.service.RoboService;
+import roboguice.util.Ln;
+import roboguice.util.Strings;
 
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
@@ -102,7 +100,6 @@ public class DefaultRoboModule extends AbstractModule {
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
-        final String androidId = Secure.getString(application.getContentResolver(), Secure.ANDROID_ID);
 
         // Package Info
         try {
@@ -112,6 +109,13 @@ public class DefaultRoboModule extends AbstractModule {
             throw new RuntimeException(e);
         }
 
+        String androidId = null;
+        final ContentResolver contentResolver = application.getContentResolver();
+        try {
+            androidId = Secure.getString(contentResolver, Secure.ANDROID_ID);
+        } catch( RuntimeException e) {
+            // ignore Stub! errors for Secure.getString() when mocking in test cases since there's no way to mock static methods
+        }
 
         if(Strings.notEmpty(androidId))
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);

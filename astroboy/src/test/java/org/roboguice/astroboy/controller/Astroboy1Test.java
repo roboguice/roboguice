@@ -1,15 +1,13 @@
 package org.roboguice.astroboy.controller;
 
+import android.content.Context;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.test.RobolectricRoboTestRunner;
 
-import android.content.Context;
-
-import static org.hamcrest.CoreMatchers.endsWith;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * A simple testcase that tests the {@link Astroboy} pojo.
@@ -26,6 +24,6 @@ public class Astroboy1Test {
     
     @Test
     public void stringShouldEndInExclamationMark() {
-        assertThat(astroboy.punch(), endsWith("!"));
+        assertTrue(astroboy.punch().endsWith("!"));
     }
 }

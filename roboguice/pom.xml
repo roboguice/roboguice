@@ -39,9 +39,9 @@
         </mailingList>
     </mailingLists>
     <scm>
-        <url>http://code.google.com/p/roboguice/source/list</url>
-        <connection>scm:hg:https://roboguice.googlecode.com/hg/</connection>
-        <developerConnection>scm:hg:https://roboguice.googlecode.com/hg/</developerConnection>
+        <url>https://github.com/roboguice/roboguice</url>
+        <connection>scm:git:https://github.com/roboguice/roboguice.git</connection>
+        <developerConnection>scm:git:https://github.com/roboguice/roboguice.git</developerConnection>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

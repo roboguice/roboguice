@@ -49,13 +49,13 @@ import com.google.inject.Inject;
  *
  */
 @SuppressWarnings({"ImplicitArrayToString"})
-public class Ln  {
+public class Ln {
 
     /**
      * lnImpl is initially set to LnImpl() with sensible defaults, then replaced
      * by whatever binding you choose during guice static injection pass.
      */
-    @Inject protected static LnImpl lnImpl = new LnImpl();
+    @Inject(optional = true) protected static LnInterface lnImpl = new LnImpl();
 
 
 

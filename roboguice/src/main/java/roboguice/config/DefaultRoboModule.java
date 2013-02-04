@@ -36,6 +36,7 @@ import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
+import roboguice.util.LnImpl;
 import roboguice.util.Strings;
 
 /**
@@ -121,6 +122,10 @@ public class DefaultRoboModule extends AbstractModule {
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
 
 
+        bind(Ln.Config.class).to(LnImpl.BaseConfig.class);
+        bind(Ln.Print.class).to(LnImpl.BasePrint.class);
+
+
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
         bind(PreferenceListener.class).toInstance(preferenceListener);
@@ -184,12 +189,14 @@ public class DefaultRoboModule extends AbstractModule {
 
         // Compatibility library bindings
         if(fragmentManagerClass!=null) {
+            //noinspection unchecked
             bind(fragmentManagerClass).toProvider(FragmentManagerProvider.class);
         }
 
 
         // 2.0 Eclair
         if( VERSION.SDK_INT>=5 ) {
+            //noinspection unchecked
             bind(accountManagerClass).toProvider(AccountManagerProvider.class);
         }
 

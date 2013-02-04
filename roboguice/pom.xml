@@ -3,7 +3,7 @@
     <groupId>org.roboguice</groupId>
     <artifactId>roboguice</artifactId>
     <name>RoboGuice</name>
-    <version>3.0-experimental-SNAPSHOT</version>
+    <version>3.0a-experimental-SNAPSHOT</version>
     <description>A framework for using Google Guice dependency injection in Android.</description>
 
     <licenses>

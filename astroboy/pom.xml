@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.roboguice</groupId>
     <artifactId>astroboy</artifactId>
-    <version>3.0-experimental-SNAPSHOT</version>
+    <version>3.0a-experimental-SNAPSHOT</version>
     <packaging>apk</packaging>
     <name>astroboy</name>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>org.roboguice</groupId>
             <artifactId>roboguice</artifactId>
-            <version>3.0-experimental-SNAPSHOT</version>
+            <version>3.0a-experimental-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>

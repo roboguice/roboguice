@@ -3,7 +3,7 @@
     <groupId>org.roboguice</groupId>
     <artifactId>roboguice</artifactId>
     <name>RoboGuice</name>
-    <version>3.0a-experimental-SNAPSHOT</version>
+    <version>3.0b-experimental</version>
     <description>A framework for using Google Guice dependency injection in Android.</description>
 
     <licenses>
@@ -42,7 +42,7 @@
         <url>https://github.com/roboguice/roboguice</url>
         <connection>scm:git:https://github.com/roboguice/roboguice.git</connection>
         <developerConnection>scm:git:https://github.com/roboguice/roboguice.git</developerConnection>
-      <tag>HEAD</tag>
+      <tag>roboguice-3.0b-experimental</tag>
   </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

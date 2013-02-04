@@ -33,10 +33,10 @@ import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
-import roboguice.fragment.FragmentUtil;
 import roboguice.inject.*;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
+import roboguice.util.LnImpl;
 import roboguice.util.Strings;
 
 /**
@@ -56,11 +56,19 @@ import roboguice.util.Strings;
  * @author Mike Burton
  */
 public class DefaultRoboModule extends AbstractModule {
-    @SuppressWarnings("rawtypes")
-	protected static final Class accountManagerClass;
+    protected static final Class fragmentManagerClass;
+    protected static final Class accountManagerClass;
 
     static {
-        Class<?> c = null;
+        Class c = null;
+        try {
+            c = Class.forName("android.support.v4.app.FragmentManager");
+        } catch( Throwable ignored ) {}
+        fragmentManagerClass = c;
+    }
+
+    static {
+        Class c = null;
         try {
             c = Class.forName("android.accounts.AccountManager");
         } catch( Throwable ignored ) {}
@@ -112,6 +120,10 @@ public class DefaultRoboModule extends AbstractModule {
 
         if(Strings.notEmpty(androidId))
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
+
+
+        bind(Ln.Config.class).to(LnImpl.BaseConfig.class);
+        bind(Ln.Print.class).to(LnImpl.BasePrint.class);
 
 
         // Singletons
@@ -179,19 +191,19 @@ public class DefaultRoboModule extends AbstractModule {
     }
 
     @SuppressWarnings("unchecked")
-	private void bindDynamicBindings() {
-		// Compatibility library bindings
+    private void bindDynamicBindings() {
+        // Compatibility library bindings
         if(FragmentUtil.hasSupport) {
             bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
         }
         if(FragmentUtil.hasNative) {
-        	bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
+            bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
         }
 
         // 2.0 Eclair
         if( VERSION.SDK_INT>=5 ) {
             bind(accountManagerClass).toProvider(AccountManagerProvider.class);
         }
-	}
+    }
 
 }

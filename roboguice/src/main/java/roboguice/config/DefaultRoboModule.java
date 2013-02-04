@@ -36,7 +36,6 @@ import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
-import roboguice.util.LnImpl;
 import roboguice.util.Strings;
 
 /**
@@ -121,9 +120,6 @@ public class DefaultRoboModule extends AbstractModule {
         if(Strings.notEmpty(androidId))
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
 
-
-        bind(Ln.Config.class).to(LnImpl.BaseConfig.class);
-        bind(Ln.Print.class).to(LnImpl.BasePrint.class);
 
 
         // Singletons

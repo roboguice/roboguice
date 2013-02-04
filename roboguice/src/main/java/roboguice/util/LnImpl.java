@@ -7,25 +7,29 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class LnImpl {
+public class LnImpl implements LnInterface {
     /**
      * config is initially set to BaseConfig() with sensible defaults, then replaced
      * by BaseConfig(ContextSingleton) during guice static injection pass.
      */
-    @Inject protected BaseConfig config = new BaseConfig();
+    @Inject(optional = true) protected Ln.Config config = new BaseConfig();
 
     /**
      * print is initially set to Print(), then replaced by guice during
      * static injection pass.  This allows overriding where the log message is delivered to.
      */
-    @Inject protected Ln.Print print = new BasePrint();
+    @Inject(optional = true) protected Ln.Print print = new BasePrint();
 
+
+
+    @Override
     public int v(Throwable t) {
-        return config.minimumLogLevel <= Log.VERBOSE ? print.println(Log.VERBOSE, Log.getStackTraceString(t)) : 0;
+        return config.getLoggingLevel() <= Log.VERBOSE ? print.println(Log.VERBOSE, Log.getStackTraceString(t)) : 0;
     }
 
+    @Override
     public int v(Object s1, Object... args) {
-        if( config.minimumLogLevel > Log.VERBOSE )
+        if( config.getLoggingLevel()> Log.VERBOSE )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -33,8 +37,9 @@ public class LnImpl {
         return print.println(Log.VERBOSE, message);
     }
 
+    @Override
     public int v(Throwable throwable, Object s1, Object[] args) {
-        if( config.minimumLogLevel > Log.VERBOSE )
+        if( config.getLoggingLevel()> Log.VERBOSE )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -42,12 +47,14 @@ public class LnImpl {
         return print.println(Log.VERBOSE, message);
     }
 
+    @Override
     public int d(Throwable t) {
-        return config.minimumLogLevel <= Log.DEBUG ? print.println(Log.DEBUG, Log.getStackTraceString(t)) : 0;
+        return config.getLoggingLevel()<= Log.DEBUG ? print.println(Log.DEBUG, Log.getStackTraceString(t)) : 0;
     }
 
+    @Override
     public int d(Object s1, Object... args) {
-        if( config.minimumLogLevel > Log.DEBUG )
+        if( config.getLoggingLevel()> Log.DEBUG )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -55,8 +62,9 @@ public class LnImpl {
         return print.println(Log.DEBUG, message);
     }
 
-    public int d(Throwable throwable, Object s1, Object... args ) {
-        if( config.minimumLogLevel > Log.DEBUG )
+    @Override
+    public int d(Throwable throwable, Object s1, Object... args) {
+        if( config.getLoggingLevel()> Log.DEBUG )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -64,12 +72,14 @@ public class LnImpl {
         return print.println(Log.DEBUG, message);
     }
 
+    @Override
     public int i(Throwable t) {
-        return config.minimumLogLevel <= Log.INFO ? print.println(Log.INFO, Log.getStackTraceString(t)) : 0;
+        return config.getLoggingLevel()<= Log.INFO ? print.println(Log.INFO, Log.getStackTraceString(t)) : 0;
     }
 
+    @Override
     public int i(Throwable throwable, Object s1, Object... args) {
-        if( config.minimumLogLevel > Log.INFO )
+        if( config.getLoggingLevel()> Log.INFO )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -77,8 +87,9 @@ public class LnImpl {
         return print.println(Log.INFO, message);
     }
 
+    @Override
     public int i(Object s1, Object... args) {
-        if( config.minimumLogLevel > Log.INFO )
+        if( config.getLoggingLevel()> Log.INFO )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -86,12 +97,14 @@ public class LnImpl {
         return print.println(Log.INFO, message);
     }
 
+    @Override
     public int w(Throwable t) {
-        return config.minimumLogLevel <= Log.WARN ? print.println(Log.WARN, Log.getStackTraceString(t)) : 0;
+        return config.getLoggingLevel()<= Log.WARN ? print.println(Log.WARN, Log.getStackTraceString(t)) : 0;
     }
 
+    @Override
     public int w(Throwable throwable, Object s1, Object... args) {
-        if( config.minimumLogLevel > Log.WARN )
+        if( config.getLoggingLevel()> Log.WARN )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -99,8 +112,9 @@ public class LnImpl {
         return print.println(Log.WARN, message);
     }
 
+    @Override
     public int w(Object s1, Object... args) {
-        if( config.minimumLogLevel > Log.WARN )
+        if( config.getLoggingLevel()> Log.WARN )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -108,12 +122,14 @@ public class LnImpl {
         return print.println(Log.WARN, message);
     }
 
+    @Override
     public int e(Throwable t) {
-        return config.minimumLogLevel <= Log.ERROR ? print.println(Log.ERROR, Log.getStackTraceString(t)) : 0;
+        return config.getLoggingLevel()<= Log.ERROR ? print.println(Log.ERROR, Log.getStackTraceString(t)) : 0;
     }
 
+    @Override
     public int e(Throwable throwable, Object s1, Object... args) {
-        if( config.minimumLogLevel > Log.ERROR )
+        if( config.getLoggingLevel()> Log.ERROR )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -121,8 +137,9 @@ public class LnImpl {
         return print.println(Log.ERROR, message);
     }
 
+    @Override
     public int e(Object s1, Object... args) {
-        if( config.minimumLogLevel > Log.ERROR )
+        if( config.getLoggingLevel()> Log.ERROR )
             return 0;
 
         final String s = Strings.toString(s1);
@@ -130,18 +147,22 @@ public class LnImpl {
         return print.println(Log.ERROR, message);
     }
 
+    @Override
     public boolean isDebugEnabled() {
-        return config.minimumLogLevel <= Log.DEBUG;
+        return config.getLoggingLevel()<= Log.DEBUG;
     }
 
+    @Override
     public boolean isVerboseEnabled() {
-        return config.minimumLogLevel <= Log.VERBOSE;
+        return config.getLoggingLevel()<= Log.VERBOSE;
     }
 
-    public BaseConfig getConfig() {
+    @Override
+    public Ln.Config getConfig() {
         return config;
     }
 
+    @Override
     public String logLevelToString(int loglevel) {
         switch( loglevel ) {
             case Log.VERBOSE:

@@ -17,7 +17,7 @@ RoboGuice 2 applications have been Featured on the Android Market for years. It 
 
 It works, and people are using it. Why not give it a spin?
 
-[Get Started with RoboGuice 2](https://github.com/emmby/roboguice/wiki)!
+[Get Started with RoboGuice 2](https://github.com/roboguice/roboguice/wiki)!
 
 <br/>
 <br/>

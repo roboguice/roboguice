@@ -21,12 +21,23 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import com.google.inject.Inject;
 import com.google.inject.Key;
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
+
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.context.event.OnConfigurationChangedEvent;
 import roboguice.context.event.OnCreateEvent;
 import roboguice.context.event.OnDestroyEvent;
 import roboguice.context.event.OnStartEvent;
+import roboguice.activity.event.OnActivityResultEvent;
+import roboguice.activity.event.OnContentChangedEvent;
+import roboguice.activity.event.OnNewIntentEvent;
+import roboguice.activity.event.OnPauseEvent;
+import roboguice.activity.event.OnRestartEvent;
+import roboguice.activity.event.OnResumeEvent;
+import roboguice.activity.event.OnStopEvent;
 import roboguice.event.EventManager;
 import roboguice.inject.ContentViewListener;
 import roboguice.inject.RoboInjector;
@@ -34,6 +45,10 @@ import roboguice.util.RoboContext;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -63,9 +78,10 @@ import java.util.Map;
  */
 public class RoboActivity extends Activity implements RoboContext {
     protected EventManager eventManager;
-    protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>, Object>();
+    protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
-    @Inject ContentViewListener ignored; // BUG find a better place to put this
+    @Inject
+    ContentViewListener ignored; // BUG find a better place to put this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +123,7 @@ public class RoboActivity extends Activity implements RoboContext {
     }
 
     @Override
-    protected void onNewIntent( Intent intent ) {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         eventManager.fire(new OnNewIntentEvent(this));
     }
@@ -157,5 +173,32 @@ public class RoboActivity extends Activity implements RoboContext {
     @Override
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
+    }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        try {
+            Class clazz = Class.forName(name);
+            Constructor constructor = clazz.getConstructor(Context.class, AttributeSet.class);
+            View view = (View) constructor.newInstance(context, attrs);
+            final RoboInjector injector = RoboGuice.getInjector(this);
+            injector.injectMembers(view);
+            return view;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return super.onCreateView(name, context, attrs);
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        View view = super.onCreateView(parent, name, context, attrs);
+        final RoboInjector injector = RoboGuice.getInjector(this);
+        try {
+            injector.injectMembers(view);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return view;
     }
 }

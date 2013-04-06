@@ -174,28 +174,35 @@ public class RoboActivity extends Activity implements RoboContext {
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        try {
-            Class clazz = Class.forName(name);
-            Constructor constructor = clazz.getConstructor(Context.class, AttributeSet.class);
-            View view = (View) constructor.newInstance(context, attrs);
-            final RoboInjector injector = RoboGuice.getInjector(this);
-            injector.injectMembers(view);
-            return view;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (name.indexOf('.') != -1) {
+            try {
+                Class<?> clazz = Class.forName(name);
+                Constructor<?> constructor = clazz.getConstructor(Context.class, AttributeSet.class);
+                View view = (View) constructor.newInstance(context, attrs);
+                final RoboInjector injector = RoboGuice.getInjector(this);
+                injector.injectMembers(view);
+                return view;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return super.onCreateView(name, context, attrs);
     }
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        View view = super.onCreateView(parent, name, context, attrs);
-        final RoboInjector injector = RoboGuice.getInjector(this);
-        try {
-            injector.injectMembers(view);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (name.indexOf('.') != -1) {
+            try {
+                Class<?> clazz = Class.forName(name);
+                Constructor<?> constructor = clazz.getConstructor(Context.class, AttributeSet.class);
+                View view = (View) constructor.newInstance(context, attrs);
+                final RoboInjector injector = RoboGuice.getInjector(this);
+                injector.injectMembers(view);
+                return view;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        return view;
+        return super.onCreateView(parent, name, context, attrs);
     }
 }

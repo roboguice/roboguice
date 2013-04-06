@@ -10,7 +10,14 @@
 
 # generated files
 bin/
+target/
 gen/
+tmp/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+#eclipse files
+.settings
+.project
+.classpath

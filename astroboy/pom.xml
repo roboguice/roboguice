@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.roboguice</groupId>
     <artifactId>astroboy</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.1-SNAPSHOT</version>
     <packaging>apk</packaging>
     <name>astroboy</name>
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>org.roboguice</groupId>
             <artifactId>roboguice</artifactId>
-            <version>2.0-SNAPSHOT</version>
+            <version>2.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
@@ -25,40 +25,12 @@
         </dependency>
 
 
-        <!-- TEST DEPENDENCIES -->
-
-        <dependency>
-            <groupId>com.pivotallabs</groupId>
-            <artifactId>robolectric</artifactId>
-            <version>1.0-RC1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>3.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-integration</artifactId>
-            <version>1.3.RC2</version>
-            <scope>test</scope>
-        </dependency>
-
-
         <!-- PROVIDED DEPENDENCIES -->
 
         <dependency>
             <groupId>com.google.android</groupId>
             <artifactId>android</artifactId>
-            <version>2.2.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>4.1.1.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>  <!-- needed to prevent warnings in robolectric tests -->
@@ -75,7 +47,7 @@
             <plugin>
                 <groupId>com.jayway.maven.plugins.android.generation2</groupId>
                 <artifactId>android-maven-plugin</artifactId>
-                <version>3.0.0-alpha-13</version>
+                <version>3.5.2</version>
                 <configuration>
                     <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
                     <assetsDirectory>${project.basedir}/assets</assetsDirectory>

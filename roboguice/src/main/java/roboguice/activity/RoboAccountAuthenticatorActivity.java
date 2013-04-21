@@ -57,6 +57,12 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        eventManager.fire(new OnSaveInstanceStateEvent(outState));
+    }
+
+    @Override
     protected void onRestart() {
         super.onRestart();
         eventManager.fire(new OnRestartEvent());

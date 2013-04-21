@@ -69,6 +69,12 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        eventManager.fire(new OnSaveInstanceStateEvent(outState));
+    }
+
+    @Override
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);
 

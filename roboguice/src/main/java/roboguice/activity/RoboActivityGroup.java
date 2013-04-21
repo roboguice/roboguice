@@ -15,8 +15,13 @@
  */
 package roboguice.activity;
 
+import android.app.Activity;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
+import roboguice.context.event.OnConfigurationChangedEvent;
+import roboguice.context.event.OnCreateEvent;
+import roboguice.context.event.OnDestroyEvent;
+import roboguice.context.event.OnStartEvent;
 import roboguice.event.EventManager;
 import roboguice.inject.ContentViewListener;
 import roboguice.inject.RoboInjector;
@@ -56,7 +61,7 @@ public class RoboActivityGroup extends ActivityGroup implements RoboContext {
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
-        eventManager.fire(new OnCreateEvent(savedInstanceState));
+        eventManager.fire(new OnCreateEvent<Activity>(this,savedInstanceState));
     }
 
     @Override
@@ -76,7 +81,7 @@ public class RoboActivityGroup extends ActivityGroup implements RoboContext {
     @Deprecated
     protected void onStart() {
         super.onStart();
-        eventManager.fire(new OnStartEvent());
+        eventManager.fire(new OnStartEvent<Activity>(this));
     }
 
     @Override
@@ -114,7 +119,7 @@ public class RoboActivityGroup extends ActivityGroup implements RoboContext {
     @Deprecated
     protected void onDestroy() {
         try {
-            eventManager.fire(new OnDestroyEvent());
+            eventManager.fire(new OnDestroyEvent<Activity>(this));
         } finally {
             try {
                 RoboGuice.destroyInjector(this);
@@ -129,7 +134,7 @@ public class RoboActivityGroup extends ActivityGroup implements RoboContext {
     public void onConfigurationChanged(Configuration newConfig) {
         final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig));
+        eventManager.fire(new OnConfigurationChangedEvent<Activity>(this,currentConfig, newConfig));
     }
 
     @Override

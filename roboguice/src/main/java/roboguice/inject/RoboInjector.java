@@ -9,4 +9,5 @@ public interface RoboInjector extends Injector {
     void injectViewMembers(Activity activity);
     void injectViewMembers(Fragment fragment);
     void injectMembersWithoutViews(Object instance);
+    void injectViewMembers(android.app.Fragment roboNativeDialogFragment);
 }

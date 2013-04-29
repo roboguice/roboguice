@@ -4,7 +4,6 @@ import roboguice.inject.ViewListener.ViewMembersInjector;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.Fragment;
 
 import com.google.inject.*;
 import com.google.inject.spi.TypeConverterBinding;
@@ -263,7 +262,19 @@ public class ContextScopedRoboInjector implements RoboInjector {
     }
 
     @Override
-    public void injectViewMembers(Fragment fragment) {
+    public void injectViewMembers(android.support.v4.app.Fragment fragment) {
+        synchronized (ContextScope.class) {
+            scope.enter(context);
+            try {
+                ViewMembersInjector.injectViews(fragment);
+            } finally {
+                scope.exit(context);
+            }
+        }
+    }
+
+    @Override
+    public void injectViewMembers(android.app.Fragment fragment) {
         synchronized (ContextScope.class) {
             scope.enter(context);
             try {

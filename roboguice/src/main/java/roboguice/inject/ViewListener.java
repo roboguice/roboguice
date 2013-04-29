@@ -38,47 +38,93 @@ import java.util.WeakHashMap;
 @Singleton
 public class ViewListener implements TypeListener {
     
+    protected static Class<?> fragmentActivityClass = null;
     protected static Class fragmentClass = null;
     protected static Class fragmentManagerClass = null;
     protected static Method fragmentGetViewMethod = null;
     protected static Method fragmentFindFragmentByIdMethod = null;
     protected static Method fragmentFindFragmentByTagMethod = null;
 
+    protected static Class nfragmentClass = null;
+    protected static Class nfragmentManagerClass = null;
+    protected static Method nfragmentGetViewMethod = null;
+    protected static Method nfragmentFindFragmentByIdMethod = null;
+    protected static Method nfragmentFindFragmentByTagMethod = null;
+    
+    private static boolean hasNative; 
+    private static boolean hasSupport;
+    
     static {
         try {
             fragmentClass = Class.forName("android.support.v4.app.Fragment");
             fragmentManagerClass = Class.forName("android.support.v4.app.FragmentManager");
+            fragmentActivityClass = Class.forName("android.support.v4.app.FragmentActivity");
             fragmentGetViewMethod = fragmentClass.getDeclaredMethod("getView");
             fragmentFindFragmentByIdMethod = fragmentManagerClass.getMethod("findFragmentById", int.class);
             fragmentFindFragmentByTagMethod = fragmentManagerClass.getMethod("findFragmentByTag", String.class);
+            hasSupport = fragmentClass != null;
         } catch( Throwable ignored ) {}
     }
-
+    
+    static {
+        try {
+            nfragmentClass = Class.forName("android.app.Fragment");
+            nfragmentManagerClass = Class.forName("android.app.FragmentManager");
+            nfragmentGetViewMethod = nfragmentClass.getDeclaredMethod("getView");
+            nfragmentFindFragmentByIdMethod = nfragmentManagerClass.getMethod("findFragmentById", int.class);
+            nfragmentFindFragmentByTagMethod = nfragmentManagerClass.getMethod("findFragmentByTag", String.class);
+            hasNative = nfragmentClass != null;
+        } catch( Throwable ignored ) {}
+    }
+    
+    @Override
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
 
-        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
-            for (Field field : c.getDeclaredFields())
+        for (Class<?> c = typeLiteral.getRawType(); c != Object.class; c = c.getSuperclass())
+            for (Field field : c.getDeclaredFields()) {
                 if (field.isAnnotationPresent(InjectView.class))
-                    if( Modifier.isStatic(field.getModifiers()) )
+                    if (Modifier.isStatic(field.getModifiers()))
                         throw new UnsupportedOperationException("Views may not be statically injected");
-                    else if( !View.class.isAssignableFrom(field.getType()))
+                    else if (!View.class.isAssignableFrom(field.getType()))
                         throw new UnsupportedOperationException("You may only use @InjectView on fields descended from type View");
-                    else if( Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
+                    else if (Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
                         throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
                     else
                         typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class), typeEncounter));
-                
-                
-                else if (field.isAnnotationPresent(InjectFragment.class))
-                    if( Modifier.isStatic(field.getModifiers()) )
-                        throw new UnsupportedOperationException("Fragments may not be statically injected");
-                    else if( fragmentClass!=null && !fragmentClass.isAssignableFrom(field.getType()))
-                        throw new UnsupportedOperationException("You may only use @InjectFragment on fields descended from type Fragment");
-                    else if( Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
-                        throw new UnsupportedOperationException("You may only use @InjectFragment in Activity contexts");
-                    else
-                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter));
 
+                else if (field.isAnnotationPresent(InjectFragment.class))
+                    if (fragmentClass == null && nfragmentClass == null) {
+                        throw new RuntimeException(new ClassNotFoundException("Neither " + fragmentClass.getCanonicalName() + " nor "
+                                + nfragmentClass.getCanonicalName() + " was available"));
+                    }
+
+                if (Modifier.isStatic(field.getModifiers())) {
+                    throw new UnsupportedOperationException("Fragments may not be statically injected");
+
+                } else {
+                    final boolean assignableFromNative = hasNative && nfragmentClass.isAssignableFrom(field.getType());
+                    final boolean assignableFromSupport = hasSupport && fragmentClass.isAssignableFrom(field.getType());
+                    final boolean isSupportActivity = hasSupport && fragmentActivityClass.isAssignableFrom(field.getDeclaringClass());
+                    final boolean isNativeActivity = !isSupportActivity && Activity.class.isAssignableFrom(field.getDeclaringClass());
+
+                    if ((isNativeActivity && assignableFromNative) || (isSupportActivity && assignableFromSupport)) {
+                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter));
+                    }
+                    // Error messages - these filters are comprehensive. The
+                    // final else block will never execute.
+                    else if (isNativeActivity && !assignableFromNative) {
+                        throw new UnsupportedOperationException(
+                                "You may only use @InjectFragment in native activities if fields are descended from type android.app.Fragment");
+                    } else if (!isSupportActivity && !isNativeActivity) {
+                        throw new UnsupportedOperationException("You may only use @InjectFragment in Activity contexts");
+                    } else if (isSupportActivity && !assignableFromSupport) {
+                        throw new UnsupportedOperationException(
+                                "You may only use @InjectFragment in support activities if fields are descended from type android.support.v4.app.Fragment");
+                    } else {
+                        throw new RuntimeException("This should never happen.");
+                    }
+                }
+            }
     }
 
 
@@ -246,10 +292,6 @@ public class ViewListener implements TypeListener {
                         viewMembersInjector.reallyInjectMembers(activityOrFragment);
             }
         }
-
-
-
-
     }
 
 }

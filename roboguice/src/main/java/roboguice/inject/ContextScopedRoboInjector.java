@@ -263,19 +263,16 @@ public class ContextScopedRoboInjector implements RoboInjector {
 
     @Override
     public void injectViewMembers(android.support.v4.app.Fragment fragment) {
-        synchronized (ContextScope.class) {
-            scope.enter(context);
-            try {
-                ViewMembersInjector.injectViews(fragment);
-            } finally {
-                scope.exit(context);
-            }
-        }
+        injectViews(fragment);
     }
 
     @Override
     public void injectViewMembers(android.app.Fragment fragment) {
-        synchronized (ContextScope.class) {
+        injectViews(fragment);
+    }
+
+	private void injectViews(Object fragment) {
+		synchronized (ContextScope.class) {
             scope.enter(context);
             try {
                 ViewMembersInjector.injectViews(fragment);
@@ -283,5 +280,5 @@ public class ContextScopedRoboInjector implements RoboInjector {
                 scope.exit(context);
             }
         }
-    }
+	}
 }

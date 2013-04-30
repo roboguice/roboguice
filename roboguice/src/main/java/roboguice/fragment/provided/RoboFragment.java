@@ -1,4 +1,4 @@
-package roboguice.fragment;
+package roboguice.fragment.provided;
 
 import roboguice.RoboGuice;
 
@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2) 
-public abstract class RoboNativeFragment extends Fragment {
+public abstract class RoboFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

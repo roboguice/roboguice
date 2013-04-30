@@ -3,7 +3,7 @@
 <!-- only used by robolectric -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="roboguice.roboguice"
+      package="roboguice"
       android:versionCode="1"
       android:versionName="1.0">
 

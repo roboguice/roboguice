@@ -1,4 +1,6 @@
-package roboguice.inject;
+package roboguice.support.fragment;
+
+import roboguice.inject.ContextSingleton;
 
 import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
@@ -13,7 +15,6 @@ public class FragmentManagerProvider implements Provider<FragmentManager> {
 
     @Override
     public FragmentManager get() {
-        // BUG only supports compat library at the moment.  Does not support honeycomb directly yet
         return ((FragmentActivity)activity).getSupportFragmentManager();
     }
 }

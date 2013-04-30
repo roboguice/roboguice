@@ -18,6 +18,7 @@ package roboguice.inject;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
+import roboguice.provided.fragment.FragmentUtil;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
@@ -29,54 +30,14 @@ import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 
 @Singleton
+@SuppressWarnings("unchecked")
 public class ViewListener implements TypeListener {
-    
-    protected static Class<?> fragmentActivityClass = null;
-    protected static Class fragmentClass = null;
-    protected static Class fragmentManagerClass = null;
-    protected static Method fragmentGetViewMethod = null;
-    protected static Method fragmentFindFragmentByIdMethod = null;
-    protected static Method fragmentFindFragmentByTagMethod = null;
-
-    protected static Class nfragmentClass = null;
-    protected static Class nfragmentManagerClass = null;
-    protected static Method nfragmentGetViewMethod = null;
-    protected static Method nfragmentFindFragmentByIdMethod = null;
-    protected static Method nfragmentFindFragmentByTagMethod = null;
-    
-    private static boolean hasNative; 
-    private static boolean hasSupport;
-    
-    static {
-        try {
-            fragmentClass = Class.forName("android.support.v4.app.Fragment");
-            fragmentManagerClass = Class.forName("android.support.v4.app.FragmentManager");
-            fragmentActivityClass = Class.forName("android.support.v4.app.FragmentActivity");
-            fragmentGetViewMethod = fragmentClass.getDeclaredMethod("getView");
-            fragmentFindFragmentByIdMethod = fragmentManagerClass.getMethod("findFragmentById", int.class);
-            fragmentFindFragmentByTagMethod = fragmentManagerClass.getMethod("findFragmentByTag", String.class);
-            hasSupport = fragmentClass != null;
-        } catch( Throwable ignored ) {}
-    }
-    
-    static {
-        try {
-            nfragmentClass = Class.forName("android.app.Fragment");
-            nfragmentManagerClass = Class.forName("android.app.FragmentManager");
-            nfragmentGetViewMethod = nfragmentClass.getDeclaredMethod("getView");
-            nfragmentFindFragmentByIdMethod = nfragmentManagerClass.getMethod("findFragmentById", int.class);
-            nfragmentFindFragmentByTagMethod = nfragmentManagerClass.getMethod("findFragmentByTag", String.class);
-            hasNative = nfragmentClass != null;
-        } catch( Throwable ignored ) {}
-    }
-    
+       
     @Override
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
 
@@ -90,25 +51,24 @@ public class ViewListener implements TypeListener {
                     else if (Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
                         throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
                     else
-                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class), typeEncounter));
+                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectView.class), typeEncounter, null));
 
                 else if (field.isAnnotationPresent(InjectFragment.class))
-                    if (fragmentClass == null && nfragmentClass == null) {
-                        throw new RuntimeException(new ClassNotFoundException("Neither " + fragmentClass.getCanonicalName() + " nor "
-                                + nfragmentClass.getCanonicalName() + " was available"));
+                    if (!FragmentUtil.hasNative && !FragmentUtil.hasSupport) {
+                        throw new RuntimeException(new ClassNotFoundException("No fragment classes were available"));
                     }
 
                 if (Modifier.isStatic(field.getModifiers())) {
                     throw new UnsupportedOperationException("Fragments may not be statically injected");
 
                 } else {
-                    final boolean assignableFromNative = hasNative && nfragmentClass.isAssignableFrom(field.getType());
-                    final boolean assignableFromSupport = hasSupport && fragmentClass.isAssignableFrom(field.getType());
-                    final boolean isSupportActivity = hasSupport && fragmentActivityClass.isAssignableFrom(field.getDeclaringClass());
+                    final boolean assignableFromNative = FragmentUtil.hasNative && FragmentUtil.nativeFrag.fragmentType().isAssignableFrom(field.getType());
+                    final boolean assignableFromSupport = FragmentUtil.hasSupport && FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getType());
+                    final boolean isSupportActivity = FragmentUtil.hasSupport && FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass());
                     final boolean isNativeActivity = !isSupportActivity && Activity.class.isAssignableFrom(field.getDeclaringClass());
 
                     if ((isNativeActivity && assignableFromNative) || (isSupportActivity && assignableFromSupport)) {
-                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter));
+                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter, isNativeActivity ? FragmentUtil.nativeFrag:FragmentUtil.supportFrag));
                     }
                     // Error messages - these filters are comprehensive. The
                     // final else block will never execute.
@@ -137,17 +97,20 @@ public class ViewListener implements TypeListener {
         protected Field field;
         protected Annotation annotation;
         protected WeakReference<T> instanceRef;
-        protected Provider fragmentManagerProvider;
+        protected FragmentUtil.f fragUtils;
+        protected Provider fragManager;
         protected Provider<Activity> activityProvider;
         
 
-        public ViewMembersInjector(Field field, Annotation annotation, TypeEncounter<T> typeEncounter ) {
+        public ViewMembersInjector(Field field, Annotation annotation, TypeEncounter<T> typeEncounter, FragmentUtil.f utils) {
             this.field = field;
             this.annotation = annotation;
             this.activityProvider = typeEncounter.getProvider(Activity.class);
 
-            if( fragmentManagerClass!=null )
-                this.fragmentManagerProvider = typeEncounter.getProvider(fragmentManagerClass);
+            if( utils !=null ) {
+                this.fragUtils = utils;
+                this.fragManager = typeEncounter.getProvider(utils.fragmentManagerType());
+            }
 
         }
 
@@ -160,7 +123,7 @@ public class ViewListener implements TypeListener {
         public void injectMembers(T instance) {
             synchronized (ViewMembersInjector.class) {
                 final Activity activity = activityProvider.get();
-                final Object key = fragmentClass!=null && fragmentClass.isInstance(instance) ? instance : activity;
+                final Object key = fragUtils != null && fragUtils.fragmentType().isInstance(instance) ? instance : activity;
                 if( key==null )
                     return;
 
@@ -171,9 +134,6 @@ public class ViewListener implements TypeListener {
                     viewMembersInjectors.put(key, injectors);
                 }
                 injectors.add(this);
-
-
-
 
                 this.instanceRef = new WeakReference<T>(instance);
             }
@@ -201,7 +161,7 @@ public class ViewListener implements TypeListener {
          */
         protected void reallyInjectMemberViews(Object activityOrFragment) {
 
-            final T instance = fragmentClass!=null && fragmentClass.isInstance(activityOrFragment) ? (T)activityOrFragment : instanceRef.get();
+            final T instance = fragUtils != null && fragUtils.fragmentType().isInstance(activityOrFragment) ? (T)activityOrFragment : instanceRef.get();
             if( instance==null )
                 return;
 
@@ -215,10 +175,10 @@ public class ViewListener implements TypeListener {
                 final int id = injectView.value();
 
                 if( id>=0 )
-                    view = fragmentClass!=null && fragmentClass.isInstance(activityOrFragment) ? ((View)fragmentGetViewMethod.invoke(activityOrFragment)).findViewById(id) : ((Activity)activityOrFragment).findViewById(id);
+                    view = fragUtils != null && fragUtils.getClass().isInstance(activityOrFragment) ? (fragUtils.getView(activityOrFragment)).findViewById(id) : ((Activity)activityOrFragment).findViewById(id);
 
                 else
-                    view = fragmentClass!=null && fragmentClass.isInstance(activityOrFragment) ? ((View)fragmentGetViewMethod.invoke(activityOrFragment)).findViewWithTag(injectView.tag()) : ((Activity)activityOrFragment).getWindow().getDecorView().findViewWithTag(injectView.tag());
+                    view = fragUtils !=null && fragUtils.fragmentType().isInstance(activityOrFragment) ? (fragUtils.getView(activityOrFragment)).findViewWithTag(injectView.tag()) : ((Activity)activityOrFragment).getWindow().getDecorView().findViewWithTag(injectView.tag());
 
 
                 if (view == null && Nullable.notNullable(field))
@@ -230,10 +190,7 @@ public class ViewListener implements TypeListener {
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
 
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException(e);
-
-            } catch (IllegalArgumentException f) {
+            }  catch (IllegalArgumentException f) {
                 throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", view != null ? view.getClass() : "(null)", view,
                         field.getType(), field.getName()), f);
             }
@@ -259,11 +216,10 @@ public class ViewListener implements TypeListener {
                 final int id = injectFragment.value();
                 
                 if( id>=0 )
-                    fragment = fragmentFindFragmentByIdMethod.invoke(fragmentManagerProvider.get(), id);
-                
+                    fragment = fragUtils.findFragmentById(fragManager.get(), id);
                 else
-                    fragment = fragmentFindFragmentByTagMethod.invoke(fragmentManagerProvider.get(), injectFragment.tag());
-
+                    fragment = fragUtils.findFragmentByTag(fragManager.get(),injectFragment.tag());
+                
                 if (fragment == null && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
@@ -272,9 +228,6 @@ public class ViewListener implements TypeListener {
 
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
-
-            } catch (InvocationTargetException e) {
-                throw new RuntimeException( e );
 
             } catch (IllegalArgumentException f) {
                 throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", fragment != null ? fragment.getClass() : "(null)", fragment,

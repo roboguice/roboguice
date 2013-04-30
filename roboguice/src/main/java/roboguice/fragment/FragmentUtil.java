@@ -1,4 +1,4 @@
-package roboguice.provided.fragment;
+package roboguice.fragment;
 
 import com.google.inject.Provider;
 
@@ -26,12 +26,12 @@ public class FragmentUtil {
     
     static {
         try {
-            nativeFrag = (f) Class.forName("roboguice.provided.fragment.NativeFragmentUtil").newInstance();
+            nativeFrag = (f) Class.forName("roboguice.fragment.provided.NativeFragmentUtil").newInstance();
             hasNative = nativeFrag != null;
         } catch (Throwable e) {}
         
         try {
-            supportFrag = (f) Class.forName("roboguice.support.fragment.SupportFragmentUtil").newInstance();
+            supportFrag = (f) Class.forName("roboguice.fragment.support.SupportFragmentUtil").newInstance();
             supportActivity = Class.forName(SUPPORT_PACKAGE+"FragmentActivity");
             hasSupport = supportFrag != null && supportActivity != null;
         } catch (Throwable e) {}

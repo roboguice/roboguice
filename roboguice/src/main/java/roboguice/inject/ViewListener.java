@@ -18,8 +18,9 @@ package roboguice.inject;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import roboguice.provided.fragment.FragmentUtil;
-import roboguice.provided.fragment.FragmentUtil.f;
+
+import roboguice.fragment.FragmentUtil;
+import roboguice.fragment.FragmentUtil.f;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;

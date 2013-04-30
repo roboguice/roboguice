@@ -1,20 +1,24 @@
-package roboguice.support.fragment;
+package roboguice.fragment.support;
 
-import roboguice.provided.fragment.FragmentUtil.f;
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
+import roboguice.fragment.FragmentUtil.f;
+import roboguice.inject.ContextSingleton;
+
+import android.app.Activity;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
+@SuppressWarnings("unchecked") //we're being ambiguous on purpose
 public class SupportFragmentUtil implements f<Fragment, FragmentManager>{
 	// Incredible hack required to ensure that classes are loaded at construction time
 	// I.E. so that it fails fast if they're not found. TODO fix this
-	private final Class frag;
-	private final Class fragM;
-
 	public SupportFragmentUtil() throws ClassNotFoundException {
-		frag = Class.forName(Fragment.class.getName());
-		fragM = Class.forName(FragmentManager.class.getName());
+		Class.forName(Fragment.class.getName());
+		Class.forName(FragmentManager.class.getName());
 	}
 	
     @Override
@@ -45,6 +49,16 @@ public class SupportFragmentUtil implements f<Fragment, FragmentManager>{
 	@Override
 	public Class fragmentManagerProviderType() {
 		return FragmentManagerProvider.class;
+	}
+
+	@ContextSingleton
+	public static class FragmentManagerProvider implements Provider<FragmentManager> {
+	    @Inject protected Activity activity;
+
+	    @Override
+	    public FragmentManager get() {
+	        return ((FragmentActivity)activity).getSupportFragmentManager();
+	    }
 	}
 
 }

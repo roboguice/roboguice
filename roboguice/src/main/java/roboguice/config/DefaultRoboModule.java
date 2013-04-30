@@ -1,46 +1,6 @@
 package roboguice.config;
 
-import roboguice.activity.RoboActivity;
-import roboguice.event.EventManager;
-import roboguice.event.ObservesTypeListener;
-import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
-import roboguice.inject.AccountManagerProvider;
-import roboguice.inject.AssetManagerProvider;
-import roboguice.inject.ContentResolverProvider;
-import roboguice.inject.ContextScope;
-import roboguice.inject.ContextScopedSystemServiceProvider;
-import roboguice.inject.ContextSingleton;
-import roboguice.inject.ExtrasListener;
-import roboguice.inject.HandlerProvider;
-import roboguice.inject.NullProvider;
-import roboguice.inject.PreferenceListener;
-import roboguice.inject.ResourceListener;
-import roboguice.inject.ResourcesProvider;
-import roboguice.inject.SharedPreferencesProvider;
-import roboguice.inject.SystemServiceProvider;
-import roboguice.inject.ViewListener;
-import roboguice.provided.fragment.FragmentUtil;
-import roboguice.service.RoboService;
-import roboguice.util.Ln;
-import roboguice.util.LnImpl;
-import roboguice.util.LnInterface;
-import roboguice.util.Strings;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Key;
-import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
-import com.google.inject.matcher.Matchers;
-import com.google.inject.name.Names;
-
-import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.AlarmManager;
-import android.app.Application;
-import android.app.KeyguardManager;
-import android.app.NotificationManager;
-import android.app.SearchManager;
-import android.app.Service;
+import android.app.*;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -63,6 +23,21 @@ import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import com.google.inject.AbstractModule;
+import com.google.inject.Key;
+import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
+import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Names;
+import roboguice.activity.RoboActivity;
+import roboguice.event.EventManager;
+import roboguice.event.ObservesTypeListener;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+import roboguice.inject.*;
+import roboguice.provided.fragment.FragmentUtil;
+import roboguice.service.RoboService;
+import roboguice.util.Ln;
+import roboguice.util.Strings;
 
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
@@ -81,17 +56,7 @@ import android.view.inputmethod.InputMethodManager;
  * @author Mike Burton
  */
 public class DefaultRoboModule extends AbstractModule {
-    public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
-    protected static final Class fragmentManagerClass;
     protected static final Class accountManagerClass;
-
-    static {
-        Class c = null;
-        try {
-            c = Class.forName("android.support.v4.app.FragmentManager");
-        } catch( Throwable ignored ) {}
-        fragmentManagerClass = c;
-    }
 
     static {
         Class c = null;
@@ -148,11 +113,9 @@ public class DefaultRoboModule extends AbstractModule {
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
 
 
-
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
         bind(PreferenceListener.class).toInstance(preferenceListener);
-        bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
 
 
 
@@ -206,14 +169,11 @@ public class DefaultRoboModule extends AbstractModule {
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
 
 
-        bind(LnInterface.class).to(LnImpl.class);
-
         requestInjection(observerThreadingDecorator);
 
 
         requestStaticInjection(Ln.class);
 
-        System.out.println("hasSupport = "+FragmentUtil.hasSupport+ " hasNative = " +FragmentUtil.hasNative);
         // Compatibility library bindings
         if(FragmentUtil.hasSupport) {
             bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
@@ -221,7 +181,6 @@ public class DefaultRoboModule extends AbstractModule {
         if(FragmentUtil.hasNative) {
             bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(roboguice.provided.fragment.FragmentManagerProvider.class);
         }
-
 
         // 2.0 Eclair
         if( VERSION.SDK_INT>=5 ) {

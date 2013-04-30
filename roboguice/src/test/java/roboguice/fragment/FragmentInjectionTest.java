@@ -111,7 +111,6 @@ public class FragmentInjectionTest {
                 ref.setId(101);
                 return ref;
             }
-
         }
 
     }
@@ -146,7 +145,6 @@ public class FragmentInjectionTest {
                 viewRef.setId(101);
                 return viewRef;
             }
-
         }
 
     }
@@ -197,7 +195,6 @@ public class FragmentInjectionTest {
             setContentView(new FrameLayout(this));
             
         }
-
 
         public static class FragmentD extends RoboFragment {
             @InjectView(101) View v;

@@ -111,12 +111,6 @@ public class FragmentInjectionTest {
                 ref.setId(101);
                 return ref;
             }
-
-            @Override
-            public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-
-            }
         }
 
     }
@@ -152,12 +146,6 @@ public class FragmentInjectionTest {
                 viewRef = new View(getActivity());
                 viewRef.setId(101);
                 return viewRef;
-            }
-
-            @Override
-            public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-
             }
         }
 
@@ -223,16 +211,6 @@ public class FragmentInjectionTest {
             super.onResume();
         }
 
-        @Override
-        protected void onStop() {
-            super.onStop();
-        }
-
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
-        }
-
         public static class FragmentD extends RoboFragment {
             @InjectView(101) View v;
 
@@ -248,7 +226,6 @@ public class FragmentInjectionTest {
             @Override
             public void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
-
             }
         }
 

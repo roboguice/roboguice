@@ -174,7 +174,6 @@ public class DefaultRoboModule extends AbstractModule {
 
         requestStaticInjection(Ln.class);
 
-        System.out.println("hasSupport = "+FragmentUtil.hasSupport+ " hasNative = " +FragmentUtil.hasNative);
         // Compatibility library bindings
         if(FragmentUtil.hasSupport) {
             bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
@@ -182,7 +181,6 @@ public class DefaultRoboModule extends AbstractModule {
         if(FragmentUtil.hasNative) {
         	bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
         }
-
 
         // 2.0 Eclair
         if( VERSION.SDK_INT>=5 ) {

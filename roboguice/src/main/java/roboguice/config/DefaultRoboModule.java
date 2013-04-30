@@ -34,6 +34,7 @@ import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
+import roboguice.provided.fragment.FragmentUtil;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
 import roboguice.util.Strings;
@@ -55,16 +56,7 @@ import roboguice.util.Strings;
  * @author Mike Burton
  */
 public class DefaultRoboModule extends AbstractModule {
-    protected static final Class fragmentManagerClass;
     protected static final Class accountManagerClass;
-
-    static {
-        Class c = null;
-        try {
-            c = Class.forName("android.support.v4.app.FragmentManager");
-        } catch( Throwable ignored ) {}
-        fragmentManagerClass = c;
-    }
 
     static {
         Class c = null;
@@ -183,8 +175,11 @@ public class DefaultRoboModule extends AbstractModule {
         requestStaticInjection(Ln.class);
 
         // Compatibility library bindings
-        if(fragmentManagerClass!=null) {
-            bind(fragmentManagerClass).toProvider(FragmentManagerProvider.class);
+        if(FragmentUtil.hasSupport) {
+            bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(roboguice.support.fragment.FragmentManagerProvider.class);
+        }
+        if(FragmentUtil.hasNative) {
+        	bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(roboguice.provided.fragment.FragmentManagerProvider.class);
         }
 
 

@@ -174,12 +174,13 @@ public class DefaultRoboModule extends AbstractModule {
 
         requestStaticInjection(Ln.class);
 
+        System.out.println("hasSupport = "+FragmentUtil.hasSupport+ " hasNative = " +FragmentUtil.hasNative);
         // Compatibility library bindings
         if(FragmentUtil.hasSupport) {
-            bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(roboguice.support.fragment.FragmentManagerProvider.class);
+            bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
         }
         if(FragmentUtil.hasNative) {
-        	bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(roboguice.provided.fragment.FragmentManagerProvider.class);
+        	bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
         }
 
 

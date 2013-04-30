@@ -1,5 +1,7 @@
 package roboguice.provided.fragment;
 
+import com.google.inject.Provider;
+
 import android.view.View;
 
 public class FragmentUtil {
@@ -18,20 +20,21 @@ public class FragmentUtil {
         public fragType findFragmentByTag(fragManagerType fm, String tag);
         public Class fragmentType();
         public Class fragmentManagerType();
+        public Class<Provider<fragManagerType>> fragmentManagerProviderType();
     }
     
     
     static {
         try {
             nativeFrag = (f) Class.forName("roboguice.provided.fragment.NativeFragmentUtil").newInstance();
-            hasNative = true;
-        } catch (Exception e) {}
+            hasNative = nativeFrag != null;
+        } catch (Throwable e) {}
         
         try {
-            supportFrag = (f) Class.forName("roboguice.support.SupportFragmentUtil").newInstance();
+            supportFrag = (f) Class.forName("roboguice.support.fragment.SupportFragmentUtil").newInstance();
             supportActivity = Class.forName(SUPPORT_PACKAGE+"FragmentActivity");
-            hasSupport = true;
-        } catch (Exception e) {}
+            hasSupport = supportFrag != null && supportActivity != null;
+        } catch (Throwable e) {}
         
     }
 }

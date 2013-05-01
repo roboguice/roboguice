@@ -56,10 +56,11 @@ import roboguice.util.Strings;
  * @author Mike Burton
  */
 public class DefaultRoboModule extends AbstractModule {
-    protected static final Class accountManagerClass;
+    @SuppressWarnings("rawtypes")
+	protected static final Class accountManagerClass;
 
     static {
-        Class c = null;
+        Class<?> c = null;
         try {
             c = Class.forName("android.accounts.AccountManager");
         } catch( Throwable ignored ) {}
@@ -174,7 +175,12 @@ public class DefaultRoboModule extends AbstractModule {
 
         requestStaticInjection(Ln.class);
 
-        // Compatibility library bindings
+        bindDynamicBindings();
+    }
+
+    @SuppressWarnings("unchecked")
+	private void bindDynamicBindings() {
+		// Compatibility library bindings
         if(FragmentUtil.hasSupport) {
             bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
         }
@@ -186,8 +192,6 @@ public class DefaultRoboModule extends AbstractModule {
         if( VERSION.SDK_INT>=5 ) {
             bind(accountManagerClass).toProvider(AccountManagerProvider.class);
         }
-
-
-    }
+	}
 
 }

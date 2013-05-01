@@ -46,6 +46,7 @@ public class SupportFragmentUtil implements f<Fragment, FragmentManager>{
         return FragmentManager.class;
     }
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Class fragmentManagerProviderType() {
 		return FragmentManagerProvider.class;

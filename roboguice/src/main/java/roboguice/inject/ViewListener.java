@@ -53,7 +53,7 @@ public class ViewListener implements TypeListener {
                     else if (Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
                     	throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
                     else {
-                    	final f utils = FragmentUtil.hasSupport 
+                    	final f<?,?> utils = FragmentUtil.hasSupport 
                     			&& (FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass()) 
                     					|| FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getDeclaringClass()))
                     					? FragmentUtil.supportFrag : FragmentUtil.nativeFrag;
@@ -105,12 +105,14 @@ public class ViewListener implements TypeListener {
         protected Field field;
         protected Annotation annotation;
         protected WeakReference<T> instanceRef;
-        protected FragmentUtil.f fragUtils;
-        protected Provider fragManager;
+        @SuppressWarnings("rawtypes")
+		protected FragmentUtil.f fragUtils;
+        @SuppressWarnings("rawtypes")
+		protected Provider fragManager;
         protected Provider<Activity> activityProvider;
         
 
-        public ViewMembersInjector(Field field, Annotation annotation, TypeEncounter<T> typeEncounter, FragmentUtil.f utils) {
+        public ViewMembersInjector(Field field, Annotation annotation, TypeEncounter<T> typeEncounter, FragmentUtil.f<?,?> utils) {
             this.field = field;
             this.annotation = annotation;
             this.activityProvider = typeEncounter.getProvider(Activity.class);

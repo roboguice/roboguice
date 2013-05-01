@@ -48,6 +48,7 @@ public class NativeFragmentUtil implements f<Fragment,FragmentManager> {
         return FragmentManager.class;
     }
 
+	@SuppressWarnings("rawtypes") //not technically a Class<Provider<FragmentManager>>
 	@Override
 	public Class fragmentManagerProviderType() {
 		return FragmentManagerProvider.class;

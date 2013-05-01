@@ -1,15 +1,20 @@
 package roboguice.test;
 
+import java.io.File;
+
+import org.junit.runners.model.InitializationError;
+
+import roboguice.fragment.FragmentUtil;
+import roboguice.test.shadow.ShadowFragment;
+import roboguice.test.shadow.ShadowFragmentActivity;
+import roboguice.test.shadow.ShadowNativeFragment;
+import roboguice.test.shadow.ShadowNativeFragmentActivity;
+
 import com.xtremelabs.robolectric.Robolectric;
 import com.xtremelabs.robolectric.RobolectricConfig;
 import com.xtremelabs.robolectric.RobolectricTestRunner;
 import com.xtremelabs.robolectric.bytecode.ClassHandler;
 import com.xtremelabs.robolectric.bytecode.RobolectricClassLoader;
-import org.junit.runners.model.InitializationError;
-import roboguice.test.shadow.ShadowFragment;
-import roboguice.test.shadow.ShadowFragmentActivity;
-
-import java.io.File;
 
 public class RobolectricRoboTestRunner extends RobolectricTestRunner {
 
@@ -40,8 +45,14 @@ public class RobolectricRoboTestRunner extends RobolectricTestRunner {
     @Override
     protected void bindShadowClasses() {
         super.bindShadowClasses();
-        Robolectric.bindShadowClass(ShadowFragmentActivity.class);
-        Robolectric.bindShadowClass(ShadowFragment.class);
+        if(FragmentUtil.hasSupport) {
+            Robolectric.bindShadowClass(ShadowFragmentActivity.class);
+            Robolectric.bindShadowClass(ShadowFragment.class);
+        }
+        if(FragmentUtil.hasNative) {
+        	Robolectric.bindShadowClass(ShadowNativeFragmentActivity.class);
+            Robolectric.bindShadowClass(ShadowNativeFragment.class);
+        }
     }
 
 }

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.roboguice</groupId>
+    <artifactId>astroboy_fragments</artifactId>
+    <version>2.1-SNAPSHOT</version>
+    <packaging>apk</packaging>
+    <name>astroboy_fragments</name>
+
+    <dependencies>
+
+        <!-- REGULAR DEPENDENCIES -->
+        
+        <dependency>
+            <groupId>org.roboguice</groupId>
+            <artifactId>roboguice</artifactId>
+            <version>2.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>3.0</version>
+            <classifier>no_aop</classifier>
+        </dependency>
+
+        <!-- TEST DEPENDENCIES -->
+
+        <!-- PROVIDED DEPENDENCIES -->
+
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>4.1.1.4</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
+                    <assetsDirectory>${project.basedir}/assets</assetsDirectory>
+                    <resourceDirectory>${project.basedir}/res</resourceDirectory>
+                    <nativeLibrariesDirectory>${project.basedir}/src/main/native</nativeLibrariesDirectory>
+                    <sdk>
+                        <platform>17</platform>
+                    </sdk>
+                    <undeployBeforeDeploy>true</undeployBeforeDeploy>
+                </configuration>
+                <extensions>true</extensions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.5.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-gpg-plugin</artifactId>
+              <version>1.4</version>
+              <configuration>
+                <useAgent>true</useAgent>
+                <executable>gpg2</executable>
+              </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>6</version>
+    </parent>
+
+    <repositories>
+        <repository>
+            <id>third.party.closed.source.repo</id>
+            <url>file://${basedir}/../maven_repo_3rd_party</url>
+        </repository>
+    </repositories>
+
+</project>

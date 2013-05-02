@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Astroboy</string>
+    <string name="title_asteroid_list">Asteroids</string>
+    <string name="title_asteroid_detail">Asteroid Detail</string>
+
+    <string-array name="asteroids">
+        <item>big</item>
+        <item>small</item>
+        <item>far</item>
+        <item>near</item>
+        <item>armageddon</item>
+        <item>dinosaur killer</item>
+    </string-array>
+
+</resources>

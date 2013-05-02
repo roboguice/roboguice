@@ -10,7 +10,8 @@
         <module>roboguice</module>
         <module>additional-tests</module>
         <module>astroboy</module>
-    </modules>
+		<module>astroboy_fragments</module>
+   </modules>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>

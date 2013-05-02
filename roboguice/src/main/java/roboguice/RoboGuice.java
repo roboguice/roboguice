@@ -29,7 +29,6 @@ import java.util.WeakHashMap;
  * 
  * BUG hashmap should also key off of stage and modules list
  */
-@SuppressWarnings({"ALL"})
 public class RoboGuice {
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
 

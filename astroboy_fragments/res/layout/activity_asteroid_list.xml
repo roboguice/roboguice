@@ -1,0 +1,29 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:baselineAligned="false" >
+
+    <fragment
+        android:id="@+id/asteroid_list"
+        android:name="org.roboguice.astroboy.provided.AsteroidListFragment"
+        android:layout_width="149dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        tools:context=".AsteroidListActivity"
+        tools:layout="@android:layout/list_content" />
+
+    <fragment
+        android:name="org.roboguice.astroboy.provided.AsteroidListFragment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_weight="0.55"
+        android:tag="fragtag"
+        tools:context=".AsteroidListActivity"
+        tools:layout="@android:layout/list_content" />
+
+</LinearLayout>

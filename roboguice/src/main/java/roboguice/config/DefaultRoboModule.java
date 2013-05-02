@@ -33,6 +33,7 @@ import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+import roboguice.fragment.FragmentUtil;
 import roboguice.inject.*;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
@@ -55,19 +56,11 @@ import roboguice.util.Strings;
  * @author Mike Burton
  */
 public class DefaultRoboModule extends AbstractModule {
-    protected static final Class fragmentManagerClass;
-    protected static final Class accountManagerClass;
+    @SuppressWarnings("rawtypes")
+	protected static final Class accountManagerClass;
 
     static {
-        Class c = null;
-        try {
-            c = Class.forName("android.support.v4.app.FragmentManager");
-        } catch( Throwable ignored ) {}
-        fragmentManagerClass = c;
-    }
-
-    static {
-        Class c = null;
+        Class<?> c = null;
         try {
             c = Class.forName("android.accounts.AccountManager");
         } catch( Throwable ignored ) {}
@@ -182,18 +175,23 @@ public class DefaultRoboModule extends AbstractModule {
 
         requestStaticInjection(Ln.class);
 
-        // Compatibility library bindings
-        if(fragmentManagerClass!=null) {
-            bind(fragmentManagerClass).toProvider(FragmentManagerProvider.class);
-        }
+        bindDynamicBindings();
+    }
 
+    @SuppressWarnings("unchecked")
+	private void bindDynamicBindings() {
+		// Compatibility library bindings
+        if(FragmentUtil.hasSupport) {
+            bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
+        }
+        if(FragmentUtil.hasNative) {
+        	bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
+        }
 
         // 2.0 Eclair
         if( VERSION.SDK_INT>=5 ) {
             bind(accountManagerClass).toProvider(AccountManagerProvider.class);
         }
-
-
-    }
+	}
 
 }

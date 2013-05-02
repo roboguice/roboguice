@@ -261,7 +261,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
          * @param c the callable to post
          * @throws Exception on error
          */
-        protected void postToUiThreadAndWait( final Callable c ) throws Exception {
+        protected void postToUiThreadAndWait( final Callable<?> c ) throws Exception {
             final CountDownLatch latch = new CountDownLatch(1);
             final Exception[] exceptions = new Exception[1];
 

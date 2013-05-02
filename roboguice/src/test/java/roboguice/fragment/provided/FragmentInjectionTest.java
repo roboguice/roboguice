@@ -1,34 +1,35 @@
-package roboguice.fragment;
+package roboguice.fragment.provided;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import junit.framework.Assert;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import roboguice.activity.RoboFragmentActivity;
+
+import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import roboguice.test.RobolectricRoboTestRunner;
 
+import com.google.inject.Inject;
+
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.google.inject.Inject;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-
 @RunWith(RobolectricRoboTestRunner.class)
 public class FragmentInjectionTest {
 
-    @Test
-    public void shadowFragmentActivityGetApplicationContextShouldNotReturnNull() {
-        Assert.assertNotNull(new FragmentActivity().getApplicationContext());
+	@Test
+    public void shadowActivityGetApplicationContextShouldNotReturnNull() {
+        Assert.assertNotNull(new Activity().getApplicationContext());
     }
-
+	
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
         final ActivityA activity = new ActivityA();
@@ -86,7 +87,7 @@ public class FragmentInjectionTest {
 
 
 
-    public static class ActivityA extends RoboFragmentActivity {
+    public static class ActivityA extends RoboActivity {
         FragmentA fragmentRef;
 
         @Override
@@ -116,7 +117,7 @@ public class FragmentInjectionTest {
     }
 
 
-    public static class ActivityB extends RoboFragmentActivity {
+    public static class ActivityB extends RoboActivity {
         @InjectView(100) View v;
 
         View viewRef;
@@ -151,7 +152,7 @@ public class FragmentInjectionTest {
 
     }
 
-    public static class ActivityC extends RoboFragmentActivity {
+    public static class ActivityC extends RoboActivity {
         @InjectView(101) View v;
 
         View viewRef;
@@ -186,7 +187,7 @@ public class FragmentInjectionTest {
 
 
 
-    public static class ActivityD extends RoboFragmentActivity {
+    public static class ActivityD extends RoboActivity {
         FragmentD fragmentRef;
 
         @Override

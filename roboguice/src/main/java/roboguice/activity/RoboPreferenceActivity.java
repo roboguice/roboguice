@@ -69,6 +69,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     }
 
     @Override
+    @Deprecated
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);
 

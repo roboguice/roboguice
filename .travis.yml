@@ -2,6 +2,7 @@ language: java
 
 # http://levi-wilson.blogspot.com/2012/06/maven-android-travis-ci-and-more.html
 # http://stackoverflow.com/a/3008489/82156
+#
 before_install:
   - wget http://dl.google.com/android/android-sdk_r18-linux.tgz
   - tar -zxf android-sdk_r18-linux.tgz

@@ -11,5 +11,5 @@ before_install:
   - ( cd ~ && pwd )
   - export ANDROID_HOME=~/build/roboguice/roboguice/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-  - android update sdk --filter 1,2 --no-ui --force --all
-  - android update sdk --filter 13 --no-ui --force --all
+  - android update sdk --filter platform-tools --no-ui --force --all
+  - android update sdk --filter android-9 --no-ui --force --all

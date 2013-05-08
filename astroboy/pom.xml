@@ -28,6 +28,12 @@
 			<artifactId>support-v4</artifactId>
 			<version>r7</version>
 		</dependency>
+		<!-- http://code.google.com/p/google-guice/wiki/UseNullable -->
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<version>1.3.9</version>
+		</dependency>
 		
 
 		<!-- TEST DEPENDENCIES -->

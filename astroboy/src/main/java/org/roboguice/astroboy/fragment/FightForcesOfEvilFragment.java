@@ -5,8 +5,11 @@ import java.util.Random;
 import javax.inject.Inject;
 
 import org.roboguice.astroboy.R;
+import org.roboguice.astroboy.activity.AstroboyMasterConsole.AstroSpeechEvent;
 import org.roboguice.astroboy.controller.Astroboy;
 
+import roboguice.event.EventManager;
+import roboguice.event.Observes;
 import roboguice.fragment.RoboFragment;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
@@ -15,6 +18,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.TextView;
@@ -24,6 +28,9 @@ import android.widget.TextView;
  * background tasks with injection - What it means to be a @Singleton
  */
 public class FightForcesOfEvilFragment extends RoboFragment {
+
+    @Inject
+    EventManager eventManager; // only necessary to send events, not to receive them.
 
     @InjectView(R.id.expletive)
     TextView expletiveText;
@@ -48,6 +55,12 @@ public class FightForcesOfEvilFragment extends RoboFragment {
         expletiveText.setAnimation(expletiveAnimation);
         expletiveAnimation.start();
 
+        expletiveText.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                eventManager.fire(new ForceOfEvilFoughtEvent());
+            }
+        });
+
         // Throw some punches
         for (int i = 0; i < 10; ++i) {
             new AsyncPunch(getActivity()) {
@@ -61,6 +74,10 @@ public class FightForcesOfEvilFragment extends RoboFragment {
             }.execute();
         }
 
+    }
+
+    public void handleAstroSpeechEvent(@Observes AstroSpeechEvent event) {
+        expletiveText.setText(event.getMessage());
     }
 
     // This class will call Astroboy.punch() in the background
@@ -80,8 +97,14 @@ public class FightForcesOfEvilFragment extends RoboFragment {
         }
 
         public String call() throws Exception {
-            Thread.sleep(random.nextInt(5 * 1000));
+            // we are sure to see each explective at least one second
+            Thread.sleep(1000 + random.nextInt(5 * 1000));
             return astroboy.punch();
         }
     }
+
+    public class ForceOfEvilFoughtEvent {
+
+    }
+
 }

@@ -16,6 +16,7 @@ import roboguice.inject.InjectView;
 import roboguice.util.RoboAsyncTask;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +40,8 @@ public class FightForcesOfEvilFragment extends RoboFragment {
     @InjectResource(R.anim.expletive_animation)
     Animation expletiveAnimation;
 
+    Handler handler;
+
     // AstroboyRemoteControl is annotated as @ContextSingleton, so the instance
     // we get in FightForcesOfEvilFragment will be a different instance than
     // the one we got in AstroboyMasterConsole
@@ -54,6 +57,7 @@ public class FightForcesOfEvilFragment extends RoboFragment {
         super.onViewCreated(view, savedInstanceState);
         expletiveText.setAnimation(expletiveAnimation);
         expletiveAnimation.start();
+        handler = new Handler();
 
         expletiveText.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
@@ -76,8 +80,12 @@ public class FightForcesOfEvilFragment extends RoboFragment {
 
     }
 
-    public void handleAstroSpeechEvent(@Observes AstroSpeechEvent event) {
-        expletiveText.setText(event.getMessage());
+    public void handleAstroSpeechEvent(final @Observes AstroSpeechEvent event) {
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                expletiveText.setText(event.getMessage());
+            }
+        }, 10000);
     }
 
     // This class will call Astroboy.punch() in the background
@@ -98,7 +106,7 @@ public class FightForcesOfEvilFragment extends RoboFragment {
 
         public String call() throws Exception {
             // we are sure to see each explective at least one second
-            Thread.sleep(1000 + random.nextInt(5 * 1000));
+            Thread.sleep(random.nextInt(2 * 1000));
             return astroboy.punch();
         }
     }

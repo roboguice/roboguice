@@ -140,6 +140,7 @@ public class AstroboyMasterConsole extends RoboFragmentActivity {
         Fragment fightForcesOfEvilFragment = getSupportFragmentManager().findFragmentByTag(FIGHT_FORCES_OF_EVIL_FRAGMENT_TAG);
         if (fightForcesOfEvilFragment != null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.hide(fightForcesOfEvilFragment);
             ft.remove(fightForcesOfEvilFragment);
             ft.commit();
         }

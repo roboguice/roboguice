@@ -77,15 +77,21 @@ public class FightForcesOfEvilFragment extends RoboFragment {
 
             }.execute();
         }
-
     }
 
-    public void handleAstroSpeechEvent(final @Observes AstroSpeechEvent event) {
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        eventManager.unregisterObserver(this, AstroSpeechEvent.class);
+    }
+
+    public void handleAstroSpeechEvent(final @Observes(stickyEventsCount = 2) AstroSpeechEvent event) {
         handler.postDelayed(new Runnable() {
             public void run() {
                 expletiveText.setText(event.getMessage());
+                System.out.println(event.getMessage());
             }
-        }, 10000);
+        }, 5000);
     }
 
     // This class will call Astroboy.punch() in the background
@@ -106,7 +112,7 @@ public class FightForcesOfEvilFragment extends RoboFragment {
 
         public String call() throws Exception {
             // we are sure to see each explective at least one second
-            Thread.sleep(random.nextInt(2 * 1000));
+            Thread.sleep(200 + random.nextInt(500));
             return astroboy.punch();
         }
     }

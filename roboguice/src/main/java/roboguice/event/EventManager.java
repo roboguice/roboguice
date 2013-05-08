@@ -1,10 +1,13 @@
 package roboguice.event;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -34,7 +37,7 @@ public class EventManager {
     protected Map<Class<?>, Set<EventListener<?>>> registrations = new HashMap<Class<?>, Set<EventListener<?>>>(); // synchronized
     // set
     protected Map<Class<?>, EventProducer<?>> productions = new HashMap<Class<?>, EventProducer<?>>(); // synchronized
-    protected Map<Class<?>, Object> stickyEvents = new HashMap<Class<?>, Object>(); // synchronized
+    protected Map<Class<?>, List<Object>> stickyEvents = new HashMap<Class<?>, List<Object>>(); // synchronized
 
     // set
 
@@ -48,7 +51,7 @@ public class EventManager {
      * @param <T>
      *            event type
      */
-    public <T> void registerObserver(final Class<T> event, final EventListener listener) {
+    public <T> void registerObserver(final Class<T> event, final EventListener listener, int stickyEventsCountRequested) {
         Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) {
             observers = Collections.synchronizedSet(new LinkedHashSet<EventListener<?>>());
@@ -56,27 +59,31 @@ public class EventManager {
         }
 
         if (stickyEvents.get(event) != null) {
-            // we post a message that will be executed asap bu the main thread
-            // of this event manager's context
-            new Handler(context.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onEvent(stickyEvents.get(event));
-                }
-            });
+            boolean allEvents = stickyEventsCountRequested == Observes.ALL_EVENTS;
+            List<Object> eventsList = stickyEvents.get(event);
+            int stickyEventsToTriggerCount = allEvents ? 0 : Math.max(0, eventsList.size() - stickyEventsCountRequested);
+            ListIterator<Object> listIterator = eventsList.listIterator(stickyEventsToTriggerCount);
+            while (listIterator.hasNext()) {
+                fireStickyEvent(listIterator.next(), listener);
+                System.out.println(event);
+            }
         } else if (productions.get(event) != null) {
-            // we post a message that will be executed asap bu the main thread
-            // of this event manager's context
-            new Handler(context.getMainLooper()).post(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onEvent(productions.get(event).onEventRequested());
-                }
-            });
+            fireStickyEvent(productions.get(event).onEventRequested(), listener);
         }
 
         observers.add(listener);
 
+    }
+
+    private <T> void fireStickyEvent(final Object event, final EventListener listener) {
+        // we post a message that will be executed asap bu the main thread
+        // of this event manager's context
+        new Handler(context.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                listener.onEvent(event);
+            }
+        });
     }
 
     /**
@@ -89,8 +96,8 @@ public class EventManager {
      * @param event
      *            observed
      */
-    public <T> void registerObserver(Object instance, Method method, Class<T> event) {
-        registerObserver(event, new ObserverMethodListener<T>(instance, method));
+    public <T> void registerObserver(Object instance, Method method, Class<T> event, int stickyEventsCount) {
+        registerObserver(event, new ObserverMethodListener<T>(instance, method), stickyEventsCount);
     }
 
     /**
@@ -175,6 +182,14 @@ public class EventManager {
         }
     }
 
+    public <T> void unregisterProducer(Class<T> event) {
+        productions.remove(event);
+    }
+
+    public <T> void clearStickyEvents(Class<T> event) {
+        stickyEvents.remove(event);
+    }
+
     /**
      * Raises the event's class' event on the given context. This event object
      * is passed (if configured) to the registered observer's method.
@@ -185,6 +200,16 @@ public class EventManager {
     public void fire(Object event) {
 
         final Set<EventListener<?>> observers = registrations.get(event.getClass());
+
+        if (event.getClass().isAnnotationPresent(StickyEvent.class)) {
+            List<Object> stickyEventsList = stickyEvents.get(event.getClass());
+            if (stickyEventsList == null) {
+                stickyEventsList = new ArrayList<Object>();
+                stickyEvents.put(event.getClass(), stickyEventsList);
+            }
+            stickyEventsList.add(event);
+        }
+
         if (observers == null) {
             return;
         }
@@ -198,10 +223,6 @@ public class EventManager {
             }
         }
 
-        if (event.getClass().isAnnotationPresent(StickyEvent.class)) {
-            stickyEvents.put(event.getClass(), event);
-        }
-
     }
 
     public void destroy() {
@@ -210,6 +231,11 @@ public class EventManager {
         }
         registrations.clear();
         productions.clear();
+
+        for (Entry<Class<?>, List<Object>> e : stickyEvents.entrySet()) {
+            e.getValue().clear();
+        }
+        stickyEvents.clear();
     }
 
 }

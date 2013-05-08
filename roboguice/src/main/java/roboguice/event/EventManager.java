@@ -32,8 +32,9 @@ public class EventManager {
     protected Context context;
 
     protected Map<Class<?>, Set<EventListener<?>>> registrations = new HashMap<Class<?>, Set<EventListener<?>>>(); // synchronized
-                                                                                                                   // set
+    // set
     protected Map<Class<?>, EventProducer<?>> productions = new HashMap<Class<?>, EventProducer<?>>(); // synchronized
+    protected Map<Class<?>, Object> stickyEvents = new HashMap<Class<?>, Object>(); // synchronized
 
     // set
 
@@ -54,7 +55,16 @@ public class EventManager {
             registrations.put(event, observers);
         }
 
-        if (productions.get(event) != null) {
+        if (stickyEvents.get(event) != null) {
+            // we post a message that will be executed asap bu the main thread
+            // of this event manager's context
+            new Handler(context.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    listener.onEvent(stickyEvents.get(event));
+                }
+            });
+        } else if (productions.get(event) != null) {
             // we post a message that will be executed asap bu the main thread
             // of this event manager's context
             new Handler(context.getMainLooper()).post(new Runnable() {
@@ -186,6 +196,10 @@ public class EventManager {
             for (EventListener observer : observers) {
                 observer.onEvent(event);
             }
+        }
+
+        if (event.getClass().isAnnotationPresent(StickyEvent.class)) {
+            stickyEvents.put(event.getClass(), event);
         }
 
     }

@@ -11,6 +11,7 @@ import roboguice.activity.RoboFragmentActivity;
 import roboguice.event.EventManager;
 import roboguice.event.EventProducer;
 import roboguice.event.Observes;
+import roboguice.event.StickyEvent;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 import android.content.Intent;
@@ -87,7 +88,8 @@ public class AstroboyMasterConsole extends RoboFragmentActivity {
 
                 AstroSpeechEvent event = new AstroSpeechEvent(message);
                 eventManager.fire(event);
-                eventManager.registerProducer(AstroSpeechEvent.class, new AstroSpeechEventProducer(event));
+                // eventManager.registerProducer(AstroSpeechEvent.class, new
+                // AstroSpeechEventProducer(event));
                 return true;
             }
         });
@@ -143,6 +145,7 @@ public class AstroboyMasterConsole extends RoboFragmentActivity {
         }
     }
 
+    @StickyEvent
     public class AstroSpeechEvent {
         private String message;
 

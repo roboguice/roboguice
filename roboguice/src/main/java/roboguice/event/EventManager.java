@@ -51,7 +51,8 @@ public class EventManager {
      * @param <T>
      *            event type
      */
-    public <T> void registerObserver(final Class<T> event, final EventListener listener, int stickyEventsCountRequested) {
+    @SuppressWarnings("unchecked")
+    public <T> void registerObserver(final Class<T> event, final EventListener<T> listener, int stickyEventsCountRequested) {
         Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) {
             observers = Collections.synchronizedSet(new LinkedHashSet<EventListener<?>>());
@@ -60,22 +61,22 @@ public class EventManager {
 
         if (stickyEvents.get(event) != null) {
             boolean allEvents = stickyEventsCountRequested == Observes.ALL_EVENTS;
-            List<Object> eventsList = stickyEvents.get(event);
+            List<T> eventsList = (List<T>) stickyEvents.get(event);
             int stickyEventsToTriggerCount = allEvents ? 0 : Math.max(0, eventsList.size() - stickyEventsCountRequested);
-            ListIterator<Object> listIterator = eventsList.listIterator(stickyEventsToTriggerCount);
+            ListIterator<T> listIterator = eventsList.listIterator(stickyEventsToTriggerCount);
             while (listIterator.hasNext()) {
                 fireStickyEvent(listIterator.next(), listener);
                 System.out.println(event);
             }
         } else if (productions.get(event) != null) {
-            fireStickyEvent(productions.get(event).onEventRequested(), listener);
+            fireStickyEvent(((EventProducer<T>) productions.get(event)).onEventRequested(), listener);
         }
 
         observers.add(listener);
 
     }
 
-    private <T> void fireStickyEvent(final Object event, final EventListener listener) {
+    private <T> void fireStickyEvent(final T event, final EventListener<T> listener) {
         // we post a message that will be executed asap bu the main thread
         // of this event manager's context
         new Handler(context.getMainLooper()).post(new Runnable() {
@@ -110,8 +111,8 @@ public class EventManager {
      * @param <T>
      *            event type
      */
-    public <T> void registerProducer(Class<T> event, EventProducer producer) {
-        EventProducer previousProducer = productions.get(event);
+    public <T> void registerProducer(Class<T> event, EventProducer<?> producer) {
+        EventProducer<?> previousProducer = productions.get(event);
         if (previousProducer != null) {
             throw new RuntimeException("A producer is already registered for event type " + event.getSimpleName() + " :" + previousProducer);
         }
@@ -140,7 +141,7 @@ public class EventManager {
         // noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (observers) {
             for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-                final EventListener registeredListener = iterator.next();
+                final EventListener<?> registeredListener = iterator.next();
                 if (registeredListener == listener) {
                     iterator.remove();
                     break;
@@ -170,9 +171,9 @@ public class EventManager {
         // noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (observers) {
             for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-                final EventListener listener = iterator.next();
+                final EventListener<?> listener = iterator.next();
                 if (listener instanceof ObserverMethodListener) {
-                    final ObserverMethodListener observer = (ObserverMethodListener) listener;
+                    final ObserverMethodListener<?> observer = (ObserverMethodListener<?>) listener;
                     if (observer.getInstance() == instance) {
                         iterator.remove();
                         break;
@@ -197,15 +198,16 @@ public class EventManager {
      * @param event
      *            observed
      */
-    public void fire(Object event) {
+    @SuppressWarnings("unchecked")
+    public <T> void fire(T event) {
 
         final Set<EventListener<?>> observers = registrations.get(event.getClass());
 
         if (event.getClass().isAnnotationPresent(StickyEvent.class)) {
-            List<Object> stickyEventsList = stickyEvents.get(event.getClass());
+            List<T> stickyEventsList = (List<T>) stickyEvents.get(event.getClass());
             if (stickyEventsList == null) {
-                stickyEventsList = new ArrayList<Object>();
-                stickyEvents.put(event.getClass(), stickyEventsList);
+                stickyEventsList = new ArrayList<T>();
+                stickyEvents.put(event.getClass(), (List<Object>) stickyEventsList);
             }
             stickyEventsList.add(event);
         }
@@ -218,8 +220,8 @@ public class EventManager {
         // http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
         // noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (observers) {
-            for (EventListener observer : observers) {
-                observer.onEvent(event);
+            for (EventListener<?> observer : observers) {
+                ((EventListener<T>) observer).onEvent(event);
             }
         }
 

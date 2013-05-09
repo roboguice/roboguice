@@ -1,15 +1,16 @@
 package roboguice.event;
 
-import org.junit.Before;
-import org.junit.Test;
-import roboguice.event.eventListener.ObserverMethodListener;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
+import roboguice.event.eventListener.ObserverMethodListener;
+
 /**
  * Test class verifying eventManager functionality
- *
+ * 
  * @author John Ericksen
  */
 public class EventManagerTest {
@@ -31,12 +32,12 @@ public class EventManagerTest {
     }
 
     @Test
-    public void testRegistrationLifeCycle(){
-        for(Method method : eventOneMethods){
-            eventManager.registerObserver(EventOne.class, new ObserverMethodListener(tester, method));
+    public void testRegistrationLifeCycle() {
+        for (Method method : eventOneMethods) {
+            eventManager.registerObserver(EventOne.class, new ObserverMethodListener(tester, method), 1);
         }
-        for(Method method : eventTwoMethods){
-            eventManager.registerObserver(EventTwo.class, new ObserverMethodListener(tester, method));
+        for (Method method : eventTwoMethods) {
+            eventManager.registerObserver(EventTwo.class, new ObserverMethodListener(tester, method), 1);
         }
 
         eventManager.fire(event);
@@ -44,11 +45,11 @@ public class EventManagerTest {
         tester.verifyCallCount(eventOneMethods, EventOne.class, 1);
         tester.verifyCallCount(eventTwoMethods, EventTwo.class, 0);
 
-        //reset
+        // reset
         tester.reset();
 
         eventManager.unregisterObserver(tester, EventOne.class);
-        eventManager.unregisterObserver( tester, EventTwo.class);
+        eventManager.unregisterObserver(tester, EventTwo.class);
 
         eventManager.fire(event);
 

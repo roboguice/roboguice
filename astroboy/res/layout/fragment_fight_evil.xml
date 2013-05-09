@@ -9,6 +9,7 @@
         android:id="@+id/expletive"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:textIsSelectable="false"
         android:gravity="center"
         />
 

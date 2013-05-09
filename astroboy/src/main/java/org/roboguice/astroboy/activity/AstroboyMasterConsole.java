@@ -42,6 +42,9 @@ public class AstroboyMasterConsole extends RoboFragmentActivity {
 
     protected static final String FIGHT_FORCES_OF_EVIL_FRAGMENT_TAG = "FIGHT_FORCES_OF_EVIL_FRAGMENT_TAG";
 
+    // Whether or not to use the annotation system or a producer for events sent by the activity.
+    private boolean useEventProducer;
+
     // Various views that we inject into the activity.
     // Equivalent to calling findViewById() in your onCreate(), except more succinct
     @InjectView(R.id.self_destruct)
@@ -79,6 +82,7 @@ public class AstroboyMasterConsole extends RoboFragmentActivity {
         // happens during super.onCreate()
 
         sayText.setOnEditorActionListener(new OnEditorActionListener() {
+
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
 
                 // Have the remoteControl tell Astroboy to say something
@@ -88,8 +92,12 @@ public class AstroboyMasterConsole extends RoboFragmentActivity {
 
                 AstroSpeechEvent event = new AstroSpeechEvent(message);
                 eventManager.fire(event);
-                // eventManager.registerProducer(AstroSpeechEvent.class, new
-                // AstroSpeechEventProducer(event));
+
+                if (useEventProducer) {
+                    // don't use annotation system, use a producer
+                    eventManager.clearStickyEvents(AstroSpeechEvent.class);
+                    eventManager.registerProducer(AstroSpeechEvent.class, new AstroSpeechEventProducer(event));
+                }
                 return true;
             }
         });

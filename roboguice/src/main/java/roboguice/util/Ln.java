@@ -52,6 +52,8 @@ import com.google.inject.Inject;
  */
 @SuppressWarnings({"ImplicitArrayToString"})
 public class Ln  {
+    private final static String EMPTY_STRING = "";
+
     /**
      * config is initially set to BaseConfig() with sensible defaults, then replaced
      * by BaseConfig(ContextSingleton) during guice static injection pass.
@@ -71,7 +73,7 @@ public class Ln  {
 
 
     public static int v(Throwable t) {
-        return config.minimumLogLevel <= Log.VERBOSE ? print.println(Log.VERBOSE, Log.getStackTraceString(t)) : 0;
+        return config.minimumLogLevel <= Log.VERBOSE ? print.println(Log.VERBOSE, EMPTY_STRING, t) : 0;
     }
 
     public static int v(Object s1, Object... args) {
@@ -88,12 +90,12 @@ public class Ln  {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return print.println(Log.VERBOSE, message);
+        final String message = (args.length>0 ? String.format(s,args) : s);
+        return print.println(Log.VERBOSE, message, throwable);
     }
 
     public static int d(Throwable t) {
-        return config.minimumLogLevel <= Log.DEBUG ? print.println(Log.DEBUG, Log.getStackTraceString(t)) : 0;
+        return config.minimumLogLevel <= Log.DEBUG ? print.println(Log.DEBUG, EMPTY_STRING, t) : 0;
     }
 
     public static int d(Object s1, Object... args) {
@@ -110,12 +112,12 @@ public class Ln  {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return print.println(Log.DEBUG, message);
+        final String message = (args.length>0 ? String.format(s,args) : s);
+        return print.println(Log.DEBUG, message, throwable);
     }
 
     public static int i(Throwable t) {
-        return config.minimumLogLevel <= Log.INFO ? print.println(Log.INFO, Log.getStackTraceString(t)) : 0;
+        return config.minimumLogLevel <= Log.INFO ? print.println(Log.INFO, EMPTY_STRING, t) : 0;
     }
 
     public static int i( Object s1, Object... args) {
@@ -132,12 +134,12 @@ public class Ln  {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length > 0 ? String.format(s, args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return print.println(Log.INFO, message);
+        final String message = (args.length > 0 ? String.format(s, args) : s);
+        return print.println(Log.INFO, message, throwable);
     }
 
     public static int w(Throwable t) {
-        return config.minimumLogLevel <= Log.WARN ? print.println(Log.WARN, Log.getStackTraceString(t)) : 0;
+        return config.minimumLogLevel <= Log.WARN ? print.println(Log.WARN, EMPTY_STRING, t) : 0;
     }
 
     public static int w( Object s1, Object... args) {
@@ -154,12 +156,12 @@ public class Ln  {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return print.println(Log.WARN, message);
+        final String message = (args.length>0 ? String.format(s,args) : s);
+        return print.println(Log.WARN, message, throwable);
     }
 
     public static int e(Throwable t) {
-        return config.minimumLogLevel <= Log.ERROR ? print.println(Log.ERROR, Log.getStackTraceString(t)) : 0;
+        return config.minimumLogLevel <= Log.ERROR ? print.println(Log.ERROR, EMPTY_STRING, t) : 0;
     }
 
     public static int e( Object s1, Object... args) {
@@ -176,8 +178,8 @@ public class Ln  {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
-        return print.println(Log.ERROR, message);
+        final String message = (args.length>0 ? String.format(s,args) : s);
+        return print.println(Log.ERROR, message, throwable);
     }
 
     public static boolean isDebugEnabled() {
@@ -191,7 +193,6 @@ public class Ln  {
     public static Config getConfig() {
         return config;
     }
-
 
     public static interface Config {
         public int getLoggingLevel();
@@ -253,23 +254,41 @@ public class Ln  {
         return "UNKNOWN";
     }
 
-
     /** Default implementation logs to android.util.Log */
     public static class Print {
-        public int println(int priority, String msg ) {
-            return Log.println(priority,getScope(5), processMessage(msg));
+        /** Skip stack related to logging mechanism 
+         * in order to get to the line and file creating the log 
+         */
+        protected static int SKIP_STACKTRACE = 6;
+
+        public int println(int priority, String msg) {
+            return Log.println(priority, getTag(), processMessage(msg));
+        }
+
+        public int println(int priority, String msg, Throwable throwable) {
+            if (msg == null || EMPTY_STRING.equals(msg)) {
+                return println(priority, Log.getStackTraceString(throwable));
+            }
+            else {
+                return println(priority, msg + "\n" + Log.getStackTraceString(throwable));
+            }
+        }
+
+        protected String getTag() {
+            return getScope(SKIP_STACKTRACE);
         }
 
         protected String processMessage(String msg) {
-            if( config.minimumLogLevel <= Log.DEBUG )
+            if( config.minimumLogLevel <= Log.DEBUG ) {
                 msg = String.format("%s %s", Thread.currentThread().getName(), msg);
+            }
             return msg;
         }
 
         protected static String getScope(int skipDepth) {
             if( config.minimumLogLevel <= Log.DEBUG ) {
                 final StackTraceElement trace = Thread.currentThread().getStackTrace()[skipDepth];
-                return config.scope + "/" + trace.getFileName() + ":" + trace.getLineNumber();
+                return String.format("%s/%s:%s", config.scope, trace.getFileName(), trace.getLineNumber());
             }
 
             return config.scope;

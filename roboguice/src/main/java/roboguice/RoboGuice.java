@@ -29,7 +29,6 @@ import java.util.WeakHashMap;
  * 
  * BUG hashmap should also key off of stage and modules list
  */
-@SuppressWarnings({"ALL"})
 public class RoboGuice {
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
 
@@ -166,6 +165,7 @@ public class RoboGuice {
 
 
 
+    @SuppressWarnings("ConstantConditions")
     protected static ResourceListener getResourceListener( Application application ) {
         ResourceListener resourceListener = resourceListeners.get(application);
         if( resourceListener==null ) {
@@ -179,6 +179,7 @@ public class RoboGuice {
         return resourceListener;
     }
 
+    @SuppressWarnings("ConstantConditions")
     protected static ViewListener getViewListener( final Application application ) {
         ViewListener viewListener = viewListeners.get(application);
         if( viewListener==null ) {
@@ -195,7 +196,8 @@ public class RoboGuice {
     public static void destroyInjector(Context context) {
         final RoboInjector injector = getInjector(context);
         injector.getInstance(EventManager.class).destroy();
-        injectors.remove(context);
+        //noinspection SuspiciousMethodCalls
+        injectors.remove(context); // it's okay, Context is an Application
     }
     
     

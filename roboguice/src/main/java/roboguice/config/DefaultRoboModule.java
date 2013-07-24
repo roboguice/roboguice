@@ -36,6 +36,8 @@ import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 import roboguice.inject.*;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
+import roboguice.util.LnImpl;
+import roboguice.util.LnInterface;
 import roboguice.util.Strings;
 
 /**
@@ -177,6 +179,8 @@ public class DefaultRoboModule extends AbstractModule {
         bindListener(Matchers.any(), preferenceListener);
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
 
+
+        bind(LnInterface.class).to(LnImpl.class);
 
         requestInjection(observerThreadingDecorator);
 

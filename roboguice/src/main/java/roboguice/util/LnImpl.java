@@ -4,9 +4,7 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
-@Singleton
 public class LnImpl implements LnInterface {
     /**
      * config is initially set to BaseConfig() with sensible defaults, then replaced

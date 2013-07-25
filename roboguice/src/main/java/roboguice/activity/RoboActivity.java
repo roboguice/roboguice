@@ -15,24 +15,38 @@
  */
 package roboguice.activity;
 
+import java.lang.reflect.Constructor;
+import java.util.HashMap;
+import java.util.Map;
+
 import roboguice.RoboGuice;
-import roboguice.activity.event.*;
+import roboguice.activity.event.OnActivityResultEvent;
+import roboguice.activity.event.OnConfigurationChangedEvent;
+import roboguice.activity.event.OnContentChangedEvent;
+import roboguice.activity.event.OnCreateEvent;
+import roboguice.activity.event.OnDestroyEvent;
+import roboguice.activity.event.OnNewIntentEvent;
+import roboguice.activity.event.OnPauseEvent;
+import roboguice.activity.event.OnRestartEvent;
+import roboguice.activity.event.OnResumeEvent;
+import roboguice.activity.event.OnStartEvent;
+import roboguice.activity.event.OnStopEvent;
 import roboguice.event.EventManager;
 import roboguice.inject.ContentViewListener;
 import roboguice.inject.RoboInjector;
 import roboguice.util.RoboContext;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 
-import java.util.HashMap;
-import java.util.Map;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -67,9 +81,10 @@ import java.util.Map;
  */
 public class RoboActivity extends Activity implements RoboContext {
     protected EventManager eventManager;
-    protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>, Object>();
+    protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
-    @Inject ContentViewListener ignored; // BUG find a better place to put this
+    @Inject
+    ContentViewListener ignored; // BUG find a better place to put this
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +120,7 @@ public class RoboActivity extends Activity implements RoboContext {
     }
 
     @Override
-    protected void onNewIntent( Intent intent ) {
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         eventManager.fire(new OnNewIntentEvent());
     }
@@ -155,5 +170,21 @@ public class RoboActivity extends Activity implements RoboContext {
     @Override
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
+    }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        final View view = super.onCreateView(name,context,attrs);
+        if( name.indexOf('.') != -1 ) // only do injection on custom views
+            RoboGuice.injectMembers(this,view);
+        return view;
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        final View view = super.onCreateView(parent, name,context,attrs);
+        if( name.indexOf('.') != -1 ) // only do injection on custom views
+            RoboGuice.injectMembers(this,view);
+        return view;
     }
 }

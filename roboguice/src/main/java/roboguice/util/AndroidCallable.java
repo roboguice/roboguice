@@ -11,7 +11,8 @@ package roboguice.util;
 public abstract class AndroidCallable<ResultT> implements AndroidCallableI<ResultT>, Runnable {
     @Override
     public void run() {
-        new AndroidCallableWrapper<ResultT>(null,this).run();
+        final StackTraceElement[] launchLocation = Ln.isDebugEnabled() ? Thread.currentThread().getStackTrace() : null;
+        new AndroidCallableWrapper<ResultT>(null,this, launchLocation).run();
     }
 
     /**

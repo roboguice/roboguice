@@ -3,6 +3,7 @@ package roboguice.util;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -83,13 +84,13 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
             public void run() {
                 try {
                     if (e != null) {
-                        Exception tmp = e;
                         if( launchLocation!=null ) {
-                            final StackTraceElement[] stack = e.getStackTrace();
-                            tmp = new Exception("Exception caught by background thread",e);
-                            tmp.setStackTrace(stack);
+                            final StackTraceElement[] stackTrace = e.getStackTrace();
+                            final StackTraceElement[] result = Arrays.copyOf(stackTrace, stackTrace.length + launchLocation.length);
+                            System.arraycopy(launchLocation, 0, result, stackTrace.length, launchLocation.length);
+                            e.setStackTrace(result);
                         }
-                        doOnException(tmp);
+                        doOnException(e);
                     } else {
                         doOnSuccess(result);
                     }

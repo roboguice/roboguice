@@ -2,7 +2,6 @@ package roboguice.util;
 
 
 import android.os.Looper;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -55,15 +54,55 @@ public class AndroidCallableTest {
     }
 
     @Test
-    @Ignore("Can't implement until I get the other test working")
-    public void shouldNotCallOnPreCall() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Test
-    @Ignore("Can't implement until I get the other test working")
     public void shouldHaveCorrectStackTrace() {
-        throw new UnsupportedOperationException();
+        final Exception[] exception = {null};
+        final StackTraceElement[] here;
+        final StackTraceElement[][] there = new StackTraceElement[][]{null};
+        final ShadowLooper looper = Robolectric.shadowOf(Looper.getMainLooper());
+
+        try {
+            throw new UnsupportedOperationException();
+        } catch (UnsupportedOperationException e) {
+            here = e.getStackTrace();
+        }
+
+        Executors.newSingleThreadExecutor(new MyThreadFactory(new Thread[]{null})).submit(new AndroidCallable<String>() {
+            @Override
+            public String doInBackground() throws Exception {
+                try {
+                    throw new NullPointerException();
+                } catch (NullPointerException e) {
+                    there[0] = e.getStackTrace();
+                    throw e;
+                }
+            }
+
+            @Override
+            public void onException(Exception e) {
+                exception[0] = e;
+            }
+
+            @Override
+            public void onSuccess(String result) {
+            }
+
+        },false);
+
+        // Run all the pending tasks on the ui thread
+        while(exception[0]==null)
+            looper.runToEndOfTasks();
+
+        assertThat( exception[0].getStackTrace().length, equalTo(here.length + there[0].length + 3)  );
+
+        int i=0;
+        while (i<there[0].length) {
+            assertThat( exception[0].getStackTrace()[i], equalTo(there[0][i]));
+            ++i;
+        }
+
+        for( int j=i+3, k=0; k<here.length; ++k, ++j) { // skip 3 frames due to differences in where we got our stacktrace from
+            assertThat( exception[0].getStackTrace()[j].getFileName(), equalTo(here[k].getFileName())); // line numbers may be off
+        }
     }
 
     private static class StringAndroidCallable extends AndroidCallable<String> {

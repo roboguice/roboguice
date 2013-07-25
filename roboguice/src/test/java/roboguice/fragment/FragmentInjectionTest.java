@@ -1,12 +1,5 @@
 package roboguice.fragment;
 
-import junit.framework.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import roboguice.activity.RoboFragmentActivity;
-import roboguice.inject.InjectView;
-import roboguice.test.RobolectricRoboTestRunner;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -14,14 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-
 import com.google.inject.Inject;
+import junit.framework.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import roboguice.activity.RoboFragmentActivity;
+import roboguice.inject.InjectView;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class FragmentInjectionTest {
 
     @Test

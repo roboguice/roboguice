@@ -1,19 +1,17 @@
 package roboguice.view;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import roboguice.RoboGuice;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
-import roboguice.test.RobolectricRoboTestRunner;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-
 import com.google.inject.Inject;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import roboguice.RoboGuice;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ViewInjectionTest {
 
     @Test

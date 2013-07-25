@@ -7,10 +7,11 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
-import roboguice.test.RobolectricRoboTestRunner;
 
 import com.google.inject.Inject;
 
@@ -22,7 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@Config(shadows= {roboguice.fragment.shadow.ShadowNativeFragment.class, roboguice.fragment.shadow.ShadowNativeFragmentActivity.class})
+@RunWith(RobolectricTestRunner.class)
 public class FragmentInjectionTest {
 
 	@Test

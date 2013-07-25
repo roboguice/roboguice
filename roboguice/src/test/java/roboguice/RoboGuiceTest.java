@@ -1,18 +1,17 @@
 package roboguice;
 
-import com.xtremelabs.robolectric.Robolectric;
+import android.app.Activity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import roboguice.activity.RoboActivity;
-import roboguice.test.RobolectricRoboTestRunner;
-
-import android.app.Activity;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class RoboGuiceTest {
     
     @Before

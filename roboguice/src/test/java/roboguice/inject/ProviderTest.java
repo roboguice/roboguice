@@ -2,8 +2,8 @@ package roboguice.inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import roboguice.activity.RoboActivity;
-import roboguice.test.RobolectricRoboTestRunner;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import java.util.concurrent.FutureTask;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ProviderTest {
 
     @Test(expected = AssertionError.class)

@@ -1,18 +1,16 @@
 package roboguice.event;
 
-import com.xtremelabs.robolectric.Robolectric;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import roboguice.RoboGuice;
-import roboguice.test.RobolectricRoboTestRunner;
-
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
-
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import roboguice.RoboGuice;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
 /**
  * @author John Ericksen
  */
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ObservesTypeListenerTest {
 
     protected EventManager eventManager;

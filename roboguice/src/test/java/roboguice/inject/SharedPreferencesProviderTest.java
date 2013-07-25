@@ -1,7 +1,6 @@
 package roboguice.inject;
 
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.PreferenceManager;
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -26,8 +25,7 @@ public class SharedPreferencesProviderTest {
 
     @Test
     public void shouldInjectDefaultSharedPrefs() throws Exception {
-        final A a = new A();
-        a.onCreate(null);
+        final A a = Robolectric.buildActivity(A.class).create().get();
 
         final Field f = TestSharedPreferences.class.getDeclaredField("filename");
         f.setAccessible(true);
@@ -41,9 +39,7 @@ public class SharedPreferencesProviderTest {
         RoboGuice.setBaseApplicationInjector(Robolectric.application,RoboGuice.DEFAULT_STAGE, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA() );
         try {
             
-            final A a = new A();
-            a.onCreate(null);
-    
+            final A a = Robolectric.buildActivity(A.class).create().get();
             final Field f = TestSharedPreferences.class.getDeclaredField("filename");
             f.setAccessible(true);
             
@@ -63,9 +59,7 @@ public class SharedPreferencesProviderTest {
         oldDir.mkdirs();
         oldDefault.createNewFile();
         try {
-            final A a = new A();
-            a.onCreate(null);
-
+            final A a = Robolectric.buildActivity(A.class).create().get();
             final Field f = TestSharedPreferences.class.getDeclaredField("filename");
             f.setAccessible(true);
 
@@ -88,9 +82,7 @@ public class SharedPreferencesProviderTest {
         oldDir.mkdirs();
         oldDefault.createNewFile();
         try {
-            final A a = new A();
-            a.onCreate(null);
-
+            final A a = Robolectric.buildActivity(A.class).create().get();
             final Field f = TestSharedPreferences.class.getDeclaredField("filename");
             f.setAccessible(true);
 
@@ -107,11 +99,6 @@ public class SharedPreferencesProviderTest {
 
     public static class A extends RoboActivity {
         @Inject SharedPreferences prefs;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
     }
 
     public static class ModuleA extends AbstractModule {

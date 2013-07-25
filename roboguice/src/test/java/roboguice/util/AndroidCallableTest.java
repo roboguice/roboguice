@@ -86,11 +86,13 @@ public class AndroidCallableTest {
     }
 
     @Test
+    @Ignore("Can't implement until I get the other test working")
     public void shouldNotCallOnPreCall() {
         throw new UnsupportedOperationException();
     }
 
     @Test
+    @Ignore("Can't implement until I get the other test working")
     public void shouldHaveCorrectStackTrace() {
         throw new UnsupportedOperationException();
     }

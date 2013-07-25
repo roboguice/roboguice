@@ -223,16 +223,17 @@ public class LnImpl implements LnInterface {
 
     public static class BasePrint implements Ln.Print {
         public int println(int priority, String msg ) {
-            return Log.println(priority, getTag(6), processMessage(msg));
+            return Log.println(priority, getTag(), processMessage(msg));
         }
 
-        public String processMessage(String msg) {
+        protected String processMessage(String msg) {
             if( Ln.getConfig().getLoggingLevel() <= Log.DEBUG )
                 msg = String.format("%s %s", Thread.currentThread().getName(), msg);
             return msg;
         }
 
-        protected static String getTag(int skipDepth) {
+        protected String getTag() {
+            final int skipDepth = 6; // skip 6 stackframes to find the location where this was called
             final Ln.Config config = Ln.getConfig();
             final String tag = config.getTag();
             if( config.getLoggingLevel() <= Log.DEBUG ) {

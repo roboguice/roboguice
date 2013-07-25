@@ -150,8 +150,5 @@ public class Ln {
     /** Default implementation logs to android.util.Log */
     public static interface Print {
         public int println(int priority, String msg );
-
-        public String processMessage(String msg);
-
     }
 }

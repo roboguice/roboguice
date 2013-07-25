@@ -1,7 +1,6 @@
 package roboguice.event;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -22,7 +21,6 @@ import java.util.List;
 public class ObservesTypeListenerTest {
 
     protected EventManager eventManager;
-    protected Application app;
     protected Injector injector;
     protected List<Method> eventOneMethods;
     protected List<Method> eventTwoMethods;
@@ -30,8 +28,7 @@ public class ObservesTypeListenerTest {
 
     @Before
     public void setup() throws NoSuchMethodException {
-        app = Robolectric.application;
-        injector = RoboGuice.getInjector(app);
+        injector = RoboGuice.getInjector(Robolectric.application);
 
         eventManager = injector.getInstance(EventManager.class);
 

@@ -8,7 +8,9 @@ import com.google.inject.Inject;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.util.ActivityController;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
@@ -25,8 +27,7 @@ public class ViewInjectionTest {
 
     @Test
     public void shouldInjectViewsIntoActivitiesAndViews() {
-        final C activity = new C();
-        activity.onCreate(null);
+        final C activity = Robolectric.buildActivity(C.class).create().get();
 
         assertThat(activity.v, equalTo((View)activity.ref));
         assertThat(activity.v.w, equalTo(activity.v.ref));
@@ -35,8 +36,7 @@ public class ViewInjectionTest {
 
     @Test
     public void shouldBeAbleToInjectViewsIntoPojos() {
-        final B activity = new B();
-        activity.onCreate(null);
+        final B activity = Robolectric.buildActivity(B.class).create().get();
         assertThat(activity.a.v,equalTo(activity.ref));
     }
 
@@ -44,13 +44,14 @@ public class ViewInjectionTest {
 
     @Test
     public void shouldNotHoldReferencesToContext() {
-        final SoftReference<A> activityRef = new SoftReference<A>(new A());
-        activityRef.get().onCreate(null);
+        ActivityController<A> controller= Robolectric.buildActivity(A.class).create();
+        final SoftReference<A> activityRef = new SoftReference<A>(controller.get());
 
         assertThat(activityRef.get(), not(equalTo(null)));
         assertThat(activityRef.get().v, not(equalTo(null)));
 
-        activityRef.get().onDestroy();
+        controller.destroy();
+        controller=null;
 
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
@@ -72,8 +73,7 @@ public class ViewInjectionTest {
     @Ignore("getWindow().getDecoreView() doesn't seem to return the root view in robolectric?")
     @Test
     public void shouldBeAbleToInjectReferencesToTaggedViews() {
-        final D activity = new D();
-        activity.onCreate(null);
+        final D activity = Robolectric.buildActivity(D.class).create().get();
 
         assertThat(activity.v, equalTo((View)activity.ref));
         assertThat(activity.v.w, equalTo(activity.v.ref));
@@ -90,11 +90,6 @@ public class ViewInjectionTest {
             final View x = new View(this);
             x.setId(100);
             setContentView(x);
-        }
-
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
         }
     }
 

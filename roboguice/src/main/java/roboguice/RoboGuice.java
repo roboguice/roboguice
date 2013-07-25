@@ -109,8 +109,12 @@ public class RoboGuice {
 
         synchronized (RoboGuice.class) {
             int id = modulesResourceId;
-            if (id == 0)
-                id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
+            try {
+                if (id == 0)
+                    id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
+            } catch( NullPointerException ignored ) {
+                // ignored for robolectric 2.1.1, not sure why we're getting an NPE from getIdentifier
+            }
 
             final String[] moduleNames = id>0 ? application.getResources().getStringArray(id) : new String[]{};
             final ArrayList<Module> modules = new ArrayList<Module>();

@@ -2,11 +2,11 @@ package roboguice.util;
 
 
 import android.os.Looper;
-import com.xtremelabs.robolectric.Robolectric;
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;

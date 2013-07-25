@@ -2,9 +2,9 @@ package roboguice.inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 import roboguice.activity.RoboActivity;
 import roboguice.service.RoboService;
-import roboguice.test.RobolectricRoboTestRunner;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ExtrasListenerTest {
 
     @Test

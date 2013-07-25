@@ -1,11 +1,11 @@
 package roboguice.inject;
 
-import com.xtremelabs.robolectric.Robolectric;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
-import roboguice.test.RobolectricRoboTestRunner;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,7 +18,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ContextScopeTest {
 
 

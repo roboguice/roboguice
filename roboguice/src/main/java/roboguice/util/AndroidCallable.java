@@ -9,10 +9,15 @@ package roboguice.util;
  * @param <ResultT>
  */
 public abstract class AndroidCallable<ResultT> implements AndroidCallableI<ResultT>, Runnable {
+    protected StackTraceElement[] creationLocation = Ln.isDebugEnabled() ? Thread.currentThread().getStackTrace() : null;
+
+    /**
+     * Do not call this directly, pass this AndroidCallable to an Executor and this
+     * your doInBackground method will be executed in the background thread.
+     */
     @Override
     public void run() {
-        final StackTraceElement[] launchLocation = Ln.isDebugEnabled() ? Thread.currentThread().getStackTrace() : null;
-        new AndroidCallableWrapper<ResultT>(null,this, launchLocation).run();
+        new AndroidCallableWrapper<ResultT>(null,this, creationLocation).run();
     }
 
     /**

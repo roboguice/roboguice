@@ -24,6 +24,8 @@ import java.util.concurrent.*;
  * 
  * @param <ResultT>
  */
+@SuppressWarnings("deprecation")
+@Deprecated
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     public static final int DEFAULT_POOL_SIZE = 25;
     protected static final Executor DEFAULT_EXECUTOR = Executors.newFixedThreadPool(DEFAULT_POOL_SIZE);
@@ -87,7 +89,8 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     }
 
     public void execute() {
-        execute(Thread.currentThread().getStackTrace());
+        final StackTraceElement[] launchLocation = Ln.isDebugEnabled() ? Thread.currentThread().getStackTrace() : null;
+        execute(launchLocation);
     }
 
     protected void execute( StackTraceElement[] launchLocation ) {

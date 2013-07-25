@@ -18,9 +18,11 @@ import java.util.concurrent.CountDownLatch;
 public class AndroidCallableWrapper<ResultT> implements Runnable {
     protected Handler handler;
     protected AndroidCallableI<ResultT> delegate;
+    protected StackTraceElement[] launchLocation;
 
-    public AndroidCallableWrapper(Handler handler, AndroidCallableI<ResultT> delegate ) {
+    public AndroidCallableWrapper(Handler handler, AndroidCallableI<ResultT> delegate, StackTraceElement[] launchLocation ) {
         this.delegate = delegate;
+        this.launchLocation = launchLocation;
         this.handler = handler != null ? handler : new Handler(Looper.getMainLooper());
     }
 
@@ -81,7 +83,13 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
             public void run() {
                 try {
                     if (e != null) {
-                        doOnException(e);
+                        Exception tmp = e;
+                        if( launchLocation!=null ) {
+                            final StackTraceElement[] stack = e.getStackTrace();
+                            tmp = new Exception("Exception caught by background thread",e);
+                            tmp.setStackTrace(stack);
+                        }
+                        doOnException(tmp);
                     } else {
                         doOnSuccess(result);
                     }

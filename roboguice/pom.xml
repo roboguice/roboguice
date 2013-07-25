@@ -14,36 +14,12 @@
     </licenses>
 
     <url>http://roboguice.org</url>
-    <issueManagement>
-        <system>Google Code Issue Tracker</system>
-        <url>http://code.google.com/p/roboguice/issues/list</url>
-    </issueManagement>
-    <developers>
-        <developer>
-            <id>mike</id>
-            <name>Michael Burton</name>
-            <email>mb-mavencentral@niskala.org</email>
-        </developer>
-        <developer>
-            <id>mosabua</id>
-            <name>Manfred Moser</name>
-            <email>manfred@simpligility.com</email>
-        </developer>
-    </developers>
-    <mailingLists>
-        <mailingList>
-            <name>RoboGuice Forum/Mailinglist</name>
-            <post>http://groups.google.com/group/roboguice</post>
-            <subscribe>http://groups.google.com/group/roboguice/subscribe</subscribe>
-            <unsubscribe>https://groups.google.com/group/roboguice/subscribe</unsubscribe>
-        </mailingList>
-    </mailingLists>
     <scm>
         <url>https://github.com/roboguice/roboguice</url>
         <connection>scm:git:https://github.com/roboguice/roboguice.git</connection>
         <developerConnection>scm:git:https://github.com/roboguice/roboguice.git</developerConnection>
       <tag>HEAD</tag>
-  </scm>
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -51,15 +27,6 @@
     <build>
         <defaultGoal>package</defaultGoal>
         <plugins>
-            <!--plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-gpg-plugin</artifactId>
-              <version>1.4</version>
-              <configuration>
-                <useAgent>true</useAgent>
-                <executable>gpg2</executable>
-              </configuration>
-            </plugin-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

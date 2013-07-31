@@ -105,6 +105,18 @@ public class AndroidCallableTest {
         }
     }
 
+    @Test
+    public void shouldCrashAppForExceptionInOnPreExecuteOrOnSuccessOrOnFinally() {
+        throw new UnsupportedOperationException();
+    }
+
+
+    @Test
+    public void shouldCallOnExceptionForExceptionInOnPreExecute() {
+        throw new UnsupportedOperationException();
+    }
+
+
     private static class StringAndroidCallable extends AndroidCallable<String> {
         Thread[] answers;
         boolean shouldThrowException;

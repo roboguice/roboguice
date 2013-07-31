@@ -18,18 +18,20 @@ package roboguice.util;
 public interface AndroidCallableI<ResultT> {
 
     /**
-     * Executed in the handler's thread (usually the UI thread) before the task's call() method is called.
+     * Executed in the handler's thread (usually the UI thread) before the task's doInBackground() method is called.
+     * Exceptions will be thrown from the UI thread, which will crash the app if not caught.
      */
     void onPreCall();
 
     /**
      * Executed in the executor's background thread.
+     * Exceptions will be handled by the onException callback.
      */
     ResultT doInBackground() throws Exception;
 
 
     /**
-     * Executed in the handler's thread (usually the UI thread) if call threw an exception.
+     * Executed in the handler's thread (usually the UI thread) if doInBackground threw an exception.
      * @param e the exception thrown by the {@link #doInBackground} method
      */
     void onException(Exception e);
@@ -37,6 +39,7 @@ public interface AndroidCallableI<ResultT> {
 
     /**
      * Executed in the handler's thread (usually the UI thread) if call returned a result.
+     * Exceptions will be thrown from the UI thread, which will crash the app if not caught.
      * @param result the result returned by the {@link #doInBackground} method
      */
     void onSuccess(ResultT result);

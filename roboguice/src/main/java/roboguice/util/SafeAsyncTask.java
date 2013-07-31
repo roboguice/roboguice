@@ -1,12 +1,8 @@
 package roboguice.util;
 
 import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
-import java.io.InterruptedIOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.concurrent.*;
 
 /**
@@ -66,7 +62,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
 
     public FutureTask<Void> future() {
-        future = new FutureTask<Void>( newTask() );
+        future = new FutureTask<Void>( newTask(), null );
         return future;
     }
 
@@ -153,145 +149,43 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     protected void onFinally() throws RuntimeException {}
 
 
-    protected Task<ResultT> newTask() {
-        return new Task<ResultT>(this);
+    protected Runnable newTask() {
+        return new SafeAsyncTaskAndroidCallable();
     }
 
 
-    public static class Task<ResultT> implements Callable<Void> {
-        protected SafeAsyncTask<ResultT> parent;
-        protected Handler handler;
-
-        public Task(SafeAsyncTask<ResultT> parent) {
-            this.parent = parent;
-            this.handler = parent.handler!=null ? parent.handler : new Handler(Looper.getMainLooper());
+    public class SafeAsyncTaskAndroidCallable extends AndroidCallable<ResultT> {
+        @Override
+        public ResultT doInBackground() throws Exception {
+            return call();
         }
 
-        public Void call() throws Exception {
+        @Override
+        public void onException(Exception e) {
+            SafeAsyncTask.this.onException(e);
+        }
+
+        @Override
+        public void onFinally() {
+            SafeAsyncTask.this.onFinally();
+        }
+
+        @Override
+        public void onPreCall() {
             try {
-                doPreExecute();
-                doSuccess(doCall());
-
-            } catch( final Exception e ) {
-                try {
-                    doException(e);
-                } catch( Exception f ) {
-                    // logged but ignored
-                    Ln.e(f);
-                }
-
-            } catch( final Throwable t ) {
-                try {
-                    doThrowable(t);
-                } catch( Exception f ) {
-                    // logged but ignored
-                    Ln.e(f);
-                }
-            } finally {
-                doFinally();
+                SafeAsyncTask.this.onPreExecute();
+            } catch (Exception e) {
+                throw new RuntimeException(e); // This will halt the UI thread
             }
-
-            return null;
         }
 
-        protected void doPreExecute() throws Exception {
-            postToUiThreadAndWait( new Callable<Object>() {
-                public Object call() throws Exception {
-                    parent.onPreExecute();
-                    return null;
-                }
-            });
-        }
-
-        protected ResultT doCall() throws Exception {
-            return parent.call();
-        }
-
-        protected void doSuccess( final ResultT r ) throws Exception {
-            postToUiThreadAndWait( new Callable<Object>() {
-                public Object call() throws Exception {
-                    parent.onSuccess(r);
-                    return null;
-                }
-            });
-        }
-
-        protected void doException( final Exception e ) throws Exception {
-            if( parent.launchLocation!=null ) {
-                final ArrayList<StackTraceElement> stack = new ArrayList<StackTraceElement>(Arrays.asList(e.getStackTrace()));
-                stack.addAll(Arrays.asList(parent.launchLocation));
-                e.setStackTrace(stack.toArray(new StackTraceElement[stack.size()]));
+        @Override
+        public void onSuccess(ResultT result) {
+            try {
+                SafeAsyncTask.this.onSuccess(result);
+            } catch (Exception e) {
+                throw new RuntimeException(e); //This will halt the UI thread
             }
-            postToUiThreadAndWait( new Callable<Object>() {
-                public Object call() throws Exception {
-                    if( e instanceof InterruptedException || e instanceof InterruptedIOException )
-                        parent.onInterrupted(e);
-                    else
-                        parent.onException(e);
-                    return null;
-                }
-            });
         }
-
-        protected void doThrowable( final Throwable e ) throws Exception {
-            if( parent.launchLocation!=null ) {
-                final ArrayList<StackTraceElement> stack = new ArrayList<StackTraceElement>(Arrays.asList(e.getStackTrace()));
-                stack.addAll(Arrays.asList(parent.launchLocation));
-                e.setStackTrace(stack.toArray(new StackTraceElement[stack.size()]));
-            }
-            postToUiThreadAndWait( new Callable<Object>() {
-                public Object call() throws Exception {
-                    parent.onThrowable(e);
-                    return null;
-                }
-            });
-        }
-        
-        protected void doFinally() throws Exception {
-            postToUiThreadAndWait( new Callable<Object>() {
-                public Object call() throws Exception {
-                    parent.onFinally();
-                    return null;
-                }
-            });
-        }
-
-
-        /**
-         * Posts the specified runnable to the UI thread using a handler,
-         * and waits for operation to finish.  If there's an exception,
-         * it captures it and rethrows it.
-         * @param c the callable to post
-         * @throws Exception on error
-         */
-        protected void postToUiThreadAndWait( final Callable c ) throws Exception {
-            final CountDownLatch latch = new CountDownLatch(1);
-            final Exception[] exceptions = new Exception[1];
-
-            // Execute onSuccess in the UI thread, but wait
-            // for it to complete.
-            // If it throws an exception, capture that exception
-            // and rethrow it later.
-            handler.post( new Runnable() {
-               public void run() {
-                   try {
-                       c.call();
-                   } catch( Exception e ) {
-                       exceptions[0] = e;
-                   } finally {
-                       latch.countDown();
-                   }
-               }
-            });
-
-            // Wait for onSuccess to finish
-            latch.await();
-
-            if( exceptions[0] != null )
-                throw exceptions[0];
-
-        }
-
     }
-
 }

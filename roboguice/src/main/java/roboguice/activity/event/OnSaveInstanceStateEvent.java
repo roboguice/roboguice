@@ -1,16 +1,23 @@
 package roboguice.activity.event;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 public class OnSaveInstanceStateEvent {
 
-        protected Bundle savedInstanceState;
+    protected Activity activity;
+    protected Bundle savedInstanceState;
 
-        public OnSaveInstanceStateEvent(Bundle savedInstanceState) {
-            this.savedInstanceState = savedInstanceState;
-        }
+    public OnSaveInstanceStateEvent(Activity activity, Bundle savedInstanceState) {
+        this.activity = activity;
+        this.savedInstanceState = savedInstanceState;
+    }
 
-        public Bundle getSavedInstanceState() {
+    public Bundle getSavedInstanceState() {
             return savedInstanceState;
         }
+
+    public Activity getActivity() {
+        return activity;
     }
+}

@@ -6,7 +6,7 @@
     <groupId>org.roboguice</groupId>
     <artifactId>roboguice-aggregator</artifactId>
     <name>Aggregator</name>
-    <version>3.0-experimental-SNAPSHOT</version>
+    <version>3.0-alpha-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>

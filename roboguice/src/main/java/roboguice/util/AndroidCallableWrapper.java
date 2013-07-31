@@ -101,7 +101,7 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
         });
     }
 
-    protected void doOnPreCall() {
+    protected void doOnPreCall() throws Exception {
         delegate.onPreCall();
     }
 

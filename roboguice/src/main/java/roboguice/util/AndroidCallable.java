@@ -24,7 +24,7 @@ public abstract class AndroidCallable<ResultT> implements AndroidCallableI<Resul
      * {@inheritDoc}
      */
     @Override
-    public void onPreCall() {}
+    public void onPreCall() throws Exception {}
 
     /**
      * {@inheritDoc}

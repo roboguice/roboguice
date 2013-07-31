@@ -3,7 +3,6 @@ package roboguice.util;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -86,7 +85,8 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
                     if (e != null) {
                         if( launchLocation!=null ) {
                             final StackTraceElement[] stackTrace = e.getStackTrace();
-                            final StackTraceElement[] result = Arrays.copyOf(stackTrace, stackTrace.length + launchLocation.length);
+                            final StackTraceElement[] result = new StackTraceElement[stackTrace.length + launchLocation.length];
+                            System.arraycopy(stackTrace, 0, result, 0, stackTrace.length);
                             System.arraycopy(launchLocation, 0, result, stackTrace.length, launchLocation.length);
                             e.setStackTrace(result);
                         }

@@ -68,13 +68,13 @@ public class RoboTabActivity extends TabActivity implements RoboContext {
     @Deprecated
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        eventManager.fire(new OnSaveInstanceStateEvent(outState));
+        eventManager.fire(new OnSaveInstanceStateEvent(this,outState));
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        eventManager.fire(new OnRestartEvent());
+        eventManager.fire(new OnRestartEvent(this));
     }
 
     @Override
@@ -88,28 +88,28 @@ public class RoboTabActivity extends TabActivity implements RoboContext {
     @Deprecated
     protected void onResume() {
         super.onResume();
-        eventManager.fire(new OnResumeEvent());
+        eventManager.fire(new OnResumeEvent(this));
     }
 
     @Override
     @Deprecated
     protected void onPause() {
         super.onPause();
-        eventManager.fire(new OnPauseEvent());
+        eventManager.fire(new OnPauseEvent(this));
     }
 
     @Override
     @Deprecated
     protected void onNewIntent( Intent intent ) {
         super.onNewIntent(intent);
-        eventManager.fire(new OnNewIntentEvent());
+        eventManager.fire(new OnNewIntentEvent(this));
     }
 
     @Override
     @Deprecated
     protected void onStop() {
         try {
-            eventManager.fire(new OnStopEvent());
+            eventManager.fire(new OnStopEvent(this));
         } finally {
             super.onStop();
         }
@@ -142,14 +142,14 @@ public class RoboTabActivity extends TabActivity implements RoboContext {
     public void onContentChanged() {
         super.onContentChanged();
         RoboGuice.getInjector(this).injectViewMembers(this);
-        eventManager.fire(new OnContentChangedEvent());
+        eventManager.fire(new OnContentChangedEvent(this));
     }
 
     @Override
     @Deprecated
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        eventManager.fire(new OnActivityResultEvent(requestCode, resultCode, data));
+        eventManager.fire(new OnActivityResultEvent(this, requestCode, resultCode, data));
     }
 
     @Override

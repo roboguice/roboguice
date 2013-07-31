@@ -35,7 +35,9 @@ public interface LnInterface {
 
     boolean isVerboseEnabled();
 
-    Ln.Config getConfig();
+    int getLoggingLevel();
+
+    void setLoggingLevel(int level);
 
     String logLevelToString(int loglevel);
 }

@@ -131,24 +131,16 @@ public class Ln {
         return lnImpl.isVerboseEnabled();
     }
 
-    public static Config getConfig() {
-        return lnImpl.getConfig();
+    public static int getLoggingLevel() {
+        return lnImpl.getLoggingLevel();
     }
 
-
-    public static interface Config {
-        public int getLoggingLevel();
-        public void setLoggingLevel(int level);
-        public String getTag();
+    public static void setLoggingLevel(int level) {
+        lnImpl.setLoggingLevel(level);
     }
 
     public static String logLevelToString( int loglevel ) {
         return lnImpl.logLevelToString(loglevel);
     }
 
-
-    /** Default implementation logs to android.util.Log */
-    public static interface Print {
-        public int println(int priority, String msg );
-    }
 }

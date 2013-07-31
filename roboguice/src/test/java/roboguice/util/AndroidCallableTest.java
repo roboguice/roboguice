@@ -100,9 +100,9 @@ public class AndroidCallableTest {
             ++i;
         }
 
-        for( int j=i+3, k=0; k<here.length; ++k, ++j) { // skip 3 frames due to differences in where we got our stacktrace from
+        for( int j=i+3, k=0; k<here.length; ++k, ++j) // skip 3 frames due to differences in where we got our stacktrace from
             assertThat( exception[0].getStackTrace()[j].getFileName(), equalTo(here[k].getFileName())); // line numbers may be off
-        }
+
     }
 
     @Test(expected = RuntimeException.class )

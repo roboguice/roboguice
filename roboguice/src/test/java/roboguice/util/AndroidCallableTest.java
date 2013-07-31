@@ -32,7 +32,7 @@ public class AndroidCallableTest {
 
 
         final Thread[] correctAnswer = new Thread[]{fgThread, bgThread[0], null, fgThread, fgThread };
-        assertThat( answers, equalTo(correctAnswer));
+        assertThat(answers, equalTo(correctAnswer));
     }
 
     @Test
@@ -105,15 +105,181 @@ public class AndroidCallableTest {
         }
     }
 
+    @Test(expected = RuntimeException.class )
+    public void shouldCrashAppForExceptionInOnSuccess() {
+        final ShadowLooper looper = Robolectric.shadowOf(Looper.getMainLooper());
+        final boolean[] callRecord = new boolean[]{false};
+
+        Executors.newSingleThreadExecutor().submit( new AndroidCallable<String>() {
+            @Override
+            public String doInBackground() throws Exception {
+                return "";
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                throw new RuntimeException();
+            }
+
+            @Override
+            public void onException(Exception e) {
+            }
+
+            @Override
+            public void onFinally() {
+                callRecord[0] = true;
+            }
+        });
+
+        // Run all the pending tasks on the ui thread
+        while(!callRecord[callRecord.length-1])
+            looper.runToEndOfTasks();
+
+    }
+
+    @Test(expected = RuntimeException.class )
+    public void shouldCrashAppForExceptionInOnException() {
+        final ShadowLooper looper = Robolectric.shadowOf(Looper.getMainLooper());
+        final boolean[] callRecord = new boolean[]{false};
+
+        Executors.newSingleThreadExecutor().submit( new AndroidCallable<String>() {
+            @Override
+            public String doInBackground() throws Exception {
+                throw new Exception();
+            }
+
+            @Override
+            public void onSuccess(String result) {
+            }
+
+            @Override
+            public void onException(Exception e) {
+                throw new RuntimeException();
+            }
+
+            @Override
+            public void onFinally() {
+                callRecord[0] = true;
+            }
+        });
+
+        // Run all the pending tasks on the ui thread
+        while(!callRecord[callRecord.length-1])
+            looper.runToEndOfTasks();
+
+    }
+
+    @Test(expected = RuntimeException.class )
+    public void shouldCrashAppForExceptionInOnFinally() {
+        final ShadowLooper looper = Robolectric.shadowOf(Looper.getMainLooper());
+
+        Executors.newSingleThreadExecutor().submit( new AndroidCallable<String>() {
+            @Override
+            public String doInBackground() throws Exception {
+                return "";
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                throw new RuntimeException();
+            }
+
+            @Override
+            public void onException(Exception e) {
+            }
+
+            @Override
+            public void onFinally() {
+                throw new RuntimeException();
+            }
+        });
+
+        // Run all the pending tasks on the ui thread
+        //noinspection InfiniteLoopStatement
+        while(true)
+            looper.runToEndOfTasks();
+
+    }
+
     @Test
-    public void shouldCrashAppForExceptionInOnPreExecuteOrOnSuccessOrOnFinally() {
-        throw new UnsupportedOperationException();
+    public void shouldCallOnExceptionForExceptionInDoInBackground() {
+        final ShadowLooper looper = Robolectric.shadowOf(Looper.getMainLooper());
+        final boolean[] callRecord = new boolean[]{false, false, false, false};
+        final boolean[] correctAnswer = new boolean[] { true, false, true, true };
+
+        Executors.newSingleThreadExecutor().submit( new AndroidCallable<String>() {
+            @Override
+            public void onPreCall() {
+                callRecord[0] = true;
+            }
+
+            @Override
+            public String doInBackground() throws Exception {
+                throw new Exception();
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                callRecord[1] = true;
+            }
+
+            @Override
+            public void onException(Exception e) {
+                callRecord[2] = true;
+            }
+
+            @Override
+            public void onFinally() {
+                callRecord[3] = true;
+            }
+        });
+
+        // Run all the pending tasks on the ui thread
+        while(!callRecord[callRecord.length-1])
+            looper.runToEndOfTasks();
+
+        assertThat( callRecord, equalTo(correctAnswer));
     }
 
 
     @Test
     public void shouldCallOnExceptionForExceptionInOnPreExecute() {
-        throw new UnsupportedOperationException();
+        final ShadowLooper looper = Robolectric.shadowOf(Looper.getMainLooper());
+        final boolean[] callRecord = new boolean[]{false, false, false};
+        final boolean[] correctAnswer = new boolean[] { false, true, true };
+
+        Executors.newSingleThreadExecutor().submit( new AndroidCallable<String>() {
+            @Override
+            public void onPreCall() {
+                throw new RuntimeException();
+            }
+
+            @Override
+            public String doInBackground() throws Exception {
+                return "";
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                callRecord[0] = true;
+            }
+
+            @Override
+            public void onException(Exception e) {
+                callRecord[1] = true;
+            }
+
+            @Override
+            public void onFinally() {
+                callRecord[2] = true;
+            }
+        });
+
+        // Run all the pending tasks on the ui thread
+        while(!callRecord[callRecord.length-1])
+            looper.runToEndOfTasks();
+
+        assertThat( callRecord, equalTo(correctAnswer));
     }
 
 

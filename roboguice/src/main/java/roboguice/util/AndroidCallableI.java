@@ -19,9 +19,9 @@ public interface AndroidCallableI<ResultT> {
 
     /**
      * Executed in the handler's thread (usually the UI thread) before the task's doInBackground() method is called.
-     * Exceptions will be thrown from the UI thread, which will crash the app if not caught.
+     * Exceptions will be handled by the onException callback.
      */
-    void onPreCall();
+    void onPreCall() throws Exception;
 
     /**
      * Executed in the executor's background thread.

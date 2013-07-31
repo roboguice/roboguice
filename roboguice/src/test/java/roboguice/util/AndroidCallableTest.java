@@ -2,6 +2,7 @@ package roboguice.util;
 
 
 import android.os.Looper;
+import android.util.Log;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -60,6 +61,8 @@ public class AndroidCallableTest {
         final StackTraceElement[][] there = new StackTraceElement[][]{null};
         final ShadowLooper looper = Robolectric.shadowOf(Looper.getMainLooper());
 
+        Ln.setLoggingLevel(Log.DEBUG);
+
         try {
             throw new UnsupportedOperationException();
         } catch (UnsupportedOperationException e) {
@@ -92,7 +95,7 @@ public class AndroidCallableTest {
         while(exception[0]==null)
             looper.runToEndOfTasks();
 
-        assertThat( exception[0].getStackTrace().length, equalTo(here.length + there[0].length + 3)  );
+        assertThat(exception[0].getStackTrace().length, equalTo(here.length + there[0].length + 3));
 
         int i=0;
         while (i<there[0].length) {

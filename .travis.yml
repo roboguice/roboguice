@@ -1,17 +1,25 @@
 language: java
 
+# http://blog.xeiam.com/2013/05/configure-travis-ci-to-deploy-snapshots.html
+env:
+    global:
+        - secure: "EPQOklc+7/wujJipIqZFwE2+HtPjsnVoJWniV2eQ1qWtxDBDrKcpIW3dIYhucQUad8MnUWX4pZ1T4mLL6W3DpqUmGzJRfunu0iA1k2a3Z4BD/2nkO9devRv0KEJV0UCMv08mYA91XSJcuzeT4DiiLja5oCW2e4y2vOCVmhPtbJw="
+        - secure: "dOGu9TKpqafJ6ALPvRfbnWwwQxPIZj6EAkhlcFsnq+PGLrkV0nXlmfPGZDGIK/LMoFuttQyqIxo7ypxQ2pmVAfidSqJcfg8XpVi7WxTSB1jD5eVtYjmpw+o3M44Il0MxGdoEhd7tEPm5noC2EToezBrztJlPmGE+KOfbxS7tMII="
+
+
 # http://levi-wilson.blogspot.com/2012/06/maven-android-travis-ci-and-more.html
 # http://stackoverflow.com/a/3008489/82156
 before_install:
-  - wget http://dl.google.com/android/android-sdk_r18-linux.tgz
-  - tar -zxf android-sdk_r18-linux.tgz
+  - git clone -b travis `git config --get remote.origin.url` target/travis
+  - sudo apt-get update -qq
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
+  - wget http://dl.google.com/android/android-sdk_r21-linux.tgz
+  - tar -zxf android-sdk_r21-linux.tgz
   - pwd
   - ( cd ~ && pwd )
   - export ANDROID_HOME=~/build/roboguice/roboguice/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-  - android update sdk --filter 1,2 --no-ui --force --all
-  - android update sdk --filter 13 --no-ui --force --all
-  - sudo apt-get install -qq --force-yes libgd2-xpm
-  - sudo apt-get install -qq --force-yes ia32-libs
-  - sudo apt-get install -qq --force-yes ia32-libs-multiarch
-  - aapt
+  - android update sdk --all --filter platform-tools,android-9 --no-ui --force
+
+
+script: "mvn deploy --settings target/travis/settings.xml"

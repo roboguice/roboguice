@@ -1,33 +1,32 @@
 package roboguice.inject;
 
-import com.xtremelabs.robolectric.Robolectric;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import roboguice.RoboGuice;
-import roboguice.activity.RoboActivity;
-import roboguice.test.RobolectricRoboTestRunner;
-
 import android.app.Activity;
-import android.os.Bundle;
-
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Singleton;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.util.ActivityController;
+import roboguice.RoboGuice;
+import roboguice.activity.RoboActivity;
 
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ContextScopeTest {
 
 
     @Test
     public void shouldHaveContextInScopeMapAfterOnCreate() throws Exception {
-        final A a = new A();
+        final ActivityController<A> aController = Robolectric.buildActivity(A.class);
+        final A a = aController.get();
 
         assertThat(a.getScopedObjectMap().size(), equalTo(0));
-        a.onCreate(null);
+        aController.create();
 
         boolean found=false;
         for( Object o : a.getScopedObjectMap().values() )
@@ -40,8 +39,8 @@ public class ContextScopeTest {
     @Test
     public void shouldBeAbleToOpenMultipleScopes() {
         final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
-        final Activity a = new A();
-        final Activity b = new B();
+        final Activity a = Robolectric.buildActivity(A.class).get();
+        final Activity b = Robolectric.buildActivity(B.class).get();
 
         scope.enter(a);
         scope.enter(b);
@@ -52,8 +51,8 @@ public class ContextScopeTest {
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotBeAbleToExitTheWrongScope() {
         final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
-        final Activity a = new A();
-        final Activity b = new B();
+        final Activity a = Robolectric.buildActivity(A.class).get();
+        final Activity b = Robolectric.buildActivity(B.class).get();
 
         scope.enter(a);
         scope.enter(b);
@@ -62,10 +61,11 @@ public class ContextScopeTest {
 
     @Test
     public void shouldHaveTwoItemsInScopeMapAfterOnCreate() throws Exception {
-        final B b = new B();
+        final ActivityController<B> bController = Robolectric.buildActivity(B.class);
+        final B b = bController.get();
 
         assertThat(b.getScopedObjectMap().size(), equalTo(0));
-        b.onCreate(null);
+        bController.create();
 
         boolean found=false;
         for( Object o : b.getScopedObjectMap().values() )
@@ -77,10 +77,6 @@ public class ContextScopeTest {
     }
 
     public static class A extends RoboActivity {
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
     }
 
     public static class B extends RoboActivity {
@@ -88,10 +84,6 @@ public class ContextScopeTest {
         @Inject D d; // unscoped
         @Inject E e; // singleton
 
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
     }
 
     @ContextSingleton

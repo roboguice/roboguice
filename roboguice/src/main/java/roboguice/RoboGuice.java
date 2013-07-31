@@ -29,7 +29,6 @@ import java.util.WeakHashMap;
  * 
  * BUG hashmap should also key off of stage and modules list
  */
-@SuppressWarnings({"ALL"})
 public class RoboGuice {
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
 
@@ -110,8 +109,12 @@ public class RoboGuice {
 
         synchronized (RoboGuice.class) {
             int id = modulesResourceId;
-            if (id == 0)
-                id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
+            try {
+                if (id == 0)
+                    id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
+            } catch( NullPointerException ignored ) {
+                // ignored for robolectric 2.1.1, not sure why we're getting an NPE from getIdentifier
+            }
 
             final String[] moduleNames = id>0 ? application.getResources().getStringArray(id) : new String[]{};
             final ArrayList<Module> modules = new ArrayList<Module>();
@@ -166,6 +169,7 @@ public class RoboGuice {
 
 
 
+    @SuppressWarnings("ConstantConditions")
     protected static ResourceListener getResourceListener( Application application ) {
         ResourceListener resourceListener = resourceListeners.get(application);
         if( resourceListener==null ) {
@@ -179,6 +183,7 @@ public class RoboGuice {
         return resourceListener;
     }
 
+    @SuppressWarnings("ConstantConditions")
     protected static ViewListener getViewListener( final Application application ) {
         ViewListener viewListener = viewListeners.get(application);
         if( viewListener==null ) {
@@ -195,7 +200,8 @@ public class RoboGuice {
     public static void destroyInjector(Context context) {
         final RoboInjector injector = getInjector(context);
         injector.getInstance(EventManager.class).destroy();
-        injectors.remove(context);
+        //noinspection SuspiciousMethodCalls
+        injectors.remove(context); // it's okay, Context is an Application
     }
     
     

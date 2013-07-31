@@ -1,6 +1,6 @@
 package roboguice.inject;
 
-import roboguice.activity.event.OnCreateEvent;
+import roboguice.context.event.OnCreateEvent;
 import roboguice.event.Observes;
 
 import android.app.Activity;

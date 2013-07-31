@@ -2,9 +2,10 @@ package roboguice.inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import roboguice.activity.RoboActivity;
 import roboguice.service.RoboService;
-import roboguice.test.RobolectricRoboTestRunner;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,15 +15,12 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ExtrasListenerTest {
 
     @Test
     public void shouldInjectActivity() {
-        final MyRoboActivity a1 = new MyRoboActivity();
-
-        a1.onCreate(null);
-
+        final MyRoboActivity a1 = Robolectric.buildActivity(MyRoboActivity.class).create().get();
         assertThat(a1.foo, equalTo(10));
     }
 
@@ -40,11 +38,6 @@ public class ExtrasListenerTest {
 
     protected static class MyRoboActivity extends RoboActivity {
         @InjectExtra("foo") protected int foo;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
 
         @Override
         public Intent getIntent() {

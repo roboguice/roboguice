@@ -2,8 +2,9 @@ package roboguice.inject;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import roboguice.activity.RoboActivity;
-import roboguice.test.RobolectricRoboTestRunner;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -16,18 +17,13 @@ import java.util.concurrent.FutureTask;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 
-@RunWith(RobolectricRoboTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class ProviderTest {
 
     @Test(expected = AssertionError.class)
     public void shouldNotReturnProperContext() throws Exception {
-        final A a = new A();
-        a.onCreate(null);
-
-        final B b = new B();
-        b.onCreate(null);
-
-
+        final A a = Robolectric.buildActivity(A.class).create().get();
+        final B b = Robolectric.buildActivity(B.class).create().get();
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
             @Override
             public Context call() throws Exception {
@@ -41,13 +37,10 @@ public class ProviderTest {
 
     @Test
     public void shouldReturnProperContext() throws Exception {
-        final C c = new C();
-        c.onCreate(null);
+        //noinspection UnusedDeclaration
+        final B b = Robolectric.buildActivity(B.class).create().get();
 
-        final B b = new B();
-        b.onCreate(null);
-
-
+        final C c = Robolectric.buildActivity(C.class).create().get();
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
             @Override
             public Context call() throws Exception {

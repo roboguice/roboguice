@@ -3,7 +3,7 @@
     <groupId>org.roboguice</groupId>
     <artifactId>roboguice</artifactId>
     <name>RoboGuice</name>
-    <version>2.1-SNAPSHOT</version>
+    <version>3.0-experimental-SNAPSHOT</version>
     <description>A framework for using Google Guice dependency injection in Android.</description>
 
     <licenses>
@@ -14,34 +14,11 @@
     </licenses>
 
     <url>http://roboguice.org</url>
-    <issueManagement>
-        <system>Google Code Issue Tracker</system>
-        <url>http://code.google.com/p/roboguice/issues/list</url>
-    </issueManagement>
-    <developers>
-        <developer>
-            <id>mike</id>
-            <name>Michael Burton</name>
-            <email>mb-mavencentral@niskala.org</email>
-        </developer>
-        <developer>
-            <id>mosabua</id>
-            <name>Manfred Moser</name>
-            <email>manfred@simpligility.com</email>
-        </developer>
-    </developers>
-    <mailingLists>
-        <mailingList>
-            <name>RoboGuice Forum/Mailinglist</name>
-            <post>http://groups.google.com/group/roboguice</post>
-            <subscribe>http://groups.google.com/group/roboguice/subscribe</subscribe>
-            <unsubscribe>https://groups.google.com/group/roboguice/subscribe</unsubscribe>
-        </mailingList>
-    </mailingLists>
     <scm>
-        <url>http://code.google.com/p/roboguice/source/list</url>
-        <connection>scm:hg:https://roboguice.googlecode.com/hg/</connection>
-        <developerConnection>scm:hg:https://roboguice.googlecode.com/hg/</developerConnection>
+        <url>https://github.com/roboguice/roboguice</url>
+        <connection>scm:git:https://github.com/roboguice/roboguice.git</connection>
+        <developerConnection>scm:git:https://github.com/roboguice/roboguice.git</developerConnection>
+      <tag>HEAD</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,15 +27,6 @@
     <build>
         <defaultGoal>package</defaultGoal>
         <plugins>
-            <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-gpg-plugin</artifactId>
-              <version>1.4</version>
-              <configuration>
-                <useAgent>true</useAgent>
-                <executable>gpg2</executable>
-              </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -104,25 +72,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android</artifactId>
-            <version>2.1.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android-test</artifactId>
-            <version>2.1.2</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.android.maps</groupId>
-            <artifactId>maps</artifactId>
-            <version>7_r1</version>
-            <scope>provided</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>3.0</version>
@@ -141,10 +90,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.pivotallabs</groupId>
+            <groupId>org.robolectric</groupId>
             <artifactId>robolectric</artifactId>
-            <version>1.0-RC1</version>
-            <optional>true</optional>
+            <version>2.1.1</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -158,7 +107,25 @@
             <version>11</version>
             <optional>true</optional>
         </dependency>
-
+        <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>4.2.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--dependency> WHAT IS THIS FOR?
+            <groupId>com.google.android</groupId>
+            <artifactId>android-test</artifactId>
+            <version>2.1.2</version>
+            <scope>provided</scope>
+        </dependency-->
+        <dependency>
+            <groupId>com.google.android.maps</groupId>
+            <artifactId>maps</artifactId>
+            <version>7_r1</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
     <reporting>

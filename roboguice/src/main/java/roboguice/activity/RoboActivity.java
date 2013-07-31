@@ -15,21 +15,22 @@
  */
 package roboguice.activity;
 
-import roboguice.RoboGuice;
-import roboguice.activity.event.*;
-import roboguice.event.EventManager;
-import roboguice.inject.ContentViewListener;
-import roboguice.inject.RoboInjector;
-import roboguice.util.RoboContext;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-
 import com.google.inject.Inject;
-import com.google.inject.Injector;
 import com.google.inject.Key;
+import roboguice.RoboGuice;
+import roboguice.activity.event.*;
+import roboguice.context.event.OnConfigurationChangedEvent;
+import roboguice.context.event.OnCreateEvent;
+import roboguice.context.event.OnDestroyEvent;
+import roboguice.context.event.OnStartEvent;
+import roboguice.event.EventManager;
+import roboguice.inject.ContentViewListener;
+import roboguice.inject.RoboInjector;
+import roboguice.util.RoboContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,12 +58,7 @@ import java.util.Map;
  * {@link #setContentView(int)} (calling any of the overloads of this methods
  * will work).<br />
  * <br />
- * You can have access to the Guice {@link Injector} at any time, by calling
- * {@link #getInjector()}.<br />
- * However, you will not have access to ContextSingleton scoped beans until
- * {@link #onCreate(Bundle)} is called. <br />
- * <br />
- * 
+ *
  * @author Mike Burton
  */
 public class RoboActivity extends Activity implements RoboContext {
@@ -77,7 +73,13 @@ public class RoboActivity extends Activity implements RoboContext {
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
-        eventManager.fire(new OnCreateEvent(savedInstanceState));
+        eventManager.fire(new OnCreateEvent<Activity>(this,savedInstanceState));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        eventManager.fire(new OnSaveInstanceStateEvent(outState));
     }
 
     @Override
@@ -89,7 +91,7 @@ public class RoboActivity extends Activity implements RoboContext {
     @Override
     protected void onStart() {
         super.onStart();
-        eventManager.fire(new OnStartEvent());
+        eventManager.fire(new OnStartEvent<Activity>(this));
     }
 
     @Override
@@ -122,7 +124,7 @@ public class RoboActivity extends Activity implements RoboContext {
     @Override
     protected void onDestroy() {
         try {
-            eventManager.fire(new OnDestroyEvent());
+            eventManager.fire(new OnDestroyEvent<Activity>(this));
         } finally {
             try {
                 RoboGuice.destroyInjector(this);
@@ -136,7 +138,7 @@ public class RoboActivity extends Activity implements RoboContext {
     public void onConfigurationChanged(Configuration newConfig) {
         final Configuration currentConfig = getResources().getConfiguration();
         super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent(currentConfig, newConfig));
+        eventManager.fire(new OnConfigurationChangedEvent<Activity>(this,currentConfig, newConfig));
     }
 
     @Override

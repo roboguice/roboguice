@@ -52,19 +52,6 @@ public class ResourceListener implements TypeListener {
 
     }
 
-    @SuppressWarnings("unchecked")
-    public void requestStaticInjection(Class<?>... types) {
-        
-        for (Class<?> c : types)
-            for( ; c!=Object.class; c=c.getSuperclass() )
-                for (Field field : c.getDeclaredFields())
-                    if (Modifier.isStatic(field.getModifiers()) && field.isAnnotationPresent(InjectResource.class))
-                        new ResourceMembersInjector(field, application, field.getAnnotation(InjectResource.class)).injectMembers(null);
-
-
-    }
-
-
 
 
 

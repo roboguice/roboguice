@@ -71,11 +71,6 @@ public class ActivityInjectionTest {
     }
 
     @Test
-    public void shouldStaticallyInjectResources() {
-        assertThat(A.s,equalTo("Cancel"));
-    }
-    
-    @Test
     public void shouldInjectActivityAndRoboActivity() {
         assertEquals(activity,activity.activity);
         assertEquals(activity,activity.roboActivity);

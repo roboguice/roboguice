@@ -6,10 +6,6 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
-import com.google.inject.spi.DefaultElementVisitor;
-import com.google.inject.spi.Element;
-import com.google.inject.spi.Elements;
-import com.google.inject.spi.StaticInjectionRequest;
 import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.*;
@@ -74,19 +70,6 @@ public class RoboGuice {
      *
      */
     public static Injector setBaseApplicationInjector(final Application application, Stage stage, Module... modules) {
-
-        // Do a little rewriting on the modules first to
-        // add static resource injection
-        for(Element element : Elements.getElements(modules)) {
-            element.acceptVisitor(new DefaultElementVisitor<Void>() {
-                @Override
-                public Void visit(StaticInjectionRequest element) {
-                    getResourceListener(application).requestStaticInjection(element.getType());
-                    return null;
-                }
-            });
-        }
-
         synchronized (RoboGuice.class) {
             final Injector rtrn = Guice.createInjector(stage, modules);
             injectors.put(application,rtrn);

@@ -2,13 +2,13 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>roboguice</artifactId>
     <name>RoboGuice</name>
-    <version>3.0d-experimental</version> <!-- BUG necessary? or inherited -->
+    <version>3.0-alpha-SNAPSHOT</version> <!-- BUG necessary? or inherited -->
     <description>A framework for using Google Guice dependency injection in Android.</description>
 
     <parent>
         <groupId>org.roboguice</groupId>
         <artifactId>roboguice-aggregator</artifactId>
-        <version>3.0d-experimental</version>
+        <version>3.0-alpha-SNAPSHOT</version>
     </parent>
 
 

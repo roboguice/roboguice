@@ -21,6 +21,25 @@
         <version>6</version>
     </parent>
 
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <url>http://roboguice.org</url>
+    <scm>
+        <url>https://github.com/roboguice/roboguice</url>
+        <connection>scm:git:https://github.com/roboguice/roboguice.git</connection>
+        <developerConnection>scm:git:https://github.com/roboguice/roboguice.git</developerConnection>
+      <tag>HEAD</tag>
+    </scm>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
     <build>
         <plugins>
             <plugin>

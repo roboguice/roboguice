@@ -1,28 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.roboguice</groupId>
     <artifactId>roboguice</artifactId>
     <name>RoboGuice</name>
-    <version>3.0-alpha-SNAPSHOT</version>
+    <version>3.0-alpha-SNAPSHOT</version> <!-- BUG necessary? or inherited -->
     <description>A framework for using Google Guice dependency injection in Android.</description>
 
-    <licenses>
-        <license>
-            <name>Apache 2</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
+    <parent>
+        <groupId>org.roboguice</groupId>
+        <artifactId>roboguice-aggregator</artifactId>
+        <version>3.0-alpha-SNAPSHOT</version>
+    </parent>
 
-    <url>http://roboguice.org</url>
-    <scm>
-        <url>https://github.com/roboguice/roboguice</url>
-        <connection>scm:git:https://github.com/roboguice/roboguice.git</connection>
-        <developerConnection>scm:git:https://github.com/roboguice/roboguice.git</developerConnection>
-      <tag>HEAD</tag>
-    </scm>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <build>
         <defaultGoal>package</defaultGoal>
@@ -149,12 +137,6 @@
             </plugin>
         </plugins>
     </reporting>
-
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>6</version>
-    </parent>
 
     <repositories>
         <repository>

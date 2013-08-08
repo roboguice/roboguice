@@ -7,9 +7,9 @@
     <name>astroboy</name>
 
     <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>6</version>
+        <groupId>org.roboguice</groupId>
+        <artifactId>roboguice-aggregator</artifactId>
+        <version>3.0-alpha-SNAPSHOT</version>
     </parent>
 
     <dependencies>

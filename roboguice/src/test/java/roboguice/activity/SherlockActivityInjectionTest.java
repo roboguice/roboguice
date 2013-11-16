@@ -132,10 +132,12 @@ public class SherlockActivityInjectionTest {
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
         try {
             @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"}) final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
+            final Long max = Runtime.getRuntime().maxMemory();
+            final int size = max>Integer.MAX_VALUE ? Integer.MAX_VALUE : max.intValue();
             //noinspection InfiniteLoopStatement
-            while (true) {
-                allocations.add(new Object[(int) Runtime.getRuntime().maxMemory()]);
-            }
+            while (true)
+                allocations.add( new Object[size] );
+
         } catch (OutOfMemoryError e) {
             // Yeah!
         }

@@ -20,7 +20,6 @@ import java.util.Map.Entry;
  *      clear()
  *   Raising Events:
  *      fire()
- *      notifyWithResult()
  *
  * @author Adam Tybor
  * @author John Ericksen
@@ -127,6 +126,7 @@ public class EventManager {
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (observers) {
             for (EventListener observer : observers)
+                //noinspection unchecked
                 observer.onEvent(event);
         }
 

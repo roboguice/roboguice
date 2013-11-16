@@ -57,6 +57,7 @@ import roboguice.util.Strings;
  * @author Mike Burton
  */
 public class DefaultRoboModule extends AbstractModule {
+    public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
     protected static final Class fragmentManagerClass;
     protected static final Class accountManagerClass;
 
@@ -127,6 +128,7 @@ public class DefaultRoboModule extends AbstractModule {
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
         bind(PreferenceListener.class).toInstance(preferenceListener);
+        bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
 
 
 

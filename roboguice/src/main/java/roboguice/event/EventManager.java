@@ -20,7 +20,6 @@ import java.util.Map.Entry;
  *      clear()
  *   Raising Events:
  *      fire()
- *      notifyWithResult()
  *
  * @author Adam Tybor
  * @author John Ericksen

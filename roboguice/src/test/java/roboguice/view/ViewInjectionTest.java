@@ -54,6 +54,7 @@ public class ViewInjectionTest {
         //noinspection UnusedAssignment
         controller=null;
 
+
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
         try {

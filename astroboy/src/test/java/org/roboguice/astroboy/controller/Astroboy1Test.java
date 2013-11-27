@@ -1,9 +1,10 @@
 package org.roboguice.astroboy.controller;
 
 import android.content.Context;
-import com.xtremelabs.robolectric.RobolectricTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 
@@ -19,7 +20,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class Astroboy1Test {
     
-    protected Context context = new RoboActivity();
+    protected Context context = Robolectric.buildActivity(RoboActivity.class).create().get();
     protected Astroboy astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
     
     @Test

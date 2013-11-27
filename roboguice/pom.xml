@@ -92,7 +92,13 @@
         <dependency>
             <groupId>android.support</groupId>
             <artifactId>compatibility-v4</artifactId>
-            <version>11</version>
+            <version>19</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>android.support</groupId>
+            <artifactId>compatibility-v7-appcompat</artifactId>
+            <version>19</version>
             <optional>true</optional>
         </dependency>
         <dependency>

@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>android.support</groupId>
-  <artifactId>compatibility-v4</artifactId>
-  <version>11</version>
+  <artifactId>compatibility-v7-appcompat</artifactId>
+  <version>19</version>
   <description>POM was created from install:install-file</description>
 </project>

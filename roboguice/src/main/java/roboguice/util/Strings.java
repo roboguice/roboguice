@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Strings {
+public final class Strings {
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 
     /**
@@ -200,4 +200,13 @@ public class Strings {
         return namedFormat(str, map);
     }
 
+    /**
+     * Private default constructor.
+     * This is a utilities class and should not be instantiated.
+     */
+    private Strings() {
+
+    }
+
 }
+

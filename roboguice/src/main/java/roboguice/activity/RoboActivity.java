@@ -16,9 +16,12 @@
 package roboguice.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import roboguice.RoboGuice;
@@ -32,6 +35,7 @@ import roboguice.inject.ContentViewListener;
 import roboguice.inject.RoboInjector;
 import roboguice.util.RoboContext;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -158,4 +162,33 @@ public class RoboActivity extends Activity implements RoboContext {
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
+        return super.onCreateView(name, context, attrs);
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+
+    public static View injectOnCreateView(String name, Context context, AttributeSet attrs) {
+        try {
+            final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
+            final View view = (View) constructor.newInstance(context, attrs);
+            RoboGuice.injectMembers(context, view);
+            return view;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

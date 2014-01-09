@@ -18,6 +18,9 @@
 package roboguice.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.context.event.OnConfigurationChangedEvent;
@@ -143,4 +146,23 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
+        return super.onCreateView(name, context, attrs);
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+
+
 }

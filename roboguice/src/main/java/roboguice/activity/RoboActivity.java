@@ -165,35 +165,30 @@ public class RoboActivity extends Activity implements RoboContext {
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        if (name.indexOf('.') != -1) {
-            try {
-                Class<?> clazz = Class.forName(name);
-                Constructor<?> constructor = clazz.getConstructor(Context.class, AttributeSet.class);
-                View view = (View) constructor.newInstance(context, attrs);
-                final RoboInjector injector = RoboGuice.getInjector(this);
-                injector.injectMembers(view);
-                return view;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
         return super.onCreateView(name, context, attrs);
     }
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        if (name.indexOf('.') != -1) {
-            try {
-                Class<?> clazz = Class.forName(name);
-                Constructor<?> constructor = clazz.getConstructor(Context.class, AttributeSet.class);
-                View view = (View) constructor.newInstance(context, attrs);
-                final RoboInjector injector = RoboGuice.getInjector(this);
-                injector.injectMembers(view);
-                return view;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
         return super.onCreateView(parent, name, context, attrs);
     }
+
+
+    public static View injectOnCreateView(String name, Context context, AttributeSet attrs) {
+        try {
+            final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
+            final View view = (View) constructor.newInstance(context, attrs);
+            RoboGuice.injectMembers(context, view);
+            return view;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

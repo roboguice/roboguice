@@ -16,10 +16,13 @@
 package roboguice.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import android.util.AttributeSet;
+import android.view.View;
 import com.actionbarsherlock.app.SherlockActivity;
 import com.google.inject.Inject;
 import com.google.inject.Key;
@@ -139,4 +142,22 @@ public class RoboSherlockActivity extends SherlockActivity implements RoboContex
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
+        return super.onCreateView(name, context, attrs);
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+
 }

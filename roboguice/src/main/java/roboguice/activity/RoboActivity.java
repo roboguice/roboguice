@@ -16,9 +16,12 @@
 package roboguice.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import roboguice.RoboGuice;
@@ -158,4 +161,21 @@ public class RoboActivity extends Activity implements RoboContext {
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        final View view = super.onCreateView(name,context,attrs);
+        if( name.indexOf('.') != -1 ) // only do injection on custom views
+            RoboGuice.injectMembers(this,view);
+        return view;
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        final View view = super.onCreateView(parent, name,context,attrs);
+        if( name.indexOf('.') != -1 ) // only do injection on custom views
+            RoboGuice.injectMembers(this,view);
+        return view;
+    }
+
 }

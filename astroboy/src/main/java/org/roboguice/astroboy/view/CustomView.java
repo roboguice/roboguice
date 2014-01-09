@@ -1,17 +1,14 @@
 package org.roboguice.astroboy.view;
 
-import org.roboguice.astroboy.R;
-
-import roboguice.inject.InjectView;
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import org.roboguice.astroboy.R;
+import roboguice.inject.InjectView;
 
 public class CustomView extends LinearLayout {
 
@@ -19,12 +16,6 @@ public class CustomView extends LinearLayout {
     private Button buttonCloseTv;
     @InjectView(R.id.tv_status)
     private TextView textviewStatus;
-
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private CustomView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        initializeView(context);
-    }
 
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);

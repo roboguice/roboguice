@@ -149,7 +149,7 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        if (name.indexOf('.') != -1)
+        if (RoboActivity.shouldInjectOnCreateView(name))
             return RoboActivity.injectOnCreateView(name, context, attrs);
 
         return super.onCreateView(name, context, attrs);
@@ -157,7 +157,7 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        if (name.indexOf('.') != -1)
+        if (RoboActivity.shouldInjectOnCreateView(name))
             return RoboActivity.injectOnCreateView(name, context, attrs);
 
         return super.onCreateView(parent, name, context, attrs);

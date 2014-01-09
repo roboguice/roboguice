@@ -1,8 +1,11 @@
 package roboguice.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
+import android.util.AttributeSet;
+import android.view.View;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 import roboguice.RoboGuice;
@@ -119,4 +122,22 @@ public class RoboSherlockFragmentActivity extends SherlockFragmentActivity imple
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }
+
+    @Override
+    public View onCreateView(String name, Context context, AttributeSet attrs) {
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
+        return super.onCreateView(name, context, attrs);
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        if (name.indexOf('.') != -1)
+            return RoboActivity.injectOnCreateView(name, context, attrs);
+
+        return super.onCreateView(parent, name, context, attrs);
+    }
+
+
 }

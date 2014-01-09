@@ -165,7 +165,7 @@ public class RoboActivity extends Activity implements RoboContext {
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        if (name.indexOf('.') != -1)
+        if (RoboActivity.shouldInjectOnCreateView(name))
             return RoboActivity.injectOnCreateView(name, context, attrs);
 
         return super.onCreateView(name, context, attrs);
@@ -173,14 +173,20 @@ public class RoboActivity extends Activity implements RoboContext {
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        if (name.indexOf('.') != -1)
+        if (RoboActivity.shouldInjectOnCreateView(name))
             return RoboActivity.injectOnCreateView(name, context, attrs);
 
         return super.onCreateView(parent, name, context, attrs);
     }
 
+    /**
+     * @return true if name begins with a lowercase character (indicating a package) and it doesn't start with com.android
+     */
+    protected static boolean shouldInjectOnCreateView(String name) {
+        return Character.isLowerCase(name.charAt(0)) && !name.startsWith("com.android");
+    }
 
-    public static View injectOnCreateView(String name, Context context, AttributeSet attrs) {
+    protected static View injectOnCreateView(String name, Context context, AttributeSet attrs) {
         try {
             final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
             final View view = (View) constructor.newInstance(context, attrs);

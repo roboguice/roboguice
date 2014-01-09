@@ -2,6 +2,9 @@ package roboguice;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -9,6 +12,7 @@ import com.google.inject.Stage;
 import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.*;
+import roboguice.util.Strings;
 
 import java.util.ArrayList;
 import java.util.WeakHashMap;
@@ -31,8 +35,7 @@ public class RoboGuice {
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
     protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
     protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
-    protected static int modulesResourceId = 0;
-    
+
     private RoboGuice() {
     }
 
@@ -78,46 +81,36 @@ public class RoboGuice {
     }
 
     /**
-     * Allows the user to override the "roboguice_modules" resource name with some other identifier.
-     * This is a static value.
-     */
-    public static void setModulesResourceId(int modulesResourceId) {
-        RoboGuice.modulesResourceId = modulesResourceId;
-    }
-
-    /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
     public static Injector setBaseApplicationInjector(Application application, Stage stage) {
 
         synchronized (RoboGuice.class) {
-            int id = modulesResourceId;
-            try {
-                if (id == 0)
-                    id = application.getResources().getIdentifier("roboguice_modules", "array", application.getPackageName());
-            } catch( NullPointerException ignored ) {
-                // ignored for robolectric 2.1.1, not sure why we're getting an NPE from getIdentifier
-            }
 
-            final String[] moduleNames = id>0 ? application.getResources().getStringArray(id) : new String[]{};
             final ArrayList<Module> modules = new ArrayList<Module>();
-            final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
-
-            modules.add(defaultRoboModule);
 
             try {
+                final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
+                final Bundle bundle = ai.metaData;
+                final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
+                final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
+                final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
+
+                modules.add(defaultRoboModule);
+
                 for (String name : moduleNames) {
-                    final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-
-                    try {
-                        modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
-                    } catch( NoSuchMethodException ignored ) {
-                        modules.add( clazz.newInstance() );
+                    if( Strings.notEmpty(name)) {
+                        final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
+                        try {
+                            modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
+                        } catch( NoSuchMethodException ignored ) {
+                            modules.add( clazz.newInstance() );
+                        }
                     }
-
                 }
+
             } catch (Exception e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
             }
 
             final Injector rtrn = setBaseApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));

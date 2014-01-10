@@ -2,10 +2,13 @@ package roboguice.event;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import roboguice.event.eventListener.ObserverMethodListener;
 
 import java.lang.reflect.Method;
 import java.util.List;
+
+import static org.mockito.Mockito.mock;
 
 /**
  * Test class verifying eventManager functionality
@@ -54,5 +57,19 @@ public class EventManagerTest {
 
         tester.verifyCallCount(eventOneMethods, EventOne.class, 0);
         tester.verifyCallCount(eventTwoMethods, EventTwo.class, 0);
+    }
+
+    @Test
+    public void testShouldNotFailIfObserverIsRemovedInsideFire() throws Exception {
+        eventManager.registerObserver(EventOne.class, new EventListener<EventOne>() {
+            @Override
+            public void onEvent(EventOne event) {
+                // unregister self from manager
+                eventManager.unregisterObserver(EventOne.class, this);
+            }
+        });
+        eventManager.registerObserver(EventOne.class, mock(EventListener.class));
+
+        eventManager.fire(event);
     }
 }

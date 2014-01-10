@@ -18,7 +18,7 @@ import static org.junit.Assert.assertThat;
  * and has no resource processing step)
  */
 @RunWith(RobolectricTestRunner.class)
-public class ViewInjectionTests {
+public class ViewInjectionTest {
 
     @Test
     public void shouldInjectCustomViews() {

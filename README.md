@@ -133,3 +133,11 @@ It works, and people are using it. Why not give it a spin?
 		</td>
     </tr>
 </table>
+
+
+<p>
+YourKit is kindly supporting Roboguice open source project with its full-featured Java Profiler.
+YourKit, LLC is the creator of innovative and intelligent tools for profiling
+Java and .NET applications. Take a look at YourKit's leading software products:
+<a href="http://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a> and
+<a href="http://www.yourkit.com/.net/profiler/index.jsp">YourKit .NET Profiler</a>.

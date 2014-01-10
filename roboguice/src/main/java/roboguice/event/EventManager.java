@@ -123,18 +123,17 @@ public class EventManager {
         if (observers == null) return;
 
         for (EventListener observer : copyObservers(observers))
+            //noinspection unchecked
             observer.onEvent(event);
 
     }
 
-    private Set<EventListener<?>> copyObservers(Set<EventListener<?>> observers) {
-        final Set<EventListener<?>> copy;
+    protected Set<EventListener<?>> copyObservers(Set<EventListener<?>> observers) {
         // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (observers) {
-            copy = new LinkedHashSet<EventListener<?>>(observers);
+            return new LinkedHashSet<EventListener<?>>(observers);
         }
-        return copy;
     }
 
 

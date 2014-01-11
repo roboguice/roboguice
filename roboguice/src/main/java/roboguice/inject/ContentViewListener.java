@@ -8,11 +8,11 @@ import android.content.Context;
 
 import com.google.inject.Inject;
 
-@SuppressWarnings("UnusedParameters")
 @ContextSingleton
 public class ContentViewListener {
     @Inject protected Activity activity;
 
+    @SuppressWarnings("rawtypes")
     public void optionallySetContentView( @Observes OnCreateEvent ignored ) {
         Class<?> c = activity.getClass();
         while( c != Context.class ) {

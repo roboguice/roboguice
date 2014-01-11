@@ -17,7 +17,6 @@ public abstract class RoboAppWidgetProvider extends AppWidgetProvider {
 		onHandleUpdate(context, appWidgetManager, appWidgetIds);
 	}
 
-	@SuppressWarnings("UnusedParameters")
     public void onHandleUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // proper template method to handle the receive
     }

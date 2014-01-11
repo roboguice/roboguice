@@ -12,6 +12,7 @@ import static org.easymock.EasyMock.*;
  */
 public class RunnableAsyncTaskAdaptorTest {
 
+    @SuppressWarnings("rawtypes")
     protected EventListenerRunnable runnable;
 
     protected RunnableAsyncTaskAdaptor runnableAdaptor;

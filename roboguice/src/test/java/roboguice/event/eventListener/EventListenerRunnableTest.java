@@ -2,9 +2,9 @@ package roboguice.event.eventListener;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import roboguice.event.EventListener;
 import roboguice.event.EventOne;
-
 import static org.easymock.EasyMock.*;
 
 /**
@@ -17,8 +17,10 @@ public class EventListenerRunnableTest {
     protected EventOne event;
     protected EventListener<EventOne> eventListener;
 
+    @SuppressWarnings("rawtypes")
     protected EventListenerRunnable eventListenerRunnable;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setup(){
         //noinspection unchecked

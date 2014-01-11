@@ -37,8 +37,7 @@ public class ProviderTest {
 
     @Test
     public void shouldReturnProperContext() throws Exception {
-        //noinspection UnusedDeclaration
-        final B b = Robolectric.buildActivity(B.class).create().get();
+        Robolectric.buildActivity(B.class).create().get();
 
         final C c = Robolectric.buildActivity(C.class).create().get();
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {

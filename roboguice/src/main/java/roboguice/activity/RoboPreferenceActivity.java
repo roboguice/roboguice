@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+
 import roboguice.RoboGuice;
 import roboguice.activity.event.*;
 import roboguice.context.event.OnConfigurationChangedEvent;
@@ -83,6 +84,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
         eventManager.fire(new OnSaveInstanceStateEvent(this, outState));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);

@@ -131,7 +131,7 @@ public class SherlockActivityInjectionTest {
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
         try {
-            @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"}) final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
+            final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
             int size;
             while( (size = Math.min(Math.abs((int)Runtime.getRuntime().freeMemory()),Integer.MAX_VALUE))>0 )
                 allocations.add( new Object[size] );

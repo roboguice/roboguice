@@ -19,6 +19,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+
 import roboguice.RoboGuice;
 import roboguice.activity.event.OnActivityResultEvent;
 import roboguice.activity.event.OnContentChangedEvent;
@@ -37,12 +38,14 @@ import roboguice.inject.ContextScope;
 import roboguice.inject.PreferenceListener;
 import roboguice.inject.RoboInjector;
 import roboguice.util.RoboContext;
+
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceScreen;
 
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
+
 import com.google.inject.Inject;
 import com.google.inject.Key;
 
@@ -70,6 +73,7 @@ public class RoboSherlockPreferenceActivity extends SherlockPreferenceActivity i
         eventManager.fire(new OnCreateEvent<Activity>(this,savedInstanceState));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);

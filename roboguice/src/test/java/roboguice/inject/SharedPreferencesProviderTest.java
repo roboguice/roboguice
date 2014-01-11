@@ -19,7 +19,6 @@ import java.lang.reflect.Field;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesProviderTest {
 

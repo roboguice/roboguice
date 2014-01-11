@@ -90,6 +90,7 @@ public class PreferenceListener implements TypeListener {
             registerPreferenceForInjection(this);
         }
 
+        @SuppressWarnings("deprecation")
         public void reallyInjectMembers() {
             final T instance = instanceRef.get();
             if( instance==null )

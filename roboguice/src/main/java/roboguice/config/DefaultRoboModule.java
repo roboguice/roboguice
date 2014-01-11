@@ -80,6 +80,7 @@ import android.view.inputmethod.InputMethodManager;
  *
  * @author Mike Burton
  */
+@SuppressWarnings("rawtypes")
 public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
     protected static final Class fragmentManagerClass;

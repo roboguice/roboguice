@@ -52,6 +52,7 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
         // If it throws an exception, capture that exception
         // and rethrow it later.
         handler.post(new Runnable() {
+            @SuppressWarnings("rawtypes")
             public void run() {
                 try {
                     new Callable() {
@@ -122,8 +123,10 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
     }
 
 
+    @SuppressWarnings("rawtypes")
     static HashMap<Class<? extends AndroidCallableI>, Boolean> isPreCallOverriddenMap = new HashMap<Class<? extends AndroidCallableI>, Boolean>();
 
+    @SuppressWarnings("rawtypes")
     static boolean isPreCallOverriden(Class<? extends AndroidCallableI> subClass) {
         try {
             Boolean tmp = isPreCallOverriddenMap.get(subClass);

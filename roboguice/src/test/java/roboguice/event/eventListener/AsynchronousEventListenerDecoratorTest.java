@@ -2,6 +2,7 @@ package roboguice.event.eventListener;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import roboguice.event.EventListener;
 
 import android.os.Handler;
@@ -19,6 +20,7 @@ public class AsynchronousEventListenerDecoratorTest {
     protected RunnableAsyncTaskAdaptor asyncTaskAdaptor;
     protected AsynchronousEventListenerDecorator<Object> decorator;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setup(){
         //noinspection unchecked
@@ -28,6 +30,7 @@ public class AsynchronousEventListenerDecoratorTest {
     }
 
     // Mike doesn't really understand what this test is doing
+    @SuppressWarnings("deprecation")
     @Test
     public void onEventTest(){
         reset(eventListener);

@@ -20,7 +20,6 @@ import java.util.concurrent.*;
  * 
  * @param <ResultT>
  */
-@SuppressWarnings("deprecation")
 @Deprecated
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     public static final int DEFAULT_POOL_SIZE = 25;
@@ -111,7 +110,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
      * @param t the result of {@link #call()}
      * @throws Exception, captured on passed to onException() if present.
      */
-    @SuppressWarnings({"UnusedDeclaration"})
     protected void onSuccess( ResultT t ) throws Exception {}
 
     /**

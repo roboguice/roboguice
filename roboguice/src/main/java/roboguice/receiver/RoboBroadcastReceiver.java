@@ -29,7 +29,6 @@ public abstract class RoboBroadcastReceiver extends BroadcastReceiver {
      * @param context
      * @param intent
      */
-    @SuppressWarnings("UnusedParameters")
     protected void handleReceive(Context context, Intent intent) {
         // proper template method to handle the receive
     }

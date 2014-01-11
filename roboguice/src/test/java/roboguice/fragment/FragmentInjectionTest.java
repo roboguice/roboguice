@@ -10,15 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
 import com.google.inject.Inject;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.util.ActivityController;
-import roboguice.activity.RoboFragmentActivity;
-import roboguice.inject.InjectView;
 
+import roboguice.activity.RoboFragmentActivity;
+import roboguice.fragment.support.RoboFragment;
+import roboguice.inject.InjectView;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;

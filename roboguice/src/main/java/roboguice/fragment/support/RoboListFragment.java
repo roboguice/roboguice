@@ -1,12 +1,12 @@
-package roboguice.fragment;
+package roboguice.fragment.support;
 
 import roboguice.RoboGuice;
 
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.ListFragment;
 import android.view.View;
 
-public abstract class RoboDialogFragment extends DialogFragment {
+public abstract class RoboListFragment extends ListFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -1,12 +1,12 @@
-package roboguice.fragment;
+package roboguice.fragment.support;
 
 import roboguice.RoboGuice;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 
-import com.actionbarsherlock.app.SherlockDialogFragment;
-
-public abstract class RoboSherlockDialogFragment extends SherlockDialogFragment {
+public abstract class RoboFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

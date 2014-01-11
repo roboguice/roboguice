@@ -1,4 +1,4 @@
-package roboguice.fragment;
+package roboguice.fragment.support;
 
 import roboguice.RoboGuice;
 

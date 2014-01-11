@@ -10,8 +10,9 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.os.Build;
 import android.view.View;
-@TargetApi(13)
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressWarnings("unchecked") //No point in seeing warnings when you're being ambiguous on purpose
 public class NativeFragmentUtil implements f<Fragment,FragmentManager> {
 	//Incredible hack required to ensure that classes are loaded at construction time

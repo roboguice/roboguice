@@ -19,7 +19,7 @@ before_install:
   - ( cd ~ && pwd )
   - export ANDROID_HOME=~/build/roboguice/roboguice/android-sdk-linux
   - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
-  - android update sdk --all --filter platform-tools,android-17 --no-ui --force
+  - echo y | android update sdk --all --filter platform-tools,android-17 --no-ui --force
 
 
 script: "mvn deploy --settings target/travis/settings.xml"

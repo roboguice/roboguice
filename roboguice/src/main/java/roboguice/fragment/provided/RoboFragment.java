@@ -8,7 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
-@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2) 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB) 
 public abstract class RoboFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {

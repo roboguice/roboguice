@@ -12,6 +12,10 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 
+/**
+ * Support v4 based implementation of Fragment utility class.
+ * @author Charles Munger
+ */
 @SuppressWarnings("unchecked") //we're being ambiguous on purpose
 public class SupportFragmentUtil implements f<Fragment, FragmentManager>{
 	// Incredible hack required to ensure that classes are loaded at construction time

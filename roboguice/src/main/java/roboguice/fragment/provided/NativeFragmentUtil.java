@@ -12,6 +12,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Build;
 import android.view.View;
+
+/**
+ * Native implementation of Fragment utility class.
+ * @author Charles Munger
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressWarnings("unchecked") //No point in seeing warnings when you're being ambiguous on purpose
 public class NativeFragmentUtil implements f<Fragment,FragmentManager> {

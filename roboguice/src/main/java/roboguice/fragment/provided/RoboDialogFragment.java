@@ -8,6 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+/**
+ * Provides an injected {@link DialogFragment} based on the native HONEY_COMB+ Fragments.
+ * A RoboDialogFragment will see all its members and views injected after {@link #onViewCreated(View, Bundle)}. 
+ * @author Charles Munger
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public abstract class RoboDialogFragment extends DialogFragment {
     @Override

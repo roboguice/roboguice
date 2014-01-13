@@ -5,6 +5,11 @@ import com.google.inject.Provider;
 import android.app.Activity;
 import android.view.View;
 
+/**
+ * Fragment utility class, it's actual implementation will use native or support library v4 fragment's based 
+ * on whether or not the underlying app uses support library or not.
+ * @author Charles Munger
+ */
 @SuppressWarnings({ "unchecked", "rawtypes" }) //Need an unchecked conversion 
 public class FragmentUtil {
     public static final String SUPPORT_PACKAGE = "android.support.v4.app.";

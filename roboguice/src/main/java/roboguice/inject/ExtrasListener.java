@@ -125,7 +125,7 @@ public class ExtrasListener implements TypeListener {
             }
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "unchecked", "rawtypes" })
         protected Object convert(Field field, Object value, Injector injector) {
 
             // Don't try to convert null or primitives

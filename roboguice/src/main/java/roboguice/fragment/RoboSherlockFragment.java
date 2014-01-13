@@ -1,11 +1,17 @@
 package roboguice.fragment;
 
 import roboguice.RoboGuice;
-import android.os.Bundle;
-import android.view.View;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
+import android.os.Bundle;
+import android.view.View;
+
+/**
+ * Provides an injected {@link SherlockFragment} based on ActionBarSherlock's Fragments.
+ * A RoboSherlockFragment will see all its members and views injected after {@link #onViewCreated(View, Bundle)}. 
+ * @author Mickael Burton
+ */
 public abstract class RoboSherlockFragment extends SherlockFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {

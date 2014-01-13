@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.roboguice.astroboy"
+    android:versionCode="1"
+    android:versionName="0.1-SNAPSHOT" >
+
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="17" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:icon="@drawable/icon"
+        android:label="Astroboy Master Console" >
+        <activity
+            android:name="org.roboguice.astroboy.provided.AsteroidListActivity"
+            android:label="@string/title_asteroid_list" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

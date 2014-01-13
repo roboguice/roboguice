@@ -29,7 +29,7 @@ public class RuntimeSupport {
      * Makes a descriptor for a given method.
      */
     public static String makeDescriptor(Method m) {
-        Class[] params = m.getParameterTypes();
+        Class<?>[] params = m.getParameterTypes();
         return makeDescriptor(params, m.getReturnType());
     }
 
@@ -39,7 +39,7 @@ public class RuntimeSupport {
      * @param params    parameter types.
      * @param retType   return type.
      */
-    public static String makeDescriptor(Class[] params, Class retType) {
+    public static String makeDescriptor(Class<?>[] params, Class<?> retType) {
         StringBuffer sbuf = new StringBuffer();
         sbuf.append('(');
         for (int i = 0; i < params.length; i++)
@@ -52,7 +52,7 @@ public class RuntimeSupport {
         return sbuf.toString();
     }
 
-    private static void makeDesc(StringBuffer sbuf, Class type) {
+    private static void makeDesc(StringBuffer sbuf, Class<?> type) {
         if (type.isArray()) {
             sbuf.append('[');
             makeDesc(sbuf, type.getComponentType());

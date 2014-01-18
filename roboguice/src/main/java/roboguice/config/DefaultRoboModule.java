@@ -33,6 +33,7 @@ import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+import roboguice.fragment.FragmentUtil;
 import roboguice.inject.*;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
@@ -58,19 +59,12 @@ import roboguice.util.Strings;
  */
 public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
-    protected static final Class fragmentManagerClass;
-    protected static final Class accountManagerClass;
+
+    @SuppressWarnings("rawtypes")
+	protected static final Class accountManagerClass;
 
     static {
-        Class c = null;
-        try {
-            c = Class.forName("android.support.v4.app.FragmentManager");
-        } catch( Throwable ignored ) {}
-        fragmentManagerClass = c;
-    }
-
-    static {
-        Class c = null;
+        Class<?> c = null;
         try {
             c = Class.forName("android.accounts.AccountManager");
         } catch( Throwable ignored ) {}
@@ -136,7 +130,8 @@ public class DefaultRoboModule extends AbstractModule {
         bindScope(ContextSingleton.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
-        bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>(){})).in(ContextSingleton.class);
+        bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>() {
+        })).in(ContextSingleton.class);
         bind(Activity.class).toProvider(Key.get(new TypeLiteral<NullProvider<Activity>>(){})).in(ContextSingleton.class);
         bind(RoboActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboActivity>>(){})).in(ContextSingleton.class);
         bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>(){})).in(ContextSingleton.class);
@@ -189,20 +184,22 @@ public class DefaultRoboModule extends AbstractModule {
 
         requestStaticInjection(Ln.class);
 
-        // Compatibility library bindings
-        if(fragmentManagerClass!=null) {
-            //noinspection unchecked
-            bind(fragmentManagerClass).toProvider(FragmentManagerProvider.class);
-        }
+        bindDynamicBindings();
+    }
 
+    @SuppressWarnings("unchecked")
+	private void bindDynamicBindings() {
+		// Compatibility library bindings
+        if(FragmentUtil.hasSupport) {
+            bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
+        }
+        if(FragmentUtil.hasNative) {
+            bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
+        }
 
         // 2.0 Eclair
         if( VERSION.SDK_INT>=5 ) {
-            //noinspection unchecked
             bind(accountManagerClass).toProvider(AccountManagerProvider.class);
         }
-
-
-    }
-
+	}
 }

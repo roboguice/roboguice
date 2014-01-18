@@ -46,7 +46,7 @@ public class ObserverMethodListener<T> implements EventListener<T> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ObserverMethodListener that = (ObserverMethodListener) o;
+        ObserverMethodListener<?> that = (ObserverMethodListener<?>) o;
 
         if (descriptor != null ? !descriptor.equals(that.descriptor) : that.descriptor != null) return false;
         return !(instance != null ? !instance.equals(that.instance) : that.instance != null);

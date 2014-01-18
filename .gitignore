@@ -17,6 +17,11 @@ tmp/
 # Local configuration file (sdk path, etc)
 local.properties
 
+# Eclipse files
+.project
+.classpath
+.settings/
+
 # IntelliJ IDEA files
 *.iml
 .idea/

@@ -10,7 +10,6 @@
         <module>roboguice</module>
         <module>additional-tests</module>
         <module>astroboy</module>
-		<module>astroboy_fragments</module>
    </modules>
 
     <parent>

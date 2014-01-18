@@ -10,7 +10,7 @@ import android.view.View;
 /**
  * Provides an injected {@link SherlockListFragment} based on ActionBarSherlock's Fragments.
  * A RoboSherlockListFragment will see all its members and views injected after {@link #onViewCreated(View, Bundle)}. 
- * @author Mickael Burton
+ * @author Michael Burton
  */
 public abstract class RoboSherlockListFragment extends SherlockListFragment {
     @Override

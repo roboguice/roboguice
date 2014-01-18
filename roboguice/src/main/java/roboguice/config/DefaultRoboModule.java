@@ -37,6 +37,8 @@ import roboguice.fragment.FragmentUtil;
 import roboguice.inject.*;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
+import roboguice.util.LnImpl;
+import roboguice.util.LnInterface;
 import roboguice.util.Strings;
 
 /**
@@ -56,6 +58,8 @@ import roboguice.util.Strings;
  * @author Mike Burton
  */
 public class DefaultRoboModule extends AbstractModule {
+    public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
+
     @SuppressWarnings("rawtypes")
 	protected static final Class accountManagerClass;
 
@@ -114,9 +118,11 @@ public class DefaultRoboModule extends AbstractModule {
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
 
 
+
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
         bind(PreferenceListener.class).toInstance(preferenceListener);
+        bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
 
 
 
@@ -124,7 +130,8 @@ public class DefaultRoboModule extends AbstractModule {
         bindScope(ContextSingleton.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
-        bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>(){})).in(ContextSingleton.class);
+        bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>() {
+        })).in(ContextSingleton.class);
         bind(Activity.class).toProvider(Key.get(new TypeLiteral<NullProvider<Activity>>(){})).in(ContextSingleton.class);
         bind(RoboActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboActivity>>(){})).in(ContextSingleton.class);
         bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>(){})).in(ContextSingleton.class);
@@ -169,6 +176,8 @@ public class DefaultRoboModule extends AbstractModule {
         bindListener(Matchers.any(), preferenceListener);
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
 
+
+        bind(LnInterface.class).to(LnImpl.class);
 
         requestInjection(observerThreadingDecorator);
 

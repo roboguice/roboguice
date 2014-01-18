@@ -10,8 +10,8 @@ env:
 # http://levi-wilson.blogspot.com/2012/06/maven-android-travis-ci-and-more.html
 # http://stackoverflow.com/a/3008489/82156
 before_install:
-    - git clone -b travis `git config --get remote.origin.url` target/travis
-    - sudo apt-get update -qq
+  - git clone -b travis `git config --get remote.origin.url` target/travis
+  - sudo apt-get update -qq
   - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
   - wget http://dl.google.com/android/android-sdk_r21-linux.tgz
   - tar -zxf android-sdk_r21-linux.tgz

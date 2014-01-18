@@ -24,12 +24,10 @@ public class ContextScopedRoboInjector implements RoboInjector {
     protected Injector delegate;
     protected Context context;
     protected ContextScope scope;
-    protected ViewListener viewListener;
 
-    public ContextScopedRoboInjector(Context context, Injector applicationInjector, ViewListener viewListener) {
+    public ContextScopedRoboInjector(Context context, Injector applicationInjector) {
         this.delegate = applicationInjector;
         this.context = context;
-        this.viewListener = viewListener;
         this.scope = delegate.getInstance(ContextScope.class);
     }
 

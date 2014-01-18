@@ -98,7 +98,7 @@ public class DefaultRoboModule extends AbstractModule {
 
         final Provider<Context> contextProvider = getProvider(Context.class);
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
-        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
+        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
 
         // Package Info

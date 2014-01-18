@@ -32,6 +32,8 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
@@ -39,10 +41,15 @@ import android.view.View;
 @Singleton
 public class ViewListener implements TypeListener {
 
+    @SuppressWarnings(value="MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
     protected static Class fragmentClass = null;
+    @SuppressWarnings(value="MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
     protected static Class fragmentManagerClass = null;
+    @SuppressWarnings(value="MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
     protected static Method fragmentGetViewMethod = null;
+    @SuppressWarnings(value="MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
     protected static Method fragmentFindFragmentByIdMethod = null;
+    @SuppressWarnings(value="MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
     protected static Method fragmentFindFragmentByTagMethod = null;
 
     static {
@@ -88,6 +95,7 @@ public class ViewListener implements TypeListener {
      * into optimizations in the future if this is a bottleneck
      */
     public static class ViewMembersInjector<T> implements MembersInjector<T> {
+        @SuppressWarnings("MS_SHOULD_BE_FINAL")
         protected static WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>>();
 
         protected Field field;

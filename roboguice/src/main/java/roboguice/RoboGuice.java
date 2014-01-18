@@ -37,11 +37,15 @@ import android.os.Bundle;
  */
 public final class RoboGuice {
     //CHECKSTYLE:OFF
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_FINAL")
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
     //CHECKSTYLE:ON
 
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
 
     private RoboGuice() {
@@ -131,7 +135,7 @@ public final class RoboGuice {
 
     public static RoboInjector getInjector(Context context) {
         final Application application = (Application)context.getApplicationContext();
-        return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application), getViewListener(application));
+        return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application));
     }
 
     /**
@@ -148,6 +152,7 @@ public final class RoboGuice {
     }
 
     @SuppressWarnings("ConstantConditions")
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="NP_LOAD_OF_KNOWN_NULL_VALUE", justification="Double check lock")
     protected static ResourceListener getResourceListener( Application application ) {
         ResourceListener resourceListener = resourceListeners.get(application);
         if( resourceListener==null ) {
@@ -162,6 +167,7 @@ public final class RoboGuice {
     }
 
     @SuppressWarnings("ConstantConditions")
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="NP_LOAD_OF_KNOWN_NULL_VALUE", justification="Double check lock")
     protected static ViewListener getViewListener( final Application application ) {
         ViewListener viewListener = viewListeners.get(application);
         if( viewListener==null ) {

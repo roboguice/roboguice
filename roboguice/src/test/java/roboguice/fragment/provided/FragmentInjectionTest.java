@@ -1,101 +1,104 @@
-package roboguice.fragment;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import com.google.inject.Inject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.util.ActivityController;
-import roboguice.activity.RoboFragmentActivity;
-import roboguice.inject.InjectView;
+package roboguice.fragment.provided;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import junit.framework.Assert;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
+
+import com.google.inject.Inject;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(shadows= {roboguice.fragment.provided.shadow.ShadowNativeFragment.class, roboguice.fragment.provided.shadow.ShadowNativeFragmentActivity.class})
 public class FragmentInjectionTest {
 
-    // http://stackoverflow.com/questions/11333354/how-can-i-test-fragments-with-robolectric
-    protected static void startFragment( FragmentActivity activity, Fragment fragment ) {
-        final FragmentManager fragmentManager = activity.getSupportFragmentManager();
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(fragment, null);
-        fragmentTransaction.commit();
-
+	@Test
+    public void shadowActivityGetApplicationContextShouldNotReturnNull() {
+        Assert.assertNotNull(new Activity().getApplicationContext());
     }
-
-
+	
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
-        final ActivityA activityA = Robolectric.buildActivity(ActivityA.class).create().start().resume().get();
+        final ActivityA activity = new ActivityA();
+        activity.onCreate(null);
+        activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
 
-        assertNotNull(activityA.fragmentRef.ref);
-        assertThat(activityA.fragmentRef.v, equalTo(activityA.fragmentRef.ref));
-        assertThat(activityA.fragmentRef.context,equalTo((Context)activityA));
+        assertNotNull(activity.fragmentRef.ref);
+        assertThat(activity.fragmentRef.v, equalTo(activity.fragmentRef.ref));
+        assertThat(activity.fragmentRef.context,equalTo((Context)activity));
     }
 
 
     @Test
     public void shouldBeAbleToInjectViewsIntoActivityAndFragment() {
-        final ActivityB activityB = Robolectric.buildActivity(ActivityB.class).create().start().resume().get();
+        final ActivityB activity = new ActivityB();
+        activity.onCreate(null);
+        activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
 
-        assertNotNull(activityB.fragmentRef.viewRef);
-        assertNotNull(activityB.viewRef);
-        assertThat(activityB.fragmentRef.v, equalTo(activityB.fragmentRef.viewRef));
-        assertThat(activityB.v, equalTo(activityB.viewRef));
+        assertNotNull(activity.fragmentRef.viewRef);
+        assertNotNull(activity.viewRef);
+        assertThat(activity.fragmentRef.v, equalTo(activity.fragmentRef.viewRef));
+        assertThat(activity.v, equalTo(activity.viewRef));
     }
 
 
     @Test(expected = NullPointerException.class)
     public void shouldNotBeAbleToInjectFragmentViewsIntoActivity() {
-        Robolectric.buildActivity(ActivityC.class).create().start().resume().get();
+        final ActivityC activity = new ActivityC();
+        activity.onCreate(null);
+        activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
     }
 
 
     @Test
     public void shouldNotCrashWhenRotatingScreen() {
-        final ActivityController<ActivityD> activityD1Controller = Robolectric.buildActivity(ActivityD.class).create().resume();
-        final ActivityD activityD1 = activityD1Controller.get();
+        final ActivityD activity1 = new ActivityD();
+        final ActivityD activity2 = new ActivityD();
 
-        final ActivityController<ActivityD> activityD2Controller = Robolectric.buildActivity(ActivityD.class);
-        final ActivityD activityD2 = activityD2Controller.get();
+        activity1.onCreate(null);
+        activity1.onResume();
+        activity1.fragmentRef.onViewCreated(activity1.fragmentRef.onCreateView(null,null,null), null);
 
-        assertNotNull(activityD1.fragmentRef.ref);
-        assertThat(activityD1.fragmentRef.v, equalTo(activityD1.fragmentRef.ref));
+        assertNotNull(activity1.fragmentRef.ref);
+        assertThat(activity1.fragmentRef.v, equalTo(activity1.fragmentRef.ref));
 
-        activityD1Controller.pause();
+        activity1.onPause();
 
-        activityD2Controller.create().resume();
+        activity2.onCreate(null); // crash here?
+        activity2.onResume();
+        activity2.fragmentRef.onViewCreated(activity2.fragmentRef.onCreateView(null,null,null), null);
 
-        assertNotNull(activityD2.fragmentRef.ref);
-        assertThat(activityD2.fragmentRef.v, equalTo(activityD2.fragmentRef.ref));
+        assertNotNull(activity2.fragmentRef.ref);
+        assertThat(activity2.fragmentRef.v, equalTo(activity2.fragmentRef.ref));
     }
 
 
 
-    public static class ActivityA extends RoboFragmentActivity {
+    public static class ActivityA extends RoboActivity {
         FragmentA fragmentRef;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-//            fragmentRef = new FragmentA();
-//            fragmentRef.onAttach(this);
-//            fragmentRef.onCreate(null);
             fragmentRef = new FragmentA();
-            startFragment(this, fragmentRef);
+            fragmentRef.onAttach(this);
+            fragmentRef.onCreate(null);
 
         }
 
@@ -116,7 +119,7 @@ public class FragmentInjectionTest {
     }
 
 
-    public static class ActivityB extends RoboFragmentActivity {
+    public static class ActivityB extends RoboActivity {
         @InjectView(100) View v;
 
         View viewRef;
@@ -131,7 +134,9 @@ public class FragmentInjectionTest {
             setContentView(viewRef);
 
             fragmentRef = new FragmentB();
-            startFragment(this, fragmentRef);
+            fragmentRef.onAttach(this);
+            fragmentRef.onCreate(null);
+
         }
 
         public static class FragmentB extends RoboFragment {
@@ -149,7 +154,7 @@ public class FragmentInjectionTest {
 
     }
 
-    public static class ActivityC extends RoboFragmentActivity {
+    public static class ActivityC extends RoboActivity {
         @InjectView(101) View v;
 
         View viewRef;
@@ -160,8 +165,11 @@ public class FragmentInjectionTest {
             super.onCreate(savedInstanceState);
             setContentView( new View(this) );
 
+
             fragmentRef = new FragmentC();
-            startFragment(this, fragmentRef);
+            fragmentRef.onAttach(this);
+            fragmentRef.onCreate(null);
+
         }
 
         public static class FragmentC extends RoboFragment {
@@ -181,7 +189,7 @@ public class FragmentInjectionTest {
 
 
 
-    public static class ActivityD extends RoboFragmentActivity {
+    public static class ActivityD extends RoboActivity {
         FragmentD fragmentRef;
 
         @Override
@@ -189,11 +197,21 @@ public class FragmentInjectionTest {
             super.onCreate(savedInstanceState);
 
             fragmentRef = new FragmentD();
-            startFragment(this,fragmentRef);
-
+            fragmentRef.onAttach(this);
+            fragmentRef.onCreate(null);
 
             setContentView(new FrameLayout(this));
             
+        }
+
+        @Override
+        protected void onPause() {
+            super.onPause();
+        }
+
+        @Override
+        protected void onResume() {
+            super.onResume();
         }
 
         public static class FragmentD extends RoboFragment {
@@ -206,6 +224,11 @@ public class FragmentInjectionTest {
                 ref = new View(getActivity());
                 ref.setId(101);
                 return ref;
+            }
+
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
             }
         }
 

@@ -247,25 +247,10 @@ public class ActivityInjectionTest {
 
         public static class D extends RoboActivity{
             @InjectExtra("xxx") static String s;
-
-            @Override
-            protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-            }
         }
     }
 
-    public static class F extends RoboActivity {
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
-
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
-        }
-    }
+    public static class F extends RoboActivity {}
 
     public static class PojoA {
         @InjectView(100) View v;
@@ -274,10 +259,5 @@ public class ActivityInjectionTest {
 
     public static class G extends RoboActivity {
         @Inject Application application;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-        }
     }
 }

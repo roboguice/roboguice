@@ -1,5 +1,4 @@
 language: java
-jdk: oraclejdk7
 
 # http://blog.xeiam.com/2013/05/configure-travis-ci-to-deploy-snapshots.html
 env:
@@ -11,12 +10,16 @@ env:
 # http://levi-wilson.blogspot.com/2012/06/maven-android-travis-ci-and-more.html
 # http://stackoverflow.com/a/3008489/82156
 before_install:
-  # Install base Android SDK
     - git clone -b travis `git config --get remote.origin.url` target/travis
     - sudo apt-get update -qq
-    - sudo apt-get install -qq libstdc++6:i386 lib32z1
-    - export COMPONENTS=build-tools-19.0.1,android-19,android-17
-    - curl -L https://raw.github.com/embarkmobile/android-sdk-installer/master/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS
-    - source ~/.android-sdk-installer/env
+  - if [ `uname -m` = x86_64 ]; then sudo apt-get install -qq --force-yes libgd2-xpm ia32-libs ia32-libs-multiarch; fi
+  - wget http://dl.google.com/android/android-sdk_r21-linux.tgz
+  - tar -zxf android-sdk_r21-linux.tgz
+  - pwd
+  - ( cd ~ && pwd )
+  - export ANDROID_HOME=~/build/roboguice/roboguice/android-sdk-linux
+  - export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+  - android update sdk --all --filter platform-tools,android-9 --no-ui --force
+
 
 script: "mvn deploy --settings target/travis/settings.xml"

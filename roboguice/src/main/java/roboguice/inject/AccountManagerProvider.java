@@ -1,9 +1,10 @@
 package roboguice.inject;
 
-import android.accounts.AccountManager;
-import android.content.Context;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import android.accounts.AccountManager;
+import android.content.Context;
 
 @ContextSingleton
 public class AccountManagerProvider implements Provider<AccountManager> {

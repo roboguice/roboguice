@@ -1,21 +1,27 @@
 package roboguice;
 
+import java.util.ArrayList;
+import java.util.WeakHashMap;
+
+import roboguice.config.DefaultRoboModule;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.ContextScopedRoboInjector;
+import roboguice.inject.ResourceListener;
+import roboguice.inject.RoboInjector;
+import roboguice.inject.ViewListener;
+import roboguice.util.Strings;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.Stage;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Stage;
-import roboguice.config.DefaultRoboModule;
-import roboguice.event.EventManager;
-import roboguice.inject.*;
-import roboguice.util.Strings;
-
-import java.util.ArrayList;
-import java.util.WeakHashMap;
 
 /**
  *
@@ -29,8 +35,10 @@ import java.util.WeakHashMap;
  * 
  * BUG hashmap should also key off of stage and modules list
  */
-public class RoboGuice {
+public final class RoboGuice {
+    //CHECKSTYLE:OFF
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
+    //CHECKSTYLE:ON
 
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
     protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
@@ -68,7 +76,7 @@ public class RoboGuice {
      * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
      * @see roboguice.RoboGuice#DEFAULT_STAGE
      *
-     * If using this method with test cases, be sure to call {@link roboguice.RoboGuice.util#reset()} in your test teardown methods
+     * If using this method with test cases, be sure to call {@link roboguice.RoboGuice.Util#reset()} in your test teardown methods
      * to avoid polluting our other tests with your custom injector.  Don't do this in your real application though.
      *
      */
@@ -135,15 +143,9 @@ public class RoboGuice {
     }
 
 
-    
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
         return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
     }
-
-
-
-
-
 
     @SuppressWarnings("ConstantConditions")
     protected static ResourceListener getResourceListener( Application application ) {
@@ -179,10 +181,9 @@ public class RoboGuice {
         //noinspection SuspiciousMethodCalls
         injectors.remove(context); // it's okay, Context is an Application
     }
-    
-    
-    public static class util {
-        private util() {}
+
+    public static final class Util {
+        private Util() {}
 
         /**
          * This method is provided to reset RoboGuice in testcases.

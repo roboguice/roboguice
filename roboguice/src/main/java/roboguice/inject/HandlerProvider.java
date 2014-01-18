@@ -1,9 +1,9 @@
 package roboguice.inject;
 
+import com.google.inject.Provider;
+
 import android.os.Handler;
 import android.os.Looper;
-
-import com.google.inject.Provider;
 
 public class HandlerProvider implements Provider<Handler> {
     @Override

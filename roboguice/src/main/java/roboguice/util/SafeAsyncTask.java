@@ -1,9 +1,12 @@
 package roboguice.util;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+
 import android.os.Handler;
 import android.util.Log;
-
-import java.util.concurrent.*;
 
 /**
  * A class similar but unrelated to android's {@link android.os.AsyncTask}.

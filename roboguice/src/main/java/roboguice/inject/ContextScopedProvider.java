@@ -1,9 +1,9 @@
 package roboguice.inject;
 
-import android.content.Context;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+
+import android.content.Context;
 
 
 public class ContextScopedProvider<T> {

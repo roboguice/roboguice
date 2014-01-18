@@ -3,10 +3,10 @@ package roboguice.inject;
 import roboguice.context.event.OnCreateEvent;
 import roboguice.event.Observes;
 
+import com.google.inject.Inject;
+
 import android.app.Activity;
 import android.content.Context;
-
-import com.google.inject.Inject;
 
 @SuppressWarnings("UnusedParameters")
 @ContextSingleton

@@ -1,12 +1,16 @@
 package roboguice.event.eventListener;
 
+import static org.easymock.EasyMock.createMock;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.reset;
+import static org.easymock.EasyMock.verify;
+
 import org.junit.Before;
 import org.junit.Test;
+
 import roboguice.event.EventListener;
 
 import android.os.Handler;
-
-import static org.easymock.EasyMock.*;
 
 /**
  * Tests for the AsynchronousEventListenerDecorator class

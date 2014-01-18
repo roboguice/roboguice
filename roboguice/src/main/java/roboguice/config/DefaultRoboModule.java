@@ -14,6 +14,7 @@ import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Vibrator;
@@ -23,12 +24,14 @@ import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Names;
+
 import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
@@ -61,14 +64,14 @@ public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
 
     @SuppressWarnings("rawtypes")
-	protected static final Class accountManagerClass;
+	protected static final Class ACCOUNT_MANAGER_CLASS;
 
     static {
         Class<?> c = null;
         try {
             c = Class.forName("android.accounts.AccountManager");
         } catch( Throwable ignored ) {}
-        accountManagerClass = c;
+        ACCOUNT_MANAGER_CLASS = c;
     }
 
 
@@ -198,8 +201,9 @@ public class DefaultRoboModule extends AbstractModule {
         }
 
         // 2.0 Eclair
-        if( VERSION.SDK_INT>=5 ) {
-            bind(accountManagerClass).toProvider(AccountManagerProvider.class);
+        if( VERSION.SDK_INT>=VERSION_CODES.ECLAIR ) {
+            //noinspection unchecked
+            bind(ACCOUNT_MANAGER_CLASS).toProvider(AccountManagerProvider.class);
         }
-	}
+    }
 }

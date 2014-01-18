@@ -15,6 +15,8 @@
  */
 package roboguice.inject;
 
+import roboguice.inject.ExtrasListener.ExtrasMembersInjector;
+
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
@@ -48,7 +50,7 @@ import com.google.inject.Singleton;
 public interface ExtraConverter<FROM, TO> {
     /**
      * Converts an instance of FROM to an instances of TO. May return null.
-     * 
+     *
      * @param from
      *            The extra value to be converted.
      * @return The converted object that will be injected.

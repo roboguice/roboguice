@@ -1,6 +1,5 @@
 package roboguice.util;
 
-import android.util.Log;
 import com.google.inject.Inject;
 
 /**
@@ -49,7 +48,7 @@ import com.google.inject.Inject;
  *
  */
 @SuppressWarnings({"ImplicitArrayToString"})
-public class Ln {
+public final class Ln {
 
     /**
      * lnImpl is initially set to LnImpl() with sensible defaults, then replaced

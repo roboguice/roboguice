@@ -1,11 +1,11 @@
 package roboguice.event.eventListener;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import roboguice.event.EventListener;
 import roboguice.event.eventListener.javaassist.RuntimeSupport;
 import roboguice.util.Ln;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * Observer Method Event Listener.  This class calls to the method on the given instance during onEvent().
@@ -56,7 +56,8 @@ public class ObserverMethodListener<T> implements EventListener<T> {
     @Override
     public int hashCode() {
         int result = descriptor != null ? descriptor.hashCode() : 0;
-        result = 31 * result + (instance != null ? instance.hashCode() : 0);
+        final int prime = 31;
+        result = prime * result + (instance != null ? instance.hashCode() : 0);
         return result;
     }
 

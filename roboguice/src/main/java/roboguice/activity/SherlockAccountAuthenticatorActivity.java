@@ -16,10 +16,11 @@
 
 package roboguice.activity;
 
+import com.actionbarsherlock.app.SherlockActivity;
+
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.os.Bundle;
-import com.actionbarsherlock.app.SherlockActivity;
 
 /**
  * Base class for implementing an Activity that is used to help implement an

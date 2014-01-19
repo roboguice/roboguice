@@ -1,15 +1,20 @@
 package roboguice.event;
 
+import java.lang.reflect.Method;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import roboguice.event.eventListener.ObserverMethodListener;
 import roboguice.inject.ContextSingleton;
 
-import android.content.Context;
-
 import com.google.inject.Inject;
 
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.Map.Entry;
+import android.content.Context;
 
 /**
  * Manager class handling the following:

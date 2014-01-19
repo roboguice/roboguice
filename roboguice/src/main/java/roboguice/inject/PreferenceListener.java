@@ -15,9 +15,10 @@
  */
 package roboguice.inject;
 
-import android.app.Application;
-import android.content.Context;
-import android.preference.PreferenceActivity;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
@@ -25,10 +26,9 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
+import android.app.Application;
+import android.content.Context;
+import android.preference.PreferenceActivity;
 
 /**
  * 
@@ -39,12 +39,10 @@ public class PreferenceListener implements TypeListener {
 
     protected Provider<Context> contextProvider;
     protected Application application;
-    protected ContextScope scope;
 
-    public PreferenceListener(Provider<Context> contextProvider, Application application, ContextScope scope) {
+    public PreferenceListener(Provider<Context> contextProvider, Application application) {
         this.contextProvider = contextProvider;
         this.application = application;
-        this.scope = scope;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
@@ -54,7 +52,7 @@ public class PreferenceListener implements TypeListener {
                     if( Modifier.isStatic(field.getModifiers()) )
                         throw new UnsupportedOperationException("Preferences may not be statically injected");
                     else
-                        typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
+                        typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class)));
 
     }
 
@@ -74,14 +72,12 @@ public class PreferenceListener implements TypeListener {
         protected Field field;
         protected Provider<Context> contextProvider;
         protected InjectPreference annotation;
-        protected ContextScope scope;
         protected WeakReference<T> instanceRef;
 
-        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider, InjectPreference annotation, ContextScope scope) {
+        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider, InjectPreference annotation) {
             this.field = field;
             this.annotation = annotation;
             this.contextProvider = contextProvider;
-            this.scope = scope;
         }
 
         public void injectMembers(T instance) {

@@ -1,9 +1,10 @@
 package roboguice.util;
 
+import com.google.inject.Inject;
+
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
-import com.google.inject.Inject;
 
 public class LnImpl implements LnInterface {
 
@@ -30,6 +31,7 @@ public class LnImpl implements LnInterface {
                 Log.e(packageName, "Error configuring logger", e);
             } catch( RuntimeException f ) {
                 // HACK ignore Stub! errors in mock objects during testing
+                f.printStackTrace();
             }
         }
     }
@@ -186,9 +188,10 @@ public class LnImpl implements LnInterface {
                 return "ERROR";
             case Log.ASSERT:
                 return "ASSERT";
-        }
 
-        return "UNKNOWN";
+            default:
+                return "UNKNOWN";
+        }
     }
 
 

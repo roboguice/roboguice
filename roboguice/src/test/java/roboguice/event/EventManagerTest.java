@@ -1,14 +1,14 @@
 package roboguice.event;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import roboguice.event.eventListener.ObserverMethodListener;
+import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
+import org.junit.Before;
+import org.junit.Test;
+
+import roboguice.event.eventListener.ObserverMethodListener;
 
 /**
  * Test class verifying eventManager functionality

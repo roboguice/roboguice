@@ -15,5 +15,5 @@ public interface EventListener<T> {
      * 
      * @param event fired
      */
-    public void onEvent(T event);
+    void onEvent(T event);
 }

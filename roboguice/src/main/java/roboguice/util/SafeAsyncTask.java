@@ -1,9 +1,12 @@
 package roboguice.util;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+
 import android.os.Handler;
 import android.util.Log;
-
-import java.util.concurrent.*;
 
 /**
  * A class similar but unrelated to android's {@link android.os.AsyncTask}.
@@ -28,7 +31,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     protected Handler handler;
     protected Executor executor;
-    protected StackTraceElement[] launchLocation;
     protected FutureTask<Void> future;
 
 
@@ -90,7 +92,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     }
 
     protected void execute( StackTraceElement[] launchLocation ) {
-        this.launchLocation = launchLocation;
         executor.execute( future() );
     }
 

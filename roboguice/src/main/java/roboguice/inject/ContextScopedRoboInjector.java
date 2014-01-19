@@ -276,8 +276,8 @@ public class ContextScopedRoboInjector implements RoboInjector {
         injectViews(fragment);
     }
 
-	private void injectViews(Object fragment) {
-		synchronized (ContextScope.class) {
+    private void injectViews(Object fragment) {
+        synchronized (ContextScope.class) {
             scope.enter(context);
             try {
                 ViewMembersInjector.injectViews(fragment);
@@ -285,5 +285,5 @@ public class ContextScopedRoboInjector implements RoboInjector {
                 scope.exit(context);
             }
         }
-	}
+    }
 }

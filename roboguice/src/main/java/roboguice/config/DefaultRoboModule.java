@@ -60,11 +60,12 @@ import roboguice.util.Strings;
  *
  * @author Mike Burton
  */
+@SuppressWarnings("PMD")
 public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
 
     @SuppressWarnings("rawtypes")
-	protected static final Class ACCOUNT_MANAGER_CLASS;
+    protected static final Class ACCOUNT_MANAGER_CLASS;
 
     static {
         Class<?> c = null;
@@ -191,8 +192,8 @@ public class DefaultRoboModule extends AbstractModule {
     }
 
     @SuppressWarnings("unchecked")
-	private void bindDynamicBindings() {
-		// Compatibility library bindings
+    private void bindDynamicBindings() {
+        // Compatibility library bindings
         if(FragmentUtil.hasSupport) {
             bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
         }

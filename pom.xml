@@ -95,25 +95,25 @@
 						</execution>
 					</executions>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-pmd-plugin</artifactId>
-					<version>${maven-pmd-plugin.version}</version>
-					<configuration>
-						<targetJdk>1.5</targetJdk>
-					</configuration>
-					<executions>
-						<execution>
-							<id>pmd-check</id>
-							<goals>
-								<goal>check</goal>
-								<!-- Too many deduplications to check them 
-								  <goal>cpd-check</goal>
-								-->
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+				<!--<plugin>-->
+					<!--<groupId>org.apache.maven.plugins</groupId>-->
+					<!--<artifactId>maven-pmd-plugin</artifactId>-->
+					<!--<version>${maven-pmd-plugin.version}</version>-->
+					<!--<configuration>-->
+						<!--<targetJdk>1.5</targetJdk>-->
+					<!--</configuration>-->
+					<!--<executions>-->
+						<!--<execution>-->
+							<!--<id>pmd-check</id>-->
+							<!--<goals>-->
+								<!--<goal>check</goal>-->
+								<!--&lt;!&ndash; Too many deduplications to check them -->
+								  <!--<goal>cpd-check</goal>-->
+								<!--&ndash;&gt;-->
+							<!--</goals>-->
+						<!--</execution>-->
+					<!--</executions>-->
+				<!--</plugin>-->
 			</plugins>
 		</pluginManagement>
 		<plugins>

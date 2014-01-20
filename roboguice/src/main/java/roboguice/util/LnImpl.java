@@ -31,7 +31,6 @@ public class LnImpl implements LnInterface {
                 Log.e(packageName, "Error configuring logger", e);
             } catch( RuntimeException f ) {
                 // HACK ignore Stub! errors in mock objects during testing
-                f.printStackTrace();
             }
         }
     }

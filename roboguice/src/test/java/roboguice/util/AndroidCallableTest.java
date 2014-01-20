@@ -1,19 +1,20 @@
 package roboguice.util;
 
 
-import android.os.Looper;
-import android.util.Log;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.shadows.ShadowLooper;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import android.os.Looper;
+import android.util.Log;
 
 @RunWith(RobolectricTestRunner.class)
 public class AndroidCallableTest {

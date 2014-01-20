@@ -1,11 +1,13 @@
 package roboguice.util;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
+import android.os.Handler;
+import android.os.Looper;
 
 
 // TODO
@@ -20,6 +22,7 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
     protected AndroidCallableI<ResultT> delegate;
     protected StackTraceElement[] launchLocation;
 
+    @SuppressWarnings()
     public AndroidCallableWrapper(Handler handler, AndroidCallableI<ResultT> delegate, StackTraceElement[] launchLocation ) {
         this.delegate = delegate;
         this.launchLocation = launchLocation;

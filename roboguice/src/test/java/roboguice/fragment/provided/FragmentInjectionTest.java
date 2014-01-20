@@ -7,6 +7,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -34,8 +35,7 @@ public class FragmentInjectionTest {
 	
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
-        final ActivityA activity = new ActivityA();
-        activity.onCreate(null);
+        final ActivityA activity = Robolectric.buildActivity(ActivityA.class).create().start().resume().get();
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
 
         assertNotNull(activity.fragmentRef.ref);
@@ -108,6 +108,15 @@ public class FragmentInjectionTest {
 
             View ref;
 
+            @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+            }
+            
+            @Override
+            public void onViewCreated(View view, Bundle savedInstanceState) {
+                super.onViewCreated(view, savedInstanceState);
+            }
             @Override
             public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 ref = new View(getActivity());

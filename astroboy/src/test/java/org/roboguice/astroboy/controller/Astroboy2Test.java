@@ -36,7 +36,7 @@ public class Astroboy2Test {
     @After
     public void teardown() {
         // Don't forget to tear down our custom injector to avoid polluting other test classes
-        RoboGuice.util.reset();
+        RoboGuice.Util.reset();
     }
     
     @Test

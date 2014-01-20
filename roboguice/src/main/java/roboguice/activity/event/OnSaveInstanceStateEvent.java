@@ -14,8 +14,8 @@ public class OnSaveInstanceStateEvent {
     }
 
     public Bundle getSavedInstanceState() {
-            return savedInstanceState;
-        }
+        return savedInstanceState;
+    }
 
     public Activity getActivity() {
         return activity;

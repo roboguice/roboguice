@@ -23,7 +23,11 @@ import java.lang.reflect.Method;
  *
  * @see ProxyFactory
  */
-public class RuntimeSupport {
+public final class RuntimeSupport {
+    
+    private RuntimeSupport() {
+        //private utility class constructor
+    }
 
     /**
      * Makes a descriptor for a given method.
@@ -56,8 +60,7 @@ public class RuntimeSupport {
         if (type.isArray()) {
             sbuf.append('[');
             makeDesc(sbuf, type.getComponentType());
-        }
-        else if (type.isPrimitive()) {
+        } else if (type.isPrimitive()) {
             if (type == Void.TYPE)
                 sbuf.append('V');
             else if (type == Integer.TYPE)
@@ -78,8 +81,7 @@ public class RuntimeSupport {
                 sbuf.append('Z');
             else
                 throw new RuntimeException("bad type: " + type.getName());
-        }
-        else
+        } else
             sbuf.append('L').append(type.getName().replace('.', '/'))
                 .append(';');
     }

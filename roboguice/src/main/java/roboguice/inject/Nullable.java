@@ -1,11 +1,11 @@
 package roboguice.inject;
 
-import roboguice.util.Strings;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-public class Nullable {
+import roboguice.util.Strings;
+
+public final class Nullable {
     private Nullable() {
     }
     

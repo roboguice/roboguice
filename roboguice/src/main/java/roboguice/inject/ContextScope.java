@@ -15,20 +15,20 @@
  */
 package roboguice.inject;
 
-import roboguice.util.RoboContext;
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.ContextWrapper;
+import roboguice.util.RoboContext;
 
 import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Stack;
+import android.app.Application;
+import android.content.Context;
+import android.content.ContextWrapper;
 
 /**
  * Scopes the injector based on the current context.

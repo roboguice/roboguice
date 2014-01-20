@@ -10,11 +10,9 @@
  */
 package roboguice.service;
 
-import android.app.Service;
-import android.content.Intent;
-import android.content.res.Configuration;
-import com.google.inject.Injector;
-import com.google.inject.Key;
+import java.util.HashMap;
+import java.util.Map;
+
 import roboguice.RoboGuice;
 import roboguice.context.event.OnConfigurationChangedEvent;
 import roboguice.context.event.OnCreateEvent;
@@ -23,8 +21,12 @@ import roboguice.context.event.OnStartEvent;
 import roboguice.event.EventManager;
 import roboguice.util.RoboContext;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+
+import android.app.Service;
+import android.content.Intent;
+import android.content.res.Configuration;
 
 /**
  * A {@link RoboService} extends from {@link Service} to provide dynamic

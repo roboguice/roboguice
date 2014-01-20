@@ -19,4 +19,6 @@ before_install:
     - curl -L https://raw.github.com/embarkmobile/android-sdk-installer/master/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS
     - source ~/.android-sdk-installer/env
 
-script: "mvn deploy --settings target/travis/settings.xml"
+script:
+    - if [ "$TRAVIS_BRANCH" == "master" ] ; then target=deploy ; else target=install ; fi
+    - mvn $target --settings target/travis/settings.xml

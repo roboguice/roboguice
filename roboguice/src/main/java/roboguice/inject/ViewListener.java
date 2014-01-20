@@ -15,20 +15,6 @@
  */
 package roboguice.inject;
 
-import android.app.Activity;
-import android.content.Context;
-import android.view.View;
-
-import roboguice.fragment.FragmentUtil;
-import roboguice.fragment.FragmentUtil.f;
-
-import com.google.inject.MembersInjector;
-import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
-
-import javax.inject.Singleton;
 import java.lang.annotation.Annotation;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -36,14 +22,30 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 
+import javax.inject.Singleton;
+
+import roboguice.fragment.FragmentUtil;
+import roboguice.fragment.FragmentUtil.f;
+import roboguice.util.GuiceInjectionMonitor;
+
+import com.google.inject.MembersInjector;
+import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
+
+import android.app.Activity;
+import android.content.Context;
+import android.view.View;
+
 @Singleton
 @SuppressWarnings({"unchecked","PMD"})
 public class ViewListener implements TypeListener {
        
     @Override
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-
-        for (Class<?> c = typeLiteral.getRawType(); c != Object.class; c = c.getSuperclass())
+        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
+        for (Class<?> c = typeLiteral.getRawType(); gim.isWorthInjecting(c); c = c.getSuperclass()) {
             for (Field field : c.getDeclaredFields()) {
                 if (field.isAnnotationPresent(InjectView.class))
                     if (Modifier.isStatic(field.getModifiers()))
@@ -53,7 +55,7 @@ public class ViewListener implements TypeListener {
                     else if (Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
                         throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
                     else {
-                        final f<?,?> utils = FragmentUtil.hasSupport 
+                        final f<?,?> utils = FragmentUtil.hasSupport
                                 && (FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass())
                                         || FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getDeclaringClass()))
                                         ? FragmentUtil.supportFrag : FragmentUtil.nativeFrag;
@@ -92,6 +94,7 @@ public class ViewListener implements TypeListener {
                         }
                     }
             }
+        }
     }
 
 

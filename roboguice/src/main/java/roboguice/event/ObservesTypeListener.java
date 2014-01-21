@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 
 import roboguice.event.eventListener.ObserverMethodListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+import roboguice.util.GuiceInjectionMonitor;
 
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
@@ -29,15 +30,14 @@ public class ObservesTypeListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
-        for( Class<?> c = iTypeLiteral.getRawType(); c!=Object.class ; c = c.getSuperclass() ) {
+        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
+        for (Class<?> c = iTypeLiteral.getRawType(); gim.isWorthInjecting(c); c = c.getSuperclass()) {
             for (Method method : c.getDeclaredMethods())
                 findContextObserver(method, iTypeEncounter);
 
             for( Class<?> interfaceClass : c.getInterfaces())
                 for (Method method : interfaceClass.getDeclaredMethods())
                     findContextObserver(method, iTypeEncounter);
-
-            
         }
     }
 

@@ -20,6 +20,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
+import roboguice.util.GuiceInjectionMonitor;
+
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
@@ -46,13 +48,15 @@ public class PreferenceListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
+        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
+        for (Class<?> c = typeLiteral.getRawType(); gim.isWorthInjecting(c); c = c.getSuperclass()) {
             for (Field field : c.getDeclaredFields())
                 if ( field.isAnnotationPresent(InjectPreference.class))
                     if( Modifier.isStatic(field.getModifiers()) )
                         throw new UnsupportedOperationException("Preferences may not be statically injected");
                     else
                         typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class)));
+        }
 
     }
 

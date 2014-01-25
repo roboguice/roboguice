@@ -90,9 +90,8 @@
 			<groupId>findbugs</groupId>
 			<artifactId>annotations</artifactId>
 			<version>${findbugs-annotations.version}</version>
-            <type>jar</type>
+			<type>jar</type>
 		</dependency>
-
 		<!-- TEST DEPENDENCIES -->
 		<dependency>
 			<groupId>org.easymock</groupId>

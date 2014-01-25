@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import roboguice.RoboGuice;
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 
 import android.app.Activity;
 
@@ -14,11 +15,11 @@ public class GuiceInjectionMonitorTest {
     @Test
     public void testRejectAndroidClass() {
         //given
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
         Class<?> c = Activity.class;
         
         //when
-        boolean worthInjecting = gim.isWorthInjecting(c);
+        boolean worthInjecting = filter.isWorthScanning(c);
         
         //then
         assertFalse( worthInjecting );
@@ -27,11 +28,11 @@ public class GuiceInjectionMonitorTest {
     @Test
     public void testRejectNull() {
         //given
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
         Class<?> c = null;
         
         //when
-        boolean worthInjecting = gim.isWorthInjecting(c);
+        boolean worthInjecting = filter.isWorthScanning(c);
         
         //then
         assertFalse( worthInjecting );
@@ -40,11 +41,11 @@ public class GuiceInjectionMonitorTest {
     @Test
     public void testRejectObject() {
         //given
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
         Class<?> c = Object.class;
         
         //when
-        boolean worthInjecting = gim.isWorthInjecting(c);
+        boolean worthInjecting = filter.isWorthScanning(c);
         
         //then
         assertFalse( worthInjecting );
@@ -53,11 +54,11 @@ public class GuiceInjectionMonitorTest {
     @Test
     public void testAcceptInRoboGuiceClass() {
         //given
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
         Class<?> c = RoboGuice.class;
         
         //when
-        boolean worthInjecting = gim.isWorthInjecting(c);
+        boolean worthInjecting = filter.isWorthScanning(c);
         
         //then
         assertTrue( worthInjecting );
@@ -66,14 +67,14 @@ public class GuiceInjectionMonitorTest {
     @Test
     public void testRejectClassHigherThanRoboGuice() {
         //given
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
         Class<?> c1 = String.class;
         Class<?> c2 = RoboGuice.class;
         
         //when
-        boolean worthInjecting = gim.isWorthInjecting(c1);
-        boolean worthInjecting2 = gim.isWorthInjecting(c2);
-        boolean worthInjecting3 = gim.isWorthInjecting(c1);
+        boolean worthInjecting = filter.isWorthScanning(c1);
+        boolean worthInjecting2 = filter.isWorthScanning(c2);
+        boolean worthInjecting3 = filter.isWorthScanning(c1);
         
         //then
         assertTrue( worthInjecting );

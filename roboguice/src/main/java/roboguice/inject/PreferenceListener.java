@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 
-import roboguice.util.GuiceInjectionMonitor;
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
@@ -48,8 +48,8 @@ public class PreferenceListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
-        for (Class<?> c = typeLiteral.getRawType(); gim.isWorthInjecting(c); c = c.getSuperclass()) {
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
+        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) {
             for (Field field : c.getDeclaredFields())
                 if ( field.isAnnotationPresent(InjectPreference.class))
                     if( Modifier.isStatic(field.getModifiers()) )

@@ -64,6 +64,21 @@ public class ActivityInjectionTest {
                 .withIntent(new Intent(Robolectric.application, DummyActivity.class).putExtra("foobar", "goober")).create().get();
     }
 
+    //TODO clean up. remove or make better
+//    @Test
+//    public void shouldInjectFast() {
+//        long sum = 0;
+//        int count = 1000;
+//        for (int i = 0; i < count; i++) {
+//            long start = System.nanoTime();
+//            setup();
+//            final G g = Robolectric.buildActivity(G.class).create().get();
+//            long end = System.nanoTime();
+//            sum +=(end-start);
+//        }
+//        System.out.println("Average load time : "+ (sum/count));
+//    }
+    
     @Test
     public void shouldInjectUsingDefaultConstructor() {
         assertThat(activity.emptyString, is(""));

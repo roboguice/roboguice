@@ -3,9 +3,9 @@ package roboguice.event;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.event.eventListener.ObserverMethodListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
-import roboguice.util.GuiceInjectionMonitor;
 
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
@@ -30,8 +30,8 @@ public class ObservesTypeListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
-        for (Class<?> c = iTypeLiteral.getRawType(); gim.isWorthInjecting(c); c = c.getSuperclass()) {
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
+        for (Class<?> c = iTypeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) {
             for (Method method : c.getDeclaredMethods())
                 findContextObserver(method, iTypeEncounter);
 

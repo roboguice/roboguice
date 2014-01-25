@@ -18,7 +18,7 @@ package roboguice.inject;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-import roboguice.util.GuiceInjectionMonitor;
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
@@ -47,8 +47,8 @@ public class ResourceListener implements TypeListener {
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
 
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
-        for (Class<?> c = typeLiteral.getRawType(); gim.isWorthInjecting(c); c = c.getSuperclass()) {
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
+        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) {
 
             for (Field field : c.getDeclaredFields())
                 if (field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()))

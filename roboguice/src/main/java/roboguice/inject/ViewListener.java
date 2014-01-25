@@ -24,9 +24,9 @@ import java.util.WeakHashMap;
 
 import javax.inject.Singleton;
 
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.fragment.FragmentUtil;
 import roboguice.fragment.FragmentUtil.f;
-import roboguice.util.GuiceInjectionMonitor;
 
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
@@ -44,8 +44,8 @@ public class ViewListener implements TypeListener {
        
     @Override
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        GuiceInjectionMonitor gim = new GuiceInjectionMonitor();
-        for (Class<?> c = typeLiteral.getRawType(); gim.isWorthInjecting(c); c = c.getSuperclass()) {
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
+        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) {
             for (Field field : c.getDeclaredFields()) {
                 if (field.isAnnotationPresent(InjectView.class))
                     if (Modifier.isStatic(field.getModifiers()))

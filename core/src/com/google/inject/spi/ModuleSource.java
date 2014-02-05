@@ -18,7 +18,7 @@ package com.google.inject.spi;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.inject.Module;
+import com.google.inject.config.Module;
 import com.google.inject.internal.util.StackTraceElements;
 import com.google.inject.internal.util.StackTraceElements.InMemoryStackTraceElement;
 

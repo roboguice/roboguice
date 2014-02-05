@@ -17,6 +17,8 @@
 package com.google.inject;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.inject.config.BinderTest;
+import com.google.inject.config.BinderTestSuite;
 import com.google.inject.internal.MoreTypesTest;
 import com.google.inject.internal.UniqueAnnotationsTest;
 import com.google.inject.internal.WeakKeySetTest;
@@ -41,7 +43,6 @@ import com.google.inject.util.NoopOverrideTest;
 import com.google.inject.util.OverrideModuleTest;
 import com.google.inject.util.ProvidersTest;
 import com.google.inject.util.TypesTest;
-
 import com.googlecode.guice.GuiceTck;
 import com.googlecode.guice.Jsr330Test;
 

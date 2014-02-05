@@ -17,7 +17,7 @@ package com.google.inject.daggeradapter;
 
 import com.google.common.base.Objects;
 import com.google.inject.Binder;
-import com.google.inject.Module;
+import com.google.inject.config.Module;
 import com.google.inject.internal.ProviderMethodsModule;
 import com.google.inject.spi.ModuleAnnotatedMethodScanner;
 

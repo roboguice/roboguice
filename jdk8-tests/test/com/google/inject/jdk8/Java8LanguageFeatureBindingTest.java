@@ -16,7 +16,7 @@
 
 package com.google.inject.jdk8;
 
-import com.google.inject.AbstractModule;
+import com.google.inject.config.AbstractModule;
 import com.google.inject.CreationException;
 import com.google.inject.Guice;
 import com.google.inject.Inject;

@@ -24,7 +24,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.inject.AbstractModule;
+import com.google.inject.config.AbstractModule;
 import com.google.inject.Asserts;
 import com.google.inject.BindingAnnotation;
 import com.google.inject.CreationException;

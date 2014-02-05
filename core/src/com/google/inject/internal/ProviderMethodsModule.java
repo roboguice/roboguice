@@ -23,12 +23,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
-import com.google.inject.Binder;
-import com.google.inject.Key;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Provides;
-import com.google.inject.TypeLiteral;
+import com.google.inject.*;
+import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.config.Module;
 import com.google.inject.spi.Dependency;
 import com.google.inject.spi.InjectionPoint;
 import com.google.inject.spi.Message;
@@ -70,6 +67,7 @@ public final class ProviderMethodsModule implements Module {
   private final TypeLiteral<?> typeLiteral;
   private final boolean skipFastClassGeneration;
   private final ModuleAnnotatedMethodScanner scanner;
+  private HierarchyTraversalFilter filter;
 
   private ProviderMethodsModule(Object delegate, boolean skipFastClassGeneration,
       ModuleAnnotatedMethodScanner scanner) {
@@ -77,6 +75,7 @@ public final class ProviderMethodsModule implements Module {
     this.typeLiteral = TypeLiteral.get(this.delegate.getClass());
     this.skipFastClassGeneration = skipFastClassGeneration;
     this.scanner = scanner;
+    filter = Guice.createHierarchyTraversalFilter();
   }
 
   /**
@@ -128,8 +127,10 @@ public final class ProviderMethodsModule implements Module {
   public List<ProviderMethod<?>> getProviderMethods(Binder binder) {
     List<ProviderMethod<?>> result = Lists.newArrayList();
     Multimap<Signature, Method> methodsBySignature = HashMultimap.create();
-    for (Class<?> c = delegate.getClass(); c != Object.class; c = c.getSuperclass()) {
-      for (Method method : c.getDeclaredMethods()) {
+    filter.reset();
+    Class<?> c = delegate.getClass();
+    while( filter.isWorthScanningForMethods(Provides.class.getName(), c)) {
+      for (Method method : filter.getAllMethods(Provides.class.getName(), c)) {
         // private/static methods cannot override or be overridden by other methods, so there is no
         // point in indexing them.
         // Skip synthetic methods and bridge methods since java will automatically generate
@@ -144,6 +145,7 @@ public final class ProviderMethodsModule implements Module {
           result.add(createProviderMethod(binder, method, annotation.get()));
         }
       }
+      c = c.getSuperclass();
     }
     // we have found all the providers and now need to identify if any were overridden
     // In the worst case this will have O(n^2) in the number of @Provides methods, but that is only

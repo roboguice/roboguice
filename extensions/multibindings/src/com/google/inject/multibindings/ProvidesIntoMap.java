@@ -19,7 +19,7 @@ package com.google.inject.multibindings;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.google.inject.Module;
+import com.google.inject.config.Module;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

@@ -1,6 +1,6 @@
-/build/
+build/
 target/
-bin/
+/bin/
 .project
 .classpath
 .settings/
@@ -10,3 +10,5 @@ bin/
 .idea/
 *.iml
 *.ipr
+guice.iws
+.DS_Store

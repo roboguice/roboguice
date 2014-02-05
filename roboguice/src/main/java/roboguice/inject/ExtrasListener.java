@@ -21,6 +21,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 
 import roboguice.RoboGuice;
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 
 import com.google.inject.Binding;
 import com.google.inject.Injector;
@@ -49,8 +50,8 @@ public class ExtrasListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-
-        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
+        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) {
             for (Field field : c.getDeclaredFields())
                 if (field.isAnnotationPresent(InjectExtra.class) )
                     if( Modifier.isStatic(field.getModifiers()) )
@@ -58,7 +59,7 @@ public class ExtrasListener implements TypeListener {
                     else
                         typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
 
-
+        }
     }
 
 

@@ -1,6 +1,48 @@
 package roboguice.config;
 
-import android.app.*;
+import roboguice.activity.RoboActivity;
+import roboguice.event.EventManager;
+import roboguice.event.ObservesTypeListener;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+import roboguice.fragment.FragmentUtil;
+import roboguice.inject.AccountManagerProvider;
+import roboguice.inject.AssetManagerProvider;
+import roboguice.inject.ContentResolverProvider;
+import roboguice.inject.ContextScope;
+import roboguice.inject.ContextScopedSystemServiceProvider;
+import roboguice.inject.ContextSingleton;
+import roboguice.inject.ExtrasListener;
+import roboguice.inject.HandlerProvider;
+import roboguice.inject.NullProvider;
+import roboguice.inject.PreferenceListener;
+import roboguice.inject.ResourceListener;
+import roboguice.inject.ResourcesProvider;
+import roboguice.inject.SharedPreferencesProvider;
+import roboguice.inject.SystemServiceProvider;
+import roboguice.inject.ViewListener;
+import roboguice.service.RoboService;
+import roboguice.util.Ln;
+import roboguice.util.LnImpl;
+import roboguice.util.LnInterface;
+import roboguice.util.Strings;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Key;
+import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
+import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Names;
+
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.Application;
+import android.app.KeyguardManager;
+import android.app.NotificationManager;
+import android.app.SearchManager;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -25,25 +67,6 @@ import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Key;
-import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
-import com.google.inject.matcher.Matchers;
-import com.google.inject.name.Names;
-
-import roboguice.activity.RoboActivity;
-import roboguice.event.EventManager;
-import roboguice.event.ObservesTypeListener;
-import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
-import roboguice.fragment.FragmentUtil;
-import roboguice.inject.*;
-import roboguice.service.RoboService;
-import roboguice.util.Ln;
-import roboguice.util.LnImpl;
-import roboguice.util.LnInterface;
-import roboguice.util.Strings;
-
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
  * Used by {@link roboguice.RoboGuice}.
@@ -64,15 +87,8 @@ import roboguice.util.Strings;
 public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
 
-    @SuppressWarnings("rawtypes")
-    protected static final Class ACCOUNT_MANAGER_CLASS;
-
     static {
-        Class<?> c = null;
-        try {
-            c = Class.forName("android.accounts.AccountManager");
-        } catch( Throwable ignored ) {}
-        ACCOUNT_MANAGER_CLASS = c;
+        Guice.setHierarchyTraversalFilterFactory(new RoboGuiceHierarchyTraversalFilterFactory());
     }
 
 
@@ -83,7 +99,6 @@ public class DefaultRoboModule extends AbstractModule {
 
 
     public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
-
 
         this.application = application;
         this.contextScope = contextScope;
@@ -141,7 +156,7 @@ public class DefaultRoboModule extends AbstractModule {
         bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>(){})).in(ContextSingleton.class);
         bind(RoboService.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboService>>(){})).in(ContextSingleton.class);
 
-        
+
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         bind(Resources.class).toProvider(ResourcesProvider.class);
@@ -204,7 +219,7 @@ public class DefaultRoboModule extends AbstractModule {
         // 2.0 Eclair
         if( VERSION.SDK_INT>=VERSION_CODES.ECLAIR ) {
             //noinspection unchecked
-            bind(ACCOUNT_MANAGER_CLASS).toProvider(AccountManagerProvider.class);
+            bind(AccountManager.class).toProvider(AccountManagerProvider.class);
         }
     }
 }

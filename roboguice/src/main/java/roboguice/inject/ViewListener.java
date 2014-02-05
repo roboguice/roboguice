@@ -15,10 +15,16 @@
  */
 package roboguice.inject;
 
-import android.app.Activity;
-import android.content.Context;
-import android.view.View;
+import java.lang.annotation.Annotation;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.WeakHashMap;
 
+import javax.inject.Singleton;
+
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.fragment.FragmentUtil;
 import roboguice.fragment.FragmentUtil.f;
 
@@ -28,13 +34,9 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
-import javax.inject.Singleton;
-import java.lang.annotation.Annotation;
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.WeakHashMap;
+import android.app.Activity;
+import android.content.Context;
+import android.view.View;
 
 @Singleton
 @SuppressWarnings({"unchecked","PMD"})
@@ -42,8 +44,8 @@ public class ViewListener implements TypeListener {
        
     @Override
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-
-        for (Class<?> c = typeLiteral.getRawType(); c != Object.class; c = c.getSuperclass())
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
+        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) {
             for (Field field : c.getDeclaredFields()) {
                 if (field.isAnnotationPresent(InjectView.class))
                     if (Modifier.isStatic(field.getModifiers()))
@@ -53,7 +55,7 @@ public class ViewListener implements TypeListener {
                     else if (Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
                         throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
                     else {
-                        final f<?,?> utils = FragmentUtil.hasSupport 
+                        final f<?,?> utils = FragmentUtil.hasSupport
                                 && (FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass())
                                         || FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getDeclaringClass()))
                                         ? FragmentUtil.supportFrag : FragmentUtil.nativeFrag;
@@ -92,6 +94,7 @@ public class ViewListener implements TypeListener {
                         }
                     }
             }
+        }
     }
 
 

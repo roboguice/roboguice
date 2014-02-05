@@ -3,6 +3,7 @@ package roboguice.event;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.event.eventListener.ObserverMethodListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
@@ -29,15 +30,14 @@ public class ObservesTypeListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
-        for( Class<?> c = iTypeLiteral.getRawType(); c!=Object.class ; c = c.getSuperclass() ) {
+        RoboGuiceHierarchyTraversalFilter filter = new RoboGuiceHierarchyTraversalFilter();
+        for (Class<?> c = iTypeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) {
             for (Method method : c.getDeclaredMethods())
                 findContextObserver(method, iTypeEncounter);
 
             for( Class<?> interfaceClass : c.getInterfaces())
                 for (Method method : interfaceClass.getDeclaredMethods())
                     findContextObserver(method, iTypeEncounter);
-
-            
         }
     }
 

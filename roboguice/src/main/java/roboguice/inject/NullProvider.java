@@ -8,4 +8,12 @@ public class NullProvider<T> implements Provider<T> {
     public T get() {
         return null;
     }
+
+
+    static NullProvider<?> instance = new NullProvider<Object>();
+
+    public static <T> NullProvider<T> instance() {
+        //noinspection unchecked
+        return (NullProvider<T>) instance;
+    }
 }

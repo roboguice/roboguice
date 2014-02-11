@@ -20,7 +20,5 @@ before_install:
     - source ~/.android-sdk-installer/env
 
 script:
-    - echo "Building branch: $TRAVIS_BRANCH"
-    - echo "Pull Request number: $TRAVIS_PULL_REQUEST"
     - if [ "$TRAVIS_BRANCH" == "master" -a -z "$TRAVIS_PULL_REQUEST" ] ; then target=deploy ; else target=install ; fi
     - mvn $target --settings target/travis/settings.xml

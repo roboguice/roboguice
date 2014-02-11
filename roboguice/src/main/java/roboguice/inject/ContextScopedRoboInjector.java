@@ -1,6 +1,7 @@
 package roboguice.inject;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +19,8 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeConverterBinding;
 
 import android.content.Context;
+import android.util.AttributeSet;
+import android.view.View;
 
 public class ContextScopedRoboInjector implements RoboInjector {
     protected Injector delegate;
@@ -260,5 +263,29 @@ public class ContextScopedRoboInjector implements RoboInjector {
                 scope.exit(context);
             }
         }
+    }
+
+    @Override
+    public View doInjectOnCreateViewIfNeeded(String name, Context context, AttributeSet attrs) {
+        if (!shouldInjectOnCreateView(name))
+            return null;
+
+        try {
+            final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
+            final View view = (View) constructor.newInstance(context, attrs);
+            injectMembers(view);
+            injectViewMembers(view);
+            return view;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * @return true if name begins with a lowercase character (indicating a package) and it doesn't start with com.android
+     * and it's not a fragment.
+     */
+    public boolean shouldInjectOnCreateView(String name) {
+        return Character.isLowerCase(name.charAt(0)) && !name.startsWith("com.android") && !name.equals("fragment");
     }
 }

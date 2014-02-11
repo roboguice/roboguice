@@ -146,19 +146,21 @@ public class RoboSherlockListActivity extends SherlockListActivity implements Ro
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        if (RoboActivity.shouldInjectOnCreateView(name))
-            return RoboActivity.injectOnCreateView(name, context, attrs);
-
-        return super.onCreateView(name, context, attrs);
+        View view = RoboGuice.getInjector(this).doInjectOnCreateViewIfNeeded(name, context, attrs);
+        if( view != null ) {
+            return view;
+        } else {
+            return super.onCreateView(name, context, attrs);
+        }
     }
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        if (RoboActivity.shouldInjectOnCreateView(name))
-            return RoboActivity.injectOnCreateView(name, context, attrs);
-
-        return super.onCreateView(parent, name, context, attrs);
+        View view = RoboGuice.getInjector(this).doInjectOnCreateViewIfNeeded(name, context, attrs);
+        if( view != null ) {
+            return view;
+        } else {
+            return super.onCreateView(parent, name, context, attrs);
+        }
     }
-
-
 }

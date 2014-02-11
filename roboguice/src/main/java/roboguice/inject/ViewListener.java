@@ -260,6 +260,7 @@ public class ViewListener implements TypeListener {
                         viewMembersInjector.reallyInjectMembers(activityOrFragment);
             }
         }
+
     }
 
 }

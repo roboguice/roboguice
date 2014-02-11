@@ -146,6 +146,13 @@ public final class RoboGuice {
         return t;
     }
 
+    /**
+     * A shortcut for RoboGuice.getInjector(context).injectMembersWithoutViews(o);
+     */
+    public static <T> T injectMembersWithoutViews( Context context, T t ) {
+        getInjector(context).injectMembersWithoutViews(t);
+        return t;
+    }
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
         return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));

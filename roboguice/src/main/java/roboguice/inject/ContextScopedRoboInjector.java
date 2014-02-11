@@ -17,7 +17,6 @@ import com.google.inject.Scope;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeConverterBinding;
 
-import android.app.Activity;
 import android.content.Context;
 
 public class ContextScopedRoboInjector implements RoboInjector {
@@ -252,35 +251,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     }
 
     @Override
-    public void injectViewMembers(Activity activity) {
+    public void injectViewMembers(Object instance) {
         synchronized (ContextScope.class) {
             scope.enter(context);
             try {
-                if( context!=activity )
-                    throw new UnsupportedOperationException("internal error, how did you get here?");
-
-                ViewMembersInjector.injectViews(activity);
-            } finally {
-                scope.exit(context);
-            }
-        }
-    }
-
-    @Override
-    public void injectViewMembers(android.support.v4.app.Fragment fragment) {
-        injectViews(fragment);
-    }
-
-    @Override
-    public void injectViewMembers(android.app.Fragment fragment) {
-        injectViews(fragment);
-    }
-
-    private void injectViews(Object fragment) {
-        synchronized (ContextScope.class) {
-            scope.enter(context);
-            try {
-                ViewMembersInjector.injectViews(fragment);
+                ViewMembersInjector.injectViews(instance);
             } finally {
                 scope.exit(context);
             }

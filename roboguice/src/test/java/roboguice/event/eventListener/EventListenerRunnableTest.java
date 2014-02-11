@@ -21,9 +21,11 @@ public class EventListenerRunnableTest {
     protected EventOne event;
     protected EventListener<EventOne> eventListener;
 
+    @SuppressWarnings("rawtypes")
     protected EventListenerRunnable eventListenerRunnable;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setup(){
         //noinspection unchecked
         eventListener = createMock(EventListener.class);

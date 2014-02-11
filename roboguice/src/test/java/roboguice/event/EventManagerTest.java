@@ -33,6 +33,7 @@ public class EventManagerTest {
         event = new EventOne();
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     public void testRegistrationLifeCycle(){
         for(Method method : eventOneMethods){

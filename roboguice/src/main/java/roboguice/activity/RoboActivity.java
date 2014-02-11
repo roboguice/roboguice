@@ -199,7 +199,8 @@ public class RoboActivity extends Activity implements RoboContext {
         try {
             final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
             final View view = (View) constructor.newInstance(context, attrs);
-            RoboGuice.injectMembers(context, view);
+            RoboGuice.getInjector(context).injectMembers(view);
+            RoboGuice.getInjector(context).injectViewMembers(view);
             return view;
         } catch (Exception e) {
             throw new RuntimeException(e);

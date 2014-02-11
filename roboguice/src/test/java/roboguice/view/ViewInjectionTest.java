@@ -158,6 +158,7 @@ public class ViewInjectionTest {
                 addView(ref);
 
                 RoboGuice.getInjector(getContext()).injectMembers(this);
+                RoboGuice.getInjector(getContext()).injectViewMembers(this);
             }
 
         }

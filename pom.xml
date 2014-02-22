@@ -9,6 +9,7 @@
 
 	<modules>
 		<module>roboguice</module>
+		<module>roboguice-annotation-processor</module>
 		<module>additional-tests</module>
 		<module>astroboy</module>
 	</modules>

@@ -10,6 +10,7 @@ import javax.lang.model.util.ElementKindVisitor6;
 
 import lombok.Getter;
 import lombok.extern.java.Log;
+import android.accounts.AccountManager;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.KeyguardManager;
@@ -31,9 +32,9 @@ import android.view.inputmethod.InputMethodManager;
  * @author SNI
  */
 @Log
-public class RoboGuiceInjectScanner extends ElementKindVisitor6<Void, Void> {
+public class SystemServiceInjectScanner extends ElementKindVisitor6<Void, Void> {
 
-    private static List<String> INJECTABLE_ANDROID_SERVICES_CLASSES = Arrays.asList(//
+    private static final List<String> INJECTABLE_ANDROID_SERVICES_CLASSES = Arrays.asList(//
             LocationManager.class.getName(),//
             WindowManager.class.getName(),//
             ActivityManager.class.getName(),//
@@ -49,7 +50,8 @@ public class RoboGuiceInjectScanner extends ElementKindVisitor6<Void, Void> {
             TelephonyManager.class.getName(),//
             AudioManager.class.getName(),//
             LayoutInflater.class.getName(),//
-            SearchManager.class.getName());
+            SearchManager.class.getName(),
+            AccountManager.class.getName());
 
     @Getter
     private List<String> androidServiceClassList = new ArrayList<String>();

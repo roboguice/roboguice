@@ -82,18 +82,14 @@ public class DefaultRoboModule extends AbstractModule {
     protected boolean hasFeatureAudioManagerService = true;
     protected boolean hasFeatureSearchManagerService = true;
     protected boolean hasFeatureLayoutInflaterService = true;
+    protected boolean hasFeatureAccountManagerService = true;
 
-    @SuppressWarnings("rawtypes")
-    protected static final Class ACCOUNT_MANAGER_CLASS;
-
-    static {
-        Class<?> c = null;
-        try {
-            c = Class.forName("android.accounts.AccountManager");
-        } catch (Throwable ignored) {
-        }
-        ACCOUNT_MANAGER_CLASS = c;
-    }
+    //inject extra feature
+    protected boolean hasFeatureInjectExtra = true;
+    protected boolean hasFeatureInjectView = true;
+    protected boolean hasFeatureInjectFragment = true;
+    protected boolean hasFeatureInjectPreference = true;
+    protected boolean hasFeatureInjectResource = true;
 
     protected Application application;
     protected ContextScope contextScope;
@@ -114,11 +110,10 @@ public class DefaultRoboModule extends AbstractModule {
     protected void configure() {
 
         final Provider<Context> contextProvider = getProvider(Context.class);
-        final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
-        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider, application);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
 
         // Package Info
+        //TODO
         try {
             final PackageInfo info = application.getPackageManager().getPackageInfo(application.getPackageName(), 0);
             bind(PackageInfo.class).toInstance(info);
@@ -126,6 +121,7 @@ public class DefaultRoboModule extends AbstractModule {
             throw new RuntimeException(e);
         }
 
+        //TODO
         String androidId = null;
         final ContentResolver contentResolver = application.getContentResolver();
         try {
@@ -139,8 +135,6 @@ public class DefaultRoboModule extends AbstractModule {
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
 
         // Singletons
-        bind(ViewListener.class).toInstance(viewListener);
-        bind(PreferenceListener.class).toInstance(preferenceListener);
         bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
 
         // ContextSingleton bindings
@@ -159,6 +153,7 @@ public class DefaultRoboModule extends AbstractModule {
         })).in(ContextSingleton.class);
 
         // Sundry Android Classes
+        //TODO
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         bind(Resources.class).toProvider(ResourcesProvider.class);
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
@@ -219,10 +214,25 @@ public class DefaultRoboModule extends AbstractModule {
         }
 
         // Android Resources, Views and extras require special handling
-        bindListener(Matchers.any(), resourceListener);
-        bindListener(Matchers.any(), extrasListener);
-        bindListener(Matchers.any(), viewListener);
-        bindListener(Matchers.any(), preferenceListener);
+        if( hasFeatureInjectResource ) {
+            bindListener(Matchers.any(), resourceListener);
+        }
+
+        if( hasFeatureInjectExtra ) {
+            bindListener(Matchers.any(), new ExtrasListener(contextProvider));
+        }
+
+        if( hasFeatureInjectView ) {
+            bind(ViewListener.class).toInstance(viewListener);
+            bindListener(Matchers.any(), viewListener);
+        }
+
+        if( hasFeatureInjectPreference ) {
+            final PreferenceListener preferenceListener = new PreferenceListener(contextProvider, application);
+            bind(PreferenceListener.class).toInstance(preferenceListener);
+            bindListener(Matchers.any(), preferenceListener);
+        }
+
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
 
         bind(LnInterface.class).to(LnImpl.class);
@@ -245,9 +255,15 @@ public class DefaultRoboModule extends AbstractModule {
         }
 
         // 2.0 Eclair
-        if (VERSION.SDK_INT >= VERSION_CODES.ECLAIR) {
-            // noinspection unchecked
-            bind(ACCOUNT_MANAGER_CLASS).toProvider(AccountManagerProvider.class);
+        if (hasFeatureAccountManagerService && VERSION.SDK_INT >= VERSION_CODES.ECLAIR) {
+            @SuppressWarnings("rawtypes")
+            Class accountManagerServiceClass = null;
+            try {
+                accountManagerServiceClass = Class.forName("android.accounts.AccountManager");
+                // noinspection unchecked
+                bind(accountManagerServiceClass).toProvider(AccountManagerProvider.class);
+            } catch (Throwable ignored) {
+            }
         }
     }
 }

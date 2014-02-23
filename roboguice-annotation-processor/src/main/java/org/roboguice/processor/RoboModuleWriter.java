@@ -13,6 +13,7 @@ import javax.lang.model.element.Modifier;
 
 import lombok.Getter;
 import lombok.Setter;
+import android.accounts.AccountManager;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.KeyguardManager;
@@ -43,6 +44,11 @@ public class RoboModuleWriter {
     private String roboModuleClassName;
 
     private HashMap<String, Class<?>> mapFeatureVariableToAndroidServiceClass = new HashMap<String, Class<?>>();
+    private boolean hasFeatureInjectExtra;
+    private boolean hasFeatureInjectFragment;
+    private boolean hasFeatureInjectView;
+    private boolean hasFeatureInjectPreference;
+    private boolean hasFeatureInjectResource;
 
     public RoboModuleWriter() {
         mapFeatureVariableToAndroidServiceClass.put("hasFeatureLocationService", LocationManager.class);
@@ -61,6 +67,7 @@ public class RoboModuleWriter {
         mapFeatureVariableToAndroidServiceClass.put("hasFeatureAudioManagerService", AudioManager.class);
         mapFeatureVariableToAndroidServiceClass.put("hasFeatureSearchManagerService", SearchManager.class);
         mapFeatureVariableToAndroidServiceClass.put("hasFeatureLayoutInflaterService", LayoutManager.class);
+        mapFeatureVariableToAndroidServiceClass.put("hasFeatureAccountManagerService", AccountManager.class);
     }
 
     public void writeRoboModule(Writer out) throws IOException {
@@ -92,11 +99,39 @@ public class RoboModuleWriter {
         for (Entry<String, Class<?>> entry : mapFeatureVariableToAndroidServiceClass.entrySet()) {
             writer.emitStatement("%s = %s", entry.getKey(), androidServiceClassList.contains(entry.getValue().getName()));
         }
+        
+        //RoboGuice injections
+        writer.emitStatement("hasFeatureInjectFragment = %s", String.valueOf( hasFeatureInjectFragment ));
+        writer.emitStatement("hasFeatureInjectView = %s", String.valueOf( hasFeatureInjectView ));
+        writer.emitStatement("hasFeatureInjectResource = %s", String.valueOf( hasFeatureInjectResource ));
+        writer.emitStatement("hasFeatureInjectExtra = %s", String.valueOf( hasFeatureInjectExtra ));
+        writer.emitStatement("hasFeatureInjectPreference = %s", String.valueOf( hasFeatureInjectPreference ));
+        
         writer.emitStatement("super.configure()");
         writer.endMethod();
 
         writer.endType();
 
         writer.close();
+    }
+
+    public void setHasFeatureInjectExtra(boolean hasFeatureInjectExtra) {
+        this.hasFeatureInjectExtra = hasFeatureInjectExtra;
+    }
+
+    public void setHasFeatureInjectFragment(boolean hasFeatureInjectFragment) {
+        this.hasFeatureInjectFragment = hasFeatureInjectFragment;
+    }
+
+    public void setHasFeatureInjectView(boolean hasFeatureInjectView) {
+        this.hasFeatureInjectView = hasFeatureInjectView;
+    }
+
+    public void setHasFeatureInjectPreference(boolean hasFeatureInjectPreference) {
+        this.hasFeatureInjectPreference = hasFeatureInjectPreference;
+    }
+
+    public void setHasFeatureInjectResource(boolean hasFeatureInjectResource) {
+        this.hasFeatureInjectResource = hasFeatureInjectResource;
     }
 }

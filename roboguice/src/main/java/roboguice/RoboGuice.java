@@ -1,5 +1,7 @@
 package roboguice;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.WeakHashMap;
 
@@ -63,7 +65,7 @@ public final class RoboGuice {
             rtrn = injectors.get(application);
             if( rtrn!=null )
                 return rtrn;
-            
+
             return setBaseApplicationInjector(application, DEFAULT_STAGE);
         }
     }
@@ -95,6 +97,7 @@ public final class RoboGuice {
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
+    @SuppressWarnings("unchecked")
     public static Injector setBaseApplicationInjector(Application application, Stage stage) {
 
         synchronized (RoboGuice.class) {
@@ -105,20 +108,39 @@ public final class RoboGuice {
                 final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
                 final Bundle bundle = ai.metaData;
                 final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
-                final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
                 final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
 
-                modules.add(defaultRoboModule);
-
+                boolean hasDefaultRoboModule = false;
                 for (String name : moduleNames) {
                     if( Strings.notEmpty(name)) {
                         final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                        try {
-                            modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
-                        } catch( NoSuchMethodException ignored ) {
-                            modules.add( clazz.newInstance() );
+
+                        boolean isDefaultRoboModule = DefaultRoboModule.class.isAssignableFrom(clazz);
+                        hasDefaultRoboModule |= isDefaultRoboModule;
+
+                        Module module = null;
+                        if( isDefaultRoboModule ) {
+                            module = newDefaultRoboModule((Class<? extends DefaultRoboModule>) clazz, application);
+                        } else {
+                            try {
+                                module = clazz.getDeclaredConstructor(Context.class).newInstance(application);
+                            } catch( NoSuchMethodException ignored ) {
+                                module = clazz.newInstance();
+                            }
+                        }
+
+                        if( module != null ) {
+                            if(  isDefaultRoboModule ) {
+                                modules.add( 0, module );
+                            } else {
+                                modules.add( module );
+                            }
                         }
                     }
+                }
+
+                if( ! hasDefaultRoboModule ) {
+                    modules.add( 0, newDefaultRoboModule(application) );
                 }
 
             } catch (Exception e) {
@@ -149,6 +171,11 @@ public final class RoboGuice {
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
         return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
+    }
+
+    public static DefaultRoboModule newDefaultRoboModule(Class<? extends DefaultRoboModule> clazz, final Application application) throws IllegalArgumentException, InstantiationException, IllegalAccessException, InvocationTargetException, SecurityException, NoSuchMethodException {
+        Constructor<? extends DefaultRoboModule> constructor = clazz.getDeclaredConstructor(Application.class, ContextScope.class, ViewListener.class, ResourceListener.class);
+        return constructor.newInstance(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
     }
 
     @SuppressWarnings("ConstantConditions")

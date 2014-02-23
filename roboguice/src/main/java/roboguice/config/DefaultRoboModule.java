@@ -47,22 +47,41 @@ import roboguice.util.Strings;
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
  * Used by {@link roboguice.RoboGuice}.
- *
- * If you wish to add your own bindings, DO NOT subclass this class.  Instead, create a new
- * module that extends AbstractModule with your own bindings, then do something like the following:
- *
- * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
- *
+ * 
+ * If you wish to add your own bindings, DO NOT subclass this class. Instead,
+ * create a new module that extends AbstractModule with your own bindings, then
+ * do something like the following:
+ * 
+ * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE,
+ * Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
  * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
- * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+ * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application,
+ *      com.google.inject.Stage, com.google.inject.Module...)
  * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
  * @see roboguice.RoboGuice#DEFAULT_STAGE
- *
  * @author Mike Burton
  */
 @SuppressWarnings("PMD")
 public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
+
+    // service feature
+    protected boolean hasFeatureLocationService = true;
+    protected boolean hasFeatureWindowManagerService = true;
+    protected boolean hasFeatureActivityManagerService = true;
+    protected boolean hasFeaturePowerManagerService = true;
+    protected boolean hasFeatureAlarmManagerService = true;
+    protected boolean hasFeatureNotificationManagerService = true;
+    protected boolean hasFeatureKeyguardManagerService = true;
+    protected boolean hasFeatureVibratorService = true;
+    protected boolean hasFeatureConnectivityManagerService = true;
+    protected boolean hasFeatureWifiManagerService = true;
+    protected boolean hasFeatureInputMethodManagerService = true;
+    protected boolean hasFeatureSensorManagerService = true;
+    protected boolean hasFeatureTelephonyManagerService = true;
+    protected boolean hasFeatureAudioManagerService = true;
+    protected boolean hasFeatureSearchManagerService = true;
+    protected boolean hasFeatureLayoutInflaterService = true;
 
     @SuppressWarnings("rawtypes")
     protected static final Class ACCOUNT_MANAGER_CLASS;
@@ -71,20 +90,17 @@ public class DefaultRoboModule extends AbstractModule {
         Class<?> c = null;
         try {
             c = Class.forName("android.accounts.AccountManager");
-        } catch( Throwable ignored ) {}
+        } catch (Throwable ignored) {
+        }
         ACCOUNT_MANAGER_CLASS = c;
     }
-
 
     protected Application application;
     protected ContextScope contextScope;
     protected ResourceListener resourceListener;
     protected ViewListener viewListener;
 
-
     public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
-
-
         this.application = application;
         this.contextScope = contextScope;
         this.viewListener = viewListener;
@@ -99,14 +115,14 @@ public class DefaultRoboModule extends AbstractModule {
 
         final Provider<Context> contextProvider = getProvider(Context.class);
         final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
-        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
+        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider, application);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
 
         // Package Info
         try {
-            final PackageInfo info = application.getPackageManager().getPackageInfo(application.getPackageName(),0);
+            final PackageInfo info = application.getPackageManager().getPackageInfo(application.getPackageName(), 0);
             bind(PackageInfo.class).toInstance(info);
-        } catch( PackageManager.NameNotFoundException e ) {
+        } catch (PackageManager.NameNotFoundException e) {
             throw new RuntimeException(e);
         }
 
@@ -114,21 +130,18 @@ public class DefaultRoboModule extends AbstractModule {
         final ContentResolver contentResolver = application.getContentResolver();
         try {
             androidId = Secure.getString(contentResolver, Secure.ANDROID_ID);
-        } catch( RuntimeException e) {
-            // ignore Stub! errors for Secure.getString() when mocking in test cases since there's no way to mock static methods
+        } catch (RuntimeException e) {
+            // ignore Stub! errors for Secure.getString() when mocking in test
+            // cases since there's no way to mock static methods
         }
 
-        if(Strings.notEmpty(androidId))
+        if (Strings.notEmpty(androidId))
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
-
-
 
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
         bind(PreferenceListener.class).toInstance(preferenceListener);
         bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
-
-
 
         // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
@@ -136,12 +149,15 @@ public class DefaultRoboModule extends AbstractModule {
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
         bind(Context.class).toProvider(Key.get(new TypeLiteral<NullProvider<Context>>() {
         })).in(ContextSingleton.class);
-        bind(Activity.class).toProvider(Key.get(new TypeLiteral<NullProvider<Activity>>(){})).in(ContextSingleton.class);
-        bind(RoboActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboActivity>>(){})).in(ContextSingleton.class);
-        bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>(){})).in(ContextSingleton.class);
-        bind(RoboService.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboService>>(){})).in(ContextSingleton.class);
+        bind(Activity.class).toProvider(Key.get(new TypeLiteral<NullProvider<Activity>>() {
+        })).in(ContextSingleton.class);
+        bind(RoboActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboActivity>>() {
+        })).in(ContextSingleton.class);
+        bind(Service.class).toProvider(Key.get(new TypeLiteral<NullProvider<Service>>() {
+        })).in(ContextSingleton.class);
+        bind(RoboService.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboService>>() {
+        })).in(ContextSingleton.class);
 
-        
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         bind(Resources.class).toProvider(ResourcesProvider.class);
@@ -150,28 +166,57 @@ public class DefaultRoboModule extends AbstractModule {
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
         bind(Handler.class).toProvider(HandlerProvider.class);
 
-
-
         // System Services
-        bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));
-        bind(WindowManager.class).toProvider(new SystemServiceProvider<WindowManager>(Context.WINDOW_SERVICE));
-        bind(ActivityManager.class).toProvider(new SystemServiceProvider<ActivityManager>(Context.ACTIVITY_SERVICE));
-        bind(PowerManager.class).toProvider(new SystemServiceProvider<PowerManager>(Context.POWER_SERVICE));
-        bind(AlarmManager.class).toProvider(new SystemServiceProvider<AlarmManager>(Context.ALARM_SERVICE));
-        bind(NotificationManager.class).toProvider(new SystemServiceProvider<NotificationManager>(Context.NOTIFICATION_SERVICE));
-        bind(KeyguardManager.class).toProvider(new SystemServiceProvider<KeyguardManager>(Context.KEYGUARD_SERVICE));
-        bind(Vibrator.class).toProvider(new SystemServiceProvider<Vibrator>(Context.VIBRATOR_SERVICE));
-        bind(ConnectivityManager.class).toProvider(new SystemServiceProvider<ConnectivityManager>(Context.CONNECTIVITY_SERVICE));
-        bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(Context.WIFI_SERVICE));
-        bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
-        bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
-        bind(TelephonyManager.class).toProvider( new SystemServiceProvider<TelephonyManager>(Context.TELEPHONY_SERVICE));
-        bind(AudioManager.class).toProvider( new SystemServiceProvider<AudioManager>(Context.AUDIO_SERVICE));
+        if (hasFeatureLocationService) {
+            bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));
+        }
+        if (hasFeatureWindowManagerService) {
+            bind(WindowManager.class).toProvider(new SystemServiceProvider<WindowManager>(Context.WINDOW_SERVICE));
+        }
+        if (hasFeatureActivityManagerService) {
+            bind(ActivityManager.class).toProvider(new SystemServiceProvider<ActivityManager>(Context.ACTIVITY_SERVICE));
+        }
+        if (hasFeaturePowerManagerService) {
+            bind(PowerManager.class).toProvider(new SystemServiceProvider<PowerManager>(Context.POWER_SERVICE));
+        }
+        if (hasFeatureAlarmManagerService) {
+            bind(AlarmManager.class).toProvider(new SystemServiceProvider<AlarmManager>(Context.ALARM_SERVICE));
+        }
+        if (hasFeatureNotificationManagerService) {
+            bind(NotificationManager.class).toProvider(new SystemServiceProvider<NotificationManager>(Context.NOTIFICATION_SERVICE));
+        }
+        if (hasFeatureKeyguardManagerService) {
+            bind(KeyguardManager.class).toProvider(new SystemServiceProvider<KeyguardManager>(Context.KEYGUARD_SERVICE));
+        }
+        if (hasFeatureVibratorService) {
+            bind(Vibrator.class).toProvider(new SystemServiceProvider<Vibrator>(Context.VIBRATOR_SERVICE));
+        }
+        if (hasFeatureConnectivityManagerService) {
+            bind(ConnectivityManager.class).toProvider(new SystemServiceProvider<ConnectivityManager>(Context.CONNECTIVITY_SERVICE));
+        }
+        if (hasFeatureWifiManagerService) {
+            bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(Context.WIFI_SERVICE));
+        }
+        if (hasFeatureInputMethodManagerService) {
+            bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
+        }
+        if (hasFeatureSensorManagerService) {
+            bind(SensorManager.class).toProvider(new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
+        }
+        if (hasFeatureTelephonyManagerService) {
+            bind(TelephonyManager.class).toProvider(new SystemServiceProvider<TelephonyManager>(Context.TELEPHONY_SERVICE));
+        }
+        if (hasFeatureAudioManagerService) {
+            bind(AudioManager.class).toProvider(new SystemServiceProvider<AudioManager>(Context.AUDIO_SERVICE));
+        }
 
         // System Services that must be scoped to current context
-        bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
-        bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
-
+        if (hasFeatureLayoutInflaterService) {
+            bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider, Context.LAYOUT_INFLATER_SERVICE));
+        }
+        if (hasFeatureSearchManagerService) {
+            bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider, Context.SEARCH_SERVICE));
+        }
 
         // Android Resources, Views and extras require special handling
         bindListener(Matchers.any(), resourceListener);
@@ -180,11 +225,9 @@ public class DefaultRoboModule extends AbstractModule {
         bindListener(Matchers.any(), preferenceListener);
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
 
-
         bind(LnInterface.class).to(LnImpl.class);
 
         requestInjection(observerThreadingDecorator);
-
 
         requestStaticInjection(Ln.class);
 
@@ -194,16 +237,16 @@ public class DefaultRoboModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     private void bindDynamicBindings() {
         // Compatibility library bindings
-        if(FragmentUtil.hasSupport) {
+        if (FragmentUtil.hasSupport) {
             bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
         }
-        if(FragmentUtil.hasNative) {
+        if (FragmentUtil.hasNative) {
             bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
         }
 
         // 2.0 Eclair
-        if( VERSION.SDK_INT>=VERSION_CODES.ECLAIR ) {
-            //noinspection unchecked
+        if (VERSION.SDK_INT >= VERSION_CODES.ECLAIR) {
+            // noinspection unchecked
             bind(ACCOUNT_MANAGER_CLASS).toProvider(AccountManagerProvider.class);
         }
     }

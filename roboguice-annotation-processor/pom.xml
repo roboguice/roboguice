@@ -18,8 +18,6 @@
 		<maven-javadoc-plugin.version>2.8</maven-javadoc-plugin.version>
 
 		<!--LIBRARIES -->
-		<java.version>1.6</java.version>
-		<android.version>4.4.2_r2</android.version>
 		<lombok.version>0.12.0</lombok.version>
 		<commons-lang.version>3.1</commons-lang.version>
 		<commons-io.version>1.3.2</commons-io.version>
@@ -43,7 +41,7 @@
 		<dependency>
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
-			<version>${android.version}</version>
+			<version>${android-platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -125,8 +123,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
 				<configuration>
-					<configLocation>roboguice_checks.xml</configLocation>
-					<propertiesLocation>roboguice_checks.properties</propertiesLocation>
+					<configLocation>../roboguice_checks.xml</configLocation>
+					<propertiesLocation>../roboguice_checks.properties</propertiesLocation>
 					<enableRulesSummary>false</enableRulesSummary>
 				</configuration>
 				<executions>

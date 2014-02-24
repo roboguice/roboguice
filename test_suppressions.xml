@@ -7,5 +7,6 @@
 <suppressions>
     <suppress checks="ConstantName*" files="src[\\/]test[\\/].*" />
     <suppress checks="VisibilityModifier|StaticVariableName" files=".*RoboGuice.*" />
+    <suppress checks="VisibilityModifier|StaticVariableName" files=".*DefaultRoboModuleConfig.*" />
     <suppress checks="VisibilityModifier|StaticVariableName|TypeName" files=".*FragmentUtil.*" />
 </suppressions>

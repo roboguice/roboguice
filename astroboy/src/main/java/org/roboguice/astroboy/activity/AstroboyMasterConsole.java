@@ -31,6 +31,7 @@ import com.google.inject.Inject;
  *     an object's default constructor, versus when it does something "special"
  *     like call getSystemService()
  */
+@ContentView(R.layout.main)
 public class AstroboyMasterConsole extends RoboActivity {
 
     // Various views that we inject into the activity.
@@ -56,7 +57,6 @@ public class AstroboyMasterConsole extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // @Inject, @InjectResource, and @InjectExtra injection happens during super.onCreate()
-        setContentView(R.layout.main);
 
         sayText.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

@@ -4,6 +4,12 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 import com.google.inject.Inject;
+import com.google.inject.internal.util.Stopwatch;
+
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 public class LnImpl implements LnInterface {
 
@@ -192,12 +198,36 @@ public class LnImpl implements LnInterface {
     }
 
 
+    static {
+        // Configure stopwatch logger
+        final Logger l=Logger.getLogger(Stopwatch.class.getName());
+        l.addHandler(new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                Ln.d("Stopwatch: " + record.getMessage());
+            }
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void close() throws SecurityException {
+            }
+        });
+    }
+
     public int getLoggingLevel() {
         return minimumLogLevel;
     }
 
     public void setLoggingLevel(int level) {
         minimumLogLevel = level;
+
+        // Enable stopwatch logging if debug is enabled
+        final Logger l=Logger.getLogger(Stopwatch.class.getName());
+        l.setLevel(level <= Log.DEBUG ? Level.FINE : Level.OFF);
+
     }
 
     public int println(int priority, String msg ) {

@@ -47,28 +47,6 @@ import java.util.logging.Logger;
  *     like call getSystemService()
  */
 public class AstroboyMasterConsole extends RoboActivity {
-    static {
-        final Logger l =Logger.getLogger(Stopwatch.class.getName());
-        l.setLevel(Level.FINE);
-        l.addHandler(new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-                Ln.d("Stopwatch: " + record.getMessage());
-            }
-
-            @Override
-            public void flush() {
-            }
-
-            @Override
-            public void close() throws SecurityException {
-            }
-        });
-
-
-
-    }
-
     private static final Set<Class<?>> injectionClasses = new HashSet<Class<?>>(){{
         try {
             addAll(SilverUtil.get(SilverGInject.class).getAnnotated());

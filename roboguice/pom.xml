@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>roboguice</artifactId>
     <name>RoboGuice</name>
-    <version>3.0-alpha-SNAPSHOT</version> <!-- BUG necessary? or inherited -->
+    <version>3.0-alpha-SNAPSHOT</version>
     <description>A framework for using Google Guice dependency injection in Android.</description>
 
     <parent>
@@ -18,10 +18,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.5.1</version>
+                <version>3.1</version>
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
+                    <proc>none</proc>
                 </configuration>
             </plugin>
             <plugin>
@@ -62,7 +63,7 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>3.0</version>
+            <version>4.0-SNAPSHOT</version>
             <classifier>no_aop</classifier>
         </dependency>
         <dependency>
@@ -127,6 +128,22 @@
             <type>jar</type>
             <scope>provided</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.silver</groupId>
+            <artifactId>silver-api</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.silver</groupId>
+            <artifactId>silver</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency> <!-- not sure why I neeed to explicitly include this dependency -->
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>16.0</version>
         </dependency>
     </dependencies>
 

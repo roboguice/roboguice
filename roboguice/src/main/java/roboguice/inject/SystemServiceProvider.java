@@ -16,18 +16,16 @@
 package roboguice.inject;
 
 import android.app.Application;
-
-import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 public class SystemServiceProvider<T> implements Provider<T> {
 
-    @Inject protected Application application;
-
     protected String serviceName;
+    protected Application application;
 
-    public SystemServiceProvider(String serviceName) {
+    public SystemServiceProvider(Application application, String serviceName) {
         this.serviceName = serviceName;
+        this.application = application;
     }
 
     @SuppressWarnings("unchecked")

@@ -146,20 +146,20 @@ public class DefaultRoboModule extends AbstractModule {
 
 
         // System Services
-        bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(Context.LOCATION_SERVICE));
-        bind(WindowManager.class).toProvider(new SystemServiceProvider<WindowManager>(Context.WINDOW_SERVICE));
-        bind(ActivityManager.class).toProvider(new SystemServiceProvider<ActivityManager>(Context.ACTIVITY_SERVICE));
-        bind(PowerManager.class).toProvider(new SystemServiceProvider<PowerManager>(Context.POWER_SERVICE));
-        bind(AlarmManager.class).toProvider(new SystemServiceProvider<AlarmManager>(Context.ALARM_SERVICE));
-        bind(NotificationManager.class).toProvider(new SystemServiceProvider<NotificationManager>(Context.NOTIFICATION_SERVICE));
-        bind(KeyguardManager.class).toProvider(new SystemServiceProvider<KeyguardManager>(Context.KEYGUARD_SERVICE));
-        bind(Vibrator.class).toProvider(new SystemServiceProvider<Vibrator>(Context.VIBRATOR_SERVICE));
-        bind(ConnectivityManager.class).toProvider(new SystemServiceProvider<ConnectivityManager>(Context.CONNECTIVITY_SERVICE));
-        bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(Context.WIFI_SERVICE));
-        bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(Context.INPUT_METHOD_SERVICE));
-        bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(Context.SENSOR_SERVICE));
-        bind(TelephonyManager.class).toProvider( new SystemServiceProvider<TelephonyManager>(Context.TELEPHONY_SERVICE));
-        bind(AudioManager.class).toProvider( new SystemServiceProvider<AudioManager>(Context.AUDIO_SERVICE));
+        bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(application, Context.LOCATION_SERVICE));
+        bind(WindowManager.class).toProvider(new SystemServiceProvider<WindowManager>(application, Context.WINDOW_SERVICE));
+        bind(ActivityManager.class).toProvider(new SystemServiceProvider<ActivityManager>(application, Context.ACTIVITY_SERVICE));
+        bind(PowerManager.class).toProvider(new SystemServiceProvider<PowerManager>(application, Context.POWER_SERVICE));
+        bind(AlarmManager.class).toProvider(new SystemServiceProvider<AlarmManager>(application, Context.ALARM_SERVICE));
+        bind(NotificationManager.class).toProvider(new SystemServiceProvider<NotificationManager>(application, Context.NOTIFICATION_SERVICE));
+        bind(KeyguardManager.class).toProvider(new SystemServiceProvider<KeyguardManager>(application, Context.KEYGUARD_SERVICE));
+        bind(Vibrator.class).toProvider(new SystemServiceProvider<Vibrator>(application, Context.VIBRATOR_SERVICE));
+        bind(ConnectivityManager.class).toProvider(new SystemServiceProvider<ConnectivityManager>(application, Context.CONNECTIVITY_SERVICE));
+        bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(application, Context.WIFI_SERVICE));
+        bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(application, Context.INPUT_METHOD_SERVICE));
+        bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(application, Context.SENSOR_SERVICE));
+        bind(TelephonyManager.class).toProvider( new SystemServiceProvider<TelephonyManager>(application, Context.TELEPHONY_SERVICE));
+        bind(AudioManager.class).toProvider( new SystemServiceProvider<AudioManager>(application, Context.AUDIO_SERVICE));
 
         // System Services that must be scoped to current context
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));

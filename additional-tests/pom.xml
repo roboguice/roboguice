@@ -21,12 +21,6 @@
             <artifactId>roboguice</artifactId>
             <version>3.0-alpha-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>3.0</version>
-            <classifier>no_aop</classifier>
-        </dependency>
 
 
         <!-- TEST DEPENDENCIES -->

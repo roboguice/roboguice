@@ -15,6 +15,14 @@
  */
 package roboguice.inject;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+import com.google.inject.MembersInjector;
+import com.google.inject.TypeLiteral;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
+
 import android.app.Application;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -22,14 +30,6 @@ import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
-import com.google.inject.MembersInjector;
-import com.google.inject.TypeLiteral;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 
 /**
@@ -100,7 +100,7 @@ public class ResourceListener implements TypeListener {
                 } else if (Movie.class.isAssignableFrom(t)  ) {
                     value = resources.getMovie(id);
                 }
-                
+
                 if (value == null && Nullable.notNullable(field) ) {
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
                             .getName()));

@@ -15,12 +15,14 @@ import android.os.Bundle;
  * 
  * To use, simply override onCreate to call setContentView. Then override
  * startNextActivity to specify where to go next.
- * 
+ *
  * @author Mike Burton
- * 
+ *
  */
 public abstract class RoboSplashActivity extends Activity {
-    protected int minDisplayMs = (int) (2.5 * 1000);
+    private static final double DEFAULT_SPLASH_DELAY_MS = 2.5 * 1000;
+
+    protected int minDisplayMs = (int) DEFAULT_SPLASH_DELAY_MS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,7 @@ public abstract class RoboSplashActivity extends Activity {
 
     /**
      * Is there anything you want to do in the background? Add it here.
-     * 
+     *
      * @param app
      */
     @SuppressWarnings({"UnusedParameters"})

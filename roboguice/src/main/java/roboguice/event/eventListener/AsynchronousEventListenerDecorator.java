@@ -9,7 +9,7 @@ import android.os.Handler;
  *
  * @author John Ericksen
  */
-public class AsynchronousEventListenerDecorator<T> implements EventListener<T>{
+public class AsynchronousEventListenerDecorator<T> implements EventListener<T> {
 
     protected EventListener<T> eventListener;
     protected Handler handler;

@@ -15,15 +15,15 @@
  */
 package roboguice.inject;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import java.io.File;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
-import java.io.File;
+import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * To override the name of the file, bindConstant().annotatedWith(SharedPreferencesName.class).to...

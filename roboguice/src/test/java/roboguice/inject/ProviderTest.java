@@ -1,21 +1,23 @@
 package roboguice.inject;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import roboguice.activity.RoboActivity;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
 
-import android.content.Context;
-import android.os.Bundle;
-
-import javax.inject.Inject;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
+import javax.inject.Inject;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import roboguice.activity.RoboActivity;
+
+import android.content.Context;
+import android.os.Bundle;
 
 @RunWith(RobolectricTestRunner.class)
 public class ProviderTest {

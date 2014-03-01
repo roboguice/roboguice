@@ -70,6 +70,7 @@
 						<configLocation>roboguice_checks.xml</configLocation>
 						<propertiesLocation>roboguice_checks.properties</propertiesLocation>
 						<enableRulesSummary>false</enableRulesSummary>
+                        <consoleOutput>true</consoleOutput>
 					</configuration>
 					<executions>
 						<execution>

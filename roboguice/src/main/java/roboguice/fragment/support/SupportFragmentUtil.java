@@ -1,16 +1,9 @@
 package roboguice.fragment.support;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
-import roboguice.fragment.FragmentUtil.f;
-import roboguice.inject.ContextSingleton;
-
-import android.app.Activity;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
+import roboguice.fragment.FragmentUtil.f;
 
 /**
  * Support v4 based implementation of Fragment utility class.
@@ -56,14 +49,5 @@ public class SupportFragmentUtil implements f<Fragment, FragmentManager>{
 		return FragmentManagerProvider.class;
 	}
 
-	@ContextSingleton
-	public static class FragmentManagerProvider implements Provider<FragmentManager> {
-	    @Inject protected Activity activity;
-
-	    @Override
-	    public FragmentManager get() {
-	        return ((FragmentActivity)activity).getSupportFragmentManager();
-	    }
-	}
-
 }
+

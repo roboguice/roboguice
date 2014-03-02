@@ -43,33 +43,29 @@ import java.util.Set;
  */
 public class AstroboyMasterConsole extends RoboActivity {
     static {
-        try {
-            final Set<Class<?>> injectionClasses = new HashSet<Class<?>>();
-            injectionClasses.addAll(SilverUtil.get(SilverGInject.class).getAnnotated());
-            injectionClasses.addAll(SilverUtil.get(SilverInjectView.class).getAnnotated());
-            // BUG hack
-            injectionClasses.addAll(Arrays.<Class<?>>asList(EventManager.class, EventListenerThreadingDecorator.class, NativeFragmentUtil.class, SupportFragmentUtil.class,
-                    AccountManagerProvider.class, AssetManagerProvider.class, ContentResolverProvider.class, ContentViewListener.class, ContextScopedProvider.class,
-                    ResourcesProvider.class, RoboApplicationProvider.class, SharedPreferencesProvider.class, StringResourceFactory.class, Ln.class, LnImpl.class,
-                    RoboAccountAuthenticatorActivity.class, /*RoboActionBarActivity.class,*/ RoboActivityGroup.class, RoboExpandableListActivity.class,
-                    /*RoboFragmentActivity.class,*/ RoboLauncherActivity.class, RoboListActivity.class, /*RoboMapActivity.class,*/  RoboPreferenceActivity.class,
-                    /*RoboSherlockAccountAuthenticatorActivity.class, RoboSherlockActivity.class, RoboSherlockFragmentActivity.class,
-                    RoboSherlockListActivity.class, RoboSherlockPreferenceActivity.class,*/ RoboTabActivity.class)
-            );
-            Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
-                @Override
-                public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                    return new HierarchyTraversalFilter() {
-                        @Override
-                        public boolean isWorthScanning(Class<?> c) {
-                            return c != null && injectionClasses.contains(c);
-                        }
-                    };
-                }
-            });
-        } catch( Exception e ) {
-            Ln.e("Unable to initialize RoboGuice annotated class list. Startup performance will be degraded.");
-        }
+        final Set<Class<?>> injectionClasses = new HashSet<Class<?>>();
+        injectionClasses.addAll(SilverUtil.get(SilverGInject.class).getAnnotated());
+        injectionClasses.addAll(SilverUtil.get(SilverInjectView.class).getAnnotated());
+        // BUG hack
+        injectionClasses.addAll(Arrays.<Class<?>>asList(EventManager.class, EventListenerThreadingDecorator.class, NativeFragmentUtil.class, SupportFragmentUtil.class,
+                AccountManagerProvider.class, AssetManagerProvider.class, ContentResolverProvider.class, ContentViewListener.class, ContextScopedProvider.class,
+                ResourcesProvider.class, RoboApplicationProvider.class, SharedPreferencesProvider.class, StringResourceFactory.class, Ln.class, LnImpl.class,
+                RoboAccountAuthenticatorActivity.class, /*RoboActionBarActivity.class,*/ RoboActivityGroup.class, RoboExpandableListActivity.class,
+                /*RoboFragmentActivity.class,*/ RoboLauncherActivity.class, RoboListActivity.class, /*RoboMapActivity.class,*/  RoboPreferenceActivity.class,
+                /*RoboSherlockAccountAuthenticatorActivity.class, RoboSherlockActivity.class, RoboSherlockFragmentActivity.class,
+                RoboSherlockListActivity.class, RoboSherlockPreferenceActivity.class,*/ RoboTabActivity.class)
+        );
+        Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
+            @Override
+            public HierarchyTraversalFilter createHierarchyTraversalFilter() {
+                return new HierarchyTraversalFilter() {
+                    @Override
+                    public boolean isWorthScanning(Class<?> c) {
+                        return c != null && injectionClasses.contains(c);
+                    }
+                };
+            }
+        });
     }
 
     // Various views that we inject into the activity.

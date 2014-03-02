@@ -14,7 +14,6 @@ import com.google.inject.Guice;
 import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.HierarchyTraversalFilterFactory;
 import com.google.inject.Inject;
-import com.google.inject.internal.util.Stopwatch;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.AstroboyRemoteControl;
 import org.silver.SilverUtil;
@@ -30,10 +29,6 @@ import roboguice.util.LnImpl;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 /**
  * This activity uses an AstroboyRemoteControl to control Astroboy remotely!
@@ -47,12 +42,13 @@ import java.util.logging.Logger;
  *     like call getSystemService()
  */
 public class AstroboyMasterConsole extends RoboActivity {
-    private static final Set<Class<?>> injectionClasses = new HashSet<Class<?>>(){{
+    static {
         try {
-            addAll(SilverUtil.get(SilverGInject.class).getAnnotated());
-            addAll(SilverUtil.get(SilverInjectView.class).getAnnotated());
+            final Set<Class<?>> injectionClasses = new HashSet<Class<?>>();
+            injectionClasses.addAll(SilverUtil.get(SilverGInject.class).getAnnotated());
+            injectionClasses.addAll(SilverUtil.get(SilverInjectView.class).getAnnotated());
             // BUG hack
-            addAll(Arrays.<Class<?>>asList(EventManager.class, EventListenerThreadingDecorator.class, NativeFragmentUtil.class, SupportFragmentUtil.class,
+            injectionClasses.addAll(Arrays.<Class<?>>asList(EventManager.class, EventListenerThreadingDecorator.class, NativeFragmentUtil.class, SupportFragmentUtil.class,
                     AccountManagerProvider.class, AssetManagerProvider.class, ContentResolverProvider.class, ContentViewListener.class, ContextScopedProvider.class,
                     ResourcesProvider.class, RoboApplicationProvider.class, SharedPreferencesProvider.class, StringResourceFactory.class, Ln.class, LnImpl.class,
                     RoboAccountAuthenticatorActivity.class, /*RoboActionBarActivity.class,*/ RoboActivityGroup.class, RoboExpandableListActivity.class,
@@ -60,14 +56,6 @@ public class AstroboyMasterConsole extends RoboActivity {
                     /*RoboSherlockAccountAuthenticatorActivity.class, RoboSherlockActivity.class, RoboSherlockFragmentActivity.class,
                     RoboSherlockListActivity.class, RoboSherlockPreferenceActivity.class,*/ RoboTabActivity.class)
             );
-        } catch( Exception e ) {
-            Ln.e("Unable to initialize RoboGuice annotated class list. Startup performance will be degraded.");
-        }
-    }};
-
-
-    public AstroboyMasterConsole() {
-        if( injectionClasses.size()>0 ) {
             Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                 @Override
                 public HierarchyTraversalFilter createHierarchyTraversalFilter() {
@@ -79,8 +67,9 @@ public class AstroboyMasterConsole extends RoboActivity {
                     };
                 }
             });
+        } catch( Exception e ) {
+            Ln.e("Unable to initialize RoboGuice annotated class list. Startup performance will be degraded.");
         }
-
     }
 
     // Various views that we inject into the activity.

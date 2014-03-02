@@ -16,7 +16,7 @@ import com.google.inject.HierarchyTraversalFilterFactory;
 import com.google.inject.Inject;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.AstroboyRemoteControl;
-import org.silver.SilverUtil;
+import roboguice.AnnotationDatabase;
 import roboguice.activity.*;
 import roboguice.event.EventManager;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
@@ -44,8 +44,8 @@ import java.util.Set;
 public class AstroboyMasterConsole extends RoboActivity {
     static {
         final Set<Class<?>> injectionClasses = new HashSet<Class<?>>();
-        injectionClasses.addAll(SilverUtil.get(SilverGInject.class).getAnnotated());
-        injectionClasses.addAll(SilverUtil.get(SilverInjectView.class).getAnnotated());
+        injectionClasses.addAll(AnnotationDatabase.getClasses());
+
         // BUG hack
         injectionClasses.addAll(Arrays.<Class<?>>asList(EventManager.class, EventListenerThreadingDecorator.class, NativeFragmentUtil.class, SupportFragmentUtil.class,
                 AccountManagerProvider.class, AssetManagerProvider.class, ContentResolverProvider.class, ContentViewListener.class, ContextScopedProvider.class,
@@ -55,6 +55,9 @@ public class AstroboyMasterConsole extends RoboActivity {
                 /*RoboSherlockAccountAuthenticatorActivity.class, RoboSherlockActivity.class, RoboSherlockFragmentActivity.class,
                 RoboSherlockListActivity.class, RoboSherlockPreferenceActivity.class,*/ RoboTabActivity.class)
         );
+        if( injectionClasses.isEmpty() )
+            throw new IllegalStateException("Was unable to find the output of annotation processor");
+
         Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
             @Override
             public HierarchyTraversalFilter createHierarchyTraversalFilter() {

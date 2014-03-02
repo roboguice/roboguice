@@ -9,6 +9,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
+import com.google.inject.internal.util.Stopwatch;
 import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.*;
@@ -73,11 +74,19 @@ public class RoboGuice {
      *
      */
     public static Injector setBaseApplicationInjector(final Application application, Stage stage, Module... modules) {
-        synchronized (RoboGuice.class) {
-            final Injector rtrn = Guice.createInjector(stage, modules);
-            injectors.put(application,rtrn);
-            return rtrn;
+        final Stopwatch stopwatch = new Stopwatch();
+        try {
+
+            synchronized (RoboGuice.class) {
+                final Injector rtrn = Guice.createInjector(stage, modules);
+                injectors.put(application,rtrn);
+                return rtrn;
+            }
+
+        } finally {
+            stopwatch.resetAndLog("BaseApplicationInjector creation");
         }
+
     }
 
     /**

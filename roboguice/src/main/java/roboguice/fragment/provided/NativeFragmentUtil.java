@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import roboguice.fragment.FragmentUtil.f;
-import roboguice.fragment.support.FragmentManagerProvider;
 import roboguice.inject.ContextSingleton;
 
 import android.annotation.TargetApi;
@@ -61,6 +60,14 @@ public class NativeFragmentUtil implements f<Fragment,FragmentManager> {
 		return FragmentManagerProvider.class;
 	}
 	
+	@ContextSingleton
+	public static class FragmentManagerProvider implements Provider<FragmentManager> {
+	    @Inject protected Activity activity;
+
+	    @Override
+	    public FragmentManager get() {
+	        return activity.getFragmentManager();
+	    }
+	}
 
 }
-

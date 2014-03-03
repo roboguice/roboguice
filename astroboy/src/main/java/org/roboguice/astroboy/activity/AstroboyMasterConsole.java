@@ -35,24 +35,6 @@ import java.util.Set;
  *     like call getSystemService()
  */
 public class AstroboyMasterConsole extends RoboActivity {
-    static {
-        final Set<String> injectionClasses = new HashSet<String>();
-        injectionClasses.addAll(AnnotationDatabase.getClasses("roboguice"));
-        if( injectionClasses.isEmpty() )
-            throw new IllegalStateException("Was unable to find the output of annotation processor");
-
-        Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
-            @Override
-            public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                return new HierarchyTraversalFilter() {
-                    @Override
-                    public boolean isWorthScanning(Class<?> c) {
-                        return c != null && injectionClasses.contains(c.getName());
-                    }
-                };
-            }
-        });
-    }
 
     // Various views that we inject into the activity.
     // Equivalent to calling findViewById() in your onCreate(), except more succinct

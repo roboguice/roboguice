@@ -5,10 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Stage;
+import com.google.inject.*;
 import com.google.inject.internal.util.Stopwatch;
 import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
@@ -16,6 +13,7 @@ import roboguice.inject.*;
 import roboguice.util.Strings;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
@@ -78,6 +76,21 @@ public class RoboGuice {
         try {
 
             synchronized (RoboGuice.class) {
+                final Set<String> injectionClasses = AnnotationDatabase.getClasses ("roboguice");
+                if(injectionClasses.isEmpty())
+                    throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
+                Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
+                    @Override
+                    public HierarchyTraversalFilter createHierarchyTraversalFilter() {
+                        return new HierarchyTraversalFilter() {
+                            @Override
+                            public boolean isWorthScanning(Class<?> c) {
+                                return c != null && injectionClasses.contains(c.getName());
+                            }
+                        };
+                    }
+                });
+
                 final Injector rtrn = Guice.createInjector(stage, modules);
                 injectors.put(application,rtrn);
                 return rtrn;

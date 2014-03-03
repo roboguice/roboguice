@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
 import com.google.inject.Inject;
+import com.google.inject.internal.util.Stopwatch;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LnImpl implements LnInterface {
 
@@ -198,6 +202,10 @@ public class LnImpl implements LnInterface {
 
     public void setLoggingLevel(int level) {
         minimumLogLevel = level;
+
+        // enable stopwatch logging for verbose only
+        final Logger stopwatchLogger = Logger.getLogger(Stopwatch.class.getName());
+        stopwatchLogger.setLevel(level <= Log.VERBOSE ? Level.FINE : Level.OFF );
     }
 
     public int println(int priority, String msg ) {

@@ -10,12 +10,16 @@ import com.google.inject.internal.util.Stopwatch;
 import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.*;
+import roboguice.util.Ln;
 import roboguice.util.Strings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.logging.Handler;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  *
@@ -35,6 +39,28 @@ public class RoboGuice {
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
     protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
     protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
+
+
+
+    static {
+        // Map Logger logging to Ln.v
+        final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        logger.addHandler(new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+                Ln.v(record.getMessage());
+            }
+
+            @Override
+            public void flush() {
+            }
+
+            @Override
+            public void close() throws SecurityException {
+            }
+        });
+    }
+
 
     private RoboGuice() {
     }

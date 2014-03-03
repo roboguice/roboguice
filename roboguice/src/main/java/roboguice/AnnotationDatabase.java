@@ -11,17 +11,17 @@ public abstract class AnnotationDatabase {
 
     // BUG needs a little cleanup and optimization
     public static Set<String> getClasses(String... additionalPackageNames) {
-        final HashSet<String> set = new HashSet<String>();
         try {
-            set.addAll(((AnnotationDatabase) Class.forName("AnnotationDatabaseImpl").newInstance()).classes());
+            final HashSet<String> set = new HashSet<String>(((AnnotationDatabase) Class.forName("AnnotationDatabaseImpl").newInstance()).classes());
 
             for( String pkg : additionalPackageNames )
                 set.addAll(((AnnotationDatabase) Class.forName( pkg + ".AnnotationDatabaseImpl").newInstance()).classes());
+
+            return set;
         } catch( Exception e ) {
             throw new RuntimeException(e);
         }
 
-        return set;
     }
 
 }

@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-@SupportedAnnotationTypes({"com.google.inject.Inject","javax.inject.Inject", "roboguice.inject.InjectView"})
+@SupportedAnnotationTypes({"com.google.inject.Inject", "com.google.inject.Provides", "javax.inject.Inject", "roboguice.inject.InjectView", "roboguice.inject.InjectResource", "roboguice.inject.InjectPreference", "roboguice.inject.InjectExtra", "roboguice.inject.InjectFragment"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class ClassesRequiringScanningProcessor extends AbstractProcessor {
 

@@ -13,6 +13,7 @@ import roboguice.inject.*;
 import roboguice.util.Strings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -55,6 +56,10 @@ public class RoboGuice {
         }
     }
 
+    public static Injector setBaseApplicationInjector(final Application application, Stage stage, Module... modules ) {
+        return setBaseApplicationInjector(application, stage, null, modules);
+    }
+
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      * If specifying your own modules, you must include a DefaultRoboModule for most things to work properly.
@@ -63,7 +68,7 @@ public class RoboGuice {
      * RoboGuice.setApplicationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
      *
      * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
-     * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+     * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, String[], com.google.inject.Module...)
      * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
      * @see roboguice.RoboGuice#DEFAULT_STAGE
      *
@@ -71,12 +76,19 @@ public class RoboGuice {
      * to avoid polluting our other tests with your custom injector.  Don't do this in your real application though.
      *
      */
-    public static Injector setBaseApplicationInjector(final Application application, Stage stage, Module... modules) {
+    public static Injector setBaseApplicationInjector(final Application application, Stage stage, String[] additionalAnnotationDatabasePackages, Module... modules ) {
         final Stopwatch stopwatch = new Stopwatch();
         try {
 
             synchronized (RoboGuice.class) {
-                final Set<String> injectionClasses = AnnotationDatabase.getClasses ("roboguice");
+
+                // BUG this results in a whole bunch of unnecessary copying
+                final ArrayList<String> packages = new ArrayList<String>();
+                packages.add("roboguice");
+                if( additionalAnnotationDatabasePackages!=null)
+                    packages.addAll(Arrays.asList(additionalAnnotationDatabasePackages));
+
+                final Set<String> injectionClasses = AnnotationDatabase.getClasses (packages.toArray(new String[packages.size()]));
                 if(injectionClasses.isEmpty())
                     throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
                 Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
@@ -85,7 +97,7 @@ public class RoboGuice {
                         return new HierarchyTraversalFilter() {
                             @Override
                             public boolean isWorthScanning(Class<?> c) {
-                                return c != null && injectionClasses.contains(c.getName());
+                                return c != null && injectionClasses.contains(c.getCanonicalName());
                             }
                         };
                     }
@@ -135,7 +147,7 @@ public class RoboGuice {
                 throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
             }
 
-            final Injector rtrn = setBaseApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));
+            final Injector rtrn = setBaseApplicationInjector(application, stage, null, modules.toArray(new Module[modules.size()]));
             injectors.put(application,rtrn);
             return rtrn;
         }

@@ -17,16 +17,9 @@ import com.google.inject.Inject;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.AstroboyRemoteControl;
 import roboguice.AnnotationDatabase;
-import roboguice.activity.*;
-import roboguice.event.EventManager;
-import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
-import roboguice.fragment.provided.NativeFragmentUtil;
-import roboguice.fragment.support.SupportFragmentUtil;
-import roboguice.inject.*;
-import roboguice.util.Ln;
-import roboguice.util.LnImpl;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.InjectView;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,18 +36,8 @@ import java.util.Set;
  */
 public class AstroboyMasterConsole extends RoboActivity {
     static {
-        final Set<Class<?>> injectionClasses = new HashSet<Class<?>>();
-        injectionClasses.addAll(AnnotationDatabase.getClasses());
-
-        // BUG hack
-        injectionClasses.addAll(Arrays.<Class<?>>asList(EventManager.class, EventListenerThreadingDecorator.class, NativeFragmentUtil.class, SupportFragmentUtil.class,
-                AccountManagerProvider.class, AssetManagerProvider.class, ContentResolverProvider.class, ContentViewListener.class, ContextScopedProvider.class,
-                ResourcesProvider.class, RoboApplicationProvider.class, SharedPreferencesProvider.class, StringResourceFactory.class, Ln.class, LnImpl.class,
-                RoboAccountAuthenticatorActivity.class, /*RoboActionBarActivity.class,*/ RoboActivityGroup.class, RoboExpandableListActivity.class,
-                /*RoboFragmentActivity.class,*/ RoboLauncherActivity.class, RoboListActivity.class, /*RoboMapActivity.class,*/  RoboPreferenceActivity.class,
-                /*RoboSherlockAccountAuthenticatorActivity.class, RoboSherlockActivity.class, RoboSherlockFragmentActivity.class,
-                RoboSherlockListActivity.class, RoboSherlockPreferenceActivity.class,*/ RoboTabActivity.class)
-        );
+        final Set<String> injectionClasses = new HashSet<String>();
+        injectionClasses.addAll(AnnotationDatabase.getClasses("roboguice"));
         if( injectionClasses.isEmpty() )
             throw new IllegalStateException("Was unable to find the output of annotation processor");
 
@@ -64,7 +47,7 @@ public class AstroboyMasterConsole extends RoboActivity {
                 return new HierarchyTraversalFilter() {
                     @Override
                     public boolean isWorthScanning(Class<?> c) {
-                        return c != null && injectionClasses.contains(c);
+                        return c != null && injectionClasses.contains(c.getName());
                     }
                 };
             }

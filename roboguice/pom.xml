@@ -22,7 +22,6 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
-                    <proc>none</proc>
                 </configuration>
             </plugin>
             <plugin>
@@ -60,6 +59,11 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.roboguice</groupId>
+            <artifactId>annotationprocessing</artifactId>
+            <version>3.0-alpha-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>

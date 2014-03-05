@@ -6,9 +6,10 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.PackageElement;
-import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.*;
+import javax.lang.model.type.DeclaredType;
+import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,12 +38,31 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
         final String packageName = packages!=null && packages.size()>0 ? packages.iterator().next().getQualifiedName().toString() : null;
 
 
-        final HashSet<TypeElement> classesRequiringScanning = new HashSet<TypeElement>();
+        final HashSet<String> classesRequiringScanning = new HashSet<String>();
+        final HashSet<String> injectedClasses = new HashSet<String>();
 
-        // Get the enclosing class for each annotated method, constructor, or field.
-        for( TypeElement annotation : annotations )
-            for( Element injectionPoint : roundEnv.getElementsAnnotatedWith(annotation))
-                classesRequiringScanning.add( (TypeElement) injectionPoint.getEnclosingElement() );
+        for( TypeElement annotation : annotations ) {
+            for( Element injectionPoint : roundEnv.getElementsAnnotatedWith(annotation)) {
+                // Get the enclosing class for each annotated method, constructor, or field.
+                classesRequiringScanning.add( ((TypeElement) injectionPoint.getEnclosingElement()).getQualifiedName().toString() );
+
+                // Get the injected field types
+                if( injectionPoint instanceof VariableElement ) {
+                    final TypeMirror fieldTypeMirror = injectionPoint.asType();
+                    if( fieldTypeMirror instanceof DeclaredType )
+                        injectedClasses.add( ((TypeElement)((DeclaredType)fieldTypeMirror).asElement()).getQualifiedName().toString() );
+                    else if( fieldTypeMirror instanceof PrimitiveType )
+                        injectedClasses.add( fieldTypeMirror.getKind().name() );
+
+
+                // Get the injected method and constructor types
+                } else if( injectionPoint instanceof ExecutableElement ) {
+                    for( VariableElement variable : ((ExecutableElement)injectionPoint).getParameters() )
+                        injectedClasses.add( ((TypeElement)((DeclaredType)variable.asType()).asElement()).getQualifiedName().toString() );
+                }
+
+            }
+        }
 
         try {
             final JavaFileObject jfo = processingEnv.getFiler().createSourceFile( "AnnotationDatabaseImpl" );
@@ -57,16 +77,34 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
             w.println("    public static final List<String> classes = Arrays.<String>asList(");
 
             int i=0;
-            for( TypeElement clazz : classesRequiringScanning ) {
-                w.println("            \"" + clazz.getQualifiedName() + (i < classesRequiringScanning.size() - 1 ? "\"," : "\""));
+            for( String name : classesRequiringScanning ) {
+                w.println("            \"" + name + (i < classesRequiringScanning.size() - 1 ? "\"," : "\""));
                 ++i;
             }
 
             w.println("    );");
-
             w.println();
+            w.println("    public static final List<String> injectedClasses = Arrays.<String>asList(");
+
+            // BUG HACK, need to figure out why i have to manually add these
+            w.println("            \"android.app.FragmentManager\",");
+            w.println("            \"android.support.v4.app.FragmentManager\",");
+
+            i=0;
+            for( String name : injectedClasses ) {
+                w.println("            \"" + name + (i < injectedClasses.size() - 1 ? "\"," : "\""));
+                ++i;
+            }
+
+            w.println("    );");
+            w.println();
+            w.println("    /** The classes that have fields, methods, or constructors annotated with RoboGuice annotations */");
             w.println("    @Override");
             w.println("    public List<String> classes() { return classes; }");
+            w.println();
+            w.println("    /** The types that can be injected in fields, methods, or constructors */");
+            w.println("    @Override");
+            w.println("    public List<String> injectedClasses() { return injectedClasses; }");
             w.println("}");
             w.close();
 

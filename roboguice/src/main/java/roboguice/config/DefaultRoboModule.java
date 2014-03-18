@@ -198,7 +198,7 @@ public class DefaultRoboModule extends AbstractModule {
         if( injectableClasses.contains(clazz.getCanonicalName()) )
             return super.bind(clazz);
         else
-
+            System.out.println("Binding discarded for class " + clazz.getName());
             // NoOp AnnotatedBindingBuilder
             return NoOpAnnotatedBindingBuilder.INSTANCE;
     }

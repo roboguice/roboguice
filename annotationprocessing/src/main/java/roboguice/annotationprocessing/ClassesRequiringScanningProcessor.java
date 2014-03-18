@@ -1,20 +1,25 @@
 package roboguice.annotationprocessing;
 
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.*;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.HashSet;
-import java.util.Set;
 
 @SupportedAnnotationTypes({"com.google.inject.Inject", "com.google.inject.Provides", "javax.inject.Inject", "roboguice.inject.InjectView", "roboguice.inject.InjectResource", "roboguice.inject.InjectPreference", "roboguice.inject.InjectExtra", "roboguice.inject.InjectFragment"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
@@ -72,6 +77,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
                 w.println("package " + packageName + ";");
 
             w.println("import java.util.*;");
+            w.println("import roboguice.fragment.FragmentUtil;");
             w.println();
             w.println("public class AnnotationDatabaseImpl extends roboguice.AnnotationDatabase {");
             w.println("    public static final List<String> classes = Arrays.<String>asList(");
@@ -84,11 +90,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
 
             w.println("    );");
             w.println();
-            w.println("    public static final List<String> injectedClasses = Arrays.<String>asList(");
-
-            // BUG HACK, need to figure out why i have to manually add these
-            w.println("            \"android.app.FragmentManager\",");
-            w.println("            \"android.support.v4.app.FragmentManager\",");
+            w.println("    public static final List<String> injectedClasses = new ArrayList(Arrays.<String>asList(");
 
             i=0;
             for( String name : injectedClasses ) {
@@ -96,8 +98,21 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
                 ++i;
             }
 
-            w.println("    );");
+            w.println("    ));");
             w.println();
+
+            // BUG HACK, need to figure out why i have to manually add these
+            w.println("   static {");
+            w.println("        if(FragmentUtil.hasNative) {");
+            w.println("            injectedClasses.add(\"android.app.FragmentManager\");");
+            w.println("        }");
+            
+            w.println("        if(FragmentUtil.hasSupport) {");
+            w.println("            injectedClasses.add(\"android.support.v4.app.FragmentManager\");");
+            w.println("        }");
+            w.println("   }");
+            w.println();
+            
             w.println("    /** The classes that have fields, methods, or constructors annotated with RoboGuice annotations */");
             w.println("    @Override");
             w.println("    public List<String> classes() { return classes; }");

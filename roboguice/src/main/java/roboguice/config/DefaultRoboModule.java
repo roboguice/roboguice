@@ -1,6 +1,48 @@
 package roboguice.config;
 
-import android.app.*;
+import java.util.Set;
+
+import roboguice.AnnotationDatabase;
+import roboguice.activity.RoboActivity;
+import roboguice.event.EventManager;
+import roboguice.event.ObservesTypeListener;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+import roboguice.fragment.FragmentUtil;
+import roboguice.inject.AccountManagerProvider;
+import roboguice.inject.AssetManagerProvider;
+import roboguice.inject.ContentResolverProvider;
+import roboguice.inject.ContextScope;
+import roboguice.inject.ContextScopedSystemServiceProvider;
+import roboguice.inject.ContextSingleton;
+import roboguice.inject.ExtrasListener;
+import roboguice.inject.HandlerProvider;
+import roboguice.inject.NullProvider;
+import roboguice.inject.PreferenceListener;
+import roboguice.inject.ResourceListener;
+import roboguice.inject.ResourcesProvider;
+import roboguice.inject.SharedPreferencesProvider;
+import roboguice.inject.SystemServiceProvider;
+import roboguice.inject.ViewListener;
+import roboguice.service.RoboService;
+import roboguice.util.Ln;
+import roboguice.util.LnImpl;
+import roboguice.util.LnInterface;
+import roboguice.util.Strings;
+
+import com.google.inject.AbstractModule;
+import com.google.inject.Provider;
+import com.google.inject.binder.AnnotatedBindingBuilder;
+import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Names;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.Application;
+import android.app.KeyguardManager;
+import android.app.NotificationManager;
+import android.app.SearchManager;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,28 +65,6 @@ import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import com.google.inject.*;
-import com.google.inject.binder.AnnotatedBindingBuilder;
-import com.google.inject.binder.LinkedBindingBuilder;
-import com.google.inject.binder.ScopedBindingBuilder;
-import com.google.inject.matcher.Matchers;
-import com.google.inject.name.Names;
-import roboguice.AnnotationDatabase;
-import roboguice.activity.RoboActivity;
-import roboguice.event.EventManager;
-import roboguice.event.ObservesTypeListener;
-import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
-import roboguice.fragment.FragmentUtil;
-import roboguice.inject.*;
-import roboguice.service.RoboService;
-import roboguice.util.Ln;
-import roboguice.util.LnImpl;
-import roboguice.util.LnInterface;
-import roboguice.util.Strings;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.util.Set;
 
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
@@ -67,6 +87,8 @@ public class DefaultRoboModule extends AbstractModule {
 
     @SuppressWarnings("rawtypes")
 	protected static final Class accountManagerClass;
+    
+    private static final Set<String> injectableClasses = AnnotationDatabase.getInjectedClasses("roboguice");// BUG doesn't belong here
 
     static {
         Class<?> c = null;
@@ -82,10 +104,11 @@ public class DefaultRoboModule extends AbstractModule {
     protected ResourceListener resourceListener;
     protected ViewListener viewListener;
 
+    @SuppressWarnings("rawtypes")
+    private AnnotatedBindingBuilder noOpAnnotatedBindingBuilder = new NoOpAnnotatedBindingBuilder();
+
 
     public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
-
-
         this.application = application;
         this.contextScope = contextScope;
         this.viewListener = viewListener;
@@ -191,16 +214,13 @@ public class DefaultRoboModule extends AbstractModule {
         bindDynamicBindings();
     }
 
-    private static final Set<String> injectableClasses = AnnotationDatabase.getInjectedClasses("roboguice");// BUG doesn't belong here
-
+    @SuppressWarnings("unchecked")
     @Override
     protected <T> AnnotatedBindingBuilder<T> bind(Class<T> clazz) {
         if( injectableClasses.contains(clazz.getCanonicalName()) )
             return super.bind(clazz);
         else
-            System.out.println("Binding discarded for class " + clazz.getName());
-            // NoOp AnnotatedBindingBuilder
-            return NoOpAnnotatedBindingBuilder.INSTANCE;
+            return noOpAnnotatedBindingBuilder;
     }
 
     @SuppressWarnings("unchecked")
@@ -219,168 +239,4 @@ public class DefaultRoboModule extends AbstractModule {
         }
 	}
 
-    private static class NoOpAnnotatedBindingBuilder<T> implements AnnotatedBindingBuilder<T> {
-        public static AnnotatedBindingBuilder INSTANCE = new NoOpAnnotatedBindingBuilder();
-
-        @Override
-        public LinkedBindingBuilder<T> annotatedWith(Class<? extends Annotation> annotationType) {
-            return new NoOpLinkedBindingBuilder<T>();
-        }
-
-        @Override
-        public LinkedBindingBuilder<T> annotatedWith(Annotation annotation) {
-            return NoOpAnnotatedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public ScopedBindingBuilder to(Class<? extends T> implementation) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public ScopedBindingBuilder to(TypeLiteral<? extends T> implementation) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public ScopedBindingBuilder to(Key<? extends T> targetKey) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public void toInstance(T instance) {
-
-        }
-
-        @Override
-        public ScopedBindingBuilder toProvider(Provider<? extends T> provider) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public ScopedBindingBuilder toProvider(Class<? extends javax.inject.Provider<? extends T>> providerType) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public ScopedBindingBuilder toProvider(TypeLiteral<? extends javax.inject.Provider<? extends T>> providerType) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public ScopedBindingBuilder toProvider(Key<? extends javax.inject.Provider<? extends T>> providerKey) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public <S extends T> ScopedBindingBuilder toConstructor(Constructor<S> constructor) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public <S extends T> ScopedBindingBuilder toConstructor(Constructor<S> constructor, TypeLiteral<? extends S> type) {
-            return NoOpScopedBindingBuilder.INSTANCE;
-        }
-
-        @Override
-        public void in(Class<? extends Annotation> scopeAnnotation) {
-
-        }
-
-        @Override
-        public void in(Scope scope) {
-
-        }
-
-        @Override
-        public void asEagerSingleton() {
-
-        }
-
-        private static class NoOpLinkedBindingBuilder<T> implements LinkedBindingBuilder<T> {
-            @Override
-            public ScopedBindingBuilder to(Class<? extends T> implementation) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public ScopedBindingBuilder to(TypeLiteral<? extends T> implementation) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public ScopedBindingBuilder to(Key<? extends T> targetKey) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public void toInstance(T instance) {
-
-            }
-
-            @Override
-            public ScopedBindingBuilder toProvider(Provider<? extends T> provider) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public ScopedBindingBuilder toProvider(Class<? extends javax.inject.Provider<? extends T>> providerType) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public ScopedBindingBuilder toProvider(TypeLiteral<? extends javax.inject.Provider<? extends T>> providerType) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public ScopedBindingBuilder toProvider(Key<? extends javax.inject.Provider<? extends T>> providerKey) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public <S extends T> ScopedBindingBuilder toConstructor(Constructor<S> constructor) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public <S extends T> ScopedBindingBuilder toConstructor(Constructor<S> constructor, TypeLiteral<? extends S> type) {
-                return NoOpScopedBindingBuilder.INSTANCE;
-            }
-
-            @Override
-            public void in(Class<? extends Annotation> scopeAnnotation) {
-
-            }
-
-            @Override
-            public void in(Scope scope) {
-
-            }
-
-            @Override
-            public void asEagerSingleton() {
-
-            }
-        }
-
-        private static class NoOpScopedBindingBuilder implements ScopedBindingBuilder {
-            public static ScopedBindingBuilder INSTANCE = new NoOpScopedBindingBuilder();
-
-            @Override
-            public void in(Class<? extends Annotation> scopeAnnotation) {
-
-            }
-
-            @Override
-            public void in(Scope scope) {
-
-            }
-
-            @Override
-            public void asEagerSingleton() {
-
-            }
-        }
-    }
 }

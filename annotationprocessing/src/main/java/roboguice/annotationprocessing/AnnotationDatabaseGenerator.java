@@ -34,7 +34,7 @@ public class AnnotationDatabaseGenerator {
 
         w.println("    );");
         w.println();
-        w.println("    public static final List<String> injectedClasses = new ArrayList(Arrays.<String>asList(");
+        w.println("    public static final List<String> injectedClasses = new ArrayList<String>(Arrays.<String>asList(");
 
         i=0;
         for( String name : injectedClasses ) {

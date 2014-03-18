@@ -2,7 +2,6 @@ package roboguice.annotationprocessing;
 
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,11 +18,18 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
+/**
+ * An annotation processor that detects classes that need to receive injections.
+ * @author MikeBurton
+ */
 @SupportedAnnotationTypes({"com.google.inject.Inject", "com.google.inject.Provides", "javax.inject.Inject", "roboguice.inject.InjectView", "roboguice.inject.InjectResource", "roboguice.inject.InjectPreference", "roboguice.inject.InjectExtra", "roboguice.inject.InjectFragment"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class ClassesRequiringScanningProcessor extends AbstractProcessor {
+
+    private AnnotationDatabaseGenerator annotationDatabaseGenerator = new AnnotationDatabaseGenerator();
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -69,64 +75,14 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
             }
         }
 
+        JavaFileObject jfo;
         try {
-            final JavaFileObject jfo = processingEnv.getFiler().createSourceFile( "AnnotationDatabaseImpl" );
-            final PrintWriter w = new PrintWriter(jfo.openWriter());
-
-            if( packageName!=null )
-                w.println("package " + packageName + ";");
-
-            w.println("import java.util.*;");
-            w.println("import roboguice.fragment.FragmentUtil;");
-            w.println();
-            w.println("public class AnnotationDatabaseImpl extends roboguice.AnnotationDatabase {");
-            w.println("    public static final List<String> classes = Arrays.<String>asList(");
-
-            int i=0;
-            for( String name : classesRequiringScanning ) {
-                w.println("            \"" + name + (i < classesRequiringScanning.size() - 1 ? "\"," : "\""));
-                ++i;
-            }
-
-            w.println("    );");
-            w.println();
-            w.println("    public static final List<String> injectedClasses = new ArrayList(Arrays.<String>asList(");
-
-            i=0;
-            for( String name : injectedClasses ) {
-                w.println("            \"" + name + (i < injectedClasses.size() - 1 ? "\"," : "\""));
-                ++i;
-            }
-
-            w.println("    ));");
-            w.println();
-
-            // BUG HACK, need to figure out why i have to manually add these
-            w.println("   static {");
-            w.println("        if(FragmentUtil.hasNative) {");
-            w.println("            injectedClasses.add(\"android.app.FragmentManager\");");
-            w.println("        }");
-            
-            w.println("        if(FragmentUtil.hasSupport) {");
-            w.println("            injectedClasses.add(\"android.support.v4.app.FragmentManager\");");
-            w.println("        }");
-            w.println("   }");
-            w.println();
-            
-            w.println("    /** The classes that have fields, methods, or constructors annotated with RoboGuice annotations */");
-            w.println("    @Override");
-            w.println("    public List<String> classes() { return classes; }");
-            w.println();
-            w.println("    /** The types that can be injected in fields, methods, or constructors */");
-            w.println("    @Override");
-            w.println("    public List<String> injectedClasses() { return injectedClasses; }");
-            w.println("}");
-            w.close();
-
-        } catch( IOException e ) {
-            throw new RuntimeException(e);
+            jfo = processingEnv.getFiler().createSourceFile( "AnnotationDatabaseImpl" );
+            annotationDatabaseGenerator.generateAnnotationDatabase(jfo, packageName, classesRequiringScanning, injectedClasses);
+        } catch (IOException e) {
+            e.printStackTrace();
+            processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
         }
-
 
         return true;
     }

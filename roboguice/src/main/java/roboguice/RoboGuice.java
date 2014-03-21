@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
 import com.google.inject.*;
 import com.google.inject.internal.util.Stopwatch;
+
 import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.*;
@@ -35,6 +37,9 @@ public class RoboGuice {
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
     protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
     protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
+
+    private static AnnotationDatabaseFinder annotationDatabaseFinder;
+    private static Set<String> classesContainingInjectionPoints;
 
     private RoboGuice() {
     }
@@ -88,8 +93,10 @@ public class RoboGuice {
                 if( additionalAnnotationDatabasePackages!=null)
                     packages.addAll(Arrays.asList(additionalAnnotationDatabasePackages));
 
-                final Set<String> injectionClasses = AnnotationDatabase.getClasses (packages.toArray(new String[packages.size()]));
-                if(injectionClasses.isEmpty())
+                annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
+                classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
+
+                if(classesContainingInjectionPoints.isEmpty())
                     throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
                 Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                     @Override
@@ -97,7 +104,7 @@ public class RoboGuice {
                         return new HierarchyTraversalFilter() {
                             @Override
                             public boolean isWorthScanning(Class<?> c) {
-                                return c != null && injectionClasses.contains(c.getCanonicalName());
+                                return c != null && classesContainingInjectionPoints.contains(c.getName());
                             }
                         };
                     }

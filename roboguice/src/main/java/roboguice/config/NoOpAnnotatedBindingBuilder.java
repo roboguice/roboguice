@@ -14,7 +14,7 @@ import com.google.inject.binder.ScopedBindingBuilder;
 /**
  * Basically, a binder that does nothing.
  * @author Mike Burton
- * @param <T> 
+ * @param <T> ??
  */
 public class NoOpAnnotatedBindingBuilder<T> implements AnnotatedBindingBuilder<T> {
     private ScopedBindingBuilder scopedBindingBuilder = new NoOpScopedBindingBuilder();

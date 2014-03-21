@@ -2,7 +2,7 @@ package roboguice.config;
 
 import java.util.Set;
 
-import roboguice.AnnotationDatabase;
+import roboguice.AnnotationDatabaseFinder;
 import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
@@ -88,7 +88,8 @@ public class DefaultRoboModule extends AbstractModule {
     @SuppressWarnings("rawtypes")
 	protected static final Class accountManagerClass;
     
-    private static final Set<String> injectableClasses = AnnotationDatabase.getInjectedClasses("roboguice");// BUG doesn't belong here
+    private AnnotationDatabaseFinder annotationDatabaseFinder;
+    private Set<String> injectableClasses;
 
     static {
         Class<?> c = null;
@@ -113,6 +114,8 @@ public class DefaultRoboModule extends AbstractModule {
         this.contextScope = contextScope;
         this.viewListener = viewListener;
         this.resourceListener = resourceListener;
+        annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
+        injectableClasses = annotationDatabaseFinder.getInjectedClasses();
     }
 
     /**
@@ -145,14 +148,10 @@ public class DefaultRoboModule extends AbstractModule {
         if(Strings.notEmpty(androidId))
             bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
 
-
-
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
         bind(PreferenceListener.class).toInstance(preferenceListener);
         bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
-
-
 
         // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
@@ -163,7 +162,6 @@ public class DefaultRoboModule extends AbstractModule {
         bind(RoboActivity.class).toProvider(NullProvider.<RoboActivity>instance()).in(ContextSingleton.class);
         bind(Service.class).toProvider(NullProvider.<Service>instance()).in(ContextSingleton.class);
         bind(RoboService.class).toProvider(NullProvider.<RoboService>instance()).in(ContextSingleton.class);
-
         
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
@@ -172,8 +170,6 @@ public class DefaultRoboModule extends AbstractModule {
         bind(Application.class).toInstance(application);
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
         bind(Handler.class).toProvider(HandlerProvider.class);
-
-
 
         // System Services
         bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(application, Context.LOCATION_SERVICE));
@@ -195,7 +191,6 @@ public class DefaultRoboModule extends AbstractModule {
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
         bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
 
-
         // Android Resources, Views and extras require special handling
         bindListener(Matchers.any(), resourceListener);
         bindListener(Matchers.any(), extrasListener);
@@ -203,11 +198,9 @@ public class DefaultRoboModule extends AbstractModule {
         bindListener(Matchers.any(), preferenceListener);
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
 
-
         bind(LnInterface.class).to(LnImpl.class);
 
         requestInjection(observerThreadingDecorator);
-
 
         requestStaticInjection(Ln.class);
 
@@ -217,7 +210,7 @@ public class DefaultRoboModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     protected <T> AnnotatedBindingBuilder<T> bind(Class<T> clazz) {
-        if( injectableClasses.contains(clazz.getCanonicalName()) )
+        if( injectableClasses.contains(clazz.getName()) )
             return super.bind(clazz);
         else
             return noOpAnnotatedBindingBuilder;

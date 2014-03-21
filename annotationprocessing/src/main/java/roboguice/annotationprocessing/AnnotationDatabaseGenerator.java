@@ -59,11 +59,11 @@ public class AnnotationDatabaseGenerator {
 
         w.println("    /** The classes that have fields, methods, or constructors annotated with RoboGuice annotations */");
         w.println("    @Override");
-        w.println("    public List<String> classes() { return classes; }");
+        w.println("    public List<String> getClassesContainingInjectionPoints() { return classes; }");
         w.println();
         w.println("    /** The types that can be injected in fields, methods, or constructors */");
         w.println("    @Override");
-        w.println("    public List<String> injectedClasses() { return injectedClasses; }");
+        w.println("    public List<String> getInjectedClasses() { return injectedClasses; }");
         w.println("}");
         w.close();
     }

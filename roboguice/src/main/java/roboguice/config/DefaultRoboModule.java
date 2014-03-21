@@ -2,7 +2,6 @@ package roboguice.config;
 
 import java.util.Set;
 
-import roboguice.AnnotationDatabaseFinder;
 import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;

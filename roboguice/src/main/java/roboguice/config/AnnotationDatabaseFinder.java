@@ -1,4 +1,4 @@
-package roboguice;
+package roboguice.config;
 
 import java.util.HashSet;
 import java.util.Set;

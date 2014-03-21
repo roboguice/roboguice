@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.google.inject.*;
 import com.google.inject.internal.util.Stopwatch;
 
+import roboguice.config.AnnotationDatabaseFinder;
 import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.*;

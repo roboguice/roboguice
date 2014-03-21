@@ -23,7 +23,7 @@ public class AnnotationDatabaseGenerator {
         w.println("import java.util.*;");
         w.println("import roboguice.fragment.FragmentUtil;");
         w.println();
-        w.println("public class AnnotationDatabaseImpl extends roboguice.AnnotationDatabase {");
+        w.println("public class AnnotationDatabaseImpl extends roboguice.config.AnnotationDatabase {");
         w.println("    public static final List<String> classes = Arrays.<String>asList(");
 
         int i=0;

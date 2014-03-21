@@ -16,7 +16,7 @@ import com.google.inject.HierarchyTraversalFilterFactory;
 import com.google.inject.Inject;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.AstroboyRemoteControl;
-import roboguice.AnnotationDatabase;
+import roboguice.config.AnnotationDatabase;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 

@@ -63,6 +63,7 @@
             <groupId>org.roboguice</groupId>
             <artifactId>annotationprocessing</artifactId>
             <version>3.0-alpha-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>

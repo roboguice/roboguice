@@ -49,8 +49,6 @@ public class RoboGuice {
     protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
     protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
 
-    private static AnnotationDatabaseFinder annotationDatabaseFinder;
-    private static Set<String> classesContainingInjectionPoints;
     
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default.*/
     public static boolean useAnnotationDatabases = true; 
@@ -109,23 +107,25 @@ public class RoboGuice {
 
                 if( useAnnotationDatabases ) {
                     try {
-                        annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
-                        classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
+                        AnnotationDatabaseFinder annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
+                        final Set<String> classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
 
-                        if(classesContainingInjectionPoints.isEmpty())
-                            throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
                         Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                             @Override
                             public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                                return new AnnotatedRoboGuiceHierarchyTraversalFilter();
+                                return new AnnotatedRoboGuiceHierarchyTraversalFilter(classesContainingInjectionPoints);
                             }
                         });
                     } catch( Exception ex ) {
-                        ex.printStackTrace();
+                        throw new IllegalStateException("Unable use Annotation Database(s)", ex);
                     }
                 } else {
-                    Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory());
-
+                    Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
+                        @Override
+                        public HierarchyTraversalFilter createHierarchyTraversalFilter() {
+                            return new RoboGuiceHierarchyTraversalFilter();
+                        }
+                    });
                 }
 
                 final Injector rtrn = Guice.createInjector(stage, modules);
@@ -248,10 +248,18 @@ public class RoboGuice {
      */
     private static final class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarchyTraversalFilter {
         private boolean hasHadInjectionPoints;
+        private static Set<String> classesContainingInjectionPoints;
 
+        public  AnnotatedRoboGuiceHierarchyTraversalFilter(Set<String> classesContainingInjectionPoints) {
+            if(classesContainingInjectionPoints.isEmpty())
+                throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
+
+            this.classesContainingInjectionPoints = classesContainingInjectionPoints;
+        }
+        
         @Override
         public boolean isWorthScanning(Class<?> c) {
-            boolean hasInjectionPoints = c != null && classesContainingInjectionPoints.contains(c.getName());
+            boolean hasInjectionPoints = c != null && this.classesContainingInjectionPoints.contains(c.getName());
             if( hasInjectionPoints ) {
                 hasHadInjectionPoints = true;
                 return true;

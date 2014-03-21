@@ -1,30 +1,39 @@
 package roboguice.view;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.LinearLayout;
-import com.google.inject.Inject;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
+
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.util.ActivityController;
+
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
+import com.google.inject.Inject;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 
 @RunWith(RobolectricTestRunner.class)
 public class ViewInjectionTest {
 
+    @BeforeClass
+    public static void setUpFilter() {
+        RoboGuice.useAnnotationDatabases = false;
+    }
+    
     @Test
     public void shouldInjectViewsIntoActivitiesAndViews() {
         final C activity = Robolectric.buildActivity(C.class).create().get();

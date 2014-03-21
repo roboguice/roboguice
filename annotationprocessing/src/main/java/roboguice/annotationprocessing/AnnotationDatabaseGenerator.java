@@ -9,15 +9,14 @@ import javax.tools.JavaFileObject;
 /**
  * Generates a AnnotationDatabase implementation for RoboGuice.
  * @author Mike Burton
- * @author SNI
- * TODO use javawriter
+ * @author SNI TODO use javawriter
  */
 public class AnnotationDatabaseGenerator {
-    
+
     public void generateAnnotationDatabase(JavaFileObject jfo, final String packageName, final HashSet<String> classesRequiringScanning, final HashSet<String> injectedClasses) throws IOException {
         final PrintWriter w = new PrintWriter(jfo.openWriter());
 
-        if( packageName!=null )
+        if (packageName != null)
             w.println("package " + packageName + ";");
 
         w.println("import java.util.*;");
@@ -26,8 +25,8 @@ public class AnnotationDatabaseGenerator {
         w.println("public class AnnotationDatabaseImpl extends roboguice.config.AnnotationDatabase {");
         w.println("    public static final List<String> classes = Arrays.<String>asList(");
 
-        int i=0;
-        for( String name : classesRequiringScanning ) {
+        int i = 0;
+        for (String name : classesRequiringScanning) {
             w.println("            \"" + name + (i < classesRequiringScanning.size() - 1 ? "\"," : "\""));
             ++i;
         }
@@ -36,8 +35,8 @@ public class AnnotationDatabaseGenerator {
         w.println();
         w.println("    public static final List<String> injectedClasses = new ArrayList<String>(Arrays.<String>asList(");
 
-        i=0;
-        for( String name : injectedClasses ) {
+        i = 0;
+        for (String name : injectedClasses) {
             w.println("            \"" + name + (i < injectedClasses.size() - 1 ? "\"," : "\""));
             ++i;
         }

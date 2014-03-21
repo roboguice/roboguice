@@ -1,5 +1,6 @@
 package roboguice.config;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import roboguice.activity.RoboActivity;
@@ -98,7 +99,6 @@ public class DefaultRoboModule extends AbstractModule {
         accountManagerClass = c;
     }
 
-
     protected Application application;
     protected ContextScope contextScope;
     protected ResourceListener resourceListener;
@@ -113,8 +113,12 @@ public class DefaultRoboModule extends AbstractModule {
         this.contextScope = contextScope;
         this.viewListener = viewListener;
         this.resourceListener = resourceListener;
-        annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
-        injectableClasses = annotationDatabaseFinder.getInjectedClasses();
+        try {
+            annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
+            injectableClasses = annotationDatabaseFinder.getInjectedClasses();
+        } catch(Exception ex ) {
+            injectableClasses = new HashSet<String>();
+        }
     }
 
     /**
@@ -209,7 +213,7 @@ public class DefaultRoboModule extends AbstractModule {
     @SuppressWarnings("unchecked")
     @Override
     protected <T> AnnotatedBindingBuilder<T> bind(Class<T> clazz) {
-        if( injectableClasses.contains(clazz.getName()) )
+        if( injectableClasses.isEmpty() || injectableClasses.contains(clazz.getName()) )
             return super.bind(clazz);
         else
             return noOpAnnotatedBindingBuilder;

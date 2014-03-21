@@ -44,7 +44,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
         // a library which also uses roboguice, we'll need to put the library's
         // AnnotationDatabase somewhere else.  This can be specified using
         // the @AnnotationDatabasePackage package-level annotation
-        //noinspection unchecked
+        // noinspection unchecked
         final Set<PackageElement> packages = (Set<PackageElement>) roundEnv.getElementsAnnotatedWith(AnnotationDatabasePackage.class);
         final String packageName = packages!=null && packages.size()>0 ? packages.iterator().next().getQualifiedName().toString() : null;
 

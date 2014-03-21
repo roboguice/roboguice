@@ -10,13 +10,17 @@ import android.preference.Preference;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.google.inject.*;
+
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.util.ActivityController;
+
 import roboguice.RoboGuice;
 import roboguice.activity.ActivityInjectionTest.ModuleA.A;
 import roboguice.activity.ActivityInjectionTest.ModuleB.B;
@@ -41,6 +45,7 @@ public class ActivityInjectionTest {
 
     @Before
     public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
         RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         activity = Robolectric.buildActivity(DummyActivity.class).withIntent(new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober")).create().get();
     }
@@ -141,7 +146,7 @@ public class ActivityInjectionTest {
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
             final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(Key.get(new TypeLiteral<ContextScopedProvider<Context>>(){}));
-            
+
             @Override
             public Context call() throws Exception {
                 return contextProvider.get(f);
@@ -162,7 +167,7 @@ public class ActivityInjectionTest {
         @InjectResource(R.string.cancel) protected String cancel;
         @InjectExtra("foobar") protected String foobar;
 
-        
+
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);

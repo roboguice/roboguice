@@ -23,6 +23,8 @@ import android.graphics.drawable.Drawable;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.google.inject.Guice;
+import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
@@ -45,20 +47,14 @@ public class ResourceListener implements TypeListener {
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
         
-        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c = c.getSuperclass() )
+        HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
+        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) 
             for (Field field : c.getDeclaredFields())
                 if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
                     typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
 
     }
 
-
-
-
-
-
-
-    
     protected static class ResourceMembersInjector<T> implements MembersInjector<T> {
 
         protected Field field;

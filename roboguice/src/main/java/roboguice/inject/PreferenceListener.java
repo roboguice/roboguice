@@ -19,6 +19,8 @@ import android.app.Application;
 import android.content.Context;
 import android.preference.PreferenceActivity;
 
+import com.google.inject.Guice;
+import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
@@ -48,7 +50,8 @@ public class PreferenceListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
+        HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
+        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) 
             for (Field field : c.getDeclaredFields())
                 if ( field.isAnnotationPresent(InjectPreference.class))
                     if( Modifier.isStatic(field.getModifiers()) )

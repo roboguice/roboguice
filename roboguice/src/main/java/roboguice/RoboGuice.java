@@ -1,24 +1,34 @@
 package roboguice;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.WeakHashMap;
+
+import roboguice.config.AnnotationDatabaseFinder;
+import roboguice.config.DefaultRoboModule;
+import roboguice.config.RoboGuiceHierarchyTraversalFilter;
+import roboguice.event.EventManager;
+import roboguice.inject.ContextScope;
+import roboguice.inject.ContextScopedRoboInjector;
+import roboguice.inject.ResourceListener;
+import roboguice.inject.RoboInjector;
+import roboguice.inject.ViewListener;
+import roboguice.util.Strings;
+
+import com.google.inject.Guice;
+import com.google.inject.HierarchyTraversalFilter;
+import com.google.inject.HierarchyTraversalFilterFactory;
+import com.google.inject.Injector;
+import com.google.inject.Module;
+import com.google.inject.Stage;
+import com.google.inject.internal.util.Stopwatch;
+
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
-import com.google.inject.*;
-import com.google.inject.internal.util.Stopwatch;
-
-import roboguice.config.AnnotationDatabaseFinder;
-import roboguice.config.DefaultRoboModule;
-import roboguice.event.EventManager;
-import roboguice.inject.*;
-import roboguice.util.Strings;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.WeakHashMap;
 
 /**
  *
@@ -41,6 +51,9 @@ public class RoboGuice {
 
     private static AnnotationDatabaseFinder annotationDatabaseFinder;
     private static Set<String> classesContainingInjectionPoints;
+    
+    /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default.*/
+    public static boolean useAnnotationDatabases = true; 
 
     private RoboGuice() {
     }
@@ -57,7 +70,7 @@ public class RoboGuice {
             rtrn = injectors.get(application);
             if( rtrn!=null )
                 return rtrn;
-            
+
             return setBaseApplicationInjector(application, DEFAULT_STAGE);
         }
     }
@@ -94,22 +107,26 @@ public class RoboGuice {
                 if( additionalAnnotationDatabasePackages!=null)
                     packages.addAll(Arrays.asList(additionalAnnotationDatabasePackages));
 
-                annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
-                classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
+                if( useAnnotationDatabases ) {
+                    try {
+                        annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
+                        classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
 
-                if(classesContainingInjectionPoints.isEmpty())
-                    throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
-                Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
-                    @Override
-                    public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                        return new HierarchyTraversalFilter() {
+                        if(classesContainingInjectionPoints.isEmpty())
+                            throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
+                        Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                             @Override
-                            public boolean isWorthScanning(Class<?> c) {
-                                return c != null && classesContainingInjectionPoints.contains(c.getName());
+                            public HierarchyTraversalFilter createHierarchyTraversalFilter() {
+                                return new AnnotatedRoboGuiceHierarchyTraversalFilter();
                             }
-                        };
+                        });
+                    } catch( Exception ex ) {
+                        ex.printStackTrace();
                     }
-                });
+                } else {
+                    Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory());
+
+                }
 
                 final Injector rtrn = Guice.createInjector(stage, modules);
                 injectors.put(application,rtrn);
@@ -177,7 +194,7 @@ public class RoboGuice {
     }
 
 
-    
+
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
         return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
     }
@@ -221,8 +238,31 @@ public class RoboGuice {
         //noinspection SuspiciousMethodCalls
         injectors.remove(context); // it's okay, Context is an Application
     }
-    
-    
+
+    /**
+     * Once a class is detected has having injection points,
+     * its super classes are kept as long as they satisfy the filtering operated
+     * by {@link RoboGuiceHierarchyTraversalFilter}. Otherwise, the class will be rejected
+     * by the filter.
+     * @author SNI
+     */
+    private static final class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarchyTraversalFilter {
+        private boolean hasHadInjectionPoints;
+
+        @Override
+        public boolean isWorthScanning(Class<?> c) {
+            boolean hasInjectionPoints = c != null && classesContainingInjectionPoints.contains(c.getName());
+            if( hasInjectionPoints ) {
+                hasHadInjectionPoints = true;
+                return true;
+            } else if( hasHadInjectionPoints ) {
+                return super.isWorthScanning(c);
+            }
+            return false;
+        }
+    }
+
+
     public static class util {
         private util() {}
 

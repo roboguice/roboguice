@@ -120,7 +120,7 @@ public class ResourceListener implements TypeListener {
 
         protected int getId(Resources resources, InjectResource annotation) {
             int id = annotation.value();
-            return id>=0 ? id : resources.getIdentifier(annotation.name(),null,null);
+            return id>=0 ? id : resources.getIdentifier(annotation.name(),null,application.getPackageName());
         }
     }
 }

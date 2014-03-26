@@ -1,8 +1,11 @@
 package roboguice.config;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
@@ -27,13 +30,14 @@ import roboguice.service.RoboService;
 import roboguice.util.Ln;
 import roboguice.util.LnImpl;
 import roboguice.util.LnInterface;
-import roboguice.util.Strings;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import com.google.inject.binder.AnnotatedBindingBuilder;
 import com.google.inject.matcher.Matchers;
-import com.google.inject.name.Names;
+import com.google.inject.name.Named;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -62,6 +66,7 @@ import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -87,7 +92,10 @@ public class DefaultRoboModule extends AbstractModule {
 
     @SuppressWarnings("rawtypes")
 	protected static final Class accountManagerClass;
-    
+
+    @SuppressWarnings("rawtypes")
+    private static Map<Class, String> mapSystemSericeClassToName = new HashMap<Class, String>();
+
     private AnnotationDatabaseFinder annotationDatabaseFinder;
     private Set<String> injectableClasses;
 
@@ -97,6 +105,21 @@ public class DefaultRoboModule extends AbstractModule {
             c = Class.forName("android.accounts.AccountManager");
         } catch( Throwable ignored ) {}
         accountManagerClass = c;
+        
+        mapSystemSericeClassToName.put(LocationManager.class, Context.LOCATION_SERVICE);
+        mapSystemSericeClassToName.put(WindowManager.class, Context.WINDOW_SERVICE);
+        mapSystemSericeClassToName.put(ActivityManager.class, Context.ACTIVITY_SERVICE);
+        mapSystemSericeClassToName.put(PowerManager.class, Context.POWER_SERVICE);
+        mapSystemSericeClassToName.put(AlarmManager.class, Context.ALARM_SERVICE);
+        mapSystemSericeClassToName.put(NotificationManager.class, Context.NOTIFICATION_SERVICE);
+        mapSystemSericeClassToName.put(KeyguardManager.class, Context.KEYGUARD_SERVICE);
+        mapSystemSericeClassToName.put(Vibrator.class, Context.VIBRATOR_SERVICE);
+        mapSystemSericeClassToName.put(ConnectivityManager.class, Context.CONNECTIVITY_SERVICE);
+        mapSystemSericeClassToName.put(WifiManager.class, Context.WIFI_SERVICE);
+        mapSystemSericeClassToName.put(InputMethodManager.class, Context.INPUT_METHOD_SERVICE);
+        mapSystemSericeClassToName.put(SensorManager.class, Context.SENSOR_SERVICE);
+        mapSystemSericeClassToName.put(TelephonyManager.class, Context.TELEPHONY_SERVICE);
+        mapSystemSericeClassToName.put(AudioManager.class, Context.ACCESSIBILITY_SERVICE);
     }
 
     protected Application application;
@@ -108,6 +131,7 @@ public class DefaultRoboModule extends AbstractModule {
     private AnnotatedBindingBuilder noOpAnnotatedBindingBuilder = new NoOpAnnotatedBindingBuilder();
 
 
+
     public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
         this.application = application;
         this.contextScope = contextScope;
@@ -115,9 +139,11 @@ public class DefaultRoboModule extends AbstractModule {
         this.resourceListener = resourceListener;
         try {
             annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
+            RoboGuice.setAnnotationDatabaseFinder(annotationDatabaseFinder);
             injectableClasses = annotationDatabaseFinder.getInjectedClasses();
         } catch(Exception ex ) {
             injectableClasses = new HashSet<String>();
+            ex.printStackTrace();
         }
     }
 
@@ -132,29 +158,9 @@ public class DefaultRoboModule extends AbstractModule {
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
 
-        // Package Info
-        try {
-            final PackageInfo info = application.getPackageManager().getPackageInfo(application.getPackageName(),0);
-            bind(PackageInfo.class).toInstance(info);
-        } catch( PackageManager.NameNotFoundException e ) {
-            throw new RuntimeException(e);
-        }
-
-        String androidId = null;
-        final ContentResolver contentResolver = application.getContentResolver();
-        try {
-            androidId = Secure.getString(contentResolver, Secure.ANDROID_ID);
-        } catch( RuntimeException e) {
-            // ignore Stub! errors for Secure.getString() when mocking in test cases since there's no way to mock static methods
-        }
-
-        if(Strings.notEmpty(androidId))
-            bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
-
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
         bind(PreferenceListener.class).toInstance(preferenceListener);
-        bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
 
         // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
@@ -175,21 +181,21 @@ public class DefaultRoboModule extends AbstractModule {
         bind(Handler.class).toProvider(HandlerProvider.class);
 
         // System Services
-        bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(application, Context.LOCATION_SERVICE));
-        bind(WindowManager.class).toProvider(new SystemServiceProvider<WindowManager>(application, Context.WINDOW_SERVICE));
-        bind(ActivityManager.class).toProvider(new SystemServiceProvider<ActivityManager>(application, Context.ACTIVITY_SERVICE));
-        bind(PowerManager.class).toProvider(new SystemServiceProvider<PowerManager>(application, Context.POWER_SERVICE));
-        bind(AlarmManager.class).toProvider(new SystemServiceProvider<AlarmManager>(application, Context.ALARM_SERVICE));
-        bind(NotificationManager.class).toProvider(new SystemServiceProvider<NotificationManager>(application, Context.NOTIFICATION_SERVICE));
-        bind(KeyguardManager.class).toProvider(new SystemServiceProvider<KeyguardManager>(application, Context.KEYGUARD_SERVICE));
-        bind(Vibrator.class).toProvider(new SystemServiceProvider<Vibrator>(application, Context.VIBRATOR_SERVICE));
-        bind(ConnectivityManager.class).toProvider(new SystemServiceProvider<ConnectivityManager>(application, Context.CONNECTIVITY_SERVICE));
-        bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(application, Context.WIFI_SERVICE));
-        bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(application, Context.INPUT_METHOD_SERVICE));
-        bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(application, Context.SENSOR_SERVICE));
-        bind(TelephonyManager.class).toProvider( new SystemServiceProvider<TelephonyManager>(application, Context.TELEPHONY_SERVICE));
-        bind(AudioManager.class).toProvider( new SystemServiceProvider<AudioManager>(application, Context.AUDIO_SERVICE));
-
+        bindSystemService(LocationManager.class);
+        bindSystemService(WindowManager.class);
+        bindSystemService(ActivityManager.class);
+        bindSystemService(PowerManager.class);
+        bindSystemService(AlarmManager.class);
+        bindSystemService(NotificationManager.class);
+        bindSystemService(KeyguardManager.class);
+        bindSystemService(Vibrator.class);
+        bindSystemService(ConnectivityManager.class);
+        bindSystemService(WifiManager.class);
+        bindSystemService(InputMethodManager.class);
+        bindSystemService(SensorManager.class);
+        bindSystemService(TelephonyManager.class);
+        bindSystemService(AudioManager.class);
+        
         // System Services that must be scoped to current context
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
         bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
@@ -234,5 +240,50 @@ public class DefaultRoboModule extends AbstractModule {
             bind(accountManagerClass).toProvider(AccountManagerProvider.class);
         }
 	}
+    
+
+
+    @Provides
+    @Singleton
+    public PackageInfo providesPackageInfo() {
+        try {
+            return application.getPackageManager().getPackageInfo(application.getPackageName(),0);
+        } catch( PackageManager.NameNotFoundException e ) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Provides
+    @Named(Settings.Secure.ANDROID_ID)
+    public String providesAndroidId() {
+        String androidId = null;
+        final ContentResolver contentResolver = application.getContentResolver();
+        try {
+            androidId = Secure.getString(contentResolver, Secure.ANDROID_ID);
+        } catch( RuntimeException e) {
+            // ignore Stub! errors for Secure.getString() when mocking in test cases since there's no way to mock static methods
+            Log.e(DefaultRoboModule.class.getName(), "Impossible to get the android device Id. This may fail 'normally' when testing.", e);
+        }
+
+        if(!androidId.equals("")) {
+            return androidId;
+        } else {
+            throw new RuntimeException("No Android Id.");
+        }
+    }
+
+    @Provides
+    @Named(GLOBAL_EVENT_MANAGER_NAME)
+    @Singleton
+    public EventManager providesGlobalEventManager() {
+        return new EventManager();
+    }
+
+    private <T> void bindSystemService(Class<T> c) {
+        if( injectableClasses.isEmpty() || injectableClasses.contains(c.getName()) ) {
+            bind(c).toProvider(new SystemServiceProvider<T>(application, mapSystemSericeClassToName.get(c) ));
+        }
+
+    }
 
 }

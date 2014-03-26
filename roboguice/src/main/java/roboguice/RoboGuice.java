@@ -50,7 +50,7 @@ public class RoboGuice {
     protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
     protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
 
-    
+
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default.*/
     public static boolean useAnnotationDatabases = true;
 
@@ -67,13 +67,11 @@ public class RoboGuice {
         if( rtrn!=null )
             return rtrn;
 
-        synchronized (RoboGuice.class) {
-            rtrn = injectors.get(application);
-            if( rtrn!=null )
-                return rtrn;
+        rtrn = injectors.get(application);
+        if( rtrn!=null )
+            return rtrn;
 
-            return setBaseApplicationInjector(application, DEFAULT_STAGE);
-        }
+        return setBaseApplicationInjector(application, DEFAULT_STAGE);
     }
 
     public static Injector setBaseApplicationInjector(final Application application, Stage stage, Module... modules ) {
@@ -110,7 +108,6 @@ public class RoboGuice {
 
                 if( useAnnotationDatabases ) {
                     try {
-                        annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
                         final Set<String> classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
 
                         Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
@@ -147,38 +144,36 @@ public class RoboGuice {
      */
     public static Injector setBaseApplicationInjector(Application application, Stage stage) {
 
-        synchronized (RoboGuice.class) {
 
-            final ArrayList<Module> modules = new ArrayList<Module>();
+        final ArrayList<Module> modules = new ArrayList<Module>();
 
-            try {
-                final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
-                final Bundle bundle = ai.metaData;
-                final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
-                final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
-                final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
+        try {
+            final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
+            final Bundle bundle = ai.metaData;
+            final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
+            final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
+            final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
 
-                modules.add(defaultRoboModule);
+            modules.add(defaultRoboModule);
 
-                for (String name : moduleNames) {
-                    if( Strings.notEmpty(name)) {
-                        final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                        try {
-                            modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
-                        } catch( NoSuchMethodException ignored ) {
-                            modules.add( clazz.newInstance() );
-                        }
+            for (String name : moduleNames) {
+                if( Strings.notEmpty(name)) {
+                    final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
+                    try {
+                        modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
+                    } catch( NoSuchMethodException ignored ) {
+                        modules.add( clazz.newInstance() );
                     }
                 }
-
-            } catch (Exception e) {
-                throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
             }
 
-            final Injector rtrn = setBaseApplicationInjector(application, stage, null, modules.toArray(new Module[modules.size()]));
-            injectors.put(application,rtrn);
-            return rtrn;
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
         }
+
+        final Injector rtrn = setBaseApplicationInjector(application, stage, null, modules.toArray(new Module[modules.size()]));
+        injectors.put(application,rtrn);
+        return rtrn;
 
     }
 
@@ -234,7 +229,11 @@ public class RoboGuice {
         //noinspection SuspiciousMethodCalls
         injectors.remove(context); // it's okay, Context is an Application
     }
-    
+
+    public static void setAnnotationDatabaseFinder(AnnotationDatabaseFinder annotationDatabaseFinder) {
+        RoboGuice.annotationDatabaseFinder = annotationDatabaseFinder;
+    }
+
     public static class util {
         private util() {}
 
@@ -248,4 +247,5 @@ public class RoboGuice {
             viewListeners.clear();
         }
     }
+
 }

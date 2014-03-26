@@ -24,24 +24,28 @@ import java.lang.reflect.Method;
 public class ObservesTypeListener implements TypeListener {
     protected Provider<EventManager> eventManagerProvider;
     protected EventListenerThreadingDecorator observerThreadingDecorator;
+    private HierarchyTraversalFilter filter;
 
     public ObservesTypeListener(Provider<EventManager> eventManagerProvider, EventListenerThreadingDecorator observerThreadingDecorator) {
         this.eventManagerProvider = eventManagerProvider;
         this.observerThreadingDecorator = observerThreadingDecorator;
+        filter = Guice.createHierarchyTraversalFilter();
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
-        HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
-        for (Class<?> c = iTypeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) {
-            for (Method method : c.getDeclaredMethods())
-                findContextObserver(method, iTypeEncounter);
-
-            for( Class<?> interfaceClass : c.getInterfaces())
-                for (Method method : interfaceClass.getDeclaredMethods())
+        filter.reset();
+        Class<?> c = iTypeLiteral.getRawType();
+        if( filter.isWorthScanning(c))
+            for (; filter.isWorthScanning(c); c = c.getSuperclass()) {
+                for (Method method : c.getDeclaredMethods())
                     findContextObserver(method, iTypeEncounter);
 
-            
-        }
+                for( Class<?> interfaceClass : c.getInterfaces())
+                    for (Method method : interfaceClass.getDeclaredMethods())
+                        findContextObserver(method, iTypeEncounter);
+
+
+            }
     }
 
     protected <I> void findContextObserver(Method method, TypeEncounter<I> iTypeEncounter) {
@@ -95,8 +99,8 @@ public class ObservesTypeListener implements TypeListener {
         protected EventThread threadType;
 
         public ContextObserverMethodInjector(Provider<EventManager> eventManagerProvider,
-                                             EventListenerThreadingDecorator observerThreadingDecorator,  Method method,
-                                             Class<T> event, EventThread threadType) {
+                EventListenerThreadingDecorator observerThreadingDecorator,  Method method,
+                Class<T> event, EventThread threadType) {
             this.observerThreadingDecorator = observerThreadingDecorator;
             this.eventManagerProvider = eventManagerProvider;
             this.method = method;

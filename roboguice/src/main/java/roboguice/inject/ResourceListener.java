@@ -40,18 +40,21 @@ import java.lang.reflect.Modifier;
  */
 public class ResourceListener implements TypeListener {
     protected Application application;
+    private HierarchyTraversalFilter filter;
 
     public ResourceListener(Application application) {
         this.application = application;
+        filter = Guice.createHierarchyTraversalFilter();
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        
-        HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
-        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) 
-            for (Field field : c.getDeclaredFields())
-                if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
-                    typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
+        filter.reset();
+        Class<?> c = typeLiteral.getRawType();
+        if( filter.isWorthScanning(c) ) 
+            for (; filter.isWorthScanning(c); c = c.getSuperclass()) 
+                for (Field field : c.getDeclaredFields())
+                    if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
+                        typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
 
     }
 
@@ -96,7 +99,7 @@ public class ResourceListener implements TypeListener {
                 } else if (Movie.class.isAssignableFrom(t)  ) {
                     value = resources.getMovie(id);
                 }
-                
+
                 if (value == null && Nullable.notNullable(field) ) {
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
                             .getName()));

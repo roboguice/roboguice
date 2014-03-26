@@ -42,61 +42,69 @@ import android.view.View;
 @Singleton
 @SuppressWarnings("unchecked")
 public class ViewListener implements TypeListener {
-       
+
+    private HierarchyTraversalFilter filter;
+
+    public ViewListener() {
+        filter = Guice.createHierarchyTraversalFilter();
+    }
+
     @Override
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
 
-        HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
-        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) 
-            for (Field field : c.getDeclaredFields()) {
-                if (field.isAnnotationPresent(InjectView.class))
-                    if (Modifier.isStatic(field.getModifiers()))
-                        throw new UnsupportedOperationException("Views may not be statically injected");
-                    else if (!View.class.isAssignableFrom(field.getType()))
-                        throw new UnsupportedOperationException("You may only use @InjectView on fields that extend View");
-                    else if (Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
-                    	throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
-                    else {
-                    	final f<?,?> utils = FragmentUtil.hasSupport 
-                    			&& (FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass()) 
-                    					|| FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getDeclaringClass()))
-                    					? FragmentUtil.supportFrag : FragmentUtil.nativeFrag;
+        filter.reset();
+        Class<?> c = typeLiteral.getRawType();
+        if( filter.isWorthScanning(c) ) 
+            for (; filter.isWorthScanning(c); c = c.getSuperclass()) 
+                for (Field field : c.getDeclaredFields()) {
+                    if (field.isAnnotationPresent(InjectView.class))
+                        if (Modifier.isStatic(field.getModifiers()))
+                            throw new UnsupportedOperationException("Views may not be statically injected");
+                        else if (!View.class.isAssignableFrom(field.getType()))
+                            throw new UnsupportedOperationException("You may only use @InjectView on fields that extend View");
+                        else if (Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
+                            throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
+                        else {
+                            final f<?,?> utils = FragmentUtil.hasSupport 
+                                    && (FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass()) 
+                                            || FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getDeclaringClass()))
+                                            ? FragmentUtil.supportFrag : FragmentUtil.nativeFrag;
 
-                    	typeEncounter.register(new ViewMembersInjector<I>(
-                    			field, field.getAnnotation(InjectView.class),
-                    			typeEncounter, utils));
-                    }
+                            typeEncounter.register(new ViewMembersInjector<I>(
+                                    field, field.getAnnotation(InjectView.class),
+                                    typeEncounter, utils));
+                        }
 
-                else if (field.isAnnotationPresent(InjectFragment.class))
-                    if (!FragmentUtil.hasNative && !FragmentUtil.hasSupport) {
-                        throw new RuntimeException(new ClassNotFoundException("No fragment classes were available"));
-                    } else if (Modifier.isStatic(field.getModifiers())) {
-                    	throw new UnsupportedOperationException("Fragments may not be statically injected");
+                    else if (field.isAnnotationPresent(InjectFragment.class))
+                        if (!FragmentUtil.hasNative && !FragmentUtil.hasSupport) {
+                            throw new RuntimeException(new ClassNotFoundException("No fragment classes were available"));
+                        } else if (Modifier.isStatic(field.getModifiers())) {
+                            throw new UnsupportedOperationException("Fragments may not be statically injected");
 
-	                } else {
-	                    final boolean assignableFromNative = FragmentUtil.hasNative && FragmentUtil.nativeFrag.fragmentType().isAssignableFrom(field.getType());
-	                    final boolean assignableFromSupport = FragmentUtil.hasSupport && FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getType());
-	                    final boolean isSupportActivity = FragmentUtil.hasSupport && FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass());
-	                    final boolean isNativeActivity = !isSupportActivity && Activity.class.isAssignableFrom(field.getDeclaringClass());
-	
-	                    if ((isNativeActivity && assignableFromNative) || (isSupportActivity && assignableFromSupport)) {
-	                        typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter, isNativeActivity ? FragmentUtil.nativeFrag:FragmentUtil.supportFrag));
-	                    }
-	                    // Error messages - these filters are comprehensive. The
-	                    // final else block will never execute.
-	                    else if (isNativeActivity && !assignableFromNative) {
-	                        throw new UnsupportedOperationException(
-	                                "You may only use @InjectFragment in native activities if fields are descended from type android.app.Fragment");
-	                    } else if (!isSupportActivity && !isNativeActivity) {
-	                        throw new UnsupportedOperationException("You may only use @InjectFragment in Activity contexts");
-	                    } else if (isSupportActivity && !assignableFromSupport) {
-	                        throw new UnsupportedOperationException(
-	                                "You may only use @InjectFragment in support activities if fields are descended from type android.support.v4.app.Fragment");
-	                    } else {
-	                        throw new RuntimeException("This should never happen.");
-	                    }
-	                }
-            }
+                        } else {
+                            final boolean assignableFromNative = FragmentUtil.hasNative && FragmentUtil.nativeFrag.fragmentType().isAssignableFrom(field.getType());
+                            final boolean assignableFromSupport = FragmentUtil.hasSupport && FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getType());
+                            final boolean isSupportActivity = FragmentUtil.hasSupport && FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass());
+                            final boolean isNativeActivity = !isSupportActivity && Activity.class.isAssignableFrom(field.getDeclaringClass());
+
+                            if ((isNativeActivity && assignableFromNative) || (isSupportActivity && assignableFromSupport)) {
+                                typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter, isNativeActivity ? FragmentUtil.nativeFrag:FragmentUtil.supportFrag));
+                            }
+                            // Error messages - these filters are comprehensive. The
+                            // final else block will never execute.
+                            else if (isNativeActivity && !assignableFromNative) {
+                                throw new UnsupportedOperationException(
+                                        "You may only use @InjectFragment in native activities if fields are descended from type android.app.Fragment");
+                            } else if (!isSupportActivity && !isNativeActivity) {
+                                throw new UnsupportedOperationException("You may only use @InjectFragment in Activity contexts");
+                            } else if (isSupportActivity && !assignableFromSupport) {
+                                throw new UnsupportedOperationException(
+                                        "You may only use @InjectFragment in support activities if fields are descended from type android.support.v4.app.Fragment");
+                            } else {
+                                throw new RuntimeException("This should never happen.");
+                            }
+                        }
+                }
     }
 
 
@@ -110,11 +118,11 @@ public class ViewListener implements TypeListener {
         protected Annotation annotation;
         protected WeakReference<T> instanceRef;
         @SuppressWarnings("rawtypes")
-		protected FragmentUtil.f fragUtils;
+        protected FragmentUtil.f fragUtils;
         @SuppressWarnings("rawtypes")
-		protected Provider fragManager;
+        protected Provider fragManager;
         protected Provider<Activity> activityProvider;
-        
+
 
         public ViewMembersInjector(Field field, Annotation annotation, TypeEncounter<T> typeEncounter, FragmentUtil.f<?,?> utils) {
             this.field = field;
@@ -231,12 +239,12 @@ public class ViewListener implements TypeListener {
             try {
                 final InjectFragment injectFragment = (InjectFragment) annotation;
                 final int id = injectFragment.value();
-                
+
                 if( id>=0 )
                     fragment = fragUtils.findFragmentById(fragManager.get(), id);
                 else
                     fragment = fragUtils.findFragmentByTag(fragManager.get(),injectFragment.tag());
-                
+
                 if (fragment == null && Nullable.notNullable(field))
                     throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
 
@@ -252,7 +260,7 @@ public class ViewListener implements TypeListener {
             }
         }
 
-        
+
         protected static void injectViews(Object activityOrFragment) {
             synchronized ( ViewMembersInjector.class ) {
 

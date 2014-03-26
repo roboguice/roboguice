@@ -22,13 +22,18 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
     
     @Override
     public boolean isWorthScanning(Class<?> c) {
-        boolean hasInjectionPoints = c != null && classesContainingInjectionPoints.contains(c.getName());
-        if( hasInjectionPoints ) {
+        if( hasHadInjectionPoints ) {
+            return super.isWorthScanning(c);
+        } else if( c != null && classesContainingInjectionPoints.contains(c.getName()) ) {
             hasHadInjectionPoints = true;
             return true;
-        } else if( hasHadInjectionPoints ) {
-            return super.isWorthScanning(c);
-        }
+        }  
         return false;
     }
+    
+    public void reset( ) {
+        super.reset();
+        hasHadInjectionPoints = false;
+    }
+
 }

@@ -38,21 +38,24 @@ import java.util.Map;
  */
 public class ExtrasListener implements TypeListener {
     protected Provider<Context> contextProvider;
+    private HierarchyTraversalFilter filter;
 
     public ExtrasListener(Provider<Context> contextProvider) {
         this.contextProvider = contextProvider;
+        filter = Guice.createHierarchyTraversalFilter();
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-
-        HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
-        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) 
-            for (Field field : c.getDeclaredFields())
-                if (field.isAnnotationPresent(InjectExtra.class) )
-                    if( Modifier.isStatic(field.getModifiers()) )
-                        throw new UnsupportedOperationException("Extras may not be statically injected");
-                    else
-                        typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
+        filter.reset();
+        Class<?> c = typeLiteral.getRawType();
+        if( filter.isWorthScanning(c))
+            for (; filter.isWorthScanning(c); c = c.getSuperclass()) 
+                for (Field field : c.getDeclaredFields())
+                    if (field.isAnnotationPresent(InjectExtra.class) )
+                        if( Modifier.isStatic(field.getModifiers()) )
+                            throw new UnsupportedOperationException("Extras may not be statically injected");
+                        else
+                            typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
 
 
     }

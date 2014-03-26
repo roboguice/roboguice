@@ -43,4 +43,10 @@ public class RoboGuiceHierarchyTraversalFilter extends HierarchyTraversalFilter 
         }
         return true;
     }
+
+    public void reset( ) {
+        super.reset();
+        isInRoboGuicePackage = false;
+    }
 }
+

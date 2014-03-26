@@ -43,21 +43,26 @@ public class PreferenceListener implements TypeListener {
     protected Application application;
     protected ContextScope scope;
 
+    private HierarchyTraversalFilter filter;
+
     public PreferenceListener(Provider<Context> contextProvider, Application application, ContextScope scope) {
         this.contextProvider = contextProvider;
         this.application = application;
         this.scope = scope;
+        filter = Guice.createHierarchyTraversalFilter();
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
-        for (Class<?> c = typeLiteral.getRawType(); filter.isWorthScanning(c); c = c.getSuperclass()) 
-            for (Field field : c.getDeclaredFields())
-                if ( field.isAnnotationPresent(InjectPreference.class))
-                    if( Modifier.isStatic(field.getModifiers()) )
-                        throw new UnsupportedOperationException("Preferences may not be statically injected");
-                    else
-                        typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
+        filter.reset();
+        Class<?> c = typeLiteral.getRawType();
+        if( filter.isWorthScanning(c) ) 
+            for (; filter.isWorthScanning(c); c = c.getSuperclass()) 
+                for (Field field : c.getDeclaredFields())
+                    if ( field.isAnnotationPresent(InjectPreference.class))
+                        if( Modifier.isStatic(field.getModifiers()) )
+                            throw new UnsupportedOperationException("Preferences may not be statically injected");
+                        else
+                            typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
 
     }
 

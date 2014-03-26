@@ -10,7 +10,6 @@ import com.google.inject.Inject;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Manager class handling the following:
@@ -41,7 +40,7 @@ public class EventManager {
     public <T> void registerObserver( Class<T> event, EventListener listener ) {
         Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) {
-            observers = new CopyOnWriteArraySet<EventListener<?>>();
+            observers = Collections.synchronizedSet(new LinkedHashSet<EventListener<?>>());
             registrations.put(event, observers);
         }
 
@@ -74,11 +73,13 @@ public class EventManager {
 
         // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-            final EventListener registeredListener = iterator.next();
-            if (registeredListener == listener) {
-                iterator.remove();
-                break;
+        synchronized (observers) {
+            for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
+                final EventListener registeredListener = iterator.next();
+                if (registeredListener == listener) {
+                    iterator.remove();
+                    break;
+                }
             }
         }
     }
@@ -96,13 +97,15 @@ public class EventManager {
 
         // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-            final EventListener listener = iterator.next();
-            if( listener instanceof ObserverMethodListener ) {
-                final ObserverMethodListener observer = ((ObserverMethodListener)listener);
-                if (observer.getInstance() == instance) {
-                    iterator.remove();
-                    break;
+        synchronized (observers) {
+            for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
+                final EventListener listener = iterator.next();
+                if( listener instanceof ObserverMethodListener ) {
+                    final ObserverMethodListener observer = ((ObserverMethodListener)listener);
+                    if (observer.getInstance() == instance) {
+                        iterator.remove();
+                        break;
+                    }
                 }
             }
         }
@@ -119,10 +122,20 @@ public class EventManager {
         final Set<EventListener<?>> observers = registrations.get(event.getClass());
         if (observers == null) return;
 
-        for (EventListener observer : observers)
+        for (EventListener observer : copyObservers(observers))
             //noinspection unchecked
             observer.onEvent(event);
+
     }
+
+    protected Set<EventListener<?>> copyObservers(Set<EventListener<?>> observers) {
+        // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (observers) {
+            return new LinkedHashSet<EventListener<?>>(observers);
+        }
+    }
+
 
     public void destroy() {
         for( Entry<Class<?>, Set<EventListener<?>>> e : registrations.entrySet() )

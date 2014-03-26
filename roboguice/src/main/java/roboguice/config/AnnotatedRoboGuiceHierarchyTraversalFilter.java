@@ -1,6 +1,8 @@
 package roboguice.config;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map.Entry;
 
 /**
  * Once a class is detected has having injection points,
@@ -11,23 +13,39 @@ import java.util.Set;
  */
 public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarchyTraversalFilter {
     private boolean hasHadInjectionPoints;
-    private static Set<String> classesContainingInjectionPoints;
+    private static HashMap<String, HashSet<String>> mapAnnotationToclassesContainingInjectionPoints;
+    private static HashSet<String> classesContainingInjectionPointsSet = new HashSet<String>();
 
-    public  AnnotatedRoboGuiceHierarchyTraversalFilter(Set<String> classesContainingInjectionPoints) {
-        if(classesContainingInjectionPoints.isEmpty())
+    public  AnnotatedRoboGuiceHierarchyTraversalFilter(HashMap<String, HashSet<String>> mapAnnotationToclassesContainingInjectionPoints) {
+        if(mapAnnotationToclassesContainingInjectionPoints.isEmpty())
             throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
 
-        AnnotatedRoboGuiceHierarchyTraversalFilter.classesContainingInjectionPoints = classesContainingInjectionPoints;
+        AnnotatedRoboGuiceHierarchyTraversalFilter.mapAnnotationToclassesContainingInjectionPoints = mapAnnotationToclassesContainingInjectionPoints;
+        for( Entry<String, HashSet<String>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToclassesContainingInjectionPoints.entrySet() ) {
+            classesContainingInjectionPointsSet.addAll(entryAnnotationToclassesContainingInjectionPoints.getValue());
+        }
     }
     
     @Override
     public boolean isWorthScanning(Class<?> c) {
         if( hasHadInjectionPoints ) {
             return super.isWorthScanning(c);
-        } else if( c != null && classesContainingInjectionPoints.contains(c.getName()) ) {
+        } else if( c != null && classesContainingInjectionPointsSet.contains(c.getName()) ) {
             hasHadInjectionPoints = true;
             return true;
         }  
+        return false;
+    }
+    
+    @Override
+    public boolean isWorthScanning(String annotationClassName, Class<?> c) {
+        HashSet<String> classesContainingInjectionPointsForAnnotation;
+        if( hasHadInjectionPoints ) {
+            return super.isWorthScanning(c);
+        } else if( c != null && (classesContainingInjectionPointsForAnnotation = mapAnnotationToclassesContainingInjectionPoints.get(annotationClassName)) != null && classesContainingInjectionPointsForAnnotation.contains(c.getName()) ) {
+            hasHadInjectionPoints = true;
+            return true;
+        } else 
         return false;
     }
     

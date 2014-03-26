@@ -45,17 +45,17 @@ public class ViewListener implements TypeListener {
 
     private HierarchyTraversalFilter filter;
 
-    public ViewListener() {
-        filter = Guice.createHierarchyTraversalFilter();
-    }
-
     @Override
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
 
-        filter.reset();
+        if( filter == null ) {
+            filter = Guice.createHierarchyTraversalFilter();
+        } else {
+            filter.reset();
+        }
         Class<?> c = typeLiteral.getRawType();
-        if( filter.isWorthScanning(c) ) 
-            for (; filter.isWorthScanning(c); c = c.getSuperclass()) 
+        if( isWorthScanning(c)) 
+            for (; isWorthScanning(c); c = c.getSuperclass()) { 
                 for (Field field : c.getDeclaredFields()) {
                     if (field.isAnnotationPresent(InjectView.class))
                         if (Modifier.isStatic(field.getModifiers()))
@@ -105,6 +105,12 @@ public class ViewListener implements TypeListener {
                             }
                         }
                 }
+            }
+    }
+
+
+    private boolean isWorthScanning(Class<?> c) {
+        return filter.isWorthScanning(InjectView.class.getName(), c) || filter.isWorthScanning(InjectFragment.class.getName(), c);
     }
 
 

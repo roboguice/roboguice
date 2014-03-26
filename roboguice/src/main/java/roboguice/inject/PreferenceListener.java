@@ -49,14 +49,17 @@ public class PreferenceListener implements TypeListener {
         this.contextProvider = contextProvider;
         this.application = application;
         this.scope = scope;
-        filter = Guice.createHierarchyTraversalFilter();
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        filter.reset();
+        if( filter == null ) {
+            filter = Guice.createHierarchyTraversalFilter();
+        } else {
+            filter.reset();
+        }
         Class<?> c = typeLiteral.getRawType();
-        if( filter.isWorthScanning(c) ) 
-            for (; filter.isWorthScanning(c); c = c.getSuperclass()) 
+        if( isWorthScanning(c) ) 
+            for (; isWorthScanning(c); c = c.getSuperclass()) 
                 for (Field field : c.getDeclaredFields())
                     if ( field.isAnnotationPresent(InjectPreference.class))
                         if( Modifier.isStatic(field.getModifiers()) )
@@ -64,6 +67,10 @@ public class PreferenceListener implements TypeListener {
                         else
                             typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
 
+    }
+
+    private boolean isWorthScanning(Class<?> c) {
+        return filter.isWorthScanning(InjectPreference.class.getName(), c);
     }
 
 

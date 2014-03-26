@@ -44,18 +44,25 @@ public class ResourceListener implements TypeListener {
 
     public ResourceListener(Application application) {
         this.application = application;
-        filter = Guice.createHierarchyTraversalFilter();
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        filter.reset();
+        if( filter == null ) {
+            filter = Guice.createHierarchyTraversalFilter();
+        } else {
+            filter.reset();
+        }
         Class<?> c = typeLiteral.getRawType();
-        if( filter.isWorthScanning(c) ) 
-            for (; filter.isWorthScanning(c); c = c.getSuperclass()) 
+        if( isWorthScanning(c) ) 
+            for (; isWorthScanning(c); c = c.getSuperclass()) 
                 for (Field field : c.getDeclaredFields())
                     if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
                         typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
 
+    }
+
+    private boolean isWorthScanning(Class<?> c) {
+        return filter.isWorthScanning(InjectResource.class.getName(),c);
     }
 
     protected static class ResourceMembersInjector<T> implements MembersInjector<T> {

@@ -2,6 +2,8 @@ package roboguice;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -108,7 +110,7 @@ public class RoboGuice {
 
                 if( useAnnotationDatabases ) {
                     try {
-                        final Set<String> classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
+                        final HashMap<String, HashSet<String>> classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
 
                         Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                             @Override

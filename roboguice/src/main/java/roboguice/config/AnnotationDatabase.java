@@ -1,5 +1,6 @@
 package roboguice.config;
 
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class AnnotationDatabase {
@@ -7,7 +8,7 @@ public abstract class AnnotationDatabase {
     protected AnnotationDatabase() {}
 
     //TODO rename methods
-    abstract protected List<String> getClassesContainingInjectionPoints();
+    abstract protected HashMap<String,List<String>> getClassesContainingInjectionPoints();
     abstract protected List<String> getInjectedClasses();
 
 

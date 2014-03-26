@@ -2,6 +2,8 @@ package roboguice.annotationprocessing;
 
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,11 +27,13 @@ import javax.tools.JavaFileObject;
  * An annotation processor that detects classes that need to receive injections.
  * @author MikeBurton
  */
-@SupportedAnnotationTypes({"com.google.inject.Inject", "com.google.inject.Provides", "javax.inject.Inject", "roboguice.inject.InjectView", "roboguice.inject.InjectResource", "roboguice.inject.InjectPreference", "roboguice.inject.InjectExtra", "roboguice.inject.InjectFragment"})
+@SupportedAnnotationTypes({"com.google.inject.Inject", "com.google.inject.Provides", "javax.inject.Inject", "roboguice.inject.InjectView", "roboguice.inject.InjectResource", "roboguice.inject.InjectPreference", "roboguice.inject.InjectExtra", "roboguice.inject.InjectFragment", "roboguice.event.Observes"})
 @SupportedSourceVersion(SourceVersion.RELEASE_6)
 public class ClassesRequiringScanningProcessor extends AbstractProcessor {
 
     private AnnotationDatabaseGenerator annotationDatabaseGenerator = new AnnotationDatabaseGenerator();
+    private HashMap<String, HashSet<String> > classesRequiringScanning;
+    private HashSet<String> injectedClasses;
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
@@ -49,13 +53,27 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
         final String packageName = packages!=null && packages.size()>0 ? packages.iterator().next().getQualifiedName().toString() : null;
 
 
-        final HashSet<String> classesRequiringScanning = new HashSet<String>();
-        final HashSet<String> injectedClasses = new HashSet<String>();
+        classesRequiringScanning = new HashMap<String, HashSet<String> >();
+        injectedClasses = new HashSet<String>();
 
         for( TypeElement annotation : annotations ) {
+            String annotationClassName = annotation.getQualifiedName().toString();
             for( Element injectionPoint : roundEnv.getElementsAnnotatedWith(annotation)) {
                 // Get the enclosing class for each annotated method, constructor, or field.
-                classesRequiringScanning.add( ((TypeElement) injectionPoint.getEnclosingElement()).getQualifiedName().toString() );
+                //might need some looping for @Observes as the enclosing element is a method
+                Element enclosing = injectionPoint;
+                while( ! (enclosing.getEnclosingElement() instanceof TypeElement) ) {
+                    enclosing = enclosing.getEnclosingElement();
+                }
+                TypeElement typeElementRequiringScanning = (TypeElement) enclosing.getEnclosingElement();
+                String typeElementName = typeElementRequiringScanning.getQualifiedName().toString();
+                
+                HashSet<String> classesRequiringScanningForAnnotation = classesRequiringScanning.get( annotationClassName );
+                if( classesRequiringScanningForAnnotation == null ) {
+                    classesRequiringScanningForAnnotation = new HashSet<String>();
+                }
+                classesRequiringScanningForAnnotation.add(typeElementName);
+                classesRequiringScanning.put(annotationClassName, classesRequiringScanningForAnnotation);
 
                 // Get the injected field types
                 if( injectionPoint instanceof VariableElement ) {

@@ -42,14 +42,17 @@ public class ExtrasListener implements TypeListener {
 
     public ExtrasListener(Provider<Context> contextProvider) {
         this.contextProvider = contextProvider;
-        filter = Guice.createHierarchyTraversalFilter();
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        filter.reset();
+        if( filter == null ) {
+            filter = Guice.createHierarchyTraversalFilter();
+        } else {
+            filter.reset();
+        }
         Class<?> c = typeLiteral.getRawType();
-        if( filter.isWorthScanning(c))
-            for (; filter.isWorthScanning(c); c = c.getSuperclass()) 
+        if( isWorthScanning(c))
+            for (; isWorthScanning(c); c = c.getSuperclass()) 
                 for (Field field : c.getDeclaredFields())
                     if (field.isAnnotationPresent(InjectExtra.class) )
                         if( Modifier.isStatic(field.getModifiers()) )
@@ -58,6 +61,10 @@ public class ExtrasListener implements TypeListener {
                             typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
 
 
+    }
+
+    private boolean isWorthScanning(Class<?> c) {
+        return filter.isWorthScanning(InjectExtra.class.getName(), c);
     }
 
 

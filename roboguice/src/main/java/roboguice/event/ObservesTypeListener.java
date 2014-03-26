@@ -29,14 +29,17 @@ public class ObservesTypeListener implements TypeListener {
     public ObservesTypeListener(Provider<EventManager> eventManagerProvider, EventListenerThreadingDecorator observerThreadingDecorator) {
         this.eventManagerProvider = eventManagerProvider;
         this.observerThreadingDecorator = observerThreadingDecorator;
-        filter = Guice.createHierarchyTraversalFilter();
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
-        filter.reset();
+        if( filter == null ) {
+            filter = Guice.createHierarchyTraversalFilter();
+        } else {
+            filter.reset();
+        }
         Class<?> c = iTypeLiteral.getRawType();
-        if( filter.isWorthScanning(c))
-            for (; filter.isWorthScanning(c); c = c.getSuperclass()) {
+        if( isWorthScanning(c))
+            for (; isWorthScanning(c); c = c.getSuperclass()) {
                 for (Method method : c.getDeclaredMethods())
                     findContextObserver(method, iTypeEncounter);
 
@@ -46,6 +49,10 @@ public class ObservesTypeListener implements TypeListener {
 
 
             }
+    }
+
+    private boolean isWorthScanning(Class<?> c) {
+        return filter.isWorthScanning(Observes.class.getName(), c);
     }
 
     protected <I> void findContextObserver(Method method, TypeEncounter<I> iTypeEncounter) {

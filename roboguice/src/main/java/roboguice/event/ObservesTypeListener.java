@@ -38,17 +38,17 @@ public class ObservesTypeListener implements TypeListener {
             filter.reset();
         }
         Class<?> c = iTypeLiteral.getRawType();
-        if( isWorthScanning(c))
-            for (; isWorthScanning(c); c = c.getSuperclass()) {
-                for (Method method : c.getDeclaredMethods())
+        while( isWorthScanning(c)) {
+            for (Method method : c.getDeclaredMethods())
+                findContextObserver(method, iTypeEncounter);
+
+            for( Class<?> interfaceClass : c.getInterfaces())
+                for (Method method : interfaceClass.getDeclaredMethods())
                     findContextObserver(method, iTypeEncounter);
 
-                for( Class<?> interfaceClass : c.getInterfaces())
-                    for (Method method : interfaceClass.getDeclaredMethods())
-                        findContextObserver(method, iTypeEncounter);
 
-
-            }
+            c = c.getSuperclass();
+        }
     }
 
     private boolean isWorthScanning(Class<?> c) {

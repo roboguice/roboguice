@@ -58,15 +58,16 @@ public class PreferenceListener implements TypeListener {
             filter.reset();
         }
         Class<?> c = typeLiteral.getRawType();
-        if( isWorthScanning(c) ) 
-            for (; isWorthScanning(c); c = c.getSuperclass()) 
-                for (Field field : c.getDeclaredFields())
-                    if ( field.isAnnotationPresent(InjectPreference.class))
-                        if( Modifier.isStatic(field.getModifiers()) )
-                            throw new UnsupportedOperationException("Preferences may not be statically injected");
-                        else
-                            typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
-
+        while( isWorthScanning(c) ) {
+            for (Field field : c.getDeclaredFields()) {
+                if ( field.isAnnotationPresent(InjectPreference.class))
+                    if( Modifier.isStatic(field.getModifiers()) )
+                        throw new UnsupportedOperationException("Preferences may not be statically injected");
+                    else
+                        typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
+            }
+            c = c.getSuperclass();
+        }
     }
 
     private boolean isWorthScanning(Class<?> c) {

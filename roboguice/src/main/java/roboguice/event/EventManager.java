@@ -38,7 +38,7 @@ public class EventManager {
      * @param listener to be triggered
      * @param <T> event type
      */
-    public <T> void registerObserver( Class<T> event, EventListener listener ) {
+    public <T> void registerObserver( Class<T> event, EventListener<?> listener ) {
         Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) {
             observers = new CopyOnWriteArraySet<EventListener<?>>();
@@ -88,12 +88,12 @@ public class EventManager {
 
         // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        ObserverMethodListener toRemove = null;
+        ObserverMethodListener<?> toRemove = null;
         
         for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-            final EventListener listener = iterator.next();
+            final EventListener<?> listener = iterator.next();
             if( listener instanceof ObserverMethodListener ) {
-                final ObserverMethodListener observer = ((ObserverMethodListener)listener);
+                final ObserverMethodListener<?> observer = ((ObserverMethodListener<?>)listener);
                 if (observer.getInstance() == instance) {
                     toRemove = observer;
                     break;
@@ -111,6 +111,7 @@ public class EventManager {
      *
      * @param event observed
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void fire(Object event) {
 
         final Set<EventListener<?>> observers = registrations.get(event.getClass());

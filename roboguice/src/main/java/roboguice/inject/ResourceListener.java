@@ -53,12 +53,13 @@ public class ResourceListener implements TypeListener {
             filter.reset();
         }
         Class<?> c = typeLiteral.getRawType();
-        if( isWorthScanning(c) ) 
-            for (; isWorthScanning(c); c = c.getSuperclass()) 
-                for (Field field : c.getDeclaredFields())
-                    if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
-                        typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
-
+        while( isWorthScanning(c) ) {
+            for (Field field : c.getDeclaredFields()) {
+                if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
+                    typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
+            }
+            c = c.getSuperclass();
+        }
     }
 
     private boolean isWorthScanning(Class<?> c) {

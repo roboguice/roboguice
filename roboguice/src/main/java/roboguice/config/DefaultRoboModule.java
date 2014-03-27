@@ -161,11 +161,21 @@ public class DefaultRoboModule extends AbstractModule {
         if( isInjectable(AssetManager.class ) ) {
             bind(AssetManager.class).toProvider(AssetManagerProvider.class);
         }
-        bind(Context.class).toProvider(NullProvider.<Context>instance()).in(ContextSingleton.class);
-        bind(Activity.class).toProvider(NullProvider.<Activity>instance()).in(ContextSingleton.class);
-        bind(RoboActivity.class).toProvider(NullProvider.<RoboActivity>instance()).in(ContextSingleton.class);
-        bind(Service.class).toProvider(NullProvider.<Service>instance()).in(ContextSingleton.class);
-        bind(RoboService.class).toProvider(NullProvider.<RoboService>instance()).in(ContextSingleton.class);
+        if( isInjectable(Context.class ) ) {
+            bind(Context.class).toProvider(NullProvider.<Context>instance()).in(ContextSingleton.class);
+        }
+        if( isInjectable(Activity.class ) ) {
+            bind(Activity.class).toProvider(NullProvider.<Activity>instance()).in(ContextSingleton.class);
+        }
+        if( isInjectable(RoboActivity.class ) ) {
+            bind(RoboActivity.class).toProvider(NullProvider.<RoboActivity>instance()).in(ContextSingleton.class);
+        }
+        if( isInjectable(Service.class ) ) {
+            bind(Service.class).toProvider(NullProvider.<Service>instance()).in(ContextSingleton.class);
+        }
+        if( isInjectable(RoboService.class ) ) {
+            bind(RoboService.class).toProvider(NullProvider.<RoboService>instance()).in(ContextSingleton.class);
+        }
 
         // Sundry Android Classes
         if( isInjectable(SharedPreferences.class ) ) {
@@ -177,7 +187,9 @@ public class DefaultRoboModule extends AbstractModule {
         if( isInjectable(ContentResolver.class ) ) {
             bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
         }
-        bind(Application.class).toInstance(application);
+        if( isInjectable(Application.class ) ) {
+            bind(Application.class).toInstance(application);
+        }
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
         if( isInjectable(Handler.class ) ) {
             bind(Handler.class).toProvider(HandlerProvider.class);
@@ -190,7 +202,9 @@ public class DefaultRoboModule extends AbstractModule {
 
         // System Services that must be scoped to current context
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
-        bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
+        if( isInjectable(SearchManager.class ) ) {
+            bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
+        }
 
         // Android Resources, Views and extras require special handling
         if( hasInjectionPointsForAnnotation(InjectResource.class) ) {
@@ -226,7 +240,7 @@ public class DefaultRoboModule extends AbstractModule {
     private boolean isInjectable(Class c) {
         return injectableClasses.isEmpty() || injectableClasses.contains(c.getName() );
     }
-    
+
     @SuppressWarnings("rawtypes")
     private boolean hasInjectionPointsForAnnotation(Class c) {
         return classesContainingInjectionPoints.isEmpty() || classesContainingInjectionPoints.containsKey(c.getName() );

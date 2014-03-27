@@ -19,6 +19,9 @@ import roboguice.inject.ContextScopedSystemServiceProvider;
 import roboguice.inject.ContextSingleton;
 import roboguice.inject.ExtrasListener;
 import roboguice.inject.HandlerProvider;
+import roboguice.inject.InjectExtra;
+import roboguice.inject.InjectPreference;
+import roboguice.inject.InjectResource;
 import roboguice.inject.NullProvider;
 import roboguice.inject.PreferenceListener;
 import roboguice.inject.ResourceListener;
@@ -59,6 +62,7 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -81,7 +85,7 @@ import android.view.inputmethod.InputMethodManager;
  * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
  *
  * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
- * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+ * @see roboguice.RoboGuice#createBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
  * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
  * @see roboguice.RoboGuice#DEFAULT_STAGE
  *
@@ -91,21 +95,21 @@ public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
 
     @SuppressWarnings("rawtypes")
-	protected static final Class accountManagerClass;
-
-    @SuppressWarnings("rawtypes")
     private static Map<Class, String> mapSystemSericeClassToName = new HashMap<Class, String>();
 
-    private AnnotationDatabaseFinder annotationDatabaseFinder;
     private Set<String> injectableClasses;
+    private HashMap<String, HashSet<String>> classesContainingInjectionPoints;
+
+    protected Application application;
+    protected ContextScope contextScope;
+    protected ResourceListener resourceListener;
+    protected ViewListener viewListener;
+
+    @SuppressWarnings("rawtypes")
+    private AnnotatedBindingBuilder noOpAnnotatedBindingBuilder = new NoOpAnnotatedBindingBuilder();
+
 
     static {
-        Class<?> c = null;
-        try {
-            c = Class.forName("android.accounts.AccountManager");
-        } catch( Throwable ignored ) {}
-        accountManagerClass = c;
-        
         mapSystemSericeClassToName.put(LocationManager.class, Context.LOCATION_SERVICE);
         mapSystemSericeClassToName.put(WindowManager.class, Context.WINDOW_SERVICE);
         mapSystemSericeClassToName.put(ActivityManager.class, Context.ACTIVITY_SERVICE);
@@ -122,98 +126,110 @@ public class DefaultRoboModule extends AbstractModule {
         mapSystemSericeClassToName.put(AudioManager.class, Context.ACCESSIBILITY_SERVICE);
     }
 
-    protected Application application;
-    protected ContextScope contextScope;
-    protected ResourceListener resourceListener;
-    protected ViewListener viewListener;
-
-    @SuppressWarnings("rawtypes")
-    private AnnotatedBindingBuilder noOpAnnotatedBindingBuilder = new NoOpAnnotatedBindingBuilder();
-
-
 
     public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
         this.application = application;
         this.contextScope = contextScope;
         this.viewListener = viewListener;
         this.resourceListener = resourceListener;
-        try {
-            annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
-            RoboGuice.setAnnotationDatabaseFinder(annotationDatabaseFinder);
-            injectableClasses = annotationDatabaseFinder.getInjectedClasses();
-        } catch(Exception ex ) {
+        AnnotationDatabaseFinder annotationDatabaseFinder = RoboGuice.getAnnotationDatabaseFinder();
+        if( annotationDatabaseFinder == null ) {
             injectableClasses = new HashSet<String>();
-            ex.printStackTrace();
+            classesContainingInjectionPoints = new HashMap<String, HashSet<String>>();
+        } else {
+            injectableClasses = annotationDatabaseFinder.getInjectedClasses();
+            classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
         }
     }
 
     /**
      * Configure this module to define Android related bindings.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void configure() {
 
         final Provider<Context> contextProvider = getProvider(Context.class);
-        final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
-        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
 
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
-        bind(PreferenceListener.class).toInstance(preferenceListener);
 
         // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
-        bind(AssetManager.class).toProvider(AssetManagerProvider.class);
+        if( isInjectable(AssetManager.class ) ) {
+            bind(AssetManager.class).toProvider(AssetManagerProvider.class);
+        }
         bind(Context.class).toProvider(NullProvider.<Context>instance()).in(ContextSingleton.class);
         bind(Activity.class).toProvider(NullProvider.<Activity>instance()).in(ContextSingleton.class);
         bind(RoboActivity.class).toProvider(NullProvider.<RoboActivity>instance()).in(ContextSingleton.class);
         bind(Service.class).toProvider(NullProvider.<Service>instance()).in(ContextSingleton.class);
         bind(RoboService.class).toProvider(NullProvider.<RoboService>instance()).in(ContextSingleton.class);
-        
+
         // Sundry Android Classes
-        bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
-        bind(Resources.class).toProvider(ResourcesProvider.class);
-        bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
+        if( isInjectable(SharedPreferences.class ) ) {
+            bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
+        }
+        if( isInjectable(Resources.class ) ) {
+            bind(Resources.class).toProvider(ResourcesProvider.class);
+        }
+        if( isInjectable(ContentResolver.class ) ) {
+            bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
+        }
         bind(Application.class).toInstance(application);
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
-        bind(Handler.class).toProvider(HandlerProvider.class);
+        if( isInjectable(Handler.class ) ) {
+            bind(Handler.class).toProvider(HandlerProvider.class);
+        }
 
         // System Services
-        bindSystemService(LocationManager.class);
-        bindSystemService(WindowManager.class);
-        bindSystemService(ActivityManager.class);
-        bindSystemService(PowerManager.class);
-        bindSystemService(AlarmManager.class);
-        bindSystemService(NotificationManager.class);
-        bindSystemService(KeyguardManager.class);
-        bindSystemService(Vibrator.class);
-        bindSystemService(ConnectivityManager.class);
-        bindSystemService(WifiManager.class);
-        bindSystemService(InputMethodManager.class);
-        bindSystemService(SensorManager.class);
-        bindSystemService(TelephonyManager.class);
-        bindSystemService(AudioManager.class);
-        
+        for( Class key : mapSystemSericeClassToName.keySet() ) {
+            bindSystemService(key);
+        }
+
         // System Services that must be scoped to current context
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
         bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
 
         // Android Resources, Views and extras require special handling
-        bindListener(Matchers.any(), resourceListener);
-        bindListener(Matchers.any(), extrasListener);
+        if( hasInjectionPointsForAnnotation(InjectResource.class) ) {
+            bindListener(Matchers.any(), resourceListener);
+        }   
+
+        if( hasInjectionPointsForAnnotation(InjectExtra.class) ) {
+            final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
+            bindListener(Matchers.any(), extrasListener);
+        }
         bindListener(Matchers.any(), viewListener);
-        bindListener(Matchers.any(), preferenceListener);
+
+        if( hasInjectionPointsForAnnotation(InjectPreference.class) ) {
+            final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
+            bind(PreferenceListener.class).toInstance(preferenceListener);
+            bindListener(Matchers.any(), preferenceListener);
+        }
+
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
 
-        bind(LnInterface.class).to(LnImpl.class);
+        if( isInjectable(Ln.class)) {
+            bind(LnInterface.class).to(LnImpl.class);
+            requestStaticInjection(Ln.class);
+        }
 
         requestInjection(observerThreadingDecorator);
 
-        requestStaticInjection(Ln.class);
 
         bindDynamicBindings();
+    }
+
+    @SuppressWarnings("rawtypes")
+    private boolean isInjectable(Class c) {
+        return injectableClasses.isEmpty() || injectableClasses.contains(c.getName() );
+    }
+    
+    @SuppressWarnings("rawtypes")
+    private boolean hasInjectionPointsForAnnotation(Class c) {
+        return classesContainingInjectionPoints.isEmpty() || classesContainingInjectionPoints.containsKey(c.getName() );
     }
 
     @SuppressWarnings("unchecked")
@@ -225,9 +241,15 @@ public class DefaultRoboModule extends AbstractModule {
             return noOpAnnotatedBindingBuilder;
     }
 
+    private <T> void bindSystemService(Class<T> c) {
+        if( isInjectable(c) ) {
+            bind(c).toProvider(new SystemServiceProvider<T>(application, mapSystemSericeClassToName.get(c) ));
+        }
+    }
+
     @SuppressWarnings("unchecked")
-	private void bindDynamicBindings() {
-		// Compatibility library bindings
+    private void bindDynamicBindings() {
+        // Compatibility library bindings
         if(FragmentUtil.hasSupport) {
             bind(FragmentUtil.supportFrag.fragmentManagerType()).toProvider(FragmentUtil.supportFrag.fragmentManagerProviderType());
         }
@@ -235,13 +257,16 @@ public class DefaultRoboModule extends AbstractModule {
             bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
         }
 
-        // 2.0 Eclair
-        if( VERSION.SDK_INT>=5 ) {
-            bind(accountManagerClass).toProvider(AccountManagerProvider.class);
+        if( VERSION.SDK_INT>=Build.VERSION_CODES.ECLAIR ) {
+            try {
+                @SuppressWarnings("rawtypes")
+                Class c = Class.forName("android.accounts.AccountManager");
+                bind(c).toProvider(AccountManagerProvider.class);
+            } catch( Throwable ex ) {
+                Log.e(DefaultRoboModule.class.getName(), "Impossible to bind AccountManager", ex);
+            }
         }
-	}
-    
-
+    }
 
     @Provides
     @Singleton
@@ -277,13 +302,6 @@ public class DefaultRoboModule extends AbstractModule {
     @Singleton
     public EventManager providesGlobalEventManager() {
         return new EventManager();
-    }
-
-    private <T> void bindSystemService(Class<T> c) {
-        if( injectableClasses.isEmpty() || injectableClasses.contains(c.getName()) ) {
-            bind(c).toProvider(new SystemServiceProvider<T>(application, mapSystemSericeClassToName.get(c) ));
-        }
-
     }
 
 }

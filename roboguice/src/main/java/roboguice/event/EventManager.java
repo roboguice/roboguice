@@ -72,15 +72,7 @@ public class EventManager {
         final Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) return;
 
-        // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
-        //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-            final EventListener registeredListener = iterator.next();
-            if (registeredListener == listener) {
-                iterator.remove();
-                break;
-            }
-        }
+        observers.remove(listener);
     }
 
     /**
@@ -96,15 +88,20 @@ public class EventManager {
 
         // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        ObserverMethodListener toRemove = null;
+        
         for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
             final EventListener listener = iterator.next();
             if( listener instanceof ObserverMethodListener ) {
                 final ObserverMethodListener observer = ((ObserverMethodListener)listener);
                 if (observer.getInstance() == instance) {
-                    iterator.remove();
+                    toRemove = observer;
                     break;
                 }
             }
+        }
+        if( toRemove != null ) {
+            observers.remove(toRemove);
         }
     }
 

@@ -1,10 +1,9 @@
 package roboguice;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.WeakHashMap;
 
 import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
@@ -31,6 +30,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 
 /**
@@ -73,11 +73,7 @@ public class RoboGuice {
         if( rtrn!=null )
             return rtrn;
 
-        return setBaseApplicationInjector(application, DEFAULT_STAGE);
-    }
-
-    public static Injector setBaseApplicationInjector(final Application application, Stage stage, Module... modules ) {
-        return setBaseApplicationInjector(application, stage, null, modules);
+        return createBaseApplicationInjector(application, DEFAULT_STAGE);
     }
 
     /**
@@ -94,91 +90,39 @@ public class RoboGuice {
      *
      * If using this method with test cases, be sure to call {@link roboguice.RoboGuice.util#reset()} in your test teardown methods
      * to avoid polluting our other tests with your custom injector.  Don't do this in your real application though.
-     *
+     * <b>One of RoboGuice's entry points</b>.
      */
-    public static Injector setBaseApplicationInjector(final Application application, Stage stage, String[] additionalAnnotationDatabasePackages, Module... modules ) {
+    public static Injector createBaseApplicationInjector(final Application application, Stage stage, Module... modules ) {
         final Stopwatch stopwatch = new Stopwatch();
         try {
-
             synchronized (RoboGuice.class) {
-
-                // BUG this results in a whole bunch of unnecessary copying
-                final ArrayList<String> packages = new ArrayList<String>();
-                packages.add("roboguice");
-                if( additionalAnnotationDatabasePackages!=null)
-                    packages.addAll(Arrays.asList(additionalAnnotationDatabasePackages));
-
-                if( useAnnotationDatabases ) {
-                    try {
-                        final HashMap<String, HashSet<String>> classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
-
-                        Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
-                            @Override
-                            public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                                return new AnnotatedRoboGuiceHierarchyTraversalFilter(classesContainingInjectionPoints);
-                            }
-                        });
-                    } catch( Exception ex ) {
-                        throw new IllegalStateException("Unable use Annotation Database(s)", ex);
-                    }
-                } else {
-                    Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
-                        @Override
-                        public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                            return new RoboGuiceHierarchyTraversalFilter();
-                        }
-                    });
-                }
-
                 final Injector rtrn = Guice.createInjector(stage, modules);
                 injectors.put(application,rtrn);
                 return rtrn;
             }
-
         } finally {
             stopwatch.resetAndLog("BaseApplicationInjector creation");
         }
-
     }
 
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
+     * <b>One of RoboGuice's entry points</b>.
      */
-    public static Injector setBaseApplicationInjector(Application application, Stage stage) {
-
-
+    public static Injector createBaseApplicationInjector(Application application, Stage stage) {
         final ArrayList<Module> modules = new ArrayList<Module>();
 
         try {
-            final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
-            final Bundle bundle = ai.metaData;
-            final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
-            final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
-            final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
-
-            modules.add(defaultRoboModule);
-
-            for (String name : moduleNames) {
-                if( Strings.notEmpty(name)) {
-                    final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                    try {
-                        modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
-                    } catch( NoSuchMethodException ignored ) {
-                        modules.add( clazz.newInstance() );
-                    }
-                }
-            }
-
+            initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
+            initializeModules(application, modules);
         } catch (Exception e) {
             throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
         }
 
-        final Injector rtrn = setBaseApplicationInjector(application, stage, null, modules.toArray(new Module[modules.size()]));
+        final Injector rtrn = createBaseApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));
         injectors.put(application,rtrn);
         return rtrn;
-
     }
-
 
     public static RoboInjector getInjector(Context context) {
         final Application application = (Application)context.getApplicationContext();
@@ -225,15 +169,62 @@ public class RoboGuice {
         return viewListener;
     }
 
+    public static AnnotationDatabaseFinder getAnnotationDatabaseFinder() {
+        return annotationDatabaseFinder;
+    }
+
     public static void destroyInjector(Context context) {
         final RoboInjector injector = getInjector(context);
         injector.getInstance(EventManager.class).destroy();
         //noinspection SuspiciousMethodCalls
         injectors.remove(context); // it's okay, Context is an Application
     }
+    
+    private static void initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(Application application) {
+        if( useAnnotationDatabases ) {
+            try {
+                annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
+                final HashMap<String, HashSet<String>> classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
+                Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
+                    @Override
+                    public HierarchyTraversalFilter createHierarchyTraversalFilter() {
+                        return new AnnotatedRoboGuiceHierarchyTraversalFilter(classesContainingInjectionPoints);
+                    }
+                });
+            } catch( Exception ex ) {
+                throw new IllegalStateException("Unable use Annotation Database(s)", ex);
+            }
+        } else {
+            Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
+                @Override
+                public HierarchyTraversalFilter createHierarchyTraversalFilter() {
+                    return new RoboGuiceHierarchyTraversalFilter();
+                }
+            });
+        }
+    }
 
-    public static void setAnnotationDatabaseFinder(AnnotationDatabaseFinder annotationDatabaseFinder) {
-        RoboGuice.annotationDatabaseFinder = annotationDatabaseFinder;
+    private static void initializeModules(Application application, final ArrayList<Module> modules) throws NameNotFoundException, ClassNotFoundException,
+            InstantiationException, IllegalAccessException, InvocationTargetException {
+        
+        final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
+        final Bundle bundle = ai.metaData;
+        final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
+        final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
+        final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
+
+        modules.add(defaultRoboModule);
+
+        for (String name : moduleNames) {
+            if( Strings.notEmpty(name)) {
+                final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
+                try {
+                    modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
+                } catch( NoSuchMethodException ignored ) {
+                    modules.add( clazz.newInstance() );
+                }
+            }
+        }
     }
 
     public static class util {

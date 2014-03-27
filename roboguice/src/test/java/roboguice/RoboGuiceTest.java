@@ -50,7 +50,7 @@ public class RoboGuiceTest {
     @Test
     public void shouldOnlyCallConfigureOnce() {
         final int[] i = {0};
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new AbstractModule() {
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new AbstractModule() {
             @Override
             protected void configure() {
                 ++i[0];

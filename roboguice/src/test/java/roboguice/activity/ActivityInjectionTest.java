@@ -46,7 +46,7 @@ public class ActivityInjectionTest {
     @Before
     public void setup() {
         RoboGuice.useAnnotationDatabases = false;
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         activity = Robolectric.buildActivity(DummyActivity.class).withIntent(new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober")).create().get();
     }
 
@@ -83,19 +83,19 @@ public class ActivityInjectionTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
         Robolectric.buildActivity(B.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
         Robolectric.buildActivity(D.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
         Robolectric.buildActivity(C.class).create().get();
     }
 

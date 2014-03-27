@@ -44,7 +44,7 @@ public class SherlockActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
         activity = new DummySherlockActivity();
         activity.setIntent(new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober"));
@@ -84,21 +84,21 @@ public class SherlockActivityInjectionTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
         final B b = new B();
         b.onCreate(null);
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
         final D d = new D();
         d.onCreate(null);
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
+        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
         final C c = new C();
         c.onCreate(null);
     }

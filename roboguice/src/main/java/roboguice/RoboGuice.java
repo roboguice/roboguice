@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.WeakHashMap;
 
+import roboguice.annotationprocessing.InjectionPointDescription;
 import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
 import roboguice.config.AnnotationDatabaseFinder;
 import roboguice.config.DefaultRoboModule;
@@ -184,7 +185,7 @@ public class RoboGuice {
         if( useAnnotationDatabases ) {
             try {
                 annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
-                final HashMap<String, HashSet<String>> classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
+                final HashMap<String, HashSet<InjectionPointDescription>> classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
                 Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                     @Override
                     public HierarchyTraversalFilter createHierarchyTraversalFilter() {

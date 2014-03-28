@@ -1,8 +1,12 @@
 package roboguice.config;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map.Entry;
+
+import roboguice.annotationprocessing.InjectionPointDescription;
 
 /**
  * Will filter in or out classes based on the information gathered by the annotation
@@ -16,16 +20,18 @@ import java.util.Map.Entry;
  */
 public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarchyTraversalFilter {
     private boolean hasHadInjectionPoints;
-    private static HashMap<String, HashSet<String>> mapAnnotationToclassesContainingInjectionPoints;
+    private static HashMap<String, HashSet<InjectionPointDescription>> mapAnnotationToclassesContainingInjectionPoints;
     private static HashSet<String> classesContainingInjectionPointsSet = new HashSet<String>();
 
-    public  AnnotatedRoboGuiceHierarchyTraversalFilter(HashMap<String, HashSet<String>> mapAnnotationToclassesContainingInjectionPoints) {
+    public  AnnotatedRoboGuiceHierarchyTraversalFilter(HashMap<String, HashSet<InjectionPointDescription>> mapAnnotationToclassesContainingInjectionPoints) {
         if(mapAnnotationToclassesContainingInjectionPoints.isEmpty())
             throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
 
         AnnotatedRoboGuiceHierarchyTraversalFilter.mapAnnotationToclassesContainingInjectionPoints = mapAnnotationToclassesContainingInjectionPoints;
-        for( Entry<String, HashSet<String>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToclassesContainingInjectionPoints.entrySet() ) {
-            classesContainingInjectionPointsSet.addAll(entryAnnotationToclassesContainingInjectionPoints.getValue());
+        for( Entry<String, HashSet<InjectionPointDescription>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToclassesContainingInjectionPoints.entrySet() ) {
+            for( InjectionPointDescription ip : entryAnnotationToclassesContainingInjectionPoints.getValue() ) {
+                classesContainingInjectionPointsSet.add(ip.getClassName());
+            }
         }
     }
     
@@ -66,6 +72,20 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
     }
     
     @Override
+    public List<String> getAllFields(String annotationClassName, Class<?> c) {
+        HashSet<InjectionPointDescription> classesContainingInjectionPointsForAnnotation = mapAnnotationToclassesContainingInjectionPoints.get(annotationClassName);
+                
+        if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
+            for( InjectionPointDescription ip : classesContainingInjectionPointsForAnnotation ) {
+                if( ip.getClassName().equals(c.getName())) {
+                    return ip.getListOfFieldNames();
+                }
+            }
+        }
+        //costly but should not happen
+        return new ArrayList<String>();
+    }
+
     public void reset( ) {
         super.reset();
         hasHadInjectionPoints = false;

@@ -7,6 +7,7 @@ import java.util.Set;
 
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
+import roboguice.annotationprocessing.InjectionPointDescription;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
@@ -98,7 +99,7 @@ public class DefaultRoboModule extends AbstractModule {
     private static Map<Class, String> mapSystemSericeClassToName = new HashMap<Class, String>();
 
     private Set<String> injectableClasses;
-    private HashMap<String, HashSet<String>> classesContainingInjectionPoints;
+    private HashMap<String, HashSet<InjectionPointDescription>> classesContainingInjectionPoints;
 
     protected Application application;
     protected ContextScope contextScope;
@@ -135,7 +136,7 @@ public class DefaultRoboModule extends AbstractModule {
         AnnotationDatabaseFinder annotationDatabaseFinder = RoboGuice.getAnnotationDatabaseFinder();
         if( annotationDatabaseFinder == null ) {
             injectableClasses = new HashSet<String>();
-            classesContainingInjectionPoints = new HashMap<String, HashSet<String>>();
+            classesContainingInjectionPoints = new HashMap<String, HashSet<InjectionPointDescription>>();
         } else {
             injectableClasses = annotationDatabaseFinder.getInjectedClasses();
             classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();

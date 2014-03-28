@@ -2,9 +2,10 @@ package roboguice.annotationprocessing;
 
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -32,7 +33,7 @@ import javax.tools.JavaFileObject;
 public class ClassesRequiringScanningProcessor extends AbstractProcessor {
 
     private AnnotationDatabaseGenerator annotationDatabaseGenerator = new AnnotationDatabaseGenerator();
-    private HashMap<String, HashSet<String> > classesRequiringScanning;
+    private HashMap<String, List<InjectionPointDescription> > classesRequiringScanning;
     private HashSet<String> injectedClasses;
 
     @Override
@@ -53,7 +54,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
         final String packageName = packages!=null && packages.size()>0 ? packages.iterator().next().getQualifiedName().toString() : null;
 
 
-        classesRequiringScanning = new HashMap<String, HashSet<String> >();
+        classesRequiringScanning = new HashMap<String, List<InjectionPointDescription> >();
         injectedClasses = new HashSet<String>();
 
         for( TypeElement annotation : annotations ) {
@@ -67,27 +68,54 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
                 }
                 TypeElement typeElementRequiringScanning = (TypeElement) enclosing.getEnclosingElement();
                 String typeElementName = typeElementRequiringScanning.getQualifiedName().toString();
-                
-                HashSet<String> classesRequiringScanningForAnnotation = classesRequiringScanning.get( annotationClassName );
-                if( classesRequiringScanningForAnnotation == null ) {
-                    classesRequiringScanningForAnnotation = new HashSet<String>();
+
+                List< InjectionPointDescription> injectionPointDescriptionList = classesRequiringScanning.get( annotationClassName );
+                if( injectionPointDescriptionList == null ) {
+                    injectionPointDescriptionList = new ArrayList<InjectionPointDescription>();
                 }
-                classesRequiringScanningForAnnotation.add(typeElementName);
-                classesRequiringScanning.put(annotationClassName, classesRequiringScanningForAnnotation);
+                classesRequiringScanning.put(annotationClassName, injectionPointDescriptionList);
 
                 // Get the injected field types
                 if( injectionPoint instanceof VariableElement ) {
+                    String injectedClassName = null;
+                    String injectionPointName = null;
                     final TypeMirror fieldTypeMirror = injectionPoint.asType();
-                    if( fieldTypeMirror instanceof DeclaredType )
-                        injectedClasses.add( ((TypeElement)((DeclaredType)fieldTypeMirror).asElement()).getQualifiedName().toString() );
-                    else if( fieldTypeMirror instanceof PrimitiveType )
-                        injectedClasses.add( fieldTypeMirror.getKind().name() );
+                    if( fieldTypeMirror instanceof DeclaredType ) {
+                        injectedClassName = ((TypeElement)((DeclaredType)fieldTypeMirror).asElement()).getQualifiedName().toString();
+                    } else if( fieldTypeMirror instanceof PrimitiveType ) {
+                        injectedClassName = fieldTypeMirror.getKind().name();
+                    }
+                    injectionPointName = injectionPoint.getSimpleName().toString();
+                    injectedClasses.add( injectedClassName );
+                    
+                    InjectionPointDescription injectionPointDescription = null;
+                    for( InjectionPointDescription ip : injectionPointDescriptionList ) {
+                        if( ip.getClassName().equals(typeElementName)) {
+                            injectionPointDescription = ip;
+                        }
+                    }
+                    if( injectionPointDescription == null ) {
+                        injectionPointDescription = new InjectionPointDescription(typeElementName);
+                        injectionPointDescriptionList.add(injectionPointDescription);
+                    }
+                    injectionPointDescription.addField(injectionPointName);
 
 
-                // Get the injected method and constructor types
+                    // Get the injected method and constructor types
                 } else if( injectionPoint instanceof ExecutableElement ) {
                     for( VariableElement variable : ((ExecutableElement)injectionPoint).getParameters() )
                         injectedClasses.add( ((TypeElement)((DeclaredType)variable.asType()).asElement()).getQualifiedName().toString() );
+                    
+                    InjectionPointDescription injectionPointDescription = null;
+                    for( InjectionPointDescription ip : injectionPointDescriptionList ) {
+                        if( ip.getClassName().equals(typeElementName)) {
+                            injectionPointDescription = ip;
+                        }
+                    }
+                    if( injectionPointDescription == null ) {
+                        injectionPointDescription = new InjectionPointDescription(typeElementName);
+                        injectionPointDescriptionList.add(injectionPointDescription);
+                    }
                 }
 
             }

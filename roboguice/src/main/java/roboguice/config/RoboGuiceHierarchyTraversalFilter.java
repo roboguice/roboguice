@@ -44,6 +44,7 @@ public class RoboGuiceHierarchyTraversalFilter extends HierarchyTraversalFilter 
         return true;
     }
 
+    @Override
     public void reset( ) {
         super.reset();
         isInRoboGuicePackage = false;

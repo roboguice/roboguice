@@ -5,7 +5,10 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 
 /**
- * Once a class is detected has having injection points,
+ * Will filter in or out classes based on the information gathered by the annotation
+ * preprocessor of RoboGuice. A class is filtered in if it contains an injection point
+ * or its super classes contain an injection point.<br/>
+ * Once a class is filtered in has having injection points,
  * its super classes are kept as long as they satisfy the filtering operated
  * by {@link RoboGuiceHierarchyTraversalFilter}. Otherwise, the class will be rejected
  * by the filter.
@@ -30,25 +33,39 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
     public boolean isWorthScanning(Class<?> c) {
         if( hasHadInjectionPoints ) {
             return super.isWorthScanning(c);
-        } else if( c != null && classesContainingInjectionPointsSet.contains(c.getName()) ) {
-            hasHadInjectionPoints = true;
-            return true;
+        } else if( c != null ) {
+            do {
+                if( classesContainingInjectionPointsSet.contains(c.getName()) ) {
+                    hasHadInjectionPoints = true;
+                    return true;
+                }
+                c = c.getSuperclass();
+            } while( super.isWorthScanning(c) );
         }  
         return false;
     }
     
     @Override
     public boolean isWorthScanning(String annotationClassName, Class<?> c) {
-        HashSet<String> classesContainingInjectionPointsForAnnotation;
         if( hasHadInjectionPoints ) {
             return super.isWorthScanning(c);
-        } else if( c != null && (classesContainingInjectionPointsForAnnotation = mapAnnotationToclassesContainingInjectionPoints.get(annotationClassName)) != null && classesContainingInjectionPointsForAnnotation.contains(c.getName()) ) {
-            hasHadInjectionPoints = true;
-            return true;
-        } else 
+        } else if( c != null ) {
+            HashSet<String> classesContainingInjectionPointsForAnnotation = mapAnnotationToclassesContainingInjectionPoints.get(annotationClassName);
+            if( classesContainingInjectionPointsForAnnotation == null ) {
+                return false;
+            }
+            do {
+                if( classesContainingInjectionPointsForAnnotation.contains(c.getName()) ) {
+                    hasHadInjectionPoints = true;
+                    return true;
+                }
+                c = c.getSuperclass();
+            } while( super.isWorthScanning(c) );
+        }  
         return false;
     }
     
+    @Override
     public void reset( ) {
         super.reset();
         hasHadInjectionPoints = false;

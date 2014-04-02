@@ -32,6 +32,9 @@ import com.google.inject.spi.TypeListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Set;
+
+import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
 
 
 /**
@@ -54,11 +57,19 @@ public class ResourceListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c) ) {
-            for (Field field : c.getDeclaredFields()) {
-                if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
-                    typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
+            Set<String> allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectView.class.getName(), c);
+            if( allFields != null ) {
+                try {
+                    for (String fieldName : allFields) {
+                        Field field = c.getDeclaredField(fieldName);
+                        if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
+                            typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                c = c.getSuperclass();
             }
-            c = c.getSuperclass();
         }
     }
 

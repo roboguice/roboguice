@@ -37,7 +37,8 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
             return super.isWorthScanning(c);
         } else if( c != null ) {
             do {
-                if( classesContainingInjectionPointsSet.contains(c.getName()) ) {
+                String name = c.getName().replace('$', '.');
+                if( classesContainingInjectionPointsSet.contains(name) ) {
                     hasHadInjectionPoints = true;
                     return true;
                 }
@@ -53,12 +54,20 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
 
         if( hasHadInjectionPoints ) {
             return super.isWorthScanning(c);
-        } else if( c != null && (classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToFieldSet.get(annotationClassName)) != null ) {
-            if( classesContainingInjectionPointsForAnnotation.containsKey(c.getName())) {
-                hasHadInjectionPoints = true;
-                return true;
+        } else if( c != null ) {
+            classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToFieldSet.get(annotationClassName);
+            if( classesContainingInjectionPointsForAnnotation == null ) {
+                return false;
             }
-        }
+            do {
+                String name = c.getName().replace('$', '.');
+                if( classesContainingInjectionPointsForAnnotation.containsKey(name) ) {
+                    hasHadInjectionPoints = true;
+                    return true;
+                }
+                c = c.getSuperclass();
+            } while( super.isWorthScanning(c) );
+        }  
         return false;
     }
 
@@ -66,7 +75,8 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
         Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToFieldSet.get(annotationClassName);
 
         if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
-            return classesContainingInjectionPointsForAnnotation.get(c.getName());
+            String name = c.getName().replace('$', '.');
+            return classesContainingInjectionPointsForAnnotation.get(name);
         }
         //costly but should not happen
         return Collections.emptySet();

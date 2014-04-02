@@ -31,6 +31,9 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Set;
+
+import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
 
 /**
  * 
@@ -59,12 +62,21 @@ public class PreferenceListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c) ) {
-            for (Field field : c.getDeclaredFields()) {
-                if ( field.isAnnotationPresent(InjectPreference.class))
-                    if( Modifier.isStatic(field.getModifiers()) )
-                        throw new UnsupportedOperationException("Preferences may not be statically injected");
-                    else
-                        typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
+            Set<String> allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectView.class.getName(), c);
+            if( allFields != null ) {
+                try {
+                    for (String fieldName : allFields) {
+                        Field field = c.getDeclaredField(fieldName);
+
+                        if ( field.isAnnotationPresent(InjectPreference.class))
+                            if( Modifier.isStatic(field.getModifiers()) )
+                                throw new UnsupportedOperationException("Preferences may not be statically injected");
+                            else
+                                typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             c = c.getSuperclass();
         }

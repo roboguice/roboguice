@@ -13,11 +13,15 @@
 		<version>3.0-alpha-SNAPSHOT</version>
 	</parent>
 
+	<properties>
+	    <velocity.version>1.7</velocity.version>
+	</properties>
+	
 	<dependencies>
 		<dependency>
-			<groupId>org.roboguice</groupId>
-			<artifactId>annotationprocessing-lib</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>${velocity.version}</version>
 		</dependency>
 	</dependencies>
 

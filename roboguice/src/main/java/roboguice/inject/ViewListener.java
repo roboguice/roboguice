@@ -20,7 +20,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import javax.inject.Singleton;
@@ -58,15 +58,19 @@ public class ViewListener implements TypeListener {
         Class<?> c = typeLiteral.getRawType();
         try {
             while( isWorthScanning(c)) { 
-                List<String> allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectView.class.getName(), c);
-                for (String fieldName : allFields) {
-                    Field field = c.getDeclaredField(fieldName);
-                    prepareViewMembersInjector(typeEncounter, field);
+                Set<String> allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectView.class.getName(), c);
+                if( allFields != null ) {
+                    for (String fieldName : allFields) {
+                        Field field = c.getDeclaredField(fieldName);
+                        prepareViewMembersInjector(typeEncounter, field);
+                    }
                 }
                 allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectFragment.class.getName(), c);
-                for (String fieldName : allFields) {
-                    Field field = c.getDeclaredField(fieldName);
-                    prepareViewMembersInjector(typeEncounter, field);
+                if( allFields != null ) {
+                    for (String fieldName : allFields) {
+                        Field field = c.getDeclaredField(fieldName);
+                        prepareViewMembersInjector(typeEncounter, field);
+                    }
                 }
                 c = c.getSuperclass();
             }

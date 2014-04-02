@@ -2,11 +2,8 @@ package roboguice.config;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
-
-import roboguice.annotationprocessing.InjectionPointDescription;
 
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
@@ -29,7 +26,7 @@ import android.os.Bundle;
  */
 public class AnnotationDatabaseFinder {
     
-    private HashMap<String, HashSet<InjectionPointDescription>> mapAnnotationToClassesContainingInjectionPointsSet = new HashMap<String, HashSet<InjectionPointDescription>>();
+    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet = new HashMap<String, Map<String, Set<String>>>();
     private HashSet<String> injectedClassesSet = new HashSet<String>();
 
     public AnnotationDatabaseFinder(Application application) {
@@ -76,8 +73,8 @@ public class AnnotationDatabaseFinder {
         }
     }
 
-    public HashMap<String, HashSet<InjectionPointDescription>> getClassesContainingInjectionPoints() {
-        return mapAnnotationToClassesContainingInjectionPointsSet;
+    public HashMap<String, Map<String, Set<String>>> getMapAnnotationToMapClassWithInjectionNameToFieldSet() {
+        return mapAnnotationToMapClassWithInjectionNameToFieldSet;
     }
 
     public Set<String> getInjectedClasses() {
@@ -92,16 +89,8 @@ public class AnnotationDatabaseFinder {
     }
 
     private void addAnnotationDatabase(AnnotationDatabase annotationDatabase) {
-        for( Entry<String, List<InjectionPointDescription>> entryAnnotationNameToClassesContainingInjectionPointsList : annotationDatabase.getClassesContainingInjectionPoints().entrySet() ) {
-            String annotationName = entryAnnotationNameToClassesContainingInjectionPointsList.getKey();
-            HashSet<InjectionPointDescription> classesContainingInjectionPointsSet = mapAnnotationToClassesContainingInjectionPointsSet.get(annotationName);
-            if( classesContainingInjectionPointsSet == null ) {
-                classesContainingInjectionPointsSet = new HashSet<InjectionPointDescription>(); 
-            }
-            classesContainingInjectionPointsSet.addAll(annotationDatabase.getClassesContainingInjectionPoints().get(annotationName));
-            mapAnnotationToClassesContainingInjectionPointsSet.put(annotationName, classesContainingInjectionPointsSet);
-        }
-        injectedClassesSet.addAll(annotationDatabase.getInjectedClasses());
+        annotationDatabase.fillAnnotationClassesAndFieldsNames(mapAnnotationToMapClassWithInjectionNameToFieldSet);
+        annotationDatabase.fillInjectableClasses(injectedClassesSet);
     }
 
 }

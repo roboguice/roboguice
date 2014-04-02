@@ -7,7 +7,6 @@ import java.util.Set;
 
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
-import roboguice.annotationprocessing.InjectionPointDescription;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
@@ -99,7 +98,7 @@ public class DefaultRoboModule extends AbstractModule {
     private static Map<Class, String> mapSystemSericeClassToName = new HashMap<Class, String>();
 
     private Set<String> injectableClasses;
-    private HashMap<String, HashSet<InjectionPointDescription>> classesContainingInjectionPoints;
+    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet;
 
     protected Application application;
     protected ContextScope contextScope;
@@ -136,10 +135,10 @@ public class DefaultRoboModule extends AbstractModule {
         AnnotationDatabaseFinder annotationDatabaseFinder = RoboGuice.getAnnotationDatabaseFinder();
         if( annotationDatabaseFinder == null ) {
             injectableClasses = new HashSet<String>();
-            classesContainingInjectionPoints = new HashMap<String, HashSet<InjectionPointDescription>>();
+            mapAnnotationToMapClassWithInjectionNameToFieldSet = new HashMap<String, Map<String, Set<String>>>();
         } else {
             injectableClasses = annotationDatabaseFinder.getInjectedClasses();
-            classesContainingInjectionPoints = annotationDatabaseFinder.getClassesContainingInjectionPoints();
+            mapAnnotationToMapClassWithInjectionNameToFieldSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToFieldSet();
         }
     }
 
@@ -244,7 +243,7 @@ public class DefaultRoboModule extends AbstractModule {
 
     @SuppressWarnings("rawtypes")
     private boolean hasInjectionPointsForAnnotation(Class c) {
-        return classesContainingInjectionPoints.isEmpty() || classesContainingInjectionPoints.containsKey(c.getName() );
+        return mapAnnotationToMapClassWithInjectionNameToFieldSet.isEmpty() || mapAnnotationToMapClassWithInjectionNameToFieldSet.containsKey(c.getName() );
     }
 
     @SuppressWarnings("unchecked")

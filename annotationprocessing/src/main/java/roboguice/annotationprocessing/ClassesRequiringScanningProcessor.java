@@ -2,10 +2,9 @@ package roboguice.annotationprocessing;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
@@ -33,7 +32,12 @@ import javax.tools.JavaFileObject;
 public class ClassesRequiringScanningProcessor extends AbstractProcessor {
 
     private AnnotationDatabaseGenerator annotationDatabaseGenerator = new AnnotationDatabaseGenerator();
-    private HashMap<String, List<InjectionPointDescription> > classesRequiringScanning;
+    
+    /**
+     * Maps each annotation name to an inner map.
+     * The inner map maps classes (holding injection points) names to the list of field names.
+     */
+    private HashMap<String, Map<String, Set<String>> > mapAnnotationToMapClassWithInjectionNameToFieldSet;
     private HashSet<String> injectedClasses;
 
     @Override
@@ -54,7 +58,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
         final String packageName = packages!=null && packages.size()>0 ? packages.iterator().next().getQualifiedName().toString() : null;
 
 
-        classesRequiringScanning = new HashMap<String, List<InjectionPointDescription> >();
+        mapAnnotationToMapClassWithInjectionNameToFieldSet = new HashMap<String, Map<String,Set<String>> >();
         injectedClasses = new HashSet<String>();
 
         for( TypeElement annotation : annotations ) {
@@ -69,11 +73,17 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
                 TypeElement typeElementRequiringScanning = (TypeElement) enclosing.getEnclosingElement();
                 String typeElementName = typeElementRequiringScanning.getQualifiedName().toString();
 
-                List< InjectionPointDescription> injectionPointDescriptionList = classesRequiringScanning.get( annotationClassName );
-                if( injectionPointDescriptionList == null ) {
-                    injectionPointDescriptionList = new ArrayList<InjectionPointDescription>();
+                Map<String, Set<String>> mapClassWithInjectionNameToFieldSet = mapAnnotationToMapClassWithInjectionNameToFieldSet.get( annotationClassName );
+                if( mapClassWithInjectionNameToFieldSet == null ) {
+                    mapClassWithInjectionNameToFieldSet = new HashMap<String, Set<String>>();
+                    mapAnnotationToMapClassWithInjectionNameToFieldSet.put(annotationClassName, mapClassWithInjectionNameToFieldSet);
                 }
-                classesRequiringScanning.put(annotationClassName, injectionPointDescriptionList);
+                
+                Set<String> fieldsNamesSet = mapClassWithInjectionNameToFieldSet.get(typeElementName);
+                if( fieldsNamesSet == null ) {
+                    fieldsNamesSet = new HashSet<String>();
+                    mapClassWithInjectionNameToFieldSet.put(typeElementName, fieldsNamesSet);
+                }
 
                 // Get the injected field types
                 if( injectionPoint instanceof VariableElement ) {
@@ -85,36 +95,15 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
                     } else if( fieldTypeMirror instanceof PrimitiveType ) {
                         injectedClassName = fieldTypeMirror.getKind().name();
                     }
-                    injectionPointName = injectionPoint.getSimpleName().toString();
                     injectedClasses.add( injectedClassName );
                     
-                    InjectionPointDescription injectionPointDescription = null;
-                    for( InjectionPointDescription ip : injectionPointDescriptionList ) {
-                        if( ip.getClassName().equals(typeElementName)) {
-                            injectionPointDescription = ip;
-                        }
-                    }
-                    if( injectionPointDescription == null ) {
-                        injectionPointDescription = new InjectionPointDescription(typeElementName);
-                        injectionPointDescriptionList.add(injectionPointDescription);
-                    }
-                    injectionPointDescription.addField(injectionPointName);
-
+                    injectionPointName = injectionPoint.getSimpleName().toString();
+                    fieldsNamesSet.add(injectionPointName);
 
                     // Get the injected method and constructor types
                 } else if( injectionPoint instanceof ExecutableElement ) {
-                    for( VariableElement variable : ((ExecutableElement)injectionPoint).getParameters() )
+                    for( VariableElement variable : ((ExecutableElement)injectionPoint).getParameters() ) {
                         injectedClasses.add( ((TypeElement)((DeclaredType)variable.asType()).asElement()).getQualifiedName().toString() );
-                    
-                    InjectionPointDescription injectionPointDescription = null;
-                    for( InjectionPointDescription ip : injectionPointDescriptionList ) {
-                        if( ip.getClassName().equals(typeElementName)) {
-                            injectionPointDescription = ip;
-                        }
-                    }
-                    if( injectionPointDescription == null ) {
-                        injectionPointDescription = new InjectionPointDescription(typeElementName);
-                        injectionPointDescriptionList.add(injectionPointDescription);
                     }
                 }
 
@@ -124,7 +113,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
         JavaFileObject jfo;
         try {
             jfo = processingEnv.getFiler().createSourceFile( "AnnotationDatabaseImpl" );
-            annotationDatabaseGenerator.generateAnnotationDatabase(jfo, packageName, classesRequiringScanning, injectedClasses);
+            annotationDatabaseGenerator.generateAnnotationDatabase(jfo, packageName, mapAnnotationToMapClassWithInjectionNameToFieldSet, injectedClasses);
         } catch (IOException e) {
             e.printStackTrace();
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());

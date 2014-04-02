@@ -15,9 +15,11 @@
  */
 package roboguice.inject;
 
-import android.app.Application;
-import android.content.Context;
-import android.preference.PreferenceActivity;
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Set;
 
 import com.google.inject.Guice;
 import com.google.inject.HierarchyTraversalFilter;
@@ -27,13 +29,9 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.Set;
-
-import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
+import android.app.Application;
+import android.content.Context;
+import android.preference.PreferenceActivity;
 
 /**
  * 
@@ -62,28 +60,22 @@ public class PreferenceListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c) ) {
-            Set<String> allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectView.class.getName(), c);
+            Set<Field> allFields = filter.getAllFields(InjectView.class.getName(), c);
             if( allFields != null ) {
-                try {
-                    for (String fieldName : allFields) {
-                        Field field = c.getDeclaredField(fieldName);
-
+                    for (Field field : allFields) {
                         if ( field.isAnnotationPresent(InjectPreference.class))
                             if( Modifier.isStatic(field.getModifiers()) )
                                 throw new UnsupportedOperationException("Preferences may not be statically injected");
                             else
                                 typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
             c = c.getSuperclass();
         }
     }
 
     private boolean isWorthScanning(Class<?> c) {
-        return filter.isWorthScanning(InjectPreference.class.getName(), c);
+        return filter.isWorthScanningForFields(InjectPreference.class.getName(), c);
     }
 
 

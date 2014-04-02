@@ -5,6 +5,7 @@ import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
 import com.google.inject.Guice;
 import com.google.inject.HierarchyTraversalFilter;
+import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.InjectionListener;
@@ -13,6 +14,7 @@ import com.google.inject.spi.TypeListener;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 /**
  * Guice driven type listener which scans for the @Observes annotations.
@@ -39,20 +41,19 @@ public class ObservesTypeListener implements TypeListener {
         }
         Class<?> c = iTypeLiteral.getRawType();
         while( isWorthScanning(c)) {
-            for (Method method : c.getDeclaredMethods())
+            for (Method method : filter.getAllMethods(Observes.class.getName(), c))
                 findContextObserver(method, iTypeEncounter);
 
             for( Class<?> interfaceClass : c.getInterfaces())
-                for (Method method : interfaceClass.getDeclaredMethods())
+                for (Method method : filter.getAllMethods(Observes.class.getName(), interfaceClass))
                     findContextObserver(method, iTypeEncounter);
-
 
             c = c.getSuperclass();
         }
     }
 
     private boolean isWorthScanning(Class<?> c) {
-        return filter.isWorthScanning(Observes.class.getName(), c);
+        return filter.isWorthScanningForMethods(Observes.class.getName(), c);
     }
 
     protected <I> void findContextObserver(Method method, TypeEncounter<I> iTypeEncounter) {

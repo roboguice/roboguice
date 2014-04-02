@@ -27,6 +27,7 @@ import android.os.Bundle;
 public class AnnotationDatabaseFinder {
     
     private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet = new HashMap<String, Map<String, Set<String>>>();
+    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet = new HashMap<String, Map<String, Set<String>>>();
     private HashSet<String> injectedClassesSet = new HashSet<String>();
 
     public AnnotationDatabaseFinder(Application application) {
@@ -77,6 +78,10 @@ public class AnnotationDatabaseFinder {
         return mapAnnotationToMapClassWithInjectionNameToFieldSet;
     }
 
+    public HashMap<String, Map<String, Set<String>>> getMapAnnotationToMapClassWithInjectionNameToMethodSet() {
+        return mapAnnotationToMapClassWithInjectionNameToMethodSet;
+    }
+    
     public Set<String> getInjectedClasses() {
         return injectedClassesSet;
     }
@@ -90,7 +95,11 @@ public class AnnotationDatabaseFinder {
 
     private void addAnnotationDatabase(AnnotationDatabase annotationDatabase) {
         annotationDatabase.fillAnnotationClassesAndFieldsNames(mapAnnotationToMapClassWithInjectionNameToFieldSet);
+        annotationDatabase.fillAnnotationClassesAndMethods(mapAnnotationToMapClassWithInjectionNameToMethodSet);
         annotationDatabase.fillInjectableClasses(injectedClassesSet);
+        
+        //System.out.println(mapAnnotationToMapClassWithInjectionNameToMethodSet.toString());
+
     }
 
 }

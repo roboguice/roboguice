@@ -25,7 +25,6 @@ import java.util.WeakHashMap;
 
 import javax.inject.Singleton;
 
-import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
 import roboguice.fragment.FragmentUtil;
 import roboguice.fragment.FragmentUtil.f;
 
@@ -58,17 +57,15 @@ public class ViewListener implements TypeListener {
         Class<?> c = typeLiteral.getRawType();
         try {
             while( isWorthScanning(c)) { 
-                Set<String> allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectView.class.getName(), c);
+                Set<Field> allFields = filter.getAllFields(InjectView.class.getName(), c);
                 if( allFields != null ) {
-                    for (String fieldName : allFields) {
-                        Field field = c.getDeclaredField(fieldName);
+                    for (Field field : allFields) {
                         prepareViewMembersInjector(typeEncounter, field);
                     }
                 }
-                allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectFragment.class.getName(), c);
+                allFields = filter.getAllFields(InjectFragment.class.getName(), c);
                 if( allFields != null ) {
-                    for (String fieldName : allFields) {
-                        Field field = c.getDeclaredField(fieldName);
+                    for (Field field : allFields) {
                         prepareViewMembersInjector(typeEncounter, field);
                     }
                 }
@@ -133,7 +130,7 @@ public class ViewListener implements TypeListener {
 
 
     private boolean isWorthScanning(Class<?> c) {
-        return filter.isWorthScanning(InjectView.class.getName(), c) || filter.isWorthScanning(InjectFragment.class.getName(), c);
+        return filter.isWorthScanningForFields(InjectView.class.getName(), c) || filter.isWorthScanningForFields(InjectFragment.class.getName(), c);
     }
 
 

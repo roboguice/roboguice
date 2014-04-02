@@ -53,28 +53,22 @@ public class ExtrasListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c)) {
-            Set<String> allFields = filter.getAllFields(InjectExtra.class.getName(), c);
+            Set<Field> allFields = filter.getAllFields(InjectExtra.class.getName(), c);
             if( allFields != null ) {
-                try {
-                    for (String fieldName : allFields) {
-                        Field field = c.getDeclaredField(fieldName);
-                        if (field.isAnnotationPresent(InjectExtra.class) )
-                            if( Modifier.isStatic(field.getModifiers()) )
-                                throw new UnsupportedOperationException("Extras may not be statically injected");
-                            else
-                                typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
-                    }
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
+                for (Field field : allFields) {
+                    if (field.isAnnotationPresent(InjectExtra.class) )
+                        if( Modifier.isStatic(field.getModifiers()) )
+                            throw new UnsupportedOperationException("Extras may not be statically injected");
+                        else
+                            typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
                 }
             }
             c = c.getSuperclass();
         }
-
     }
 
     private boolean isWorthScanning(Class<?> c) {
-        return filter.isWorthScanning(InjectExtra.class.getName(), c);
+        return filter.isWorthScanningForFields(InjectExtra.class.getName(), c);
     }
 
 

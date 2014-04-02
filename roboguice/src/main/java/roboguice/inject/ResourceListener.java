@@ -57,24 +57,19 @@ public class ResourceListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c) ) {
-            Set<String> allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectView.class.getName(), c);
+            Set<Field> allFields = ((AnnotatedRoboGuiceHierarchyTraversalFilter)filter).getAllFields(InjectView.class.getName(), c);
             if( allFields != null ) {
-                try {
-                    for (String fieldName : allFields) {
-                        Field field = c.getDeclaredField(fieldName);
+                    for (Field field : allFields) {
                         if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
                             typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 c = c.getSuperclass();
             }
         }
     }
 
     private boolean isWorthScanning(Class<?> c) {
-        return filter.isWorthScanning(InjectResource.class.getName(),c);
+        return filter.isWorthScanningForFields(InjectResource.class.getName(),c);
     }
 
     protected static class ResourceMembersInjector<T> implements MembersInjector<T> {

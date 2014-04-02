@@ -38,6 +38,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
      * The inner map maps classes (holding injection points) names to the list of field names.
      */
     private HashMap<String, Map<String, Set<String>> > mapAnnotationToMapClassWithInjectionNameToFieldSet;
+    private HashMap<String, Map<String, Set<String>> > mapAnnotationToMapClassWithInjectionNameToMethodSet;
     private HashSet<String> injectedClasses;
 
     @Override
@@ -59,6 +60,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
 
 
         mapAnnotationToMapClassWithInjectionNameToFieldSet = new HashMap<String, Map<String,Set<String>> >();
+        mapAnnotationToMapClassWithInjectionNameToMethodSet = new HashMap<String, Map<String,Set<String>> >();
         injectedClasses = new HashSet<String>();
 
         for( TypeElement annotation : annotations ) {
@@ -66,59 +68,96 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
             for( Element injectionPoint : roundEnv.getElementsAnnotatedWith(annotation)) {
                 // Get the enclosing class for each annotated method, constructor, or field.
                 //might need some looping for @Observes as the enclosing element is a method
-                Element enclosing = injectionPoint;
-                while( ! (enclosing.getEnclosingElement() instanceof TypeElement) ) {
-                    enclosing = enclosing.getEnclosingElement();
-                }
-                TypeElement typeElementRequiringScanning = (TypeElement) enclosing.getEnclosingElement();
-                String typeElementName = typeElementRequiringScanning.getQualifiedName().toString();
 
-                Map<String, Set<String>> mapClassWithInjectionNameToFieldSet = mapAnnotationToMapClassWithInjectionNameToFieldSet.get( annotationClassName );
-                if( mapClassWithInjectionNameToFieldSet == null ) {
-                    mapClassWithInjectionNameToFieldSet = new HashMap<String, Set<String>>();
-                    mapAnnotationToMapClassWithInjectionNameToFieldSet.put(annotationClassName, mapClassWithInjectionNameToFieldSet);
-                }
-                
-                Set<String> fieldsNamesSet = mapClassWithInjectionNameToFieldSet.get(typeElementName);
-                if( fieldsNamesSet == null ) {
-                    fieldsNamesSet = new HashSet<String>();
-                    mapClassWithInjectionNameToFieldSet.put(typeElementName, fieldsNamesSet);
-                }
-
+                String injectionPointName = "";
                 // Get the injected field types
-                if( injectionPoint instanceof VariableElement ) {
-                    String injectedClassName = null;
-                    String injectionPointName = null;
-                    final TypeMirror fieldTypeMirror = injectionPoint.asType();
-                    if( fieldTypeMirror instanceof DeclaredType ) {
-                        injectedClassName = ((TypeElement)((DeclaredType)fieldTypeMirror).asElement()).getQualifiedName().toString();
-                    } else if( fieldTypeMirror instanceof PrimitiveType ) {
-                        injectedClassName = fieldTypeMirror.getKind().name();
-                    }
+                if( injectionPoint.getEnclosingElement() instanceof TypeElement && injectionPoint instanceof VariableElement ) {
+
+                    String injectedClassName = getTypeName(injectionPoint);
                     injectedClasses.add( injectedClassName );
-                    
                     injectionPointName = injectionPoint.getSimpleName().toString();
-                    fieldsNamesSet.add(injectionPointName);
 
                     // Get the injected method and constructor types
+                } else if( injectionPoint.getEnclosingElement() instanceof ExecutableElement && injectionPoint instanceof VariableElement ) {
+                    Element enclosing = injectionPoint.getEnclosingElement();
+                    injectionPointName = enclosing.getSimpleName().toString();
+                    for( VariableElement variable : ((ExecutableElement)enclosing).getParameters() ) {
+                        String parameterTypeName = getTypeName(variable);
+                        injectedClasses.add( parameterTypeName );
+                        injectionPointName += ":"+parameterTypeName;
+                    }
                 } else if( injectionPoint instanceof ExecutableElement ) {
+
+                    injectionPointName = injectionPoint.getSimpleName().toString();
                     for( VariableElement variable : ((ExecutableElement)injectionPoint).getParameters() ) {
-                        injectedClasses.add( ((TypeElement)((DeclaredType)variable.asType()).asElement()).getQualifiedName().toString() );
+                        String parameterTypeName = ((TypeElement)((DeclaredType)variable.asType()).asElement()).getQualifiedName().toString();
+                        injectedClasses.add( parameterTypeName );
+                        injectionPointName += ":"+parameterTypeName;
                     }
                 }
-
+                
+                if( injectionPoint.getEnclosingElement() instanceof TypeElement && injectionPoint instanceof VariableElement) {
+                    TypeElement typeElementRequiringScanning = (TypeElement) injectionPoint.getEnclosingElement();
+                    String typeElementName = typeElementRequiringScanning.getQualifiedName().toString();
+                    addToInjectedFields(annotationClassName, typeElementName, injectionPointName);
+                } else if ( injectionPoint.getEnclosingElement() instanceof ExecutableElement ) {
+                    TypeElement typeElementRequiringScanning = (TypeElement) ((ExecutableElement) injectionPoint.getEnclosingElement()).getEnclosingElement();
+                    String typeElementName = typeElementRequiringScanning.getQualifiedName().toString();
+                    addToInjectedMethods(annotationClassName, typeElementName, injectionPointName );
+                }
             }
         }
 
         JavaFileObject jfo;
         try {
             jfo = processingEnv.getFiler().createSourceFile( "AnnotationDatabaseImpl" );
-            annotationDatabaseGenerator.generateAnnotationDatabase(jfo, packageName, mapAnnotationToMapClassWithInjectionNameToFieldSet, injectedClasses);
+            annotationDatabaseGenerator.generateAnnotationDatabase(jfo, packageName, mapAnnotationToMapClassWithInjectionNameToFieldSet, mapAnnotationToMapClassWithInjectionNameToMethodSet, injectedClasses);
         } catch (IOException e) {
             e.printStackTrace();
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
         }
 
         return true;
+    }
+
+    private String getTypeName(Element injectionPoint) {
+        String injectedClassName = null;
+        final TypeMirror fieldTypeMirror = injectionPoint.asType();
+        if( fieldTypeMirror instanceof DeclaredType ) {
+            injectedClassName = ((TypeElement)((DeclaredType)fieldTypeMirror).asElement()).getQualifiedName().toString();
+        } else if( fieldTypeMirror instanceof PrimitiveType ) {
+            injectedClassName = fieldTypeMirror.getKind().name();
+        }
+        return injectedClassName;
+    }
+
+    private void addToInjectedMethods(String annotationClassName, String typeElementName, String injectionPointName) {
+        Map<String, Set<String>> mapClassWithInjectionNameToMethodSet = mapAnnotationToMapClassWithInjectionNameToMethodSet.get( annotationClassName );
+        if( mapClassWithInjectionNameToMethodSet == null ) {
+            mapClassWithInjectionNameToMethodSet = new HashMap<String, Set<String>>();
+            mapAnnotationToMapClassWithInjectionNameToMethodSet.put(annotationClassName, mapClassWithInjectionNameToMethodSet);
+        }
+        
+        Set<String> methodsNamesAndParamsSet = mapClassWithInjectionNameToMethodSet.get(typeElementName);
+        if( methodsNamesAndParamsSet == null ) {
+            methodsNamesAndParamsSet = new HashSet<String>();
+            mapClassWithInjectionNameToMethodSet.put(typeElementName, methodsNamesAndParamsSet);
+        }
+        methodsNamesAndParamsSet.add(injectionPointName);
+    }
+
+    private void addToInjectedFields(String annotationClassName, String typeElementName, String injectionPointName) {
+        Map<String, Set<String>> mapClassWithInjectionNameToFieldSet = mapAnnotationToMapClassWithInjectionNameToFieldSet.get( annotationClassName );
+        if( mapClassWithInjectionNameToFieldSet == null ) {
+            mapClassWithInjectionNameToFieldSet = new HashMap<String, Set<String>>();
+            mapAnnotationToMapClassWithInjectionNameToFieldSet.put(annotationClassName, mapClassWithInjectionNameToFieldSet);
+        }
+        
+        Set<String> fieldsNamesSet = mapClassWithInjectionNameToFieldSet.get(typeElementName);
+        if( fieldsNamesSet == null ) {
+            fieldsNamesSet = new HashSet<String>();
+            mapClassWithInjectionNameToFieldSet.put(typeElementName, fieldsNamesSet);
+        }
+        fieldsNamesSet.add(injectionPointName);
     }
 }

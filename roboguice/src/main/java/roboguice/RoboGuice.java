@@ -187,11 +187,12 @@ public class RoboGuice {
         if( useAnnotationDatabases ) {
             try {
                 annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
-                final HashMap<String, Map<String, Set<String>>> classesContainingInjectionPoints = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToFieldSet();
+                final HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToFieldSet();
+                final HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToMethodSet();
                 Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                     @Override
                     public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                        return new AnnotatedRoboGuiceHierarchyTraversalFilter(classesContainingInjectionPoints);
+                        return new AnnotatedRoboGuiceHierarchyTraversalFilter(mapAnnotationToMapClassWithInjectionNameToFieldSet, mapAnnotationToMapClassWithInjectionNameToMethodSet);
                     }
                 });
             } catch( Exception ex ) {

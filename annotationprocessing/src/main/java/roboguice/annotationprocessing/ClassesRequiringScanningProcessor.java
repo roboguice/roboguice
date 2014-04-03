@@ -87,7 +87,6 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
                         injectionPointName += ":"+parameterTypeName;
                     }
                 } else if( injectionPoint instanceof ExecutableElement ) {
-
                     injectionPointName = injectionPoint.getSimpleName().toString();
                     for( VariableElement variable : ((ExecutableElement)injectionPoint).getParameters() ) {
                         String parameterTypeName = ((TypeElement)((DeclaredType)variable.asType()).asElement()).getQualifiedName().toString();
@@ -102,6 +101,10 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
                     addToInjectedFields(annotationClassName, typeElementName, injectionPointName);
                 } else if ( injectionPoint.getEnclosingElement() instanceof ExecutableElement ) {
                     TypeElement typeElementRequiringScanning = (TypeElement) ((ExecutableElement) injectionPoint.getEnclosingElement()).getEnclosingElement();
+                    String typeElementName = typeElementRequiringScanning.getQualifiedName().toString();
+                    addToInjectedMethods(annotationClassName, typeElementName, injectionPointName );
+                } else if ( injectionPoint instanceof ExecutableElement && !injectionPointName.startsWith("<init>")) {
+                    TypeElement typeElementRequiringScanning = (TypeElement) injectionPoint.getEnclosingElement();
                     String typeElementName = typeElementRequiringScanning.getQualifiedName().toString();
                     addToInjectedMethods(annotationClassName, typeElementName, injectionPointName );
                 }

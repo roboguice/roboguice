@@ -62,12 +62,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.roboguice</groupId>
-			<artifactId>annotationprocessing-lib</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.roboguice</groupId>
 			<artifactId>annotationprocessing</artifactId>
 			<version>${project.version}</version>
 			<optional>true</optional>

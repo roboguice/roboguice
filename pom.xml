@@ -7,7 +7,6 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>annotationprocessing-lib</module>
         <module>annotationprocessing</module>
         <module>roboguice</module>
         <module>additional-tests</module>

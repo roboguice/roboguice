@@ -3,12 +3,10 @@ package roboguice;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import roboguice.annotationprocessing.InjectionPointDescription;
 import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
 import roboguice.config.AnnotationDatabaseFinder;
 import roboguice.config.DefaultRoboModule;

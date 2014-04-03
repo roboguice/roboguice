@@ -35,7 +35,6 @@ public class AnnotationDatabaseImpl extends AnnotationDatabase {
 
 #end
 #end
-
     }
     
     public void fillAnnotationClassesAndMethods(HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodsSet) {
@@ -62,7 +61,6 @@ public class AnnotationDatabaseImpl extends AnnotationDatabase {
 
 #end
 #end
-
     }
 
     public void fillInjectableClasses(HashSet<String> injectedClasses) {
@@ -77,7 +75,6 @@ public class AnnotationDatabaseImpl extends AnnotationDatabase {
         if(FragmentUtil.hasSupport) {
             injectedClasses.add("android.support.v4.app.FragmentManager");
         }
-
     }
 
 }

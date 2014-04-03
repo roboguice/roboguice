@@ -16,10 +16,16 @@
 
         <!-- REGULAR DEPENDENCIES -->
         
+       <dependency>
+            <groupId>org.roboguice</groupId>
+            <artifactId>annotationprocessing</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.roboguice</groupId>
             <artifactId>roboguice</artifactId>
-            <version>3.0-alpha-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>

@@ -1,5 +1,6 @@
 package roboguice.config;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -20,11 +21,12 @@ import java.util.Set;
  */
 public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarchyTraversalFilter {
     private boolean hasHadInjectionPoints;
+    private static HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet;
     private static HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet;
     private static HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet;
     private static HashSet<String> classesContainingInjectionPointsSet = new HashSet<String>();
 
-    public  AnnotatedRoboGuiceHierarchyTraversalFilter(HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet, HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet) {
+    public  AnnotatedRoboGuiceHierarchyTraversalFilter(HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet, HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet, HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet) {
         if(mapAnnotationToMapClassWithInjectionNameToFieldSet.isEmpty())
             throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
 
@@ -34,6 +36,10 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
         }
         AnnotatedRoboGuiceHierarchyTraversalFilter.mapAnnotationToMapClassWithInjectionNameToMethodSet = mapAnnotationToMapClassWithInjectionNameToMethodSet;
         for( Map<String, Set<String>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToMapClassWithInjectionNameToMethodSet.values() ) {
+            classesContainingInjectionPointsSet.addAll(entryAnnotationToclassesContainingInjectionPoints.keySet());
+        }
+        AnnotatedRoboGuiceHierarchyTraversalFilter.mapAnnotationToMapClassWithInjectionNameToConstructorSet = mapAnnotationToMapClassWithInjectionNameToConstructorSet;
+        for( Map<String, Set<String>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToMapClassWithInjectionNameToConstructorSet.values() ) {
             classesContainingInjectionPointsSet.addAll(entryAnnotationToclassesContainingInjectionPoints.keySet());
         }
     }
@@ -143,6 +149,59 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
                             paramClass[i-1] = getClass().getClassLoader().loadClass(split[1]);
                         }
                         methodSet.add( c.getDeclaredMethod(methodName, paramClass));
+                    }
+                    return methodSet;
+                } catch( Exception ex ) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        //costly but should not happen
+        return Collections.emptySet();
+    }
+
+    @Override
+    public boolean isWorthScanningForConstructors(String annotationClassName, Class<?> c) {
+        Map<String, Set<String>> classesContainingInjectionPointsForAnnotation;
+
+        if( hasHadInjectionPoints ) {
+            return super.isWorthScanning(c);
+        } else if( c != null ) {
+            classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToConstructorSet.get(annotationClassName);
+            if( classesContainingInjectionPointsForAnnotation == null ) {
+                return false;
+            }
+            do {
+                String name = c.getName().replace('$', '.');
+                if( classesContainingInjectionPointsForAnnotation.containsKey(name) ) {
+                    hasHadInjectionPoints = true;
+                    return true;
+                }
+                c = c.getSuperclass();
+            } while( super.isWorthScanning(c) );
+        }  
+        return false;
+    }
+    
+    public Set<Constructor> getAllConstructors(String annotationClassName, Class<?> c) {
+        
+        //System.out.printf("map of methods : %s \n",mapAnnotationToMapClassWithInjectionNameToConstructorSet.toString());
+        Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToConstructorSet.get(annotationClassName);
+
+        if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
+            String name = c.getName().replace('$', '.');
+            Set<String> methodNameSet = classesContainingInjectionPointsForAnnotation.get(name);
+            if( methodNameSet != null ) {
+                Set<Constructor> methodSet = new HashSet<Constructor>();
+                try {
+                    for( String methodNameAndParamClasses : methodNameSet ) {
+                        //System.out.printf("Getting method %s of class %s \n",methodNameAndParamClasses,c.getName());
+                        String[] split = methodNameAndParamClasses.split(":");
+                        Class[] paramClass = new Class[split.length-1];
+                        for( int i=1;i<split.length;i++) {
+                            paramClass[i-1] = getClass().getClassLoader().loadClass(split[1]);
+                        }
+                        methodSet.add( c.getDeclaredConstructor( paramClass));
                     }
                     return methodSet;
                 } catch( Exception ex ) {

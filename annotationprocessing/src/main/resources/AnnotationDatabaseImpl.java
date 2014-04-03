@@ -62,6 +62,32 @@ public class AnnotationDatabaseImpl extends AnnotationDatabase {
 #end
 #end
     }
+    
+    public void fillAnnotationClassesAndConstructors(HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorsSet) {
+
+        String annotationClassName = null;
+        Map<String, Set<String>> mapClassWithInjectionNameToConstructorSet = null;
+        Set<String> constructorSet = null;
+
+#foreach( $annotationName in $mapAnnotationToMapClassWithInjectionNameToConstructorSet.keySet() )
+
+        annotationClassName = "$annotationName";
+        mapClassWithInjectionNameToConstructorSet = mapAnnotationToMapClassWithInjectionNameToConstructorsSet.get(annotationClassName);
+        if( mapClassWithInjectionNameToConstructorSet == null ) {
+            mapClassWithInjectionNameToConstructorSet = new HashMap<String, Set<String>>();
+            mapAnnotationToMapClassWithInjectionNameToConstructorsSet.put(annotationClassName, mapClassWithInjectionNameToConstructorSet);
+        }
+
+#foreach( $className in $mapAnnotationToMapClassWithInjectionNameToConstructorSet.get($annotationName).keySet() ) 
+        constructorSet = new HashSet<String>();
+#foreach( $constructor in $mapAnnotationToMapClassWithInjectionNameToConstructorSet.get($annotationName).get($className) ) 
+        constructorSet.add("$constructor");
+#end
+        mapClassWithInjectionNameToConstructorSet.put("$className", constructorSet);
+
+#end
+#end
+    }
 
     public void fillInjectableClasses(HashSet<String> injectedClasses) {
 #foreach( $className in $injectedClasses )

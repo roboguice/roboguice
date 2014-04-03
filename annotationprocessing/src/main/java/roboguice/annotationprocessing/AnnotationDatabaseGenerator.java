@@ -22,7 +22,8 @@ import org.apache.velocity.app.Velocity;
 public class AnnotationDatabaseGenerator {
 
     public void generateAnnotationDatabase(JavaFileObject jfo, final String packageName, final HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet,
-            HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet, final HashSet<String> injectedClasses) throws IOException {
+            HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet,
+            HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet, final HashSet<String> injectedClasses) throws IOException {
 
         Properties props = new Properties();
         props.put("resource.loader", "class");
@@ -35,6 +36,7 @@ public class AnnotationDatabaseGenerator {
         context.put("packageName", packageName);
         context.put("mapAnnotationToMapClassWithInjectionNameToFieldSet", mapAnnotationToMapClassWithInjectionNameToFieldSet);
         context.put("mapAnnotationToMapClassWithInjectionNameToMethodSet", mapAnnotationToMapClassWithInjectionNameToMethodSet);
+        context.put("mapAnnotationToMapClassWithInjectionNameToConstructorSet", mapAnnotationToMapClassWithInjectionNameToConstructorSet);
         context.put("injectedClasses", injectedClasses);
 
         Template template = null;

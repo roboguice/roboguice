@@ -28,6 +28,7 @@ public class AnnotationDatabaseFinder {
     
     private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet = new HashMap<String, Map<String, Set<String>>>();
     private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet = new HashMap<String, Map<String, Set<String>>>();
+    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet = new HashMap<String, Map<String, Set<String>>>();
     private HashSet<String> injectedClassesSet = new HashSet<String>();
 
     public AnnotationDatabaseFinder(Application application) {
@@ -82,6 +83,10 @@ public class AnnotationDatabaseFinder {
         return mapAnnotationToMapClassWithInjectionNameToMethodSet;
     }
     
+    public HashMap<String, Map<String, Set<String>>> getMapAnnotationToMapClassWithInjectionNameToConstructorSet() {
+        return mapAnnotationToMapClassWithInjectionNameToConstructorSet;
+    }
+    
     public Set<String> getInjectedClasses() {
         return injectedClassesSet;
     }
@@ -96,6 +101,7 @@ public class AnnotationDatabaseFinder {
     private void addAnnotationDatabase(AnnotationDatabase annotationDatabase) {
         annotationDatabase.fillAnnotationClassesAndFieldsNames(mapAnnotationToMapClassWithInjectionNameToFieldSet);
         annotationDatabase.fillAnnotationClassesAndMethods(mapAnnotationToMapClassWithInjectionNameToMethodSet);
+        annotationDatabase.fillAnnotationClassesAndConstructors(mapAnnotationToMapClassWithInjectionNameToConstructorSet);
         annotationDatabase.fillInjectableClasses(injectedClassesSet);
         
         //System.out.println(mapAnnotationToMapClassWithInjectionNameToMethodSet.toString());

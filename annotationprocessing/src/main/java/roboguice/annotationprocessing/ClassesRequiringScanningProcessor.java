@@ -1,6 +1,7 @@
 package roboguice.annotationprocessing;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -124,7 +125,11 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
 
         JavaFileObject jfo;
         try {
-            jfo = processingEnv.getFiler().createSourceFile( "AnnotationDatabaseImpl" );
+            String className = "AnnotationDatabaseImpl";
+            if( packageName != null && !packageName.isEmpty() ) {
+                className = packageName+'.'+className;
+            }
+            jfo = processingEnv.getFiler().createSourceFile( className );
             annotationDatabaseGenerator.generateAnnotationDatabase(jfo, packageName, mapAnnotationToMapClassWithInjectionNameToFieldSet, mapAnnotationToMapClassWithInjectionNameToMethodSet, mapAnnotationToMapClassWithInjectionNameToConstructorsSet, injectedClasses);
         } catch (IOException e) {
             e.printStackTrace();

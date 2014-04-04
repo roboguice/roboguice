@@ -1,5 +1,49 @@
 package roboguice.activity;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.robolectric.Robolectric.shadowOf;
+
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import roboguice.RoboGuice;
+import roboguice.activity.SherlockActivityInjectionTest.ModuleA.A;
+import roboguice.activity.SherlockActivityInjectionTest.ModuleB.B;
+import roboguice.activity.SherlockActivityInjectionTest.ModuleC.C;
+import roboguice.activity.SherlockActivityInjectionTest.ModuleD.D;
+import roboguice.inject.ContextScopedProvider;
+import roboguice.inject.ContextSingleton;
+import roboguice.inject.InjectExtra;
+import roboguice.inject.InjectPreference;
+import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
+import roboguice.inject.NullProvider;
+
+import com.actionbarsherlock.ActionBarSherlock;
+import com.actionbarsherlock.internal.ActionBarSherlockNative;
+
+import com.google.inject.ConfigurationException;
+import com.google.inject.Inject;
+import com.google.inject.Key;
+import com.google.inject.Stage;
+import com.google.inject.TypeLiteral;
+
 import android.R;
 import android.app.Activity;
 import android.app.Application;
@@ -11,31 +55,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.actionbarsherlock.ActionBarSherlock;
-import com.actionbarsherlock.internal.ActionBarSherlockNative;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleA.A;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleB.B;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleC.C;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleD.D;
-import com.google.inject.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import roboguice.RoboGuice;
-import roboguice.inject.*;
-
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.concurrent.*;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.robolectric.Robolectric.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class SherlockActivityInjectionTest {
@@ -44,7 +63,6 @@ public class SherlockActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.useAnnotationDatabases = false;
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
         activity = new DummySherlockActivity();

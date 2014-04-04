@@ -1,5 +1,5 @@
 #if( $packageName ) 
-    package $packageName;
+package $packageName;
 #end
 
 import java.util.HashMap;

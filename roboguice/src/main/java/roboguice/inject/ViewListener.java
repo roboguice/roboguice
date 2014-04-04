@@ -55,26 +55,21 @@ public class ViewListener implements TypeListener {
             filter.reset();
         }
         Class<?> c = typeLiteral.getRawType();
-        try {
-            while( isWorthScanning(c)) { 
-                Set<Field> allFields = filter.getAllFields(InjectView.class.getName(), c);
-                if( allFields != null ) {
-                    for (Field field : allFields) {
-                        prepareViewMembersInjector(typeEncounter, field);
-                    }
+        while( isWorthScanning(c)) { 
+            Set<Field> allFields = filter.getAllFields(InjectView.class.getName(), c);
+            if( allFields != null ) {
+                for (Field field : allFields) {
+                    prepareViewMembersInjector(typeEncounter, field);
                 }
-                allFields = filter.getAllFields(InjectFragment.class.getName(), c);
-                if( allFields != null ) {
-                    for (Field field : allFields) {
-                        prepareViewMembersInjector(typeEncounter, field);
-                    }
-                }
-                c = c.getSuperclass();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            allFields = filter.getAllFields(InjectFragment.class.getName(), c);
+            if( allFields != null ) {
+                for (Field field : allFields) {
+                    prepareViewMembersInjector(typeEncounter, field);
+                }
+            }
+            c = c.getSuperclass();
         }
-
     }
 
 

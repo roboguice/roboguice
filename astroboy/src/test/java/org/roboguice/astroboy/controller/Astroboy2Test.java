@@ -26,7 +26,7 @@ public class Astroboy2Test {
     @Before
     public void setup() {
         // Override the default RoboGuice module
-        RoboGuice.setBaseApplicationInjector(application, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(application)).with(new MyTestModule()));
+        RoboGuice.createBaseApplicationInjector(application, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(application)).with(new MyTestModule()));
 
         when(context.getApplicationContext()).thenReturn(application);
         when(application.getApplicationContext()).thenReturn(application);

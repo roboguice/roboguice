@@ -144,7 +144,7 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
                         //System.out.printf("Getting method %s of class %s \n",methodNameAndParamClasses,c.getName());
                         String[] split = methodNameAndParamClasses.split(":");
                         String methodName = split[0];
-                        Class[] paramClass = new Class[split.length-1];
+                        Class<?>[] paramClass = new Class[split.length-1];
                         for( int i=1;i<split.length;i++) {
                             paramClass[i-1] = getClass().getClassLoader().loadClass(split[1]);
                         }

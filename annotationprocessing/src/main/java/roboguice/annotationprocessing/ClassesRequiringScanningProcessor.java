@@ -1,7 +1,6 @@
 package roboguice.annotationprocessing;
 
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,6 +56,7 @@ public class ClassesRequiringScanningProcessor extends AbstractProcessor {
         // AnnotationDatabase somewhere else.  This can be specified using
         // the @AnnotationDatabasePackage package-level annotation
         // noinspection unchecked
+        @SuppressWarnings("unchecked")
         final Set<PackageElement> packages = (Set<PackageElement>) roundEnv.getElementsAnnotatedWith(AnnotationDatabasePackage.class);
         final String packageName = packages!=null && packages.size()>0 ? packages.iterator().next().getQualifiedName().toString() : null;
 

@@ -10,13 +10,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+
 import com.google.inject.Guice;
-import com.google.inject.HierarchyTraversalFilter;
-import com.google.inject.HierarchyTraversalFilterFactory;
 import com.google.inject.Inject;
+import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.config.HierarchyTraversalFilterFactory;
+
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.AstroboyRemoteControl;
-import roboguice.config.AnnotationDatabase;
+
+import com.google.inject.config.AnnotationDatabase;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 

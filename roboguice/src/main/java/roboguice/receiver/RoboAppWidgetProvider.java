@@ -1,11 +1,13 @@
 package roboguice.receiver;
 
+import roboguice.RoboGuice;
+
+import com.google.inject.Injector;
+
 import android.app.Application;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
-import com.google.inject.Injector;
-import roboguice.RoboGuice;
 
 public abstract class RoboAppWidgetProvider extends AppWidgetProvider {
 

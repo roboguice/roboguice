@@ -18,8 +18,9 @@
         
        <dependency>
             <groupId>org.roboguice</groupId>
-            <artifactId>annotationprocessing</artifactId>
+            <artifactId>roboblender</artifactId>
             <version>${project.version}</version>
+            <optional>true</optional>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -98,6 +99,9 @@
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>
+					<compilerArgs>
+  						<arg>-AguiceAnnotationDatabasePackageName=astroboy</arg>
+					</compilerArgs>                    
                 </configuration>
             </plugin>
 

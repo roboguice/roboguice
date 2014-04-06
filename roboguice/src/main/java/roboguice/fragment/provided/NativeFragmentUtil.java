@@ -1,10 +1,10 @@
 package roboguice.fragment.provided;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
 import roboguice.fragment.FragmentUtil.f;
 import roboguice.inject.ContextSingleton;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

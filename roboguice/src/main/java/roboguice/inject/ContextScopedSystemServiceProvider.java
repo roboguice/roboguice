@@ -15,9 +15,9 @@
  */
 package roboguice.inject;
 
-import android.content.Context;
-
 import com.google.inject.Provider;
+
+import android.content.Context;
 
 public class ContextScopedSystemServiceProvider<T> implements Provider<T> {
 

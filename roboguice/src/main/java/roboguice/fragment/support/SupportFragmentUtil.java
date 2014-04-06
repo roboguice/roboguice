@@ -1,10 +1,10 @@
 package roboguice.fragment.support;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
 import roboguice.fragment.FragmentUtil.f;
 import roboguice.inject.ContextSingleton;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;

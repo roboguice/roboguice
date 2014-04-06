@@ -15,6 +15,17 @@
  */
 package roboguice.inject;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.Set;
+
+import com.google.inject.Guice;
+import com.google.inject.MembersInjector;
+import com.google.inject.TypeLiteral;
+import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
+
 import android.app.Application;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
@@ -22,19 +33,6 @@ import android.graphics.Movie;
 import android.graphics.drawable.Drawable;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-
-import com.google.inject.Guice;
-import com.google.inject.HierarchyTraversalFilter;
-import com.google.inject.MembersInjector;
-import com.google.inject.TypeLiteral;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.Set;
-
-import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
 
 
 /**

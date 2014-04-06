@@ -1,9 +1,10 @@
 package roboguice.util;
 
+import com.google.inject.Inject;
+
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
-import com.google.inject.Inject;
 
 public class LnImpl implements LnInterface {
 

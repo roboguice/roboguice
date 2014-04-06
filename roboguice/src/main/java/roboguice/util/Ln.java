@@ -1,6 +1,5 @@
 package roboguice.util;
 
-import android.util.Log;
 import com.google.inject.Inject;
 
 /**

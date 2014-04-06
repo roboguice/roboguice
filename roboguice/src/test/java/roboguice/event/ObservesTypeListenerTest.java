@@ -1,18 +1,21 @@
 package roboguice.event;
 
-import android.app.Activity;
-import android.content.Context;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
+import java.lang.reflect.Method;
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+
 import roboguice.RoboGuice;
 
-import java.lang.reflect.Method;
-import java.util.List;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+
+import android.app.Activity;
+import android.content.Context;
 
 /**
  * @author John Ericksen

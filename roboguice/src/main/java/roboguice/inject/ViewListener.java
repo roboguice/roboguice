@@ -29,10 +29,10 @@ import roboguice.fragment.FragmentUtil;
 import roboguice.fragment.FragmentUtil.f;
 
 import com.google.inject.Guice;
-import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
+import com.google.inject.config.HierarchyTraversalFilter;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
@@ -62,6 +62,10 @@ public class ViewListener implements TypeListener {
                     prepareViewMembersInjector(typeEncounter, field);
                 }
             }
+            //TODO
+            //right now those loops could be merged. But it would be interesting 
+            //to see if ViewMembersInjector should not be more distinguished 
+            //by introducing a FragmentMembersInjector
             allFields = filter.getAllFields(InjectFragment.class.getName(), c);
             if( allFields != null ) {
                 for (Field field : allFields) {
@@ -125,7 +129,8 @@ public class ViewListener implements TypeListener {
 
 
     private boolean isWorthScanning(Class<?> c) {
-        return filter.isWorthScanningForFields(InjectView.class.getName(), c) || filter.isWorthScanningForFields(InjectFragment.class.getName(), c);
+        return filter.isWorthScanningForFields(InjectView.class.getName(), c) 
+                || filter.isWorthScanningForFields(InjectFragment.class.getName(), c);
     }
 
 

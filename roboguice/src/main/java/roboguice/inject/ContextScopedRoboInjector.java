@@ -11,11 +11,13 @@ import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.MembersInjector;
-import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.TypeLiteral;
+import com.google.inject.config.Module;
 import com.google.inject.spi.TypeConverterBinding;
+
+
 //github.com/roboguice/roboguice/issues/174
 import android.content.Context;
 

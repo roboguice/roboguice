@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.inject.config.AnnotationDatabaseFinder;
+
 /**
  * Will filter in or out classes based on the information gathered by the annotation
  * preprocessor of RoboGuice. A class is filtered in if it contains an injection point
@@ -19,26 +21,29 @@ import java.util.Set;
  * by the filter.
  * @author SNI
  */
-public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarchyTraversalFilter {
+public class RoboGuiceAnnotatedGuiceHierarchyTraversalFilter extends RoboGuiceHierarchyTraversalFilter {
     private boolean hasHadInjectionPoints;
-    private static HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet;
-    private static HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet;
-    private static HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet;
-    private static HashSet<String> classesContainingInjectionPointsSet = new HashSet<String>();
+    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet;
+    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet;
+    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet;
+    private HashSet<String> classesContainingInjectionPointsSet = new HashSet<String>();
 
-    public  AnnotatedRoboGuiceHierarchyTraversalFilter(HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet, HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet, HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet) {
+    public  RoboGuiceAnnotatedGuiceHierarchyTraversalFilter(AnnotationDatabaseFinder annotationDatabaseFinder ) {
+        mapAnnotationToMapClassWithInjectionNameToFieldSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToFieldSet();
+        mapAnnotationToMapClassWithInjectionNameToMethodSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToMethodSet();
+        mapAnnotationToMapClassWithInjectionNameToConstructorSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToConstructorSet();
+
         if(mapAnnotationToMapClassWithInjectionNameToFieldSet.isEmpty())
             throw new IllegalStateException("Unable to find Annotation Database which should be output as part of annotation processing");
 
-        AnnotatedRoboGuiceHierarchyTraversalFilter.mapAnnotationToMapClassWithInjectionNameToFieldSet = mapAnnotationToMapClassWithInjectionNameToFieldSet;
         for( Map<String, Set<String>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToMapClassWithInjectionNameToFieldSet.values() ) {
             classesContainingInjectionPointsSet.addAll(entryAnnotationToclassesContainingInjectionPoints.keySet());
         }
-        AnnotatedRoboGuiceHierarchyTraversalFilter.mapAnnotationToMapClassWithInjectionNameToMethodSet = mapAnnotationToMapClassWithInjectionNameToMethodSet;
+        
         for( Map<String, Set<String>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToMapClassWithInjectionNameToMethodSet.values() ) {
             classesContainingInjectionPointsSet.addAll(entryAnnotationToclassesContainingInjectionPoints.keySet());
         }
-        AnnotatedRoboGuiceHierarchyTraversalFilter.mapAnnotationToMapClassWithInjectionNameToConstructorSet = mapAnnotationToMapClassWithInjectionNameToConstructorSet;
+        
         for( Map<String, Set<String>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToMapClassWithInjectionNameToConstructorSet.values() ) {
             classesContainingInjectionPointsSet.addAll(entryAnnotationToclassesContainingInjectionPoints.keySet());
         }
@@ -50,8 +55,7 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
             return super.isWorthScanning(c);
         } else if( c != null ) {
             do {
-                String name = c.getName().replace('$', '.');
-                if( classesContainingInjectionPointsSet.contains(name) ) {
+                if( classesContainingInjectionPointsSet.contains(c.getName()) ) {
                     hasHadInjectionPoints = true;
                     return true;
                 }
@@ -64,7 +68,6 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
     @Override
     public boolean isWorthScanningForFields(String annotationClassName, Class<?> c) {
         Map<String, Set<String>> classesContainingInjectionPointsForAnnotation;
-
         if( hasHadInjectionPoints ) {
             return super.isWorthScanning(c);
         } else if( c != null ) {
@@ -73,8 +76,7 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
                 return false;
             }
             do {
-                String name = c.getName().replace('$', '.');
-                if( classesContainingInjectionPointsForAnnotation.containsKey(name) ) {
+                if( classesContainingInjectionPointsForAnnotation.containsKey(c.getName()) ) {
                     hasHadInjectionPoints = true;
                     return true;
                 }
@@ -88,8 +90,7 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
         Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToFieldSet.get(annotationClassName);
 
         if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
-            String name = c.getName().replace('$', '.');
-            Set<String> fieldNameSet = classesContainingInjectionPointsForAnnotation.get(name);
+            Set<String> fieldNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
             if( fieldNameSet != null ) {
                 Set<Field> fieldSet = new HashSet<Field>();
                 try {
@@ -118,8 +119,7 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
                 return false;
             }
             do {
-                String name = c.getName().replace('$', '.');
-                if( classesContainingInjectionPointsForAnnotation.containsKey(name) ) {
+                if( classesContainingInjectionPointsForAnnotation.containsKey(c.getName()) ) {
                     hasHadInjectionPoints = true;
                     return true;
                 }
@@ -135,8 +135,7 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
         Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToMethodSet.get(annotationClassName);
 
         if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
-            String name = c.getName().replace('$', '.');
-            Set<String> methodNameSet = classesContainingInjectionPointsForAnnotation.get(name);
+            Set<String> methodNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
             if( methodNameSet != null ) {
                 Set<Method> methodSet = new HashSet<Method>();
                 try {
@@ -172,8 +171,7 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
                 return false;
             }
             do {
-                String name = c.getName().replace('$', '.');
-                if( classesContainingInjectionPointsForAnnotation.containsKey(name) ) {
+                if( classesContainingInjectionPointsForAnnotation.containsKey(c.getName()) ) {
                     hasHadInjectionPoints = true;
                     return true;
                 }
@@ -183,21 +181,20 @@ public class AnnotatedRoboGuiceHierarchyTraversalFilter extends RoboGuiceHierarc
         return false;
     }
     
-    public Set<Constructor> getAllConstructors(String annotationClassName, Class<?> c) {
+    public Set<Constructor<?>> getAllConstructors(String annotationClassName, Class<?> c) {
         
         //System.out.printf("map of methods : %s \n",mapAnnotationToMapClassWithInjectionNameToConstructorSet.toString());
         Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToConstructorSet.get(annotationClassName);
 
         if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
-            String name = c.getName().replace('$', '.');
-            Set<String> methodNameSet = classesContainingInjectionPointsForAnnotation.get(name);
+            Set<String> methodNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
             if( methodNameSet != null ) {
-                Set<Constructor> methodSet = new HashSet<Constructor>();
+                Set<Constructor<?>> methodSet = new HashSet<Constructor<?>>();
                 try {
                     for( String methodNameAndParamClasses : methodNameSet ) {
                         //System.out.printf("Getting method %s of class %s \n",methodNameAndParamClasses,c.getName());
                         String[] split = methodNameAndParamClasses.split(":");
-                        Class[] paramClass = new Class[split.length-1];
+                        Class<?>[] paramClass = new Class[split.length-1];
                         for( int i=1;i<split.length;i++) {
                             paramClass[i-1] = getClass().getClassLoader().loadClass(split[1]);
                         }

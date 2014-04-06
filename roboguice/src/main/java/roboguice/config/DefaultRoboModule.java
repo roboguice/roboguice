@@ -1,11 +1,8 @@
 package roboguice.config;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
@@ -34,11 +31,11 @@ import roboguice.util.Ln;
 import roboguice.util.LnImpl;
 import roboguice.util.LnInterface;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.binder.AnnotatedBindingBuilder;
+import com.google.inject.config.AbstractModule;
+import com.google.inject.config.AnnotationDatabaseFinder;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Named;
 
@@ -97,17 +94,10 @@ public class DefaultRoboModule extends AbstractModule {
     @SuppressWarnings("rawtypes")
     private static Map<Class, String> mapSystemSericeClassToName = new HashMap<Class, String>();
 
-    private Set<String> injectableClasses;
-    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet;
-
     protected Application application;
     protected ContextScope contextScope;
     protected ResourceListener resourceListener;
     protected ViewListener viewListener;
-
-    @SuppressWarnings("rawtypes")
-    private AnnotatedBindingBuilder noOpAnnotatedBindingBuilder = new NoOpAnnotatedBindingBuilder();
-
 
     static {
         mapSystemSericeClassToName.put(LocationManager.class, Context.LOCATION_SERVICE);
@@ -128,18 +118,15 @@ public class DefaultRoboModule extends AbstractModule {
 
 
     public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
+        this(application, contextScope, viewListener, resourceListener, null);
+    }
+
+    public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener, AnnotationDatabaseFinder annotationDatabaseFinder) {
+        super(annotationDatabaseFinder);
         this.application = application;
         this.contextScope = contextScope;
         this.viewListener = viewListener;
         this.resourceListener = resourceListener;
-        AnnotationDatabaseFinder annotationDatabaseFinder = RoboGuice.getAnnotationDatabaseFinder();
-        if( annotationDatabaseFinder == null ) {
-            injectableClasses = new HashSet<String>();
-            mapAnnotationToMapClassWithInjectionNameToFieldSet = new HashMap<String, Map<String, Set<String>>>();
-        } else {
-            injectableClasses = annotationDatabaseFinder.getInjectedClasses();
-            mapAnnotationToMapClassWithInjectionNameToFieldSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToFieldSet();
-        }
     }
 
     /**
@@ -232,27 +219,7 @@ public class DefaultRoboModule extends AbstractModule {
 
         requestInjection(observerThreadingDecorator);
 
-
         bindDynamicBindings();
-    }
-
-    @SuppressWarnings("rawtypes")
-    private boolean isInjectable(Class c) {
-        return injectableClasses.isEmpty() || injectableClasses.contains(c.getName() );
-    }
-
-    @SuppressWarnings("rawtypes")
-    private boolean hasInjectionPointsForAnnotation(Class c) {
-        return mapAnnotationToMapClassWithInjectionNameToFieldSet.isEmpty() || mapAnnotationToMapClassWithInjectionNameToFieldSet.containsKey(c.getName() );
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    protected <T> AnnotatedBindingBuilder<T> bind(Class<T> clazz) {
-        if( injectableClasses.isEmpty() || injectableClasses.contains(clazz.getName()) )
-            return super.bind(clazz);
-        else
-            return noOpAnnotatedBindingBuilder;
     }
 
     private <T> void bindSystemService(Class<T> c) {

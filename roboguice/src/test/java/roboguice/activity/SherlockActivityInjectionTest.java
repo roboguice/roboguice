@@ -219,7 +219,7 @@ public class SherlockActivityInjectionTest {
         }
     }
 
-    public static class BaseModule extends com.google.inject.AbstractModule {
+    public static class BaseModule extends com.google.inject.config.AbstractModule {
         @Override
         protected void configure() {
             bind(RoboSherlockActivity.class)

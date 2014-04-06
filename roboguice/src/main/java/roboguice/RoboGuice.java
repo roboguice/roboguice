@@ -2,14 +2,12 @@ package roboguice;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.WeakHashMap;
 
-import roboguice.config.AnnotatedRoboGuiceHierarchyTraversalFilter;
-import roboguice.config.AnnotationDatabaseFinder;
 import roboguice.config.DefaultRoboModule;
+import roboguice.config.RoboGuiceAnnotatedGuiceHierarchyTraversalFilter;
 import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
@@ -20,11 +18,12 @@ import roboguice.inject.ViewListener;
 import roboguice.util.Strings;
 
 import com.google.inject.Guice;
-import com.google.inject.HierarchyTraversalFilter;
-import com.google.inject.HierarchyTraversalFilterFactory;
 import com.google.inject.Injector;
-import com.google.inject.Module;
 import com.google.inject.Stage;
+import com.google.inject.config.AnnotationDatabaseFinder;
+import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.config.HierarchyTraversalFilterFactory;
+import com.google.inject.config.Module;
 import com.google.inject.internal.util.Stopwatch;
 
 import android.app.Application;
@@ -33,6 +32,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  *
@@ -113,8 +113,9 @@ public class RoboGuice {
     public static Injector createBaseApplicationInjector(Application application, Stage stage) {
         final ArrayList<Module> modules = new ArrayList<Module>();
 
+        initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
+
         try {
-            initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
             initializeModules(application, modules);
         } catch (Exception e) {
             throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
@@ -139,7 +140,11 @@ public class RoboGuice {
     }
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
-        return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
+        if( useAnnotationDatabases ) {
+            return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application), annotationDatabaseFinder);
+        } else {
+            return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -180,24 +185,47 @@ public class RoboGuice {
         //noinspection SuspiciousMethodCalls
         injectors.remove(context); // it's okay, Context is an Application
     }
-    
+
     private static void initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(Application application) {
         if( useAnnotationDatabases ) {
+            Log.d(RoboGuice.class.getName(), "Using annotation database(s).");
             try {
-                annotationDatabaseFinder = new AnnotationDatabaseFinder(application);
-                final HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToFieldSet();
-                final HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToMethodSet();
-                final HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet = annotationDatabaseFinder.getMapAnnotationToMapClassWithInjectionNameToConstructorSet();
+                Set<String> additionalPackageNameList = new HashSet<String>();
+
+                try {
+                    ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
+                    final Bundle bundle = ai.metaData;
+                    final String roboguicePackages = bundle!=null ? bundle.getString("roboguice.annotations.packages") : null;
+                    if( roboguicePackages != null ) {
+                        for( String packageName : roboguicePackages.split("[\\s,]") ) {
+                            additionalPackageNameList.add(packageName);
+                        }
+                    }
+                } catch (NameNotFoundException e) {
+                    //if no packages are found in manifest, just log
+                    Log.d(RoboGuice.class.getName(), "Annotation database(s) failed to load properly.");
+                    e.printStackTrace();
+                }
+
+                additionalPackageNameList.add("roboguice");
+                Log.d(RoboGuice.class.getName(), "Using annotation database(s) : " + additionalPackageNameList.toString());
+
+
+                final String[] additionalPackageNames = new String[additionalPackageNameList.size()];
+                additionalPackageNameList.toArray(additionalPackageNames);
+
+                annotationDatabaseFinder = new AnnotationDatabaseFinder(additionalPackageNames);
                 Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                     @Override
                     public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                        return new AnnotatedRoboGuiceHierarchyTraversalFilter(mapAnnotationToMapClassWithInjectionNameToFieldSet, mapAnnotationToMapClassWithInjectionNameToMethodSet, mapAnnotationToMapClassWithInjectionNameToConstructorSet);
+                        return new RoboGuiceAnnotatedGuiceHierarchyTraversalFilter(annotationDatabaseFinder);
                     }
                 });
             } catch( Exception ex ) {
-                throw new IllegalStateException("Unable use Annotation Database(s)", ex);
+                throw new IllegalStateException("Unable use annotation database(s)", ex);
             }
         } else {
+            Log.d(RoboGuice.class.getName(), "Using full reflection. Try using RoboGuice annotation processor for better performance.");
             Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
                 @Override
                 public HierarchyTraversalFilter createHierarchyTraversalFilter() {
@@ -208,8 +236,8 @@ public class RoboGuice {
     }
 
     private static void initializeModules(Application application, final ArrayList<Module> modules) throws NameNotFoundException, ClassNotFoundException,
-            InstantiationException, IllegalAccessException, InvocationTargetException {
-        
+    InstantiationException, IllegalAccessException, InvocationTargetException {
+
         final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
         final Bundle bundle = ai.metaData;
         final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;

@@ -15,12 +15,12 @@
  */
 package roboguice.inject;
 
-import android.app.Application;
-import android.content.res.Resources;
-
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+
+import android.app.Application;
+import android.content.res.Resources;
 
 /**
  * 

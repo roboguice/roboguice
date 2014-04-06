@@ -35,6 +35,7 @@ import roboguice.inject.InjectView;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
+import com.google.inject.config.Module;
 import com.google.inject.Key;
 import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
@@ -209,7 +210,7 @@ public class ActivityInjectionTest {
         }
     }
 
-    public static class ModuleA extends com.google.inject.AbstractModule {
+    public static class ModuleA extends com.google.inject.config.AbstractModule {
         @Override
         protected void configure() {
             requestStaticInjection(A.class);
@@ -223,7 +224,7 @@ public class ActivityInjectionTest {
     }
 
 
-    public static class ModuleB extends com.google.inject.AbstractModule {
+    public static class ModuleB extends com.google.inject.config.AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(B.class);
@@ -236,7 +237,7 @@ public class ActivityInjectionTest {
     }
 
 
-    public static class ModuleC extends com.google.inject.AbstractModule {
+    public static class ModuleC extends com.google.inject.config.AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(C.class);
@@ -254,7 +255,7 @@ public class ActivityInjectionTest {
     }
 
 
-    public static class ModuleD extends com.google.inject.AbstractModule {
+    public static class ModuleD extends com.google.inject.config.AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(D.class);

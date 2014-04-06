@@ -1,17 +1,20 @@
 package roboguice;
 
-import android.app.Activity;
-import com.google.inject.AbstractModule;
-import com.google.inject.Stage;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+
 import roboguice.activity.RoboActivity;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import com.google.inject.Stage;
+import com.google.inject.config.AbstractModule;
+
+import android.app.Activity;
 
 @RunWith(RobolectricTestRunner.class)
 public class RoboGuiceTest {

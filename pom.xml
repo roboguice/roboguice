@@ -7,7 +7,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>annotationprocessing</module>
+        <module>roboblender</module>
         <module>roboguice</module>
         <module>additional-tests</module>
         <module>astroboy</module>

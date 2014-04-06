@@ -1,11 +1,11 @@
 package roboguice.util;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+
+import android.os.Handler;
+import android.os.Looper;
 
 
 // TODO

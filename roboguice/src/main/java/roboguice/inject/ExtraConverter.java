@@ -15,6 +15,8 @@
  */
 package roboguice.inject;
 
+import roboguice.inject.ExtrasListener.ExtrasMembersInjector;
+
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 

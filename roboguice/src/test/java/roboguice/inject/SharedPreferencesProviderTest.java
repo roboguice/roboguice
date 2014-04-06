@@ -1,23 +1,28 @@
 package roboguice.inject;
 
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.lang.reflect.Field;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.tester.android.content.TestSharedPreferences;
+
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.util.Strings;
 
-import java.io.File;
-import java.lang.reflect.Field;
+import com.google.inject.Inject;
+import com.google.inject.config.AbstractModule;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.*;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 @RunWith(RobolectricTestRunner.class)

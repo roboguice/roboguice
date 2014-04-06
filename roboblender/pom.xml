@@ -2,16 +2,35 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>annotationprocessing-lib</artifactId>
+	<artifactId>roboblender</artifactId>
 	<version>3.0-alpha-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>annotationprocessing library</name>
+	<name>Robo Blender</name>
+        <description>The annotation processor of RoboGuice</description>
 
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
 		<version>3.0-alpha-SNAPSHOT</version>
 	</parent>
+
+	<properties>
+		<velocity.version>1.7</velocity.version>
+		<blender.version>4.0-SNAPSHOT</blender.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>blender</artifactId>
+			<version>${blender.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>${velocity.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -21,6 +40,7 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<proc>none</proc>
 				</configuration>
 			</plugin>
 

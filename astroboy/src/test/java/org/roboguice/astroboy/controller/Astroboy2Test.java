@@ -3,14 +3,16 @@ package org.roboguice.astroboy.controller;
 import android.app.Application;
 import android.content.Context;
 import android.os.Vibrator;
-import com.google.inject.AbstractModule;
+
+import com.google.inject.config.AbstractModule;
 import com.google.inject.util.Modules;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
-
 import static org.mockito.Mockito.*;
 
 /**
@@ -25,6 +27,7 @@ public class Astroboy2Test {
 
     @Before
     public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
         // Override the default RoboGuice module
         RoboGuice.createBaseApplicationInjector(application, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(application)).with(new MyTestModule()));
 

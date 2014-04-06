@@ -2,7 +2,7 @@ package roboguice.config;
 
 import roboguice.RoboGuice;
 
-import com.google.inject.HierarchyTraversalFilter;
+import com.google.inject.config.HierarchyTraversalFilter;
 
 /**
  * Monitors the state of type hierarchy when injecting a given type via Guice.

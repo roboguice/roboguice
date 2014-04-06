@@ -1,20 +1,18 @@
 package roboguice.event;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+
 import roboguice.event.eventListener.ObserverMethodListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
 import com.google.inject.Guice;
-import com.google.inject.HierarchyTraversalFilter;
-import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
+import com.google.inject.config.HierarchyTraversalFilter;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Set;
 
 /**
  * Guice driven type listener which scans for the @Observes annotations.

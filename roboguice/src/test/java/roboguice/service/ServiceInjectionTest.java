@@ -5,10 +5,12 @@ import static org.junit.Assert.assertThat;
 
 import javax.inject.Inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import roboguice.RoboGuice;
 import roboguice.inject.InjectView;
 
 import com.google.inject.ConfigurationException;
@@ -20,6 +22,11 @@ import android.view.View;
 
 @RunWith(RobolectricTestRunner.class)
 public class ServiceInjectionTest {
+
+    @Before 
+    public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
+    }
 
     @Test
     public void shouldBeAbleToInjectInRoboService() {

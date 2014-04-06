@@ -63,6 +63,7 @@ public class SherlockActivityInjectionTest {
 
     @Before
     public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
         activity = new DummySherlockActivity();

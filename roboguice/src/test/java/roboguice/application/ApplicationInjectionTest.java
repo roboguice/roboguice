@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Random;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -21,6 +22,11 @@ import android.content.Context;
 @RunWith(RobolectricTestRunner.class)
 public class ApplicationInjectionTest {
 
+    @Before 
+    public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
+    }
+    
     @Test
     public void shouldBeAbleToInjectIntoApplication() {
         Robolectric.application = new AppA();

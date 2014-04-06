@@ -4,11 +4,13 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.service.RoboService;
 
@@ -17,6 +19,11 @@ import android.os.IBinder;
 
 @RunWith(RobolectricTestRunner.class)
 public class ExtrasListenerTest {
+
+    @Before 
+    public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
+    }
 
     @Test
     public void shouldInjectActivity() {

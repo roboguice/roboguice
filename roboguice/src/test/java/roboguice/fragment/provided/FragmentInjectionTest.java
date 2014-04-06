@@ -5,11 +5,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import junit.framework.Assert;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
@@ -26,6 +28,11 @@ import android.widget.FrameLayout;
 @RunWith(RobolectricTestRunner.class)
 @Config(shadows= {roboguice.fragment.provided.shadow.ShadowNativeFragment.class, roboguice.fragment.provided.shadow.ShadowNativeFragmentActivity.class})
 public class FragmentInjectionTest {
+
+    @Before 
+    public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
+    }
 
 	@Test
     public void shadowActivityGetApplicationContextShouldNotReturnNull() {

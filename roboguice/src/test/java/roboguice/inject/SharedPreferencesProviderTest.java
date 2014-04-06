@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.lang.reflect.Field;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -27,6 +28,11 @@ import android.preference.PreferenceManager;
 @SuppressWarnings("ResultOfMethodCallIgnored")
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesProviderTest {
+
+    @Before 
+    public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
+    }
 
     @Test
     public void shouldInjectDefaultSharedPrefs() throws Exception {

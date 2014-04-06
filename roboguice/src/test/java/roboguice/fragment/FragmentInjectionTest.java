@@ -4,12 +4,14 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.util.ActivityController;
 
+import roboguice.RoboGuice;
 import roboguice.activity.RoboFragmentActivity;
 import roboguice.inject.InjectView;
 
@@ -36,6 +38,11 @@ public class FragmentInjectionTest {
         fragmentTransaction.add(fragment, null);
         fragmentTransaction.commit();
 
+    }
+
+    @Before 
+    public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
     }
 
 

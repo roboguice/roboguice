@@ -7,6 +7,7 @@ import static org.junit.Assert.assertThat;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +28,11 @@ import android.widget.LinearLayout;
 
 @RunWith(RobolectricTestRunner.class)
 public class ViewInjectionTest {
+
+    @Before 
+    public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
+    }
 
     @Test
     public void shouldInjectViewsIntoActivitiesAndViews() {

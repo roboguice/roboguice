@@ -4,6 +4,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -22,6 +23,10 @@ import android.app.Activity;
 @RunWith(RobolectricTestRunner.class)
 public class ContextScopeTest {
 
+    @Before 
+    public void setup() {
+        RoboGuice.useAnnotationDatabases = false;
+    }
 
     @Test
     public void shouldHaveContextInScopeMapAfterOnCreate() throws Exception {

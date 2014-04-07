@@ -127,12 +127,10 @@ public class ViewListener implements TypeListener {
         }
     }
 
-
     private boolean isWorthScanning(Class<?> c) {
         return filter.isWorthScanningForFields(InjectView.class.getName(), c) 
                 || filter.isWorthScanningForFields(InjectFragment.class.getName(), c);
     }
-
 
     /**
      * This class gets twice as many providers as necessary to do its job, look into optimizations in the future if this is a bottleneck
@@ -148,7 +146,6 @@ public class ViewListener implements TypeListener {
         @SuppressWarnings("rawtypes")
         protected Provider fragManager;
         protected Provider<Activity> activityProvider;
-
 
         public ViewMembersInjector(Field field, Annotation annotation, TypeEncounter<T> typeEncounter, FragmentUtil.f<?,?> utils) {
             this.field = field;

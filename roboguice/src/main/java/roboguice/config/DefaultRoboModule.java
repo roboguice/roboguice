@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.fest.util.Strings;
-
 import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
 import roboguice.event.ObservesTypeListener;
@@ -257,7 +255,7 @@ public class DefaultRoboModule extends AbstractModule {
             Log.e(DefaultRoboModule.class.getName(), "Impossible to get the android device Id. This may fail 'normally' when testing.", e);
         }
 
-        if(!Strings.isNullOrEmpty(androidId)) {
+        if(!"".equals(androidId)) {
             return androidId;
         } else {
             throw new RuntimeException("No Android Id.");

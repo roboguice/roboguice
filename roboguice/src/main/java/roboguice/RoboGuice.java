@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import roboguice.config.DefaultRoboModule;
-import roboguice.config.RoboGuiceAnnotatedGuiceHierarchyTraversalFilter;
 import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
@@ -190,7 +189,7 @@ public class RoboGuice {
         if( useAnnotationDatabases ) {
             Log.d(RoboGuice.class.getName(), "Using annotation database(s).");
             try {
-                Set<String> additionalPackageNameList = new HashSet<String>();
+                Set<String> packageNameList = new HashSet<String>();
 
                 try {
                     ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
@@ -198,7 +197,7 @@ public class RoboGuice {
                     final String roboguicePackages = bundle!=null ? bundle.getString("roboguice.annotations.packages") : null;
                     if( roboguicePackages != null ) {
                         for( String packageName : roboguicePackages.split("[\\s,]") ) {
-                            additionalPackageNameList.add(packageName);
+                            packageNameList.add(packageName);
                         }
                     }
                 } catch (NameNotFoundException e) {
@@ -207,20 +206,15 @@ public class RoboGuice {
                     e.printStackTrace();
                 }
 
-                additionalPackageNameList.add("roboguice");
-                Log.d(RoboGuice.class.getName(), "Using annotation database(s) : " + additionalPackageNameList.toString());
+                packageNameList.add("roboguice");
+                Log.d(RoboGuice.class.getName(), "Using annotation database(s) : " + packageNameList.toString());
 
 
-                final String[] additionalPackageNames = new String[additionalPackageNameList.size()];
-                additionalPackageNameList.toArray(additionalPackageNames);
+                final String[] packageNames = new String[packageNameList.size()];
+                packageNameList.toArray(packageNames);
 
-                annotationDatabaseFinder = new AnnotationDatabaseFinder(additionalPackageNames);
-                Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory() {
-                    @Override
-                    public HierarchyTraversalFilter createHierarchyTraversalFilter() {
-                        return new RoboGuiceAnnotatedGuiceHierarchyTraversalFilter(annotationDatabaseFinder);
-                    }
-                });
+                Guice.setAnnotationDatabasePackageNames(packageNames);
+                annotationDatabaseFinder = Guice.getAnnotationDatabaseFinder();
             } catch( Exception ex ) {
                 throw new IllegalStateException("Unable use annotation database(s)", ex);
             }

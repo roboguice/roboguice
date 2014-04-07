@@ -2,6 +2,9 @@ package roboguice.config;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import org.fest.util.Strings;
 
 import roboguice.activity.RoboActivity;
 import roboguice.event.EventManager;
@@ -145,53 +148,29 @@ public class DefaultRoboModule extends AbstractModule {
         // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
         bind(ContextScope.class).toInstance(contextScope);
-        if( isInjectable(AssetManager.class ) ) {
-            bind(AssetManager.class).toProvider(AssetManagerProvider.class);
-        }
-        if( isInjectable(Context.class ) ) {
-            bind(Context.class).toProvider(NullProvider.<Context>instance()).in(ContextSingleton.class);
-        }
-        if( isInjectable(Activity.class ) ) {
-            bind(Activity.class).toProvider(NullProvider.<Activity>instance()).in(ContextSingleton.class);
-        }
-        if( isInjectable(RoboActivity.class ) ) {
-            bind(RoboActivity.class).toProvider(NullProvider.<RoboActivity>instance()).in(ContextSingleton.class);
-        }
-        if( isInjectable(Service.class ) ) {
-            bind(Service.class).toProvider(NullProvider.<Service>instance()).in(ContextSingleton.class);
-        }
-        if( isInjectable(RoboService.class ) ) {
-            bind(RoboService.class).toProvider(NullProvider.<RoboService>instance()).in(ContextSingleton.class);
-        }
+        bind(AssetManager.class).toProvider(AssetManagerProvider.class);
+        bind(Context.class).toProvider(NullProvider.<Context>instance()).in(ContextSingleton.class);
+        bind(Activity.class).toProvider(NullProvider.<Activity>instance()).in(ContextSingleton.class);
+        bind(RoboActivity.class).toProvider(NullProvider.<RoboActivity>instance()).in(ContextSingleton.class);
+        bind(Service.class).toProvider(NullProvider.<Service>instance()).in(ContextSingleton.class);
+        bind(RoboService.class).toProvider(NullProvider.<RoboService>instance()).in(ContextSingleton.class);
 
         // Sundry Android Classes
-        if( isInjectable(SharedPreferences.class ) ) {
-            bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
-        }
-        if( isInjectable(Resources.class ) ) {
-            bind(Resources.class).toProvider(ResourcesProvider.class);
-        }
-        if( isInjectable(ContentResolver.class ) ) {
-            bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
-        }
-        if( isInjectable(Application.class ) ) {
-            bind(Application.class).toInstance(application);
-        }
+        bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
+        bind(Resources.class).toProvider(ResourcesProvider.class);
+        bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
+        bind(Application.class).toInstance(application);
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
-        if( isInjectable(Handler.class ) ) {
-            bind(Handler.class).toProvider(HandlerProvider.class);
-        }
+        bind(Handler.class).toProvider(HandlerProvider.class);
 
         // System Services
-        for( Class key : mapSystemSericeClassToName.keySet() ) {
-            bindSystemService(key);
+        for( Entry<Class, String> entry : mapSystemSericeClassToName.entrySet() ) {
+            bindSystemService(entry.getKey(), entry.getValue());
         }
 
         // System Services that must be scoped to current context
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
-        if( isInjectable(SearchManager.class ) ) {
-            bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
-        }
+        bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
 
         // Android Resources, Views and extras require special handling
         if( hasInjectionPointsForAnnotation(InjectResource.class) ) {
@@ -202,6 +181,8 @@ public class DefaultRoboModule extends AbstractModule {
             final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
             bindListener(Matchers.any(), extrasListener);
         }
+
+        //should be bound only if we use InjectView or InjectFragment
         bindListener(Matchers.any(), viewListener);
 
         if( hasInjectionPointsForAnnotation(InjectPreference.class) ) {
@@ -210,22 +191,21 @@ public class DefaultRoboModule extends AbstractModule {
             bindListener(Matchers.any(), preferenceListener);
         }
 
+        //should always be bound as ContentViewListener relies on event system
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
+        requestInjection(observerThreadingDecorator);
 
         if( isInjectable(Ln.class)) {
             bind(LnInterface.class).to(LnImpl.class);
+            //should this be placed in if statement ?
             requestStaticInjection(Ln.class);
         }
-
-        requestInjection(observerThreadingDecorator);
 
         bindDynamicBindings();
     }
 
-    private <T> void bindSystemService(Class<T> c) {
-        if( isInjectable(c) ) {
-            bind(c).toProvider(new SystemServiceProvider<T>(application, mapSystemSericeClassToName.get(c) ));
-        }
+    private <T> void bindSystemService(Class<T> c, String androidServiceName) {
+        bind(c).toProvider(new SystemServiceProvider<T>(application, androidServiceName ));
     }
 
     @SuppressWarnings("unchecked")
@@ -248,6 +228,12 @@ public class DefaultRoboModule extends AbstractModule {
             }
         }
     }
+    
+    // ----------------------------------
+    //  PROVIDER METHODS
+    //  used for lazy bindings, when 
+    //  instance creation is costly. 
+    // ----------------------------------
 
     @Provides
     @Singleton
@@ -271,7 +257,7 @@ public class DefaultRoboModule extends AbstractModule {
             Log.e(DefaultRoboModule.class.getName(), "Impossible to get the android device Id. This may fail 'normally' when testing.", e);
         }
 
-        if(!androidId.equals("")) {
+        if(!Strings.isNullOrEmpty(androidId)) {
             return androidId;
         } else {
             throw new RuntimeException("No Android Id.");

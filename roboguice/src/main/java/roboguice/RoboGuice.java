@@ -54,7 +54,7 @@ public class RoboGuice {
 
 
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default.*/
-    public static boolean useAnnotationDatabases = true;
+    private static boolean useAnnotationDatabases = true;
 
     private static AnnotationDatabaseFinder annotationDatabaseFinder; 
 
@@ -146,6 +146,10 @@ public class RoboGuice {
         }
     }
 
+    public static void setUseAnnotationDatabases(boolean useAnnotationDatabases) {
+        RoboGuice.useAnnotationDatabases = useAnnotationDatabases;
+    }
+    
     @SuppressWarnings("ConstantConditions")
     protected static ResourceListener getResourceListener( Application application ) {
         ResourceListener resourceListener = resourceListeners.get(application);
@@ -202,10 +206,14 @@ public class RoboGuice {
                     }
                 } catch (NameNotFoundException e) {
                     //if no packages are found in manifest, just log
-                    Log.d(RoboGuice.class.getName(), "Annotation database(s) failed to load properly.");
+                    Log.d(RoboGuice.class.getName(), "Failed to read manifest properly.");
                     e.printStackTrace();
                 }
 
+                if( packageNameList.isEmpty() ) {
+                    //add default package if none is specified
+                    packageNameList.add("");
+                }
                 packageNameList.add("roboguice");
                 Log.d(RoboGuice.class.getName(), "Using annotation database(s) : " + packageNameList.toString());
 

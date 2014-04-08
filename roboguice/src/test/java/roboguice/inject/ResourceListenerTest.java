@@ -18,7 +18,7 @@ public class ResourceListenerTest {
 
     @Before 
     public void setup() {
-        RoboGuice.useAnnotationDatabases = false;
+        RoboGuice.setUseAnnotationDatabases(false);
     }
 
     @Ignore("Need to configure roboguice build to use maven android plugin for tests at least so it can access resources")

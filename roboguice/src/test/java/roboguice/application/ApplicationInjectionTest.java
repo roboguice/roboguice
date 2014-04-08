@@ -24,7 +24,7 @@ public class ApplicationInjectionTest {
 
     @Before 
     public void setup() {
-        RoboGuice.useAnnotationDatabases = false;
+        RoboGuice.setUseAnnotationDatabases(false);
     }
     
     @Test

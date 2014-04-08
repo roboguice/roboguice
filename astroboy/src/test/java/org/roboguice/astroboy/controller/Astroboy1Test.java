@@ -26,7 +26,7 @@ public class Astroboy1Test {
     
     @Before
     public void setup() {
-       RoboGuice.useAnnotationDatabases = false;
+       RoboGuice.setUseAnnotationDatabases(false);
        context = Robolectric.buildActivity(RoboActivity.class).create().get();
        astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
     }

@@ -27,7 +27,7 @@ public class Astroboy2Test {
 
     @Before
     public void setup() {
-        RoboGuice.useAnnotationDatabases = false;
+        RoboGuice.setUseAnnotationDatabases(false);
         // Override the default RoboGuice module
         RoboGuice.createBaseApplicationInjector(application, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(application)).with(new MyTestModule()));
 

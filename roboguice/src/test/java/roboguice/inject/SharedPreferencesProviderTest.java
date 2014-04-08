@@ -31,7 +31,7 @@ public class SharedPreferencesProviderTest {
 
     @Before 
     public void setup() {
-        RoboGuice.useAnnotationDatabases = false;
+        RoboGuice.setUseAnnotationDatabases(false);
     }
 
     @Test

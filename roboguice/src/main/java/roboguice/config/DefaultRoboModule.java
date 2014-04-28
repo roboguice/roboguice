@@ -36,7 +36,6 @@ import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.config.AbstractModule;
-import com.google.inject.config.AnnotationDatabaseFinder;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Named;
 
@@ -119,11 +118,6 @@ public class DefaultRoboModule extends AbstractModule {
 
 
     public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
-        this(application, contextScope, viewListener, resourceListener, null);
-    }
-
-    public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener, AnnotationDatabaseFinder annotationDatabaseFinder) {
-        super(annotationDatabaseFinder);
         this.application = application;
         this.contextScope = contextScope;
         this.viewListener = viewListener;

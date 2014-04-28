@@ -20,7 +20,6 @@ import roboguice.util.Strings;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
-import com.google.inject.config.AnnotationDatabaseFinder;
 import com.google.inject.config.HierarchyTraversalFilter;
 import com.google.inject.config.HierarchyTraversalFilterFactory;
 import com.google.inject.config.Module;
@@ -56,8 +55,6 @@ public class RoboGuice {
 
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default.*/
     private static boolean useAnnotationDatabases = true;
-
-    private static AnnotationDatabaseFinder annotationDatabaseFinder; 
 
     private RoboGuice() {
     }
@@ -110,7 +107,8 @@ public class RoboGuice {
         
         try {
             List<Module> modules = createModules(application);
-            return createGuiceInjector(application, stage, stopwatch, modules.toArray(new Module[modules.size()]));
+            Module[] moduleArray = modules.toArray(new Module[modules.size()]);
+            return createGuiceInjector(application, stage, stopwatch, moduleArray);
         } catch (Exception e) {
             throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
         }
@@ -143,11 +141,7 @@ public class RoboGuice {
     }
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
-        if( useAnnotationDatabases ) {
-            return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application), annotationDatabaseFinder);
-        } else {
-            return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
-        }
+        return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
     }
 
     public static void setUseAnnotationDatabases(boolean useAnnotationDatabases) {
@@ -180,10 +174,6 @@ public class RoboGuice {
             }
         }
         return viewListener;
-    }
-
-    public static AnnotationDatabaseFinder getAnnotationDatabaseFinder() {
-        return annotationDatabaseFinder;
     }
 
     public static void destroyInjector(Context context) {
@@ -226,7 +216,6 @@ public class RoboGuice {
                 packageNameList.toArray(packageNames);
 
                 Guice.setAnnotationDatabasePackageNames(packageNames);
-                annotationDatabaseFinder = Guice.getAnnotationDatabaseFinder();
             } catch( Exception ex ) {
                 throw new IllegalStateException("Unable use annotation database(s)", ex);
             }
@@ -264,6 +253,7 @@ public class RoboGuice {
                 }
             }
         }
+        
         return modules;
     }
 

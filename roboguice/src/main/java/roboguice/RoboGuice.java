@@ -3,6 +3,7 @@ package roboguice;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -94,6 +95,29 @@ public class RoboGuice {
      */
     public static Injector createBaseApplicationInjector(final Application application, Stage stage, Module... modules ) {
         final Stopwatch stopwatch = new Stopwatch();
+        initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
+        return createGuiceInjector(application, stage, stopwatch, modules);
+    }
+
+    /**
+     * Return the cached Injector instance for this application, or create a new one if necessary.
+     * <b>One of RoboGuice's entry points</b>.
+     */
+    public static Injector createBaseApplicationInjector(Application application, Stage stage) {
+        final Stopwatch stopwatch = new Stopwatch();
+
+        initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
+        
+        try {
+            List<Module> modules = createModules(application);
+            return createGuiceInjector(application, stage, stopwatch, modules.toArray(new Module[modules.size()]));
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
+        }
+
+    }
+    
+    private static Injector createGuiceInjector(final Application application, Stage stage, final Stopwatch stopwatch, Module... modules) {
         try {
             synchronized (RoboGuice.class) {
                 final Injector rtrn = Guice.createInjector(stage, modules);
@@ -103,26 +127,6 @@ public class RoboGuice {
         } finally {
             stopwatch.resetAndLog("BaseApplicationInjector creation");
         }
-    }
-
-    /**
-     * Return the cached Injector instance for this application, or create a new one if necessary.
-     * <b>One of RoboGuice's entry points</b>.
-     */
-    public static Injector createBaseApplicationInjector(Application application, Stage stage) {
-        final ArrayList<Module> modules = new ArrayList<Module>();
-
-        initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
-
-        try {
-            initializeModules(application, modules);
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
-        }
-
-        final Injector rtrn = createBaseApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));
-        injectors.put(application,rtrn);
-        return rtrn;
     }
 
     public static RoboInjector getInjector(Context context) {
@@ -237,8 +241,10 @@ public class RoboGuice {
         }
     }
 
-    private static void initializeModules(Application application, final ArrayList<Module> modules) throws NameNotFoundException, ClassNotFoundException,
+    private static List<Module> createModules(Application application) throws NameNotFoundException, ClassNotFoundException,
     InstantiationException, IllegalAccessException, InvocationTargetException {
+
+        final ArrayList<Module> modules = new ArrayList<Module>();
 
         final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
         final Bundle bundle = ai.metaData;
@@ -258,6 +264,7 @@ public class RoboGuice {
                 }
             }
         }
+        return modules;
     }
 
     public static class util {

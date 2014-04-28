@@ -10,6 +10,8 @@ import com.google.inject.util.Modules;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
 
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
@@ -20,6 +22,7 @@ import static org.mockito.Mockito.*;
  * Astroboy's {@link org.roboguice.astroboy.controller.Astroboy#brushTeeth()} method
  * works properly.
  */
+@RunWith(RobolectricTestRunner.class)
 public class Astroboy2Test {
     protected Application application = mock(Application.class, RETURNS_DEEP_STUBS);
     protected Context context = mock(RoboActivity.class, RETURNS_DEEP_STUBS);

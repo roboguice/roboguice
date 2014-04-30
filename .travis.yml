@@ -4,8 +4,8 @@ jdk: oraclejdk7
 # http://blog.xeiam.com/2013/05/configure-travis-ci-to-deploy-snapshots.html
 env:
     global:
-        - secure: "EPQOklc+7/wujJipIqZFwE2+HtPjsnVoJWniV2eQ1qWtxDBDrKcpIW3dIYhucQUad8MnUWX4pZ1T4mLL6W3DpqUmGzJRfunu0iA1k2a3Z4BD/2nkO9devRv0KEJV0UCMv08mYA91XSJcuzeT4DiiLja5oCW2e4y2vOCVmhPtbJw="
-        - secure: "dOGu9TKpqafJ6ALPvRfbnWwwQxPIZj6EAkhlcFsnq+PGLrkV0nXlmfPGZDGIK/LMoFuttQyqIxo7ypxQ2pmVAfidSqJcfg8XpVi7WxTSB1jD5eVtYjmpw+o3M44Il0MxGdoEhd7tEPm5noC2EToezBrztJlPmGE+KOfbxS7tMII="
+        - secure: "MBolkGQu4J/ZU6HuUv/kUkssmlIgKQ22Wn4njYHqSrWbfpFKHhFR4T3iSrA1YSqExy2QZ1UWWe4dHAypkbtkamuvawvS/h1JcPbgwkBCekkz3FD11AOI35E2GahbEoUphHC2OG4qZGJ2RcwCUyLaPKZJNIAIzc/dV15mWv6QgVA="
+        - secure: "RCklprdsC5v87r76/jWexKzdcZbLLeUh2JyR7bako8lYtIjs2yhVofMxUenY3rQCVbMWyR68Je5uH4rNENmqqZZnG3hgb/yHNn/FMFuFDiGyaRMZbGjPYZy47nsfI89i8KWr8P8hT1Ro90Mp+Q/QOQu0Eca6VWZtSNTraxor0dc="
 
 
 before_install:

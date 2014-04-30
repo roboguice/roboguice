@@ -40,7 +40,7 @@
 
 		<!-- PLUGINS -->
 		<android-maven-plugin.version>3.8.2</android-maven-plugin.version>
-		<maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
 		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
 		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>

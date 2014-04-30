@@ -1,4 +1,4 @@
-language: java
+language: android
 jdk: oraclejdk7
 
 # http://blog.xeiam.com/2013/05/configure-travis-ci-to-deploy-snapshots.html
@@ -8,16 +8,14 @@ env:
         - secure: "dOGu9TKpqafJ6ALPvRfbnWwwQxPIZj6EAkhlcFsnq+PGLrkV0nXlmfPGZDGIK/LMoFuttQyqIxo7ypxQ2pmVAfidSqJcfg8XpVi7WxTSB1jD5eVtYjmpw+o3M44Il0MxGdoEhd7tEPm5noC2EToezBrztJlPmGE+KOfbxS7tMII="
 
 
-# http://levi-wilson.blogspot.com/2012/06/maven-android-travis-ci-and-more.html
-# http://stackoverflow.com/a/3008489/82156
 before_install:
-  # Install base Android SDK
     - git clone -b travis `git config --get remote.origin.url` target/travis
-    - sudo apt-get update -qq
-    - sudo apt-get install -qq libstdc++6:i386 lib32z1
-    - export COMPONENTS=build-tools-19.0.1,android-19,android-17
-    - curl -L https://raw.github.com/embarkmobile/android-sdk-installer/master/android-sdk-installer | bash /dev/stdin --install=$COMPONENTS
-    - source ~/.android-sdk-installer/env
+
+android:
+  components:
+    - build-tools-19.0.1
+#    - android-19
+#    - android-17
 
 script:
     - if [ "$TRAVIS_BRANCH" == "master" ] ; then target=deploy ; else target=install ; fi

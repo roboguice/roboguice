@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>astroboy</artifactId>
-	<version>3.0-alpha-2</version>
+	<version>3.0-alpha-3-SNAPSHOT</version>
 	<packaging>apk</packaging>
 	<name>astroboy</name>
 
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.0-alpha-2</version>
+		<version>3.0-alpha-3-SNAPSHOT</version>
 	</parent>
 
 	<properties>

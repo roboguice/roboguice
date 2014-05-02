@@ -14,9 +14,6 @@
 	</parent>
 
 	<properties>
-		<!-- LIBRARIES -->
-		<roboguice.version>${project.version}</roboguice.version>
-
 		<!-- TEST LIBRARIES -->
 		<mockito.version>1.9.0</mockito.version>
 	</properties>
@@ -49,7 +46,7 @@
 		<dependency>
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
-			<version>${roboguice.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
@@ -129,7 +126,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore/>
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

@@ -46,10 +46,12 @@ public class ContextObserverTesterImpl extends ContextObserverBase implements Co
         triggerCalled(methods[2], EventOne.class);
     }
 
+    @SuppressWarnings("unused")
     private void observesPrivateEvent(@Observes EventOne event){
         triggerCalled(methods[3], EventOne.class);
     }
 
+    @SuppressWarnings("unused")
     private void observesPrivateEvent(@Observes EventTwo event){
         triggerCalled(methods[3], EventOne.class);
     }

@@ -57,7 +57,7 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
         handler.post(new Runnable() {
             public void run() {
                 try {
-                    new Callable() {
+                    new Callable<Object>() {
                         @Override
                         public Object call() throws Exception {
                             doOnPreCall();
@@ -125,8 +125,10 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
     }
 
 
+    @java.lang.SuppressWarnings("rawtypes")
     static HashMap<Class<? extends AndroidCallableI>, Boolean> isPreCallOverriddenMap = new HashMap<Class<? extends AndroidCallableI>, Boolean>();
 
+    @java.lang.SuppressWarnings("rawtypes")
     static boolean isPreCallOverriden(Class<? extends AndroidCallableI> subClass) {
         try {
             Boolean tmp = isPreCallOverriddenMap.get(subClass);

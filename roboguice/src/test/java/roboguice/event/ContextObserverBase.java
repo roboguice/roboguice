@@ -77,10 +77,12 @@ public class ContextObserverBase {
         triggerCalled(methods[2], EventTwo.class);
     }
 
+    @SuppressWarnings("unused")
     private void baseObservesPrivateEvent(@Observes EventOne event) {
         triggerCalled(methods[3], EventOne.class);
     }
 
+    @SuppressWarnings("unused")
     private void baseObservesPrivateEvent(@Observes EventTwo event) {
         triggerCalled(methods[3], EventTwo.class);
     }
@@ -109,7 +111,7 @@ public class ContextObserverBase {
         triggerCalled(OVERLOADED_METHOD, EventTwo.class);
     }
 
-    public void triggerCalled(String method, Class eventClass) {
+    public void triggerCalled(String method, Class<?> eventClass) {
         if (!callCount.containsKey(method)) {
             callCount.put(method, new HashMap<Class<?>, Integer>());
         }

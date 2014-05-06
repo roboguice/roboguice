@@ -225,8 +225,8 @@ public class ShadowNativeFragmentActivity extends ShadowActivity {
             }
 
 			//@Override
-			public boolean isDestroyed() {
-				// TODO Auto-generated method stub
+			@SuppressWarnings("unused")
+            public boolean isDestroyed() {
 				return false;
 			}
         };

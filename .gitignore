@@ -22,6 +22,10 @@ local.properties
 .classpath
 .settings/
 
+#For this eclipse file see
+#roboguice/.settings/org.eclipse.jdt.core.prefs
+#see http://stackoverflow.com/a/15942199/693752
+
 # IntelliJ IDEA files
 *.iml
 .idea/

@@ -15,7 +15,6 @@
  */
 package roboguice.activity;
 
-import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -174,36 +173,21 @@ public class RoboActivity extends Activity implements RoboContext {
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        if (RoboActivity.shouldInjectOnCreateView(name))
-            return RoboActivity.injectOnCreateView(name, context, attrs);
-
-        return super.onCreateView(name, context, attrs);
+        View view = RoboGuice.getInjector(this).doInjectOnCreateViewIfNeeded(name, context, attrs);
+        if( view != null ) {
+            return view;
+        } else {
+            return super.onCreateView(name, context, attrs);
+        }
     }
 
     @Override
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        if (RoboActivity.shouldInjectOnCreateView(name))
-            return RoboActivity.injectOnCreateView(name, context, attrs);
-
-        return super.onCreateView(parent, name, context, attrs);
-    }
-
-    /**
-     * @return true if name begins with a lowercase character (indicating a package) and it doesn't start with com.android
-     */
-    protected static boolean shouldInjectOnCreateView(String name) {
-        return Character.isLowerCase(name.charAt(0)) && !name.startsWith("com.android") && !name.equals("fragment");
-    }
-
-    protected static View injectOnCreateView(String name, Context context, AttributeSet attrs) {
-        try {
-            final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
-            final View view = (View) constructor.newInstance(context, attrs);
-            RoboGuice.injectMembers(context, view);
+        View view = RoboGuice.getInjector(this).doInjectOnCreateViewIfNeeded(name, context, attrs);
+        if( view != null ) {
             return view;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } else {
+            return super.onCreateView(parent, name, context, attrs);
         }
     }
-
 }

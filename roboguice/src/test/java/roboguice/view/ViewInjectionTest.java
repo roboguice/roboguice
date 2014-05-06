@@ -36,7 +36,18 @@ public class ViewInjectionTest {
         assertThat(activity.v, equalTo((View)activity.ref));
         assertThat(activity.v.w, equalTo(activity.v.ref));
     }
-
+    
+    @Test
+    public void shouldInjectViewsIntoViewsCreatedDynamically() {
+        final C activity = Robolectric.buildActivity(C.class).create().get();
+        //reset view A
+        activity.v = new C.ViewA(activity);
+        //manually inject
+        RoboGuice.injectMembers(activity, activity.v);
+        RoboGuice.getInjector(activity).injectViewMembers(activity.v);
+       
+        assertThat(activity.v.w, equalTo(activity.v.ref));
+    }
 
     @Test
     public void shouldBeAbleToInjectViewsIntoPojos() {
@@ -158,6 +169,7 @@ public class ViewInjectionTest {
                 addView(ref);
 
                 RoboGuice.getInjector(getContext()).injectMembers(this);
+                RoboGuice.getInjector(getContext()).injectViewMembers(this);
             }
 
         }

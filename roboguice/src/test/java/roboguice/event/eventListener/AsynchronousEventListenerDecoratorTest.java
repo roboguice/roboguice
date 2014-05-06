@@ -24,6 +24,7 @@ public class AsynchronousEventListenerDecoratorTest {
     protected AsynchronousEventListenerDecorator<Object> decorator;
 
     @Before
+    @SuppressWarnings("unchecked")
     public void setup(){
         //noinspection unchecked
         eventListener = createMock(EventListener.class);
@@ -33,6 +34,7 @@ public class AsynchronousEventListenerDecoratorTest {
 
     // Mike doesn't really understand what this test is doing
     @Test
+    @SuppressWarnings("deprecation")
     public void onEventTest(){
         reset(eventListener);
 

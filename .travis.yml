@@ -18,5 +18,5 @@ android:
 #    - android-17
 
 script:
-    - if [ "$TRAVIS_BRANCH" == "master" ] ; then target=deploy ; else target=install ; fi
+    - if [ "$TRAVIS_BRANCH" == "master" -a -z "$TRAVIS_PULL_REQUEST" ] ; then target=deploy ; else target=install ; fi
     - mvn $target --settings target/travis/settings.xml

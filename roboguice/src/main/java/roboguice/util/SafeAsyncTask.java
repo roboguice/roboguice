@@ -23,7 +23,6 @@ import android.util.Log;
  * 
  * @param <ResultT>
  */
-@SuppressWarnings("deprecation")
 @Deprecated
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     public static final int DEFAULT_POOL_SIZE = 25;

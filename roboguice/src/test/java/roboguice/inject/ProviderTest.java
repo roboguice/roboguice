@@ -26,7 +26,7 @@ public class ProviderTest {
 
     @Before 
     public void setup() {
-        RoboGuice.setUseAnnotationDatabases(false);
+        RoboGuice.setUseAnnotationDatabases(true);
     }
 
     @Test(expected = AssertionError.class)

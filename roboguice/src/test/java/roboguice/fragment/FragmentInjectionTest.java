@@ -42,7 +42,7 @@ public class FragmentInjectionTest {
 
     @Before 
     public void setup() {
-        RoboGuice.setUseAnnotationDatabases(false);
+        RoboGuice.setUseAnnotationDatabases(true);
     }
 
 

@@ -8,6 +8,7 @@ import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -41,7 +42,7 @@ public class FragmentInjectionTest {
 	
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
-        final ActivityA activity = new ActivityA();
+        final ActivityA activity = Robolectric.buildActivity(ActivityA.class).create().get();
         activity.onCreate(null);
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
 
@@ -53,7 +54,7 @@ public class FragmentInjectionTest {
 
     @Test
     public void shouldBeAbleToInjectViewsIntoActivityAndFragment() {
-        final ActivityB activity = new ActivityB();
+        final ActivityB activity = Robolectric.buildActivity(ActivityB.class).create().get();
         activity.onCreate(null);
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
 
@@ -66,7 +67,7 @@ public class FragmentInjectionTest {
 
     @Test(expected = NullPointerException.class)
     public void shouldNotBeAbleToInjectFragmentViewsIntoActivity() {
-        final ActivityC activity = new ActivityC();
+        final ActivityC activity = Robolectric.buildActivity(ActivityC.class).create().get();
         activity.onCreate(null);
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
     }
@@ -74,10 +75,9 @@ public class FragmentInjectionTest {
 
     @Test
     public void shouldNotCrashWhenRotatingScreen() {
-        final ActivityD activity1 = new ActivityD();
-        final ActivityD activity2 = new ActivityD();
+        final ActivityD activity1 = Robolectric.buildActivity(ActivityD.class).create().get();
+        final ActivityD activity2 = Robolectric.buildActivity(ActivityD.class).create().get();
 
-        activity1.onCreate(null);
         activity1.onResume();
         activity1.fragmentRef.onViewCreated(activity1.fragmentRef.onCreateView(null,null,null), null);
 

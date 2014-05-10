@@ -66,9 +66,7 @@ public class SherlockActivityInjectionTest {
         RoboGuice.setUseAnnotationDatabases(false);
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
-        activity = new DummySherlockActivity();
-        activity.setIntent(new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober"));
-        activity.onCreate(null);
+        activity =  Robolectric.buildActivity(DummySherlockActivity.class).withIntent(new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober")).create().get();
     }
 
     @Test
@@ -105,27 +103,25 @@ public class SherlockActivityInjectionTest {
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
-        final B b = new B();
-        b.onCreate(null);
+        final B b = Robolectric.buildActivity(B.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
-        final D d = new D();
-        d.onCreate(null);
+        final D d = Robolectric.buildActivity(D.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
-        final C c = new C();
+        final C c = Robolectric.buildActivity(C.class).create().get();
         c.onCreate(null);
     }
 
     @Test
     public void shouldInjectApplication() {
-        final G g = new G();
+        final G g = Robolectric.buildActivity(G.class).create().get();
         g.onCreate(null);
 
         assertThat(g.application, equalTo(Robolectric.application));
@@ -133,7 +129,7 @@ public class SherlockActivityInjectionTest {
 
     @Test
     public void shouldAllowBackgroundThreadsToFinishUsingContextAfterOnDestroy() throws Exception {
-        final SoftReference<F> ref = new SoftReference<F>(new F());
+        final SoftReference<F> ref = new SoftReference<F>(Robolectric.buildActivity(F.class).create().get());
         ref.get().onCreate(null);
 
         final BlockingQueue<Context> queue = new ArrayBlockingQueue<Context>(1);
@@ -165,7 +161,7 @@ public class SherlockActivityInjectionTest {
 
     @Test
     public void shouldBeAbleToGetContextProvidersInBackgroundThreads() throws Exception {
-        final F f = new F();
+        final F f = Robolectric.buildActivity(F.class).create().get();
         f.onCreate(null);
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
@@ -325,12 +321,12 @@ public class SherlockActivityInjectionTest {
             LayoutInflater layoutInflater = LayoutInflater.from(mActivity);
             View contentView = layoutInflater.inflate(layoutResId, null);
 
-            shadowOf(mActivity).setContentView(contentView);
+            shadowOf(mActivity).getWindow().setContentView(contentView);
         }
 
         @Override
         public void setContentView(View view) {
-            shadowOf(mActivity).setContentView(view);
+            shadowOf(mActivity).getWindow().setContentView(view);
         }
     }
 }

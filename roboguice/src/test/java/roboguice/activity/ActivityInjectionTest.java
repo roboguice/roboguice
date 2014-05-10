@@ -58,7 +58,7 @@ public class ActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.setUseAnnotationDatabases(false);
+        RoboGuice.setUseAnnotationDatabases(true);
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         activity = Robolectric.buildActivity(DummyActivity.class).withIntent(new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober")).create().get();
     }

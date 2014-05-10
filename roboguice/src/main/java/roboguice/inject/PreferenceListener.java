@@ -60,7 +60,7 @@ public class PreferenceListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c) ) {
-            Set<Field> allFields = filter.getAllFields(InjectView.class.getName(), c);
+            Set<Field> allFields = filter.getAllFields(InjectPreference.class.getName(), c);
             if( allFields != null ) {
                     for (Field field : allFields) {
                         if ( field.isAnnotationPresent(InjectPreference.class))

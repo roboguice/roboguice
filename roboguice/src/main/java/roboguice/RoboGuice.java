@@ -217,7 +217,7 @@ public class RoboGuice {
 
                 Guice.setAnnotationDatabasePackageNames(packageNames);
             } catch( Exception ex ) {
-                throw new IllegalStateException("Unable use annotation database(s)", ex);
+                throw new IllegalStateException("Unable to use annotation database(s)", ex);
             }
         } else {
             Log.d(RoboGuice.class.getName(), "Using full reflection. Try using RoboGuice annotation processor for better performance.");

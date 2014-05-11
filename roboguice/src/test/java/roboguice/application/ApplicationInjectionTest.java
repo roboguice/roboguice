@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.res.builder.RobolectricPackageManager;
 
 import roboguice.RoboGuice;
 
@@ -18,6 +19,9 @@ import com.google.inject.Inject;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
 
 @RunWith(RobolectricTestRunner.class)
 public class ApplicationInjectionTest {
@@ -47,9 +51,8 @@ public class ApplicationInjectionTest {
     }
 
 
-
-
     public static class AppA extends Application {
+
         @Inject Random random;
 
         @Override
@@ -61,6 +64,11 @@ public class ApplicationInjectionTest {
         @Override
         public String getPackageName() {
             return "org.robolectric.default";
+        }
+        
+        @Override
+        public PackageManager getPackageManager() {
+            return new TestRobolectricPackageManager();
         }
     }
 
@@ -76,6 +84,22 @@ public class ApplicationInjectionTest {
         @Override
         public String getPackageName() {
             return "org.robolectric.default";
+        }
+        
+        @Override
+        public PackageManager getPackageManager() {
+            return new TestRobolectricPackageManager();
+        }
+    }
+    
+    public static class TestRobolectricPackageManager extends RobolectricPackageManager {
+        @Override
+        public ApplicationInfo getApplicationInfo(String packageName, int flags) throws NameNotFoundException {
+            ApplicationInfo applicationInfo = new ApplicationInfo();
+            Bundle bundle = new Bundle();
+            bundle.putString("roboguice.annotations.packages", "roboguice,testroboguice");
+            applicationInfo.metaData = bundle ;
+            return applicationInfo;
         }
     }
 

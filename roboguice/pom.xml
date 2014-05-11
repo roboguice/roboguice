@@ -26,7 +26,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>compile-sources</id>
+						<id>default-compile</id>
 						<phase>compile</phase>
 						<goals>
 							<goal>compile</goal>
@@ -38,7 +38,7 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>compile-test-sources</id>
+						<id>default-testCompile</id>
 						<phase>test-compile</phase>
 						<goals>
 						    <goal>testCompile</goal>

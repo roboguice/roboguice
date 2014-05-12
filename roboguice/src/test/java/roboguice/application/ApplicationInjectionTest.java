@@ -20,6 +20,7 @@ import com.google.inject.Inject;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
@@ -100,6 +101,13 @@ public class ApplicationInjectionTest {
             bundle.putString("roboguice.annotations.packages", "roboguice,testroboguice");
             applicationInfo.metaData = bundle ;
             return applicationInfo;
+        }
+        
+        @Override
+        public PackageInfo getPackageInfo(String packageName, int flags) throws NameNotFoundException {
+            PackageInfo packageInfo = new PackageInfo();
+            packageInfo.packageName = "org.robolectric.default";
+            return packageInfo;
         }
     }
 

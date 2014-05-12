@@ -66,7 +66,7 @@ public class ApplicationInjectionTest {
 
         @Override
         public String getPackageName() {
-            return "org.robolectric.default";
+            return TEST_PACKAGE_NAME;
         }
         
         @Override

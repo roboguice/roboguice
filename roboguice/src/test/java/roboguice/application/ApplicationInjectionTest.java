@@ -27,6 +27,8 @@ import android.os.Bundle;
 @RunWith(RobolectricTestRunner.class)
 public class ApplicationInjectionTest {
 
+    private static final String TEST_PACKAGE_NAME = "org.robolectric.default";
+    
     @Before 
     public void setup() {
         RoboGuice.setUseAnnotationDatabases(true);
@@ -74,6 +76,7 @@ public class ApplicationInjectionTest {
     }
 
     public static class AppB extends Application {
+        
         @Inject Context context;
 
         @Override
@@ -84,7 +87,7 @@ public class ApplicationInjectionTest {
 
         @Override
         public String getPackageName() {
-            return "org.robolectric.default";
+            return TEST_PACKAGE_NAME;
         }
         
         @Override
@@ -106,7 +109,7 @@ public class ApplicationInjectionTest {
         @Override
         public PackageInfo getPackageInfo(String packageName, int flags) throws NameNotFoundException {
             PackageInfo packageInfo = new PackageInfo();
-            packageInfo.packageName = "org.robolectric.default";
+            packageInfo.packageName = TEST_PACKAGE_NAME;
             return packageInfo;
         }
     }

@@ -21,7 +21,6 @@ public class RoboGuiceTest {
     
     @Before
     public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
         RoboGuice.injectors.clear();
     }
     

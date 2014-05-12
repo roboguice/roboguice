@@ -31,7 +31,6 @@ public class ObservesTypeListenerTest {
 
     @Before
     public void setup() throws NoSuchMethodException {
-        RoboGuice.setUseAnnotationDatabases(true);
         injector = RoboGuice.getInjector(Robolectric.application);
 
         eventManager = injector.getInstance(EventManager.class);

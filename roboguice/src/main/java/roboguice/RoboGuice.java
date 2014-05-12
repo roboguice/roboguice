@@ -44,6 +44,7 @@ import android.util.Log;
  *    your current context, whether it's an activity, service, or something else.
  * 
  * BUG hashmap should also key off of stage and modules list
+ * TODO add documentation about annotation processing system
  */
 public class RoboGuice {
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
@@ -56,6 +57,14 @@ public class RoboGuice {
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default.*/
     private static boolean useAnnotationDatabases = true;
 
+    //used for testing
+    static {
+        String useAnnotationsEnvVar = System.getenv("roboguice.useAnnotationDatabases");
+        if( useAnnotationsEnvVar != null ) {
+            useAnnotationDatabases = Boolean.parseBoolean(useAnnotationsEnvVar);
+        }
+    }
+    
     private RoboGuice() {
     }
 

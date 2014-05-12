@@ -23,11 +23,6 @@ import android.app.Activity;
 @RunWith(RobolectricTestRunner.class)
 public class ContextScopeTest {
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
     @Test
     public void shouldHaveContextInScopeMapAfterOnCreate() throws Exception {
         final ActivityController<A> aController = Robolectric.buildActivity(A.class);

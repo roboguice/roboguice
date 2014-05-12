@@ -29,11 +29,6 @@ public class ApplicationInjectionTest {
 
     private static final String TEST_PACKAGE_NAME = "org.robolectric.default";
     
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-    
     @Test
     public void shouldBeAbleToInjectIntoApplication() {
         Robolectric.application = new AppA();

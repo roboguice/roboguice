@@ -29,11 +29,6 @@ import android.preference.PreferenceManager;
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesProviderTest {
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
     @Test
     public void shouldInjectDefaultSharedPrefs() throws Exception {
         final A a = Robolectric.buildActivity(A.class).create().get();

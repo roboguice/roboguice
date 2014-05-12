@@ -30,11 +30,6 @@ import android.widget.FrameLayout;
 @Config(shadows= {roboguice.fragment.provided.shadow.ShadowNativeFragment.class, roboguice.fragment.provided.shadow.ShadowNativeFragmentActivity.class})
 public class FragmentInjectionTest {
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
 	@Test
     public void shadowActivityGetApplicationContextShouldNotReturnNull() {
         Assert.assertNotNull(new Activity().getApplicationContext());

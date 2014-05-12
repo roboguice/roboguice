@@ -35,7 +35,6 @@ import roboguice.inject.InjectView;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
-import com.google.inject.config.Module;
 import com.google.inject.Key;
 import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
@@ -58,7 +57,6 @@ public class ActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         activity = Robolectric.buildActivity(DummyActivity.class).withIntent(new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober")).create().get();
     }

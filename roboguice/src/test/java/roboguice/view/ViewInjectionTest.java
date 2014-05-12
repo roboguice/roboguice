@@ -29,11 +29,6 @@ import android.widget.LinearLayout;
 @RunWith(RobolectricTestRunner.class)
 public class ViewInjectionTest {
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
     @Test
     public void shouldInjectViewsIntoActivitiesAndViews() {
         final C activity = Robolectric.buildActivity(C.class).create().get();

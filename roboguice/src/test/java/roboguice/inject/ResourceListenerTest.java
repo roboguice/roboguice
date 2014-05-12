@@ -16,11 +16,6 @@ import android.os.Bundle;
 @RunWith(RobolectricTestRunner.class)
 public class ResourceListenerTest {
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
     @Ignore("Need to configure roboguice build to use maven android plugin for tests at least so it can access resources")
     @Test
     public void shouldInjectResources() {

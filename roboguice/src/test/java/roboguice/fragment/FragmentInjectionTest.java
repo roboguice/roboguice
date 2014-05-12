@@ -40,12 +40,6 @@ public class FragmentInjectionTest {
 
     }
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
-
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
         final ActivityA activityA = Robolectric.buildActivity(ActivityA.class).create().start().resume().get();

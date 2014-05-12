@@ -104,6 +104,27 @@
 				<version>1.4</version> <configuration> <useAgent>true</useAgent> <executable>gpg2</executable> 
 				</configuration> </plugin -->
 
+			<!-- By default RoboGuice uses annotation database system. Turn it off and replay all tests. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>test-with-annotation-database-off</id>
+						<configuration>
+							<environmentVariables>
+								<roboguice.useAnnotationDatabases>false</roboguice.useAnnotationDatabases>
+							</environmentVariables>
+						</configuration>
+						<goals>
+						    <goal>test</goal>
+						</goals>
+						<phase>test</phase>
+					</execution>
+				</executions>
+
+			</plugin>
+
 		</plugins>
 	</build>
 

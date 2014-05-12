@@ -20,11 +20,6 @@ import android.os.IBinder;
 @RunWith(RobolectricTestRunner.class)
 public class ExtrasListenerTest {
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
     @Test
     public void shouldInjectActivity() {
         final MyRoboActivity a1 = Robolectric.buildActivity(MyRoboActivity.class).create().get();

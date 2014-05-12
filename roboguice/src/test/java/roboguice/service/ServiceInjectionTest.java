@@ -23,11 +23,6 @@ import android.view.View;
 @RunWith(RobolectricTestRunner.class)
 public class ServiceInjectionTest {
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
     @Test
     public void shouldBeAbleToInjectInRoboService() {
         final RoboServiceA roboService = new RoboServiceA();

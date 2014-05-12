@@ -63,7 +63,6 @@ public class SherlockActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
         RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
         activity =  Robolectric.buildActivity(DummySherlockActivity.class).withIntent(new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober")).create().get();

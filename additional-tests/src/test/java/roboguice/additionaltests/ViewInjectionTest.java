@@ -22,11 +22,6 @@ import roboguice.RoboGuice;
 @RunWith(RobolectricTestRunner.class)
 public class ViewInjectionTest {
 
-    @Before
-    public void setup() {
-       RoboGuice.setUseAnnotationDatabases(true);
-    }
-    
     @Test
     public void shouldInjectCustomViews() {
         final A a = Robolectric.buildActivity(A.class).create().get();

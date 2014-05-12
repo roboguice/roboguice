@@ -24,11 +24,6 @@ import android.os.Bundle;
 @RunWith(RobolectricTestRunner.class)
 public class ProviderTest {
 
-    @Before 
-    public void setup() {
-        RoboGuice.setUseAnnotationDatabases(true);
-    }
-
     @Test(expected = AssertionError.class)
     public void shouldNotReturnProperContext() throws Exception {
         final A a = Robolectric.buildActivity(A.class).create().get();

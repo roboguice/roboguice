@@ -17,7 +17,6 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.config.Module;
 import com.google.inject.spi.TypeConverterBinding;
 
-
 //github.com/roboguice/roboguice/issues/174
 import android.content.Context;
 
@@ -25,12 +24,10 @@ public class ContextScopedRoboInjector implements RoboInjector {
     protected Injector delegate;
     protected Context context;
     protected ContextScope scope;
-    protected ViewListener viewListener;
 
-    public ContextScopedRoboInjector(Context context, Injector applicationInjector, ViewListener viewListener) {
+    public ContextScopedRoboInjector(Context context, Injector applicationInjector) {
         this.delegate = applicationInjector;
         this.context = context;
-        this.viewListener = viewListener;
         this.scope = delegate.getInstance(ContextScope.class);
     }
 
@@ -264,5 +261,5 @@ public class ContextScopedRoboInjector implements RoboInjector {
                 scope.exit(context);
             }
         }
-	}
+    }
 }

@@ -18,19 +18,19 @@ import android.app.Activity;
 
 @RunWith(RobolectricTestRunner.class)
 public class RoboGuiceTest {
-    
+
     @Before
     public void setup() {
         RoboGuice.injectors.clear();
     }
-    
+
     @Test
     public void destroyInjectorShouldRemoveContext() {
         final Activity activity = Robolectric.buildActivity(RoboActivity.class).get();
         RoboGuice.getInjector(activity);
-        
+
         assertThat(RoboGuice.injectors.size(), equalTo(1));
-        
+
         RoboGuice.destroyInjector(activity);
         assertThat(RoboGuice.injectors.size(), equalTo(1));
 
@@ -42,10 +42,10 @@ public class RoboGuiceTest {
     public void resetShouldRemoveContext() {
         final Activity activity = Robolectric.buildActivity(RoboActivity.class).get();
         RoboGuice.getInjector(activity);
-        
+
         assertThat(RoboGuice.injectors.size(), equalTo(1));
-        
-        RoboGuice.util.reset();
+
+        RoboGuice.Util.reset();
         assertThat(RoboGuice.injectors.size(), equalTo(0));
     }
 

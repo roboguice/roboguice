@@ -88,6 +88,7 @@ import android.view.inputmethod.InputMethodManager;
  *
  * @author Mike Burton
  */
+@SuppressWarnings("PMD")
 public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
 
@@ -178,7 +179,7 @@ public class DefaultRoboModule extends AbstractModule {
         bindListener(Matchers.any(), viewListener);
 
         if( hasInjectionPointsForAnnotation(InjectPreference.class) ) {
-            final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application,contextScope);
+            final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
             bind(PreferenceListener.class).toInstance(preferenceListener);
             bindListener(Matchers.any(), preferenceListener);
         }
@@ -223,8 +224,8 @@ public class DefaultRoboModule extends AbstractModule {
     
     // ----------------------------------
     //  PROVIDER METHODS
-    //  used for lazy bindings, when 
-    //  instance creation is costly. 
+    //  used for lazy bindings, when
+    //  instance creation is costly.
     // ----------------------------------
 
     @Provides

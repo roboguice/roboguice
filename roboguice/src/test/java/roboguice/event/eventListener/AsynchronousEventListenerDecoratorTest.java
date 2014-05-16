@@ -1,47 +1,41 @@
 package roboguice.event.eventListener;
 
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.reset;
-import static org.easymock.EasyMock.verify;
-
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import roboguice.event.EventListener;
 
 import android.os.Handler;
+
+import static org.mockito.Mockito.*;
 
 /**
  * Tests for the AsynchronousEventListenerDecorator class
  *
  * @author John Ericksen
  */
+@SuppressWarnings("unchecked")
 public class AsynchronousEventListenerDecoratorTest {
 
     protected EventListener<Object> eventListener;
-    protected RunnableAsyncTaskAdaptor asyncTaskAdaptor;
     protected AsynchronousEventListenerDecorator<Object> decorator;
 
     @Before
     public void setup(){
         //noinspection unchecked
-        eventListener = createMock(EventListener.class);
-        asyncTaskAdaptor = createMock(RunnableAsyncTaskAdaptor.class);
-        decorator = new AsynchronousEventListenerDecorator<Object>(createMock(Handler.class),eventListener);
+        eventListener = mock(EventListener.class);
+        decorator = new AsynchronousEventListenerDecorator<Object>(mock(Handler.class),eventListener);
     }
 
     // Mike doesn't really understand what this test is doing
+    @SuppressWarnings("deprecation")
     @Test
     public void onEventTest(){
         reset(eventListener);
 
-        asyncTaskAdaptor.execute();
-
-        replay(eventListener);
-
         decorator.onEvent( new Object() );
 
-        verify(eventListener);
+        verify(eventListener,Mockito.never()).onEvent( Mockito.anyObject());
     }
 }

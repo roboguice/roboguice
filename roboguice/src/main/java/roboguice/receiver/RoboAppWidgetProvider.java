@@ -11,15 +11,15 @@ import android.content.Context;
 
 public abstract class RoboAppWidgetProvider extends AppWidgetProvider {
 
-	@Override
-	public final void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		final Injector injector = RoboGuice.getBaseApplicationInjector((Application) context.getApplicationContext());
+    @Override
+    public final void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        final Injector injector = RoboGuice.getBaseApplicationInjector((Application) context.getApplicationContext());
 
-		injector.injectMembers(this);
-		onHandleUpdate(context, appWidgetManager, appWidgetIds);
-	}
+        injector.injectMembers(this);
+        onHandleUpdate(context, appWidgetManager, appWidgetIds);
+    }
 
-	@SuppressWarnings("UnusedParameters")
+    @SuppressWarnings("UnusedParameters")
     public void onHandleUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // proper template method to handle the receive
     }

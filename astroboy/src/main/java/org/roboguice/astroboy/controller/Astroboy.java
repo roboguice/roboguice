@@ -1,13 +1,13 @@
 package org.roboguice.astroboy.controller;
 
+import java.util.Random;
+
 import android.app.Application;
 import android.os.Vibrator;
 import android.widget.Toast;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-
-import java.util.Random;
 
 
 /**

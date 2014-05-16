@@ -2,7 +2,6 @@ package org.roboguice.astroboy.controller;
 
 import roboguice.inject.ContextSingleton;
 import roboguice.util.Ln;
-
 import android.app.Activity;
 import android.widget.Toast;
 

@@ -20,8 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
 
-import javax.inject.Inject;
-
 import roboguice.util.RoboContext;
 
 import com.google.inject.Key;

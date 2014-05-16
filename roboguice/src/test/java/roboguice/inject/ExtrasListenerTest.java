@@ -3,6 +3,7 @@ package roboguice.inject;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,9 +32,10 @@ public class ExtrasListenerTest {
         final MyRoboService s1 = new MyRoboService();
         try {
             s1.onCreate();
-            assertTrue(false);
+            fail();
         } catch( Exception e ) {
             // great
+            assertTrue(true);
         }
 
     }

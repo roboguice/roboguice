@@ -187,9 +187,10 @@ public class LnImpl implements LnInterface {
                 return "ERROR";
             case Log.ASSERT:
                 return "ASSERT";
-        }
 
-        return "UNKNOWN";
+            default:
+                return "UNKNOWN";
+        }
     }
 
 

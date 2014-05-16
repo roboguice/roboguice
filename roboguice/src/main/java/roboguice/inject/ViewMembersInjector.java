@@ -20,7 +20,7 @@ import android.view.View;
  * This class gets twice as many providers as necessary to do its job, look into optimizations in the future if this is a bottleneck
  */
 public class ViewMembersInjector<T> implements MembersInjector<T> {
-    protected static WeakHashMap<Object,ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>>();
+    protected static final WeakHashMap<Object,ArrayList<ViewMembersInjector<?>>> VIEW_MEMBERS_INJECTORS = new WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>>();
 
     protected Field field;
     protected Annotation annotation;
@@ -58,10 +58,10 @@ public class ViewMembersInjector<T> implements MembersInjector<T> {
                 return;
 
             // Add a view injector for the key
-            ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(key);
+            ArrayList<ViewMembersInjector<?>> injectors = VIEW_MEMBERS_INJECTORS.get(key);
             if( injectors==null ) {
                 injectors = new ArrayList<ViewMembersInjector<?>>();
-                viewMembersInjectors.put(key, injectors);
+                VIEW_MEMBERS_INJECTORS.put(key, injectors);
             }
             injectors.add(this);
 
@@ -172,7 +172,7 @@ public class ViewMembersInjector<T> implements MembersInjector<T> {
     protected static void injectViews(Object activityOrFragment) {
         synchronized ( ViewMembersInjector.class ) {
 
-            final ArrayList<ViewMembersInjector<?>> injectors = viewMembersInjectors.get(activityOrFragment);
+            final ArrayList<ViewMembersInjector<?>> injectors = VIEW_MEMBERS_INJECTORS.get(activityOrFragment);
             if(injectors!=null)
                 for(ViewMembersInjector<?> viewMembersInjector : injectors)
                     viewMembersInjector.reallyInjectMembers(activityOrFragment);

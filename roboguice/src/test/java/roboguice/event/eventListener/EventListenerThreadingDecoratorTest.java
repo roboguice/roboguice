@@ -1,7 +1,7 @@
 package roboguice.event.eventListener;
 
 import static junit.framework.Assert.assertEquals;
-import static org.easymock.EasyMock.createMock;
+import static org.mockito.Mockito.mock;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +31,12 @@ public class EventListenerThreadingDecoratorTest {
     public void setup(){
 
         //noinspection unchecked
-        eventListener = createMock(EventListener.class);
+        eventListener = mock(EventListener.class);
 
 
         final Module testFactoryModule = new AbstractModule() {
             public void configure() {
-                bind(Handler.class).toInstance(createMock(Handler.class));
+                bind(Handler.class).toInstance(mock(Handler.class));
             }
         };
 

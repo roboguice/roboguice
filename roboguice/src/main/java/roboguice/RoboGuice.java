@@ -46,11 +46,17 @@ import android.util.Log;
  * BUG hashmap should also key off of stage and modules list
  * TODO add documentation about annotation processing system
  */
-public class RoboGuice {
+public final class RoboGuice {
+    //CHECKSTYLE:OFF
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_FINAL")
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
+    //CHECKSTYLE:ON
 
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
 
 
@@ -95,7 +101,7 @@ public class RoboGuice {
      * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
      * @see roboguice.RoboGuice#DEFAULT_STAGE
      *
-     * If using this method with test cases, be sure to call {@link roboguice.RoboGuice.util#reset()} in your test teardown methods
+     * If using this method with test cases, be sure to call {@link roboguice.RoboGuice.Util#reset()} in your test teardown methods
      * to avoid polluting our other tests with your custom injector.  Don't do this in your real application though.
      * <b>One of RoboGuice's entry points</b>.
      */
@@ -113,7 +119,7 @@ public class RoboGuice {
         final Stopwatch stopwatch = new Stopwatch();
 
         initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
-        
+
         try {
             List<Module> modules = createModules(application);
             Module[] moduleArray = modules.toArray(new Module[modules.size()]);
@@ -123,7 +129,7 @@ public class RoboGuice {
         }
 
     }
-    
+
     private static Injector createGuiceInjector(final Application application, Stage stage, final Stopwatch stopwatch, Module... modules) {
         try {
             synchronized (RoboGuice.class) {
@@ -138,7 +144,7 @@ public class RoboGuice {
 
     public static RoboInjector getInjector(Context context) {
         final Application application = (Application)context.getApplicationContext();
-        return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application), getViewListener(application));
+        return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application));
     }
 
     /**
@@ -156,8 +162,9 @@ public class RoboGuice {
     public static void setUseAnnotationDatabases(boolean useAnnotationDatabases) {
         RoboGuice.useAnnotationDatabases = useAnnotationDatabases;
     }
-    
+
     @SuppressWarnings("ConstantConditions")
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="NP_LOAD_OF_KNOWN_NULL_VALUE", justification="Double check lock")
     protected static ResourceListener getResourceListener( Application application ) {
         ResourceListener resourceListener = resourceListeners.get(application);
         if( resourceListener==null ) {
@@ -172,6 +179,7 @@ public class RoboGuice {
     }
 
     @SuppressWarnings("ConstantConditions")
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="NP_LOAD_OF_KNOWN_NULL_VALUE", justification="Double check lock")
     protected static ViewListener getViewListener( final Application application ) {
         ViewListener viewListener = viewListeners.get(application);
         if( viewListener==null ) {
@@ -221,6 +229,7 @@ public class RoboGuice {
                 Log.d(RoboGuice.class.getName(), "Using annotation database(s) : " + packageNameList.toString());
 
 
+
                 final String[] packageNames = new String[packageNameList.size()];
                 packageNameList.toArray(packageNames);
 
@@ -262,12 +271,12 @@ public class RoboGuice {
                 }
             }
         }
-        
+
         return modules;
     }
 
-    public static class util {
-        private util() {}
+    public static final class Util {
+        private Util() {}
 
         /**
          * This method is provided to reset RoboGuice in testcases.

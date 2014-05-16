@@ -111,6 +111,15 @@ public class FragmentInjectionTest {
             View ref;
 
             @Override
+            public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+            }
+            
+            @Override
+            public void onViewCreated(View view, Bundle savedInstanceState) {
+                super.onViewCreated(view, savedInstanceState);
+            }
+            @Override
             public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 ref = new View(getActivity());
                 ref.setId(101);

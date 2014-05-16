@@ -6,7 +6,7 @@
  * You may obtain a copy of the License at
  * 
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,11 +41,11 @@ import com.google.inject.BindingAnnotation;
  * However, it is nonsense to inject a default value in Java if the extra is
  * not optional : {@code @InjectExtra("someValue") Integer someValue = 2; // DO
  * NOT DO THIS}
- * 
+ *
  * <br />
  * Usage example:<br /> {@code @InjectExtra("someValue") protected Integer someValue;}<br />
  * <br />{@code @InjectExtra("someValue") @Nullable protected Integer someValue;}
- * 
+ *
  * @author Mike Burton
  */
 @Retention(RUNTIME)

@@ -1,11 +1,9 @@
 package org.roboguice.astroboy.controller;
 
-import android.app.Application;
-import android.content.Context;
-import android.os.Vibrator;
-
-import com.google.inject.config.AbstractModule;
-import com.google.inject.util.Modules;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,7 +13,12 @@ import org.robolectric.RobolectricTestRunner;
 
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
-import static org.mockito.Mockito.*;
+import android.app.Application;
+import android.content.Context;
+import android.os.Vibrator;
+
+import com.google.inject.config.AbstractModule;
+import com.google.inject.util.Modules;
 
 /**
  * A testcase that swaps in a TestVibrator to verify that
@@ -42,7 +45,7 @@ public class Astroboy2Test {
     @After
     public void teardown() {
         // Don't forget to tear down our custom injector to avoid polluting other test classes
-        RoboGuice.util.reset();
+        RoboGuice.Util.reset();
     }
     
     @Test

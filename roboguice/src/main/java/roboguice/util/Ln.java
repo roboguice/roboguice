@@ -2,6 +2,8 @@ package roboguice.util;
 
 import com.google.inject.Inject;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 /**
  * A more natural android logging facility.
  *
@@ -48,12 +50,13 @@ import com.google.inject.Inject;
  *
  */
 @SuppressWarnings({"ImplicitArrayToString"})
-public class Ln {
+public final class Ln {
 
     /**
      * lnImpl is initially set to LnImpl() with sensible defaults, then replaced
      * by whatever binding you choose during guice static injection pass.
      */
+    @SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     @Inject(optional = true) protected static LnInterface lnImpl = new LnImpl();
 
 

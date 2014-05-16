@@ -35,7 +35,7 @@ public class SharedPreferencesProviderTest {
 
         final Field f = TestSharedPreferences.class.getDeclaredField("filename");
         f.setAccessible(true);
-        
+
         assertTrue(Strings.notEmpty(f.get(a.prefs)));
         assertThat(f.get(a.prefs), equalTo(f.get(PreferenceManager.getDefaultSharedPreferences(a))));
     }
@@ -44,19 +44,18 @@ public class SharedPreferencesProviderTest {
     public void shouldInjectNamedSharedPrefs() throws Exception {
         RoboGuice.createBaseApplicationInjector(Robolectric.application,RoboGuice.DEFAULT_STAGE, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA() );
         try {
-            
+
             final A a = Robolectric.buildActivity(A.class).create().get();
             final Field f = TestSharedPreferences.class.getDeclaredField("filename");
             f.setAccessible(true);
-            
-            assertEquals("FOOBAR",f.get(a.prefs));
-            
-            
+
+            assertEquals("FOOBAR", f.get(a.prefs));
+
         } finally {
-            RoboGuice.util.reset();
+            RoboGuice.Util.reset();
         }
     }
-    
+
     @Test
     public void shouldFallbackOnOldDefaultIfPresent() throws Exception {
         final File oldDefault = new File("shared_prefs/default.xml");
@@ -70,7 +69,7 @@ public class SharedPreferencesProviderTest {
             f.setAccessible(true);
 
             assertTrue(Strings.notEmpty(f.get(a.prefs)));
-            assertEquals("default.xml", f.get(a.prefs) );
+            assertEquals("default.xml", f.get(a.prefs));
 
         } finally {
             oldDefault.delete();
@@ -93,18 +92,18 @@ public class SharedPreferencesProviderTest {
             f.setAccessible(true);
 
             assertTrue(Strings.notEmpty(f.get(a.prefs)));
-            assertEquals("FOOBAR", f.get(a.prefs) );
+            assertEquals("FOOBAR", f.get(a.prefs));
 
         } finally {
-            RoboGuice.util.reset();
+            RoboGuice.Util.reset();
             oldDefault.delete();
             oldDir.delete();
         }
     }
-    
 
     public static class A extends RoboActivity {
-        @Inject SharedPreferences prefs;
+        @Inject
+        SharedPreferences prefs;
     }
 
     public static class ModuleA extends AbstractModule {
@@ -114,4 +113,3 @@ public class SharedPreferencesProviderTest {
         }
     }
 }
-

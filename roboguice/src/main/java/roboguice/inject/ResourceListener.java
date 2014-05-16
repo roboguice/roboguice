@@ -34,9 +34,9 @@ import android.graphics.drawable.Drawable;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-
 /**
  * Resource listener.
+ * 
  * @author Mike Burton
  */
 public class ResourceListener implements TypeListener {
@@ -48,26 +48,26 @@ public class ResourceListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        if( filter == null ) {
+        if (filter == null) {
             filter = Guice.createHierarchyTraversalFilter();
         } else {
             filter.reset();
         }
         Class<?> c = typeLiteral.getRawType();
-        while( isWorthScanning(c) ) {
+        while (isWorthScanning(c)) {
             Set<Field> allFields = filter.getAllFields(InjectResource.class.getName(), c);
-            if( allFields != null ) {
-                    for (Field field : allFields) {
-                        if ( field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()) )
-                            typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
-                    }
+            if (allFields != null) {
+                for (Field field : allFields) {
+                    if (field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()))
+                        typeEncounter.register(new ResourceMembersInjector<I>(field, application, field.getAnnotation(InjectResource.class)));
+                }
                 c = c.getSuperclass();
             }
         }
     }
 
     private boolean isWorthScanning(Class<?> c) {
-        return filter.isWorthScanningForFields(InjectResource.class.getName(),c);
+        return filter.isWorthScanningForFields(InjectResource.class.getName(), c);
     }
 
     protected static class ResourceMembersInjector<T> implements MembersInjector<T> {
@@ -89,14 +89,14 @@ public class ResourceListener implements TypeListener {
             try {
 
                 final Resources resources = application.getResources();
-                final int id = getId(resources,annotation);
+                final int id = getId(resources, annotation);
                 final Class<?> t = field.getType();
 
                 if (String.class.isAssignableFrom(t)) {
                     value = resources.getString(id);
                 } else if (boolean.class.isAssignableFrom(t) || Boolean.class.isAssignableFrom(t)) {
                     value = resources.getBoolean(id);
-                } else if (ColorStateList.class.isAssignableFrom(t)  ) {
+                } else if (ColorStateList.class.isAssignableFrom(t)) {
                     value = resources.getColorStateList(id);
                 } else if (int.class.isAssignableFrom(t) || Integer.class.isAssignableFrom(t)) {
                     value = resources.getInteger(id);
@@ -108,13 +108,13 @@ public class ResourceListener implements TypeListener {
                     value = resources.getIntArray(id);
                 } else if (Animation.class.isAssignableFrom(t)) {
                     value = AnimationUtils.loadAnimation(application, id);
-                } else if (Movie.class.isAssignableFrom(t)  ) {
+                } else if (Movie.class.isAssignableFrom(t)) {
                     value = resources.getMovie(id);
                 }
 
-                if (value == null && Nullable.notNullable(field) ) {
-                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field
-                            .getName()));
+                if (value == null && Nullable.notNullable(field)) {
+                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(),
+                            field.getName()));
                 }
 
                 field.setAccessible(true);
@@ -131,8 +131,7 @@ public class ResourceListener implements TypeListener {
 
         protected int getId(Resources resources, InjectResource annotation) {
             int id = annotation.value();
-            return id>=0 ? id : resources.getIdentifier(annotation.name(),null,null);
+            return id >= 0 ? id : resources.getIdentifier(annotation.name(), null, application.getPackageName());
         }
     }
 }
-

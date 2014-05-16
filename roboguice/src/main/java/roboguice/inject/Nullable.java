@@ -5,7 +5,7 @@ import java.lang.reflect.Field;
 
 import roboguice.util.Strings;
 
-public class Nullable {
+public final class Nullable {
     private Nullable() {
     }
     

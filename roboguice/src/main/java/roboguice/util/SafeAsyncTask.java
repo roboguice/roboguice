@@ -31,7 +31,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     protected Handler handler;
     protected Executor executor;
-    protected StackTraceElement[] launchLocation;
     protected FutureTask<Void> future;
 
 
@@ -93,7 +92,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     }
 
     protected void execute( StackTraceElement[] launchLocation ) {
-        this.launchLocation = launchLocation;
         executor.execute( future() );
     }
 

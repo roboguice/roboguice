@@ -42,33 +42,32 @@ public class PreferenceListener implements TypeListener {
 
     protected Provider<Context> contextProvider;
     protected Application application;
-    protected ContextScope scope;
 
     private HierarchyTraversalFilter filter;
 
-    public PreferenceListener(Provider<Context> contextProvider, Application application, ContextScope scope) {
+    public PreferenceListener(Provider<Context> contextProvider, Application application) {
         this.contextProvider = contextProvider;
         this.application = application;
-        this.scope = scope;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        if( filter == null ) {
+        if (filter == null) {
             filter = Guice.createHierarchyTraversalFilter();
         } else {
             filter.reset();
         }
         Class<?> c = typeLiteral.getRawType();
-        while( isWorthScanning(c) ) {
+        while (isWorthScanning(c)) {
             Set<Field> allFields = filter.getAllFields(InjectPreference.class.getName(), c);
-            if( allFields != null ) {
-                    for (Field field : allFields) {
-                        if ( field.isAnnotationPresent(InjectPreference.class))
-                            if( Modifier.isStatic(field.getModifiers()) )
-                                throw new UnsupportedOperationException("Preferences may not be statically injected");
-                            else
-                                typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
-                    }
+            if (allFields != null) {
+                for (Field field : allFields) {
+                    if (field.isAnnotationPresent(InjectPreference.class))
+                        if (Modifier.isStatic(field.getModifiers()))
+                            throw new UnsupportedOperationException("Preferences may not be statically injected");
+                        else
+                            typeEncounter
+                                    .register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class)));
+                }
             }
             c = c.getSuperclass();
         }
@@ -77,7 +76,6 @@ public class PreferenceListener implements TypeListener {
     private boolean isWorthScanning(Class<?> c) {
         return filter.isWorthScanningForFields(InjectPreference.class.getName(), c);
     }
-
 
     public void registerPreferenceForInjection(PreferenceMembersInjector<?> injector) {
         preferencesForInjection.add(injector);
@@ -88,20 +86,16 @@ public class PreferenceListener implements TypeListener {
             preferencesForInjection.remove(i).reallyInjectMembers();
     }
 
-
-
     class PreferenceMembersInjector<T> implements MembersInjector<T> {
         protected Field field;
         protected Provider<Context> contextProvider;
         protected InjectPreference annotation;
-        protected ContextScope scope;
         protected WeakReference<T> instanceRef;
 
-        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider, InjectPreference annotation, ContextScope scope) {
+        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider, InjectPreference annotation) {
             this.field = field;
             this.annotation = annotation;
             this.contextProvider = contextProvider;
-            this.scope = scope;
         }
 
         public void injectMembers(T instance) {
@@ -112,7 +106,7 @@ public class PreferenceListener implements TypeListener {
 
         public void reallyInjectMembers() {
             final T instance = instanceRef.get();
-            if( instance==null )
+            if (instance == null)
                 return;
 
             Object value = null;
@@ -121,9 +115,9 @@ public class PreferenceListener implements TypeListener {
 
                 value = ((PreferenceActivity) contextProvider.get()).findPreference(annotation.value());
 
-                if (value == null && Nullable.notNullable(field) )
-                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
-
+                if (value == null && Nullable.notNullable(field))
+                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(),
+                            field.getName()));
 
                 field.setAccessible(true);
                 field.set(instance, value);

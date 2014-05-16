@@ -64,7 +64,7 @@ public class ViewListener implements TypeListener {
             }
             //TODO
             //right now those loops could be merged. But it would be interesting 
-            //to see if ViewMembersInjector should not be more distinguished 
+            //to see if ViewMembersInjector should not be more distinguished
             //by introducing a FragmentMembersInjector
             allFields = filter.getAllFields(InjectFragment.class.getName(), c);
             if( allFields != null ) {
@@ -86,8 +86,8 @@ public class ViewListener implements TypeListener {
             else if (Context.class.isAssignableFrom(field.getDeclaringClass()) && !Activity.class.isAssignableFrom(field.getDeclaringClass()))
                 throw new UnsupportedOperationException("You may only use @InjectView in Activity contexts");
             else {
-                final f<?,?> utils = FragmentUtil.hasSupport 
-                        && (FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass()) 
+                final f<?,?> utils = FragmentUtil.hasSupport
+                        && (FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass())
                                 || FragmentUtil.supportFrag.fragmentType().isAssignableFrom(field.getDeclaringClass()))
                                 ? FragmentUtil.supportFrag : FragmentUtil.nativeFrag;
 
@@ -109,10 +109,9 @@ public class ViewListener implements TypeListener {
 
                 if ((isNativeActivity && assignableFromNative) || (isSupportActivity && assignableFromSupport)) {
                     typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter, isNativeActivity ? FragmentUtil.nativeFrag:FragmentUtil.supportFrag));
-                }
-                // Error messages - these filters are comprehensive. The
-                // final else block will never execute.
-                else if (isNativeActivity && !assignableFromNative) {
+                } else if (isNativeActivity && !assignableFromNative) {
+                    // Error messages - these filters are comprehensive. The
+                    // final else block will never execute.
                     throw new UnsupportedOperationException(
                             "You may only use @InjectFragment in native activities if fields are descended from type android.app.Fragment");
                 } else if (!isSupportActivity && !isNativeActivity) {
@@ -128,7 +127,7 @@ public class ViewListener implements TypeListener {
     }
 
     private boolean isWorthScanning(Class<?> c) {
-        return filter.isWorthScanningForFields(InjectView.class.getName(), c) 
+        return filter.isWorthScanningForFields(InjectView.class.getName(), c)
                 || filter.isWorthScanningForFields(InjectFragment.class.getName(), c);
     }
 
@@ -136,6 +135,7 @@ public class ViewListener implements TypeListener {
      * This class gets twice as many providers as necessary to do its job, look into optimizations in the future if this is a bottleneck
      */
     public static class ViewMembersInjector<T> implements MembersInjector<T> {
+        @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_FINAL")
         protected static WeakHashMap<Object,ArrayList<ViewMembersInjector<?>>> viewMembersInjectors = new WeakHashMap<Object, ArrayList<ViewMembersInjector<?>>>();
 
         protected Field field;

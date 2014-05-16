@@ -1,19 +1,20 @@
 package org.roboguice.astroboy.activity;
 
+import java.util.Random;
+
+import javax.inject.Inject;
+
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.Astroboy;
+
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import roboguice.util.RoboAsyncTask;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.widget.TextView;
-
-import javax.inject.Inject;
-import java.util.Random;
 
 /**
  * Things you'll learn in this class:

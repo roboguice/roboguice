@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -145,16 +146,20 @@ public class SherlockActivityInjectionTest {
 
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
+        boolean oomHappened = false;
         try {
-            @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"}) final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
+            @SuppressWarnings({ "MismatchedQueryAndUpdateOfCollection" })
+            final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
             int size;
-            while( (size = Math.min(Math.abs((int)Runtime.getRuntime().freeMemory()),Integer.MAX_VALUE))>0 )
-                allocations.add( new Object[size] );
+            while ((size = Math.min(Math.abs((int) Runtime.getRuntime().freeMemory()), Integer.MAX_VALUE)) > 0)
+                allocations.add(new Object[size]);
 
         } catch (OutOfMemoryError e) {
             // Yeah!
+            oomHappened = true;
         }
 
+        Assert.assertTrue(oomHappened);
         assertNotNull(queue.poll(10, TimeUnit.SECONDS));
     }
 
@@ -164,7 +169,9 @@ public class SherlockActivityInjectionTest {
         f.onCreate(null);
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
-            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(Key.get(new TypeLiteral<ContextScopedProvider<Context>>(){}));
+            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(
+                    Key.get(new TypeLiteral<ContextScopedProvider<Context>>() {
+                    }));
 
             @Override
             public Context call() throws Exception {
@@ -178,12 +185,18 @@ public class SherlockActivityInjectionTest {
     }
 
     public static class DummySherlockActivity extends RoboSherlockActivity {
-        @Inject protected String emptyString;
-        @Inject protected Activity activity;
-        @Inject protected RoboSherlockActivity roboSherlockActivity;
-        @InjectView(R.id.text1) protected TextView text1;
-        @InjectResource(R.string.cancel) protected String cancel;
-        @InjectExtra("foobar") protected String foobar;
+        @Inject
+        protected String emptyString;
+        @Inject
+        protected Activity activity;
+        @Inject
+        protected RoboSherlockActivity roboSherlockActivity;
+        @InjectView(R.id.text1)
+        protected TextView text1;
+        @InjectResource(R.string.cancel)
+        protected String cancel;
+        @InjectExtra("foobar")
+        protected String foobar;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -218,9 +231,8 @@ public class SherlockActivityInjectionTest {
     public static class BaseModule extends com.google.inject.config.AbstractModule {
         @Override
         protected void configure() {
-            bind(RoboSherlockActivity.class)
-                    .toProvider(Key.get(new TypeLiteral<NullProvider<RoboSherlockActivity>>(){}))
-                    .in(ContextSingleton.class);
+            bind(RoboSherlockActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboSherlockActivity>>() {
+            })).in(ContextSingleton.class);
         }
     }
 
@@ -232,8 +244,10 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class A {
-            @InjectResource(R.string.cancel) static String s;
-            @Inject static String t;
+            @InjectResource(R.string.cancel)
+            static String s;
+            @Inject
+            static String t;
         }
     }
 
@@ -245,7 +259,8 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class B extends RoboSherlockActivity {
-            @InjectView(0) static View v;
+            @InjectView(0)
+            static View v;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -262,7 +277,8 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class C extends RoboSherlockActivity {
-            @InjectPreference("xxx") static Preference v;
+            @InjectPreference("xxx")
+            static Preference v;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -279,7 +295,8 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class D extends RoboSherlockActivity {
-            @InjectExtra("xxx") static String s;
+            @InjectExtra("xxx")
+            static String s;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -301,7 +318,8 @@ public class SherlockActivityInjectionTest {
     }
 
     public static class G extends RoboSherlockActivity {
-        @Inject Application application;
+        @Inject
+        Application application;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {

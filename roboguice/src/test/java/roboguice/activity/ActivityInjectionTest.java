@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -63,22 +64,22 @@ public class ActivityInjectionTest {
 
     @Test
     public void shouldInjectUsingDefaultConstructor() {
-        assertThat(activity.emptyString,is(""));
+        assertThat(activity.emptyString, is(""));
     }
 
     @Test
     public void shouldInjectView() {
-        assertThat(activity.text1,is(activity.findViewById(R.id.text1)));
+        assertThat(activity.text1, is(activity.findViewById(R.id.text1)));
     }
 
     @Test
     public void shouldInjectStringResource() {
-        assertThat(activity.cancel,is("Cancel"));
+        assertThat(activity.cancel, is("Cancel"));
     }
 
     @Test
     public void shouldInjectExtras() {
-        assertThat(activity.foobar,is("goober"));
+        assertThat(activity.foobar, is("goober"));
     }
 
     @Test
@@ -88,8 +89,8 @@ public class ActivityInjectionTest {
 
     @Test
     public void shouldInjectActivityAndRoboActivity() {
-        assertEquals(activity,activity.activity);
-        assertEquals(activity,activity.roboActivity);
+        assertEquals(activity, activity.activity);
+        assertEquals(activity, activity.roboActivity);
     }
 
     @Test(expected = ConfigurationException.class)
@@ -121,15 +122,15 @@ public class ActivityInjectionTest {
         ActivityController<F> fController = Robolectric.buildActivity(F.class);
         final SoftReference<F> ref = new SoftReference<F>(fController.get());
         fController.create();
-        fController=null;
+        fController = null;
 
         final BlockingQueue<Context> queue = new ArrayBlockingQueue<Context>(1);
-        new Thread()  {
+        new Thread() {
             final Context context = RoboGuice.getInjector(ref.get()).getInstance(Context.class);
 
             @Override
             public void run() {
-                queue.add( context );
+                queue.add(context);
             }
         }.start();
 
@@ -137,16 +138,20 @@ public class ActivityInjectionTest {
 
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
+        boolean oomHappened = false;
         try {
-            @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"}) final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
+            @SuppressWarnings({ "MismatchedQueryAndUpdateOfCollection" })
+            final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
             int size;
-            while( (size = Math.min(Math.abs((int)Runtime.getRuntime().freeMemory()),Integer.MAX_VALUE))>0 )
-                allocations.add( new Object[size] );
+            while ((size = Math.min(Math.abs((int) Runtime.getRuntime().freeMemory()), Integer.MAX_VALUE)) > 0)
+                allocations.add(new Object[size]);
 
-        } catch( OutOfMemoryError e ) {
+        } catch (OutOfMemoryError e) {
             // great!
+            oomHappened = true;
         }
 
+        Assert.assertTrue(oomHappened);
         assertNotNull(queue.poll(10, TimeUnit.SECONDS));
 
     }
@@ -171,13 +176,18 @@ public class ActivityInjectionTest {
     }
 
     public static class DummyActivity extends RoboActivity {
-        @Inject protected String emptyString;
-        @Inject protected Activity activity;
-        @Inject protected RoboActivity roboActivity;
-        @InjectView(R.id.text1) protected TextView text1;
-        @InjectResource(R.string.cancel) protected String cancel;
-        @InjectExtra("foobar") protected String foobar;
-
+        @Inject
+        protected String emptyString;
+        @Inject
+        protected Activity activity;
+        @Inject
+        protected RoboActivity roboActivity;
+        @InjectView(R.id.text1)
+        protected TextView text1;
+        @InjectResource(R.string.cancel)
+        protected String cancel;
+        @InjectExtra("foobar")
+        protected String foobar;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -215,13 +225,13 @@ public class ActivityInjectionTest {
             requestStaticInjection(A.class);
         }
 
-
         public static class A {
-            @InjectResource(android.R.string.cancel) static String s;
-            @Inject static String t;
+            @InjectResource(android.R.string.cancel)
+            static String s;
+            @Inject
+            static String t;
         }
     }
-
 
     public static class ModuleB extends com.google.inject.config.AbstractModule {
         @Override
@@ -229,12 +239,11 @@ public class ActivityInjectionTest {
             requestStaticInjection(B.class);
         }
 
-
-        public static class B extends RoboActivity{
-            @InjectView(0) static View v;
+        public static class B extends RoboActivity {
+            @InjectView(0)
+            static View v;
         }
     }
-
 
     public static class ModuleC extends com.google.inject.config.AbstractModule {
         @Override
@@ -242,9 +251,9 @@ public class ActivityInjectionTest {
             requestStaticInjection(C.class);
         }
 
-
-        public static class C extends RoboActivity{
-            @InjectPreference("xxx") static Preference v;
+        public static class C extends RoboActivity {
+            @InjectPreference("xxx")
+            static Preference v;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -253,13 +262,11 @@ public class ActivityInjectionTest {
         }
     }
 
-
     public static class ModuleD extends com.google.inject.config.AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(D.class);
         }
-
 
         public static class D extends RoboActivity{
             @InjectExtra("xxx") static String s;
@@ -269,9 +276,9 @@ public class ActivityInjectionTest {
     public static class F extends RoboActivity {}
 
     public static class PojoA {
-        @InjectView(100) View v;
+        @InjectView(100)
+        View v;
     }
-
 
     public static class G extends RoboActivity {
         @Inject Application application;

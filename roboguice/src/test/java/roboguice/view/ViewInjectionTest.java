@@ -8,6 +8,7 @@ import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 
 import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -61,6 +62,7 @@ public class ViewInjectionTest {
 
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
+        boolean oomHappened = false;
         try {
             @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"}) final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
             int size;
@@ -69,8 +71,11 @@ public class ViewInjectionTest {
 
         } catch( OutOfMemoryError e ) {
             // great!
+            oomHappened = true;
         }
 
+
+        Assert.assertTrue(oomHappened);
         assertThat(activityRef.get(), equalTo(null));
 
     }
@@ -117,7 +122,7 @@ public class ViewInjectionTest {
             setContentView(ref);
         }
 
-        
+
         public static class PojoA {
             @InjectView(100) View v;
         }
@@ -128,7 +133,7 @@ public class ViewInjectionTest {
 
     public static class C extends RoboActivity {
         @InjectView(100) ViewA v;
-        
+
         LinearLayout ref;
 
         @Override

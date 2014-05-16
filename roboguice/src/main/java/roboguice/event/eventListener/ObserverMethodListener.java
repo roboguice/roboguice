@@ -56,7 +56,8 @@ public class ObserverMethodListener<T> implements EventListener<T> {
     @Override
     public int hashCode() {
         int result = descriptor != null ? descriptor.hashCode() : 0;
-        result = 31 * result + (instance != null ? instance.hashCode() : 0);
+        final int prime = 31;
+        result = prime * result + (instance != null ? instance.hashCode() : 0);
         return result;
     }
 

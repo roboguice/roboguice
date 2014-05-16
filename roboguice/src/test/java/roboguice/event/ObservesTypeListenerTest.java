@@ -55,8 +55,10 @@ public class ObservesTypeListenerTest {
         injector.getInstance(MalformedObserves.class);
     }
 
-    static public class InjectedTestClass{
-        @Inject public ContextObserverTesterImpl tester;
+    public static class InjectedTestClass{
+        //CHECKSTYLE:OFF
+        @Inject protected ContextObserverTesterImpl tester;
+        //CHECKSTYLE:ON
     }
 
     public class MalformedObserves{

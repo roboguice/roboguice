@@ -15,6 +15,7 @@ import org.junit.Test;
  */
 public class RunnableAsyncTaskAdaptorTest {
 
+    @SuppressWarnings("rawtypes")
     protected EventListenerRunnable runnable;
 
     protected RunnableAsyncTaskAdaptor runnableAdaptor;

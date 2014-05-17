@@ -72,6 +72,7 @@ public class RoboSherlockPreferenceActivity extends SherlockPreferenceActivity i
         eventManager.fire(new OnCreateEvent<Activity>(this,savedInstanceState));
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);

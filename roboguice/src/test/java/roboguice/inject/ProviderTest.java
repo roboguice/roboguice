@@ -39,6 +39,7 @@ public class ProviderTest {
 
     @Test
     public void shouldReturnProperContext() throws Exception {
+        @SuppressWarnings("unused")
         //noinspection UnusedDeclaration
         final B b = Robolectric.buildActivity(B.class).create().get();
 

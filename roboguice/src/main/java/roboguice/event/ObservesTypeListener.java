@@ -101,8 +101,9 @@ public class ObservesTypeListener implements TypeListener {
             this.threadType = threadType;
         }
 
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         public void afterInjection(I i) {
-            eventManagerProvider.get().registerObserver( event, observerThreadingDecorator.decorate(threadType, new ObserverMethodListener<T>(i, method)));
+            eventManagerProvider.get().registerObserver( event, observerThreadingDecorator.decorate(threadType, new ObserverMethodListener(i, method)));
         }
     }
 }

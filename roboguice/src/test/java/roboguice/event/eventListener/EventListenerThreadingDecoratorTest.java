@@ -27,6 +27,7 @@ public class EventListenerThreadingDecoratorTest {
     protected EventListenerThreadingDecorator eventListenerDecorator;
     protected EventListener<Void> eventListener;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setup(){
 
@@ -45,18 +46,21 @@ public class EventListenerThreadingDecoratorTest {
         eventListenerDecorator = injector.getInstance(EventListenerThreadingDecorator.class);
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     public void buildCurrentThreadObserverTest(){
         final EventListener outputListener = eventListenerDecorator.decorate(EventThread.CURRENT, eventListener);
         assertEquals(eventListener, outputListener);
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     public void buildUIThreadObserverTest(){
         final EventListener outputListener = eventListenerDecorator.decorate(EventThread.UI, eventListener);
         assertEquals( eventListener, ((UIThreadEventListenerDecorator)outputListener).eventListener);
     }
 
+    @SuppressWarnings("rawtypes")
     @Test
     public void buildAsyncThreadObserverTest(){
         final EventListener outputListener = eventListenerDecorator.decorate(EventThread.BACKGROUND, eventListener);

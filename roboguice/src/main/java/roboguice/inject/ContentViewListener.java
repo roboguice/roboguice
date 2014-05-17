@@ -13,7 +13,7 @@ import android.content.Context;
 public class ContentViewListener {
     @Inject protected Activity activity;
 
-    public void optionallySetContentView( @Observes OnCreateEvent ignored ) {
+    public void optionallySetContentView( @Observes OnCreateEvent<? extends Context> ignored ) {
         Class<?> c = activity.getClass();
         while( c != Context.class ) {
             final ContentView annotation = c.getAnnotation(ContentView.class);

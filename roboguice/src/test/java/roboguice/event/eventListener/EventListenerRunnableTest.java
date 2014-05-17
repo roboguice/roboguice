@@ -21,8 +21,10 @@ public class EventListenerRunnableTest {
     protected EventOne event;
     protected EventListener<EventOne> eventListener;
 
+    @SuppressWarnings("rawtypes")
     protected EventListenerRunnable eventListenerRunnable;
 
+    @SuppressWarnings("unchecked")
     @Before
     public void setup(){
         //noinspection unchecked

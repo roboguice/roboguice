@@ -42,6 +42,7 @@ public class EventManager {
      * @param listener to be triggered
      * @param <T> event type
      */
+    @SuppressWarnings("rawtypes")
     public <T> void registerObserver( Class<T> event, EventListener listener ) {
         Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) {
@@ -71,6 +72,7 @@ public class EventManager {
      * @param listener to be unregistered
      * @param <T> event type
      */
+    @SuppressWarnings("rawtypes")
     public <T> void unregisterObserver(Class<T> event, EventListener<T> listener ) {
 
         final Set<EventListener<?>> observers = registrations.get(event);
@@ -95,6 +97,7 @@ public class EventManager {
      * @param instance to be unregistered
      * @param event observed
      */
+    @SuppressWarnings("rawtypes")
     public <T> void unregisterObserver(Object instance, Class<T> event) {
 
         final Set<EventListener<?>> observers = registrations.get(event);
@@ -122,6 +125,7 @@ public class EventManager {
      *
      * @param event observed
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void fire(Object event) {
 
         final Set<EventListener<?>> observers = registrations.get(event.getClass());

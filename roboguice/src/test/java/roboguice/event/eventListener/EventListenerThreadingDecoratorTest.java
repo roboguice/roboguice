@@ -1,7 +1,7 @@
 package roboguice.event.eventListener;
 
-import static junit.framework.Assert.assertEquals;
 import static org.easymock.EasyMock.createMock;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;

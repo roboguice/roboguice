@@ -6,6 +6,10 @@
 	<version>3.0-alpha-3-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+	<prerequisites>
+		<maven>3.1.1</maven>
+	</prerequisites>
+
 	<modules>
 		<module>roboguice</module>
 		<module>additional-tests</module>
@@ -52,9 +56,9 @@
 		<guice.version>3.0</guice.version>
 
 		<!--TESTING -->
-		<junit.version>4.8.2</junit.version>
-		<robolectric.version>2.1.1</robolectric.version>
-
+		<junit.version>4.11</junit.version>
+		<robolectric.version>2.2</robolectric.version>
+		<dexmaker.version>1.1</dexmaker.version>
 	</properties>
 
 

@@ -3,11 +3,11 @@ package roboguice.view;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -74,7 +74,7 @@ public class ViewInjectionTest {
         }
 
 
-        Assert.assertTrue(oomHappened);
+        assertTrue(oomHappened);
         assertThat(activityRef.get(), equalTo(null));
 
     }

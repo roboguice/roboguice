@@ -12,11 +12,6 @@
 		<version>3.0-alpha-3-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<!-- TEST LIBRARIES -->
-		<mockito.version>1.9.5</mockito.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
             <groupId>org.roboguice</groupId>
@@ -30,8 +25,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 
 
@@ -39,13 +33,11 @@
 		<dependency>
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
-			<version>${android-platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>  <!-- needed to prevent warnings in robolectric tests -->
 			<groupId>com.google.android.maps</groupId>
 			<artifactId>maps</artifactId>
-			<version>${android-map.version}</version>
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
@@ -57,7 +49,6 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<version>${guice.version}</version>
 			<classifier>no_aop</classifier>
 		</dependency>
 
@@ -66,13 +57,11 @@
 		<dependency>
 			<groupId>org.robolectric</groupId>
 			<artifactId>robolectric</artifactId>
-			<version>${robolectric.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

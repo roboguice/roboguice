@@ -11,25 +11,6 @@
 		<version>3.0-alpha-3-SNAPSHOT</version>
 	</parent>
 
-	<properties>
-		<!--PLUGINS -->
-		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
-		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
-
-		<!--LIBRARIES -->
-		<android-map.version>7_r1</android-map.version>
-		<android-support-v4.version>19</android-support-v4.version>
-		<android-appcompat-v7.version>19</android-appcompat-v7.version>
-		<actionbarsherlock.version>4.2.0</actionbarsherlock.version>
-		<jsr305.version>2.0.3</jsr305.version>
-		<findbugs-annotations.version>1.0.0</findbugs-annotations.version>
-
-		<!--TESTING -->
-		<easymock.version>3.0</easymock.version>
-		<mockito.version>1.9.5</mockito.version>
-	</properties>
-
 	<dependencies>
 		<!-- TEST DEPENDENCIES -->
 		<!-- http://stackoverflow.com/a/18463743/693752 -->
@@ -37,7 +18,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -52,32 +32,27 @@
 		<dependency>
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
-			<version>${android-platform.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.android.maps</groupId>
 			<artifactId>maps</artifactId>
-			<version>${android-map.version}</version>
 			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v4</artifactId>
-			<version>${android-support-v4.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v7-appcompat</artifactId>
-			<version>${android-appcompat-v7.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
 			<artifactId>actionbarsherlock</artifactId>
-			<version>${actionbarsherlock.version}</version>
 			<type>jar</type>
 			<scope>provided</scope>
 			<optional>true</optional>
@@ -85,19 +60,16 @@
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>
-			<version>${jsr305.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<version>${guice.version}</version>
 			<classifier>no_aop</classifier>
 		</dependency>
 		<dependency>
 			<groupId>findbugs</groupId>
 			<artifactId>annotations</artifactId>
-			<version>${findbugs-annotations.version}</version>
 			<type>jar</type>
 		</dependency>
 
@@ -105,19 +77,21 @@
 		<dependency>
 			<groupId>org.robolectric</groupId>
 			<artifactId>robolectric</artifactId>
-			<version>${robolectric.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockito.version}</version>
+			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.dexmaker</groupId>
 			<artifactId>dexmaker</artifactId>
-			<version>${dexmaker.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

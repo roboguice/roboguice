@@ -52,13 +52,13 @@
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
-
+		<jacoco-maven-plugin.version>0.6.2.201302030002</jacoco-maven-plugin.version>
 		<!-- LIBRARIES -->
 		<android-platform.version>4.1.1.4</android-platform.version>
 		<android-map.version>7_r1</android-map.version>
 		<android-build.version>19</android-build.version>
 		<guice.version>3.0</guice.version>
-		
+
 		<!--LIBRARIES -->
 		<android-map.version>7_r1</android-map.version>
 		<android-support-v4.version>19</android-support-v4.version>
@@ -66,7 +66,7 @@
 		<actionbarsherlock.version>4.2.0</actionbarsherlock.version>
 		<jsr305.version>2.0.3</jsr305.version>
 		<findbugs-annotations.version>1.0.0</findbugs-annotations.version>
-		
+
 		<!--TESTING -->
 		<junit.version>4.11</junit.version>
 		<robolectric.version>2.2</robolectric.version>
@@ -205,6 +205,30 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>${jacoco-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>report</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<includes>
+							<include>roboguice/*</include>
+						</includes>
+					</configuration>
+				</plugin>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
@@ -243,9 +267,21 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<execute>
-											<runOnIncremental>false</runOnIncremental>
-										</execute>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jacoco</groupId>
+										<artifactId>jacoco-maven-plugin</artifactId>
+										<versionRange>[${jacoco-maven-plugin.version},)</versionRange>
+										<goals>
+											<goal>prepare-agent</goal>
+											<goal>report</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>

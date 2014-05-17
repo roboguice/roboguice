@@ -1,6 +1,6 @@
 package roboguice.event;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.lang.reflect.Method;
 

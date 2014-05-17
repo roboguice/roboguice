@@ -14,7 +14,7 @@
 
 	<properties>
 		<!-- TEST LIBRARIES -->
-		<mockito.version>1.9.0</mockito.version>
+		<mockito.version>1.9.5</mockito.version>
 	</properties>
 
 	<dependencies>

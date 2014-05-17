@@ -1,7 +1,7 @@
 package roboguice.event.eventListener;
 
-import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
+import static org.easymock.EasyMock.createMock;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,10 +10,10 @@ import roboguice.event.EventListener;
 import roboguice.event.EventThread;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.config.AbstractModule;
-import com.google.inject.config.Module;
+import com.google.inject.Module;
 
 import android.os.Handler;
 
@@ -32,12 +32,12 @@ public class EventListenerThreadingDecoratorTest {
     public void setup(){
 
         //noinspection unchecked
-        eventListener = mock(EventListener.class);
+        eventListener = createMock(EventListener.class);
 
 
         final Module testFactoryModule = new AbstractModule() {
             public void configure() {
-                bind(Handler.class).toInstance(mock(Handler.class));
+                bind(Handler.class).toInstance(createMock(Handler.class));
             }
         };
 

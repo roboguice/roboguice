@@ -1,10 +1,11 @@
 package roboguice.activity;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -15,7 +16,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -151,7 +151,7 @@ public class ActivityInjectionTest {
             oomHappened = true;
         }
 
-        Assert.assertTrue(oomHappened);
+        assertTrue(oomHappened);
         assertNotNull(queue.poll(10, TimeUnit.SECONDS));
 
     }

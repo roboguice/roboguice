@@ -3,16 +3,14 @@ package roboguice.fragment.provided;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
-import junit.framework.Assert;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.util.ActivityController;
 
-import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
@@ -32,13 +30,12 @@ public class FragmentInjectionTest {
 
 	@Test
     public void shadowActivityGetApplicationContextShouldNotReturnNull() {
-        Assert.assertNotNull(new Activity().getApplicationContext());
+        assertNotNull(new Activity().getApplicationContext());
     }
 	
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
-        final ActivityA activity = Robolectric.buildActivity(ActivityA.class).create().get();
-        activity.onCreate(null);
+        final ActivityA activity = Robolectric.buildActivity(ActivityA.class).create().start().resume().get();
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
 
         assertNotNull(activity.fragmentRef.ref);
@@ -50,7 +47,6 @@ public class FragmentInjectionTest {
     @Test
     public void shouldBeAbleToInjectViewsIntoActivityAndFragment() {
         final ActivityB activity = Robolectric.buildActivity(ActivityB.class).create().get();
-        activity.onCreate(null);
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
 
         assertNotNull(activity.fragmentRef.viewRef);
@@ -62,7 +58,7 @@ public class FragmentInjectionTest {
 
     @Test(expected = NullPointerException.class)
     public void shouldNotBeAbleToInjectFragmentViewsIntoActivity() {
-        final ActivityC activity = Robolectric.buildActivity(ActivityC.class).create().get();
+        final ActivityC activity = new ActivityC();
         activity.onCreate(null);
         activity.fragmentRef.onViewCreated(activity.fragmentRef.onCreateView(null,null,null), null);
     }
@@ -70,19 +66,20 @@ public class FragmentInjectionTest {
 
     @Test
     public void shouldNotCrashWhenRotatingScreen() {
-        final ActivityD activity1 = Robolectric.buildActivity(ActivityD.class).create().get();
-        final ActivityD activity2 = Robolectric.buildActivity(ActivityD.class).create().get();
+        final ActivityController<ActivityD> activityD1Controller = Robolectric.buildActivity(ActivityD.class).create().resume();
+        final ActivityD activity1 = activityD1Controller.get();
 
-        activity1.onResume();
+        final ActivityController<ActivityD> activityD2Controller = Robolectric.buildActivity(ActivityD.class);
+        final ActivityD activity2 = activityD2Controller.get();
+
         activity1.fragmentRef.onViewCreated(activity1.fragmentRef.onCreateView(null,null,null), null);
 
         assertNotNull(activity1.fragmentRef.ref);
         assertThat(activity1.fragmentRef.v, equalTo(activity1.fragmentRef.ref));
 
-        activity1.onPause();
+        activityD1Controller.pause();
+        activityD2Controller.create().resume();
 
-        activity2.onCreate(null); // crash here?
-        activity2.onResume();
         activity2.fragmentRef.onViewCreated(activity2.fragmentRef.onCreateView(null,null,null), null);
 
         assertNotNull(activity2.fragmentRef.ref);

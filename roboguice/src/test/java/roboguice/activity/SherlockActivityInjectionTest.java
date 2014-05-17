@@ -1,10 +1,11 @@
 package roboguice.activity;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.robolectric.Robolectric.shadowOf;
 
 import java.lang.ref.SoftReference;
@@ -16,7 +17,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,9 +64,11 @@ public class SherlockActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
+        RoboGuice
+                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
-        activity =  Robolectric.buildActivity(DummySherlockActivity.class).withIntent(new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober")).create().get();
+        Intent intent = new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober");
+        activity = Robolectric.buildActivity(DummySherlockActivity.class).withIntent(intent).create().get();
     }
 
     @Test
@@ -102,27 +104,31 @@ public class SherlockActivityInjectionTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
-        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
+        RoboGuice
+                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
+        @SuppressWarnings("unused")
         final B b = Robolectric.buildActivity(B.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
-        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
+        RoboGuice
+                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
+        @SuppressWarnings("unused")
         final D d = Robolectric.buildActivity(D.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
-        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
+        RoboGuice
+                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
+        @SuppressWarnings("unused")
         final C c = Robolectric.buildActivity(C.class).create().get();
-        c.onCreate(null);
     }
 
     @Test
     public void shouldInjectApplication() {
         final G g = Robolectric.buildActivity(G.class).create().get();
-        g.onCreate(null);
 
         assertThat(g.application, equalTo(Robolectric.application));
     }
@@ -130,7 +136,6 @@ public class SherlockActivityInjectionTest {
     @Test
     public void shouldAllowBackgroundThreadsToFinishUsingContextAfterOnDestroy() throws Exception {
         final SoftReference<F> ref = new SoftReference<F>(Robolectric.buildActivity(F.class).create().get());
-        ref.get().onCreate(null);
 
         final BlockingQueue<Context> queue = new ArrayBlockingQueue<Context>(1);
         new Thread() {
@@ -159,14 +164,13 @@ public class SherlockActivityInjectionTest {
             oomHappened = true;
         }
 
-        Assert.assertTrue(oomHappened);
+        assertTrue(oomHappened);
         assertNotNull(queue.poll(10, TimeUnit.SECONDS));
     }
 
     @Test
     public void shouldBeAbleToGetContextProvidersInBackgroundThreads() throws Exception {
         final F f = Robolectric.buildActivity(F.class).create().get();
-        f.onCreate(null);
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
             final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(
@@ -228,7 +232,7 @@ public class SherlockActivityInjectionTest {
         }
     }
 
-    public static class BaseModule extends com.google.inject.config.AbstractModule {
+    public static class BaseModule extends com.google.inject.AbstractModule {
         @Override
         protected void configure() {
             bind(RoboSherlockActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboSherlockActivity>>() {

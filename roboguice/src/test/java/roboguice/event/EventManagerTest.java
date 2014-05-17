@@ -35,10 +35,10 @@ public class EventManagerTest {
     @Test
     public void testRegistrationLifeCycle(){
         for(Method method : eventOneMethods){
-            eventManager.registerObserver(EventOne.class, new ObserverMethodListener(tester, method));
+            eventManager.registerObserver(EventOne.class, new ObserverMethodListener<EventOne>(tester, method));
         }
         for(Method method : eventTwoMethods){
-            eventManager.registerObserver(EventTwo.class, new ObserverMethodListener(tester, method));
+            eventManager.registerObserver(EventTwo.class, new ObserverMethodListener<EventTwo>(tester, method));
         }
 
         eventManager.fire(event);

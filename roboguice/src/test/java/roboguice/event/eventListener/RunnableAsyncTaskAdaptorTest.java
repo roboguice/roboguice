@@ -15,6 +15,7 @@ import org.mockito.Mockito;
  */
 public class RunnableAsyncTaskAdaptorTest {
 
+    @SuppressWarnings("rawtypes")
     protected EventListenerRunnable runnable;
 
     protected RunnableAsyncTaskAdaptor runnableAdaptor;

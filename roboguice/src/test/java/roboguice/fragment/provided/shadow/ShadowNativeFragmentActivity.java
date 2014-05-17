@@ -224,11 +224,6 @@ public class ShadowNativeFragmentActivity extends ShadowActivity {
             public void dump(String s, FileDescriptor fileDescriptor, PrintWriter printWriter, String[] strings) {
             }
 
-			//@Override
-			public boolean isDestroyed() {
-				// TODO Auto-generated method stub
-				return false;
-			}
         };
     }
 

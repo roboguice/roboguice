@@ -12,6 +12,7 @@ public class NullProvider<T> implements Provider<T> {
 
     static NullProvider<?> instance = new NullProvider<Object>();
 
+    @SuppressWarnings("unchecked")
     public static <T> NullProvider<T> instance() {
         //noinspection unchecked
         return (NullProvider<T>) instance;

@@ -29,12 +29,13 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
         this.handler = handler != null ? handler : new Handler(Looper.getMainLooper());
     }
 
+    @java.lang.SuppressWarnings("unchecked")
     @Override
     public void run() {
         ResultT result = null;
         Exception exception = null;
         try {
-            if (isPreCallOverriden(delegate.getClass()))
+            if (isPreCallOverriden((Class<? extends AndroidCallableI<?>>) delegate.getClass()))
                 beforeCall();
 
             result = doDoInBackgroundThread();
@@ -57,7 +58,7 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
         handler.post(new Runnable() {
             public void run() {
                 try {
-                    new Callable() {
+                    new Callable<Object>() {
                         @Override
                         public Object call() throws Exception {
                             doOnPreCall();
@@ -125,9 +126,9 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
     }
 
 
-    static HashMap<Class<? extends AndroidCallableI>, Boolean> isPreCallOverriddenMap = new HashMap<Class<? extends AndroidCallableI>, Boolean>();
+    static HashMap<Class<? extends AndroidCallableI<?>>, Boolean> isPreCallOverriddenMap = new HashMap<Class<? extends AndroidCallableI<?>>, Boolean>();
 
-    static boolean isPreCallOverriden(Class<? extends AndroidCallableI> subClass) {
+    static boolean isPreCallOverriden(Class<? extends AndroidCallableI<?>> subClass) {
         try {
             Boolean tmp = isPreCallOverriddenMap.get(subClass);
             if (tmp != null)

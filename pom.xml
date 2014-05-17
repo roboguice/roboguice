@@ -71,7 +71,7 @@
 						<configLocation>roboguice_checks.xml</configLocation>
 						<propertiesLocation>roboguice_checks.properties</propertiesLocation>
 						<enableRulesSummary>false</enableRulesSummary>
-                        <consoleOutput>true</consoleOutput>
+                        			<consoleOutput>true</consoleOutput>
 					</configuration>
 					<executions>
 						<execution>
@@ -96,6 +96,53 @@
 							</goals>
 						</execution>
 					</executions>
+				</plugin>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-checkstyle-plugin
+										</artifactId>
+										<versionRange>
+											[${maven-checkstyle-plugin.version},)
+										</versionRange>
+										<goals>
+											<goal>check</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute >
+             										<runOnIncremental>false</runOnIncremental>
+           									</execute >
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
 				</plugin>
 				<!--<plugin>-->
 					<!--<groupId>org.apache.maven.plugins</groupId>-->

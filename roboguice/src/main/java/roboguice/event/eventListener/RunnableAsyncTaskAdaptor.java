@@ -9,6 +9,7 @@ import android.os.Handler;
  *
 * @author John Ericksen
 */
+@SuppressWarnings("deprecation")
 public class RunnableAsyncTaskAdaptor extends SafeAsyncTask<Void> {
 
     protected Runnable runnable;

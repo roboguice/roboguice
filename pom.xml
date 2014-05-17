@@ -226,7 +226,7 @@
 					</executions>
 					<configuration>
 						<includes>
-							<include>roboguice/*</include>
+							<include>roboguice/**</include>
 						</includes>
 					</configuration>
 				</plugin>

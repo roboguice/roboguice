@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>additional-tests</artifactId>
 	<version>3.0-alpha-3-SNAPSHOT</version>
@@ -21,7 +22,7 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
-	    
+
 		<!-- REGULAR DEPENDENCIES -->
 		<dependency>
 			<groupId>com.google.android</groupId>
@@ -33,6 +34,13 @@
 			<artifactId>maps</artifactId>
 			<scope>provided</scope>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboblender</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.roboguice</groupId>
@@ -84,7 +92,30 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+					<compilerArgs>
+						<arg>-AguiceAnnotationDatabasePackageName=additionaltests</arg>
+					</compilerArgs>
 				</configuration>
+			</plugin>
+			<!-- By default RoboGuice uses annotation database system. Turn it off 
+				and replay all tests. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>test-with-annotation-database-off</id>
+						<configuration>
+							<environmentVariables>
+								<roboguice.useAnnotationDatabases>false</roboguice.useAnnotationDatabases>
+							</environmentVariables>
+						</configuration>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<phase>test</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

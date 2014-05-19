@@ -73,6 +73,7 @@
 					<sdk>
 						<platform>${android-build.version}</platform>
 					</sdk>
+					<generateApk>false</generateApk>
 					<undeployBeforeDeploy>true</undeployBeforeDeploy>
 				</configuration>
 				<extensions>true</extensions>

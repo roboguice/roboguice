@@ -1,19 +1,24 @@
 package roboguice.service;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
+import javax.inject.Inject;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
+import roboguice.RoboGuice;
+import roboguice.inject.InjectView;
+
+import com.google.inject.ConfigurationException;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.view.View;
-import com.google.inject.ConfigurationException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import roboguice.inject.InjectView;
-
-import javax.inject.Inject;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class ServiceInjectionTest {
@@ -40,7 +45,7 @@ public class ServiceInjectionTest {
         roboService.onCreate();
     }
 
-    static public class RoboServiceA extends RoboService {
+    public static class RoboServiceA extends RoboService {
         @Inject Context context;
 
         @Override
@@ -49,7 +54,7 @@ public class ServiceInjectionTest {
         }
     }
 
-    static public class RoboIntentServiceA extends RoboIntentService {
+    public static class RoboIntentServiceA extends RoboIntentService {
         @Inject Context context;
 
         public RoboIntentServiceA(String name) {
@@ -61,7 +66,7 @@ public class ServiceInjectionTest {
         }
     }
 
-    static public class RoboServiceB extends RoboService {
+    public static class RoboServiceB extends RoboService {
         @InjectView(100) View v;
 
         @Override

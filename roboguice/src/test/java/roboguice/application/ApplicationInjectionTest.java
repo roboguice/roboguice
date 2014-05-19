@@ -1,24 +1,33 @@
 package roboguice.application;
 
-import android.app.Application;
-import android.content.Context;
-import com.google.inject.Inject;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import roboguice.RoboGuice;
-
-import java.util.Random;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
+import java.util.Random;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.res.builder.RobolectricPackageManager;
+
+import roboguice.RoboGuice;
+
+import com.google.inject.Inject;
+
+import android.app.Application;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Bundle;
+
 @RunWith(RobolectricTestRunner.class)
 public class ApplicationInjectionTest {
 
+    private static final String TEST_PACKAGE_NAME = "org.robolectric.default";
+    
     @Test
     public void shouldBeAbleToInjectIntoApplication() {
         Robolectric.application = new AppA();
@@ -39,9 +48,8 @@ public class ApplicationInjectionTest {
     }
 
 
-
-
     public static class AppA extends Application {
+
         @Inject Random random;
 
         @Override
@@ -52,11 +60,17 @@ public class ApplicationInjectionTest {
 
         @Override
         public String getPackageName() {
-            return "org.robolectric.default";
+            return TEST_PACKAGE_NAME;
+        }
+        
+        @Override
+        public PackageManager getPackageManager() {
+            return new TestRobolectricPackageManager();
         }
     }
 
     public static class AppB extends Application {
+        
         @Inject Context context;
 
         @Override
@@ -67,7 +81,30 @@ public class ApplicationInjectionTest {
 
         @Override
         public String getPackageName() {
-            return "org.robolectric.default";
+            return TEST_PACKAGE_NAME;
+        }
+        
+        @Override
+        public PackageManager getPackageManager() {
+            return new TestRobolectricPackageManager();
+        }
+    }
+    
+    public static class TestRobolectricPackageManager extends RobolectricPackageManager {
+        @Override
+        public ApplicationInfo getApplicationInfo(String packageName, int flags) throws NameNotFoundException {
+            ApplicationInfo applicationInfo = new ApplicationInfo();
+            Bundle bundle = new Bundle();
+            bundle.putString("roboguice.annotations.packages", "roboguice,testroboguice");
+            applicationInfo.metaData = bundle ;
+            return applicationInfo;
+        }
+        
+        @Override
+        public PackageInfo getPackageInfo(String packageName, int flags) throws NameNotFoundException {
+            PackageInfo packageInfo = new PackageInfo();
+            packageInfo.packageName = TEST_PACKAGE_NAME;
+            return packageInfo;
         }
     }
 

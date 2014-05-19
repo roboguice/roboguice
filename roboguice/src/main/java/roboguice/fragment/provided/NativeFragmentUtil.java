@@ -1,10 +1,10 @@
 package roboguice.fragment.provided;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
-
 import roboguice.fragment.FragmentUtil.f;
 import roboguice.inject.ContextSingleton;
+
+import com.google.inject.Inject;
+import com.google.inject.Provider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -20,15 +20,15 @@ import android.view.View;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 @SuppressWarnings("unchecked") //No point in seeing warnings when you're being ambiguous on purpose
 public class NativeFragmentUtil implements f<Fragment,FragmentManager> {
-	//Incredible hack required to ensure that classes are loaded at construction time
-	//I.E. so that it fails fast if they're not found. TODO fix this
-	
-	//I thought about just depending on the API level, but that broke Robolectric.
-	public NativeFragmentUtil() throws ClassNotFoundException {
-		Class.forName(Fragment.class.getName());
-		Class.forName(FragmentManager.class.getName());
-	}
-	
+    //Incredible hack required to ensure that classes are loaded at construction time
+    //I.E. so that it fails fast if they're not found. TODO fix this
+    
+    //I thought about just depending on the API level, but that broke Robolectric.
+    public NativeFragmentUtil() throws ClassNotFoundException {
+        Class.forName(Fragment.class.getName());
+        Class.forName(FragmentManager.class.getName());
+    }
+    
     @Override
     public View getView(Fragment frag) {
         return frag.getView();
@@ -54,20 +54,20 @@ public class NativeFragmentUtil implements f<Fragment,FragmentManager> {
         return FragmentManager.class;
     }
 
-	@SuppressWarnings("rawtypes") //not technically a Class<Provider<FragmentManager>>
-	@Override
-	public Class fragmentManagerProviderType() {
-		return FragmentManagerProvider.class;
-	}
-	
-	@ContextSingleton
-	public static class FragmentManagerProvider implements Provider<FragmentManager> {
-	    @Inject protected Activity activity;
+    @SuppressWarnings("rawtypes") //not technically a Class<Provider<FragmentManager>>
+    @Override
+    public Class fragmentManagerProviderType() {
+        return FragmentManagerProvider.class;
+    }
 
-	    @Override
-	    public FragmentManager get() {
-	        return activity.getFragmentManager();
-	    }
-	}
+    @ContextSingleton
+    public static class FragmentManagerProvider implements Provider<FragmentManager> {
+        @Inject protected Activity activity;
+
+        @Override
+        public FragmentManager get() {
+            return activity.getFragmentManager();
+        }
+    }
 
 }

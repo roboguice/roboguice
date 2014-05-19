@@ -1,14 +1,13 @@
 package roboguice.event;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import roboguice.event.eventListener.ObserverMethodListener;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
-import static org.mockito.Mockito.mock;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mockito;
+
+import roboguice.event.eventListener.ObserverMethodListener;
 
 /**
  * Test class verifying eventManager functionality
@@ -36,10 +35,10 @@ public class EventManagerTest {
     @Test
     public void testRegistrationLifeCycle(){
         for(Method method : eventOneMethods){
-            eventManager.registerObserver(EventOne.class, new ObserverMethodListener(tester, method));
+            eventManager.registerObserver(EventOne.class, new ObserverMethodListener<EventOne>(tester, method));
         }
         for(Method method : eventTwoMethods){
-            eventManager.registerObserver(EventTwo.class, new ObserverMethodListener(tester, method));
+            eventManager.registerObserver(EventTwo.class, new ObserverMethodListener<EventTwo>(tester, method));
         }
 
         eventManager.fire(event);
@@ -68,7 +67,7 @@ public class EventManagerTest {
                 eventManager.unregisterObserver(EventOne.class, this);
             }
         });
-        eventManager.registerObserver(EventOne.class, mock(EventListener.class));
+        eventManager.registerObserver(EventOne.class, Mockito.mock(EventListener.class));
 
         eventManager.fire(event);
     }

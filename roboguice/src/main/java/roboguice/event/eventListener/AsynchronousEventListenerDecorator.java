@@ -9,7 +9,7 @@ import android.os.Handler;
  *
  * @author John Ericksen
  */
-public class AsynchronousEventListenerDecorator<T> implements EventListener<T>{
+public class AsynchronousEventListenerDecorator<T> implements EventListener<T> {
 
     protected EventListener<T> eventListener;
     protected Handler handler;
@@ -23,6 +23,7 @@ public class AsynchronousEventListenerDecorator<T> implements EventListener<T>{
         this.eventListener = eventListener;
     }
 
+    @SuppressWarnings("deprecation")
     public void onEvent(T event) {
         new RunnableAsyncTaskAdaptor(handler, new EventListenerRunnable<T>(event, eventListener)).execute();
     }

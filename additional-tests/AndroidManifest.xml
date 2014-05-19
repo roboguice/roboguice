@@ -3,6 +3,7 @@
           package="roboguice.additionaltests" android:versionCode="1" android:versionName="0.1-SNAPSHOT">
 
     <application android:label="Additional Tests">
+        <meta-data android:name="roboguice.annotations.packages" android:value="roboguice,additionaltests"/>
     </application>
 
 </manifest>

@@ -15,21 +15,29 @@
  */
 package roboguice.inject;
 
-import roboguice.RoboGuice;
-
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-
-import com.google.inject.*;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
-import com.google.inject.util.Types;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
+import java.util.Set;
+
+import roboguice.RoboGuice;
+
+import com.google.inject.Binding;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.MembersInjector;
+import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
+import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
+import com.google.inject.util.Types;
+
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
 
 /**
  * 
@@ -38,22 +46,36 @@ import java.util.Map;
  */
 public class ExtrasListener implements TypeListener {
     protected Provider<Context> contextProvider;
+    private HierarchyTraversalFilter filter;
 
     public ExtrasListener(Provider<Context> contextProvider) {
         this.contextProvider = contextProvider;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
+        if( filter == null ) {
+            filter = Guice.createHierarchyTraversalFilter();
+        } else {
+            filter.reset();
+        }
+        Class<?> c = typeLiteral.getRawType();
+        while( isWorthScanning(c)) {
+            Set<Field> allFields = filter.getAllFields(InjectExtra.class.getName(), c);
+            if( allFields != null ) {
+                for (Field field : allFields) {
+                    if (field.isAnnotationPresent(InjectExtra.class) )
+                        if( Modifier.isStatic(field.getModifiers()) )
+                            throw new UnsupportedOperationException("Extras may not be statically injected");
+                        else
+                            typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
+                }
+            }
+            c = c.getSuperclass();
+        }
+    }
 
-        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
-            for (Field field : c.getDeclaredFields())
-                if (field.isAnnotationPresent(InjectExtra.class) )
-                    if( Modifier.isStatic(field.getModifiers()) )
-                        throw new UnsupportedOperationException("Extras may not be statically injected");
-                    else
-                        typeEncounter.register(new ExtrasMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectExtra.class)));
-
-
+    private boolean isWorthScanning(Class<?> c) {
+        return filter.isWorthScanningForFields(InjectExtra.class.getName(), c);
     }
 
 

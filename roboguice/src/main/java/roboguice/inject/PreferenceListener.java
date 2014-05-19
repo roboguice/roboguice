@@ -15,20 +15,23 @@
  */
 package roboguice.inject;
 
-import android.app.Application;
-import android.content.Context;
-import android.preference.PreferenceActivity;
-
-import com.google.inject.MembersInjector;
-import com.google.inject.Provider;
-import com.google.inject.TypeLiteral;
-import com.google.inject.spi.TypeEncounter;
-import com.google.inject.spi.TypeListener;
-
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Set;
+
+import com.google.inject.Guice;
+import com.google.inject.MembersInjector;
+import com.google.inject.Provider;
+import com.google.inject.TypeLiteral;
+import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.spi.TypeEncounter;
+import com.google.inject.spi.TypeListener;
+
+import android.app.Application;
+import android.content.Context;
+import android.preference.PreferenceActivity;
 
 /**
  * 
@@ -39,25 +42,40 @@ public class PreferenceListener implements TypeListener {
 
     protected Provider<Context> contextProvider;
     protected Application application;
-    protected ContextScope scope;
 
-    public PreferenceListener(Provider<Context> contextProvider, Application application, ContextScope scope) {
+    private HierarchyTraversalFilter filter;
+
+    public PreferenceListener(Provider<Context> contextProvider, Application application) {
         this.contextProvider = contextProvider;
         this.application = application;
-        this.scope = scope;
     }
 
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> typeEncounter) {
-        for( Class<?> c = typeLiteral.getRawType(); c!=Object.class; c=c.getSuperclass() )
-            for (Field field : c.getDeclaredFields())
-                if ( field.isAnnotationPresent(InjectPreference.class))
-                    if( Modifier.isStatic(field.getModifiers()) )
-                        throw new UnsupportedOperationException("Preferences may not be statically injected");
-                    else
-                        typeEncounter.register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class), scope));
-
+        if (filter == null) {
+            filter = Guice.createHierarchyTraversalFilter();
+        } else {
+            filter.reset();
+        }
+        Class<?> c = typeLiteral.getRawType();
+        while (isWorthScanning(c)) {
+            Set<Field> allFields = filter.getAllFields(InjectPreference.class.getName(), c);
+            if (allFields != null) {
+                for (Field field : allFields) {
+                    if (field.isAnnotationPresent(InjectPreference.class))
+                        if (Modifier.isStatic(field.getModifiers()))
+                            throw new UnsupportedOperationException("Preferences may not be statically injected");
+                        else
+                            typeEncounter
+                                    .register(new PreferenceMembersInjector<I>(field, contextProvider, field.getAnnotation(InjectPreference.class)));
+                }
+            }
+            c = c.getSuperclass();
+        }
     }
 
+    private boolean isWorthScanning(Class<?> c) {
+        return filter.isWorthScanningForFields(InjectPreference.class.getName(), c);
+    }
 
     public void registerPreferenceForInjection(PreferenceMembersInjector<?> injector) {
         preferencesForInjection.add(injector);
@@ -68,20 +86,16 @@ public class PreferenceListener implements TypeListener {
             preferencesForInjection.remove(i).reallyInjectMembers();
     }
 
-
-
     class PreferenceMembersInjector<T> implements MembersInjector<T> {
         protected Field field;
         protected Provider<Context> contextProvider;
         protected InjectPreference annotation;
-        protected ContextScope scope;
         protected WeakReference<T> instanceRef;
 
-        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider, InjectPreference annotation, ContextScope scope) {
+        public PreferenceMembersInjector(Field field, Provider<Context> contextProvider, InjectPreference annotation) {
             this.field = field;
             this.annotation = annotation;
             this.contextProvider = contextProvider;
-            this.scope = scope;
         }
 
         public void injectMembers(T instance) {
@@ -90,9 +104,10 @@ public class PreferenceListener implements TypeListener {
             registerPreferenceForInjection(this);
         }
 
+        @SuppressWarnings("deprecation")
         public void reallyInjectMembers() {
             final T instance = instanceRef.get();
-            if( instance==null )
+            if (instance == null)
                 return;
 
             Object value = null;
@@ -101,9 +116,9 @@ public class PreferenceListener implements TypeListener {
 
                 value = ((PreferenceActivity) contextProvider.get()).findPreference(annotation.value());
 
-                if (value == null && Nullable.notNullable(field) )
-                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
-
+                if (value == null && Nullable.notNullable(field))
+                    throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(),
+                            field.getName()));
 
                 field.setAccessible(true);
                 field.set(instance, value);

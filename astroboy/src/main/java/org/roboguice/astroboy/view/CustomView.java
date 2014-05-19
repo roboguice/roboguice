@@ -1,5 +1,8 @@
 package org.roboguice.astroboy.view;
 
+import org.roboguice.astroboy.R;
+
+import roboguice.inject.InjectView;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -7,8 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import org.roboguice.astroboy.R;
-import roboguice.inject.InjectView;
 
 public class CustomView extends LinearLayout {
 

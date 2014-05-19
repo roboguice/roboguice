@@ -1,5 +1,50 @@
 package roboguice.activity;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.robolectric.Robolectric.shadowOf;
+
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import roboguice.RoboGuice;
+import roboguice.activity.SherlockActivityInjectionTest.ModuleA.A;
+import roboguice.activity.SherlockActivityInjectionTest.ModuleB.B;
+import roboguice.activity.SherlockActivityInjectionTest.ModuleC.C;
+import roboguice.activity.SherlockActivityInjectionTest.ModuleD.D;
+import roboguice.inject.ContextScopedProvider;
+import roboguice.inject.ContextSingleton;
+import roboguice.inject.InjectExtra;
+import roboguice.inject.InjectPreference;
+import roboguice.inject.InjectResource;
+import roboguice.inject.InjectView;
+import roboguice.inject.NullProvider;
+
+import com.actionbarsherlock.ActionBarSherlock;
+import com.actionbarsherlock.internal.ActionBarSherlockNative;
+
+import com.google.inject.ConfigurationException;
+import com.google.inject.Inject;
+import com.google.inject.Key;
+import com.google.inject.Stage;
+import com.google.inject.TypeLiteral;
+
 import android.R;
 import android.app.Activity;
 import android.app.Application;
@@ -11,31 +56,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.actionbarsherlock.ActionBarSherlock;
-import com.actionbarsherlock.internal.ActionBarSherlockNative;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleA.A;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleB.B;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleC.C;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleD.D;
-import com.google.inject.*;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import roboguice.RoboGuice;
-import roboguice.inject.*;
-
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.concurrent.*;
-
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.robolectric.Robolectric.shadowOf;
 
 @RunWith(RobolectricTestRunner.class)
 public class SherlockActivityInjectionTest {
@@ -44,11 +64,11 @@ public class SherlockActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
+        RoboGuice
+                .createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
-        activity = new DummySherlockActivity();
-        activity.setIntent(new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober"));
-        activity.onCreate(null);
+        Intent intent = new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober");
+        activity = Robolectric.buildActivity(DummySherlockActivity.class).withIntent(intent).create().get();
     }
 
     @Test
@@ -84,37 +104,38 @@ public class SherlockActivityInjectionTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
-        final B b = new B();
-        b.onCreate(null);
+        RoboGuice
+                .createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
+        @SuppressWarnings("unused")
+        final B b = Robolectric.buildActivity(B.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
-        final D d = new D();
-        d.onCreate(null);
+        RoboGuice
+                .createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
+        @SuppressWarnings("unused")
+        final D d = Robolectric.buildActivity(D.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
-        RoboGuice.setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
-        final C c = new C();
-        c.onCreate(null);
+        RoboGuice
+                .createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
+        @SuppressWarnings("unused")
+        final C c = Robolectric.buildActivity(C.class).create().get();
     }
 
     @Test
     public void shouldInjectApplication() {
-        final G g = new G();
-        g.onCreate(null);
+        final G g = Robolectric.buildActivity(G.class).create().get();
 
         assertThat(g.application, equalTo(Robolectric.application));
     }
 
     @Test
     public void shouldAllowBackgroundThreadsToFinishUsingContextAfterOnDestroy() throws Exception {
-        final SoftReference<F> ref = new SoftReference<F>(new F());
-        ref.get().onCreate(null);
+        final SoftReference<F> ref = new SoftReference<F>(Robolectric.buildActivity(F.class).create().get());
 
         final BlockingQueue<Context> queue = new ArrayBlockingQueue<Context>(1);
         new Thread() {
@@ -130,26 +151,31 @@ public class SherlockActivityInjectionTest {
 
         // Force an OoM
         // http://stackoverflow.com/questions/3785713/how-to-make-the-java-system-release-soft-references/3810234
+        boolean oomHappened = false;
         try {
-            @SuppressWarnings({"MismatchedQueryAndUpdateOfCollection"}) final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
+            @SuppressWarnings({ "MismatchedQueryAndUpdateOfCollection" })
+            final ArrayList<Object[]> allocations = new ArrayList<Object[]>();
             int size;
-            while( (size = Math.min(Math.abs((int)Runtime.getRuntime().freeMemory()),Integer.MAX_VALUE))>0 )
-                allocations.add( new Object[size] );
+            while ((size = Math.min(Math.abs((int) Runtime.getRuntime().freeMemory()), Integer.MAX_VALUE)) > 0)
+                allocations.add(new Object[size]);
 
         } catch (OutOfMemoryError e) {
             // Yeah!
+            oomHappened = true;
         }
 
+        assertTrue(oomHappened);
         assertNotNull(queue.poll(10, TimeUnit.SECONDS));
     }
 
     @Test
     public void shouldBeAbleToGetContextProvidersInBackgroundThreads() throws Exception {
-        final F f = new F();
-        f.onCreate(null);
+        final F f = Robolectric.buildActivity(F.class).create().get();
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
-            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(Key.get(new TypeLiteral<ContextScopedProvider<Context>>(){}));
+            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(
+                    Key.get(new TypeLiteral<ContextScopedProvider<Context>>() {
+                    }));
 
             @Override
             public Context call() throws Exception {
@@ -163,12 +189,18 @@ public class SherlockActivityInjectionTest {
     }
 
     public static class DummySherlockActivity extends RoboSherlockActivity {
-        @Inject protected String emptyString;
-        @Inject protected Activity activity;
-        @Inject protected RoboSherlockActivity roboSherlockActivity;
-        @InjectView(R.id.text1) protected TextView text1;
-        @InjectResource(R.string.cancel) protected String cancel;
-        @InjectExtra("foobar") protected String foobar;
+        @Inject
+        protected String emptyString;
+        @Inject
+        protected Activity activity;
+        @Inject
+        protected RoboSherlockActivity roboSherlockActivity;
+        @InjectView(R.id.text1)
+        protected TextView text1;
+        @InjectResource(R.string.cancel)
+        protected String cancel;
+        @InjectExtra("foobar")
+        protected String foobar;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -200,12 +232,11 @@ public class SherlockActivityInjectionTest {
         }
     }
 
-    public static class BaseModule extends com.google.inject.AbstractModule {
+    public static class BaseModule extends com.google.inject.config.AbstractModule {
         @Override
         protected void configure() {
-            bind(RoboSherlockActivity.class)
-                    .toProvider(Key.get(new TypeLiteral<NullProvider<RoboSherlockActivity>>(){}))
-                    .in(ContextSingleton.class);
+            bind(RoboSherlockActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboSherlockActivity>>() {
+            })).in(ContextSingleton.class);
         }
     }
 
@@ -217,8 +248,10 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class A {
-            @InjectResource(R.string.cancel) static String s;
-            @Inject static String t;
+            @InjectResource(R.string.cancel)
+            static String s;
+            @Inject
+            static String t;
         }
     }
 
@@ -230,7 +263,8 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class B extends RoboSherlockActivity {
-            @InjectView(0) static View v;
+            @InjectView(0)
+            static View v;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -247,7 +281,8 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class C extends RoboSherlockActivity {
-            @InjectPreference("xxx") static Preference v;
+            @InjectPreference("xxx")
+            static Preference v;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -264,7 +299,8 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class D extends RoboSherlockActivity {
-            @InjectExtra("xxx") static String s;
+            @InjectExtra("xxx")
+            static String s;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {
@@ -286,7 +322,8 @@ public class SherlockActivityInjectionTest {
     }
 
     public static class G extends RoboSherlockActivity {
-        @Inject Application application;
+        @Inject
+        Application application;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -305,12 +342,12 @@ public class SherlockActivityInjectionTest {
             LayoutInflater layoutInflater = LayoutInflater.from(mActivity);
             View contentView = layoutInflater.inflate(layoutResId, null);
 
-            shadowOf(mActivity).setContentView(contentView);
+            shadowOf(mActivity).getWindow().setContentView(contentView);
         }
 
         @Override
         public void setContentView(View view) {
-            shadowOf(mActivity).setContentView(view);
+            shadowOf(mActivity).getWindow().setContentView(view);
         }
     }
 }

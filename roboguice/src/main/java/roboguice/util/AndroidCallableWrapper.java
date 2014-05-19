@@ -1,11 +1,13 @@
 package roboguice.util;
 
-import android.os.Handler;
-import android.os.Looper;
-
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
+import android.os.Handler;
+import android.os.Looper;
 
 
 // TODO
@@ -20,18 +22,20 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
     protected AndroidCallableI<ResultT> delegate;
     protected StackTraceElement[] launchLocation;
 
+    @SuppressWarnings()
     public AndroidCallableWrapper(Handler handler, AndroidCallableI<ResultT> delegate, StackTraceElement[] launchLocation ) {
         this.delegate = delegate;
         this.launchLocation = launchLocation;
         this.handler = handler != null ? handler : new Handler(Looper.getMainLooper());
     }
 
+    @java.lang.SuppressWarnings("unchecked")
     @Override
     public void run() {
         ResultT result = null;
         Exception exception = null;
         try {
-            if (isPreCallOverriden(delegate.getClass()))
+            if (isPreCallOverriden((Class<? extends AndroidCallableI<?>>) delegate.getClass()))
                 beforeCall();
 
             result = doDoInBackgroundThread();
@@ -54,7 +58,7 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
         handler.post(new Runnable() {
             public void run() {
                 try {
-                    new Callable() {
+                    new Callable<Object>() {
                         @Override
                         public Object call() throws Exception {
                             doOnPreCall();
@@ -122,9 +126,9 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
     }
 
 
-    static HashMap<Class<? extends AndroidCallableI>, Boolean> isPreCallOverriddenMap = new HashMap<Class<? extends AndroidCallableI>, Boolean>();
+    static HashMap<Class<? extends AndroidCallableI<?>>, Boolean> isPreCallOverriddenMap = new HashMap<Class<? extends AndroidCallableI<?>>, Boolean>();
 
-    static boolean isPreCallOverriden(Class<? extends AndroidCallableI> subClass) {
+    static boolean isPreCallOverriden(Class<? extends AndroidCallableI<?>> subClass) {
         try {
             Boolean tmp = isPreCallOverriddenMap.get(subClass);
             if (tmp != null)

@@ -1,9 +1,12 @@
 package roboguice.event.eventListener;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.easymock.EasyMock.*;
+import org.mockito.Mockito;
 
 /**
  * Tests for the RunnableAsyncTaskAdaptor class
@@ -12,13 +15,14 @@ import static org.easymock.EasyMock.*;
  */
 public class RunnableAsyncTaskAdaptorTest {
 
+    @SuppressWarnings("rawtypes")
     protected EventListenerRunnable runnable;
 
     protected RunnableAsyncTaskAdaptor runnableAdaptor;
 
     @Before
     public void setup(){
-        runnable = createMock(EventListenerRunnable.class);
+        runnable = mock(EventListenerRunnable.class);
 
         runnableAdaptor = new RunnableAsyncTaskAdaptor(runnable);
     }
@@ -29,11 +33,9 @@ public class RunnableAsyncTaskAdaptorTest {
 
         runnable.run();
 
-        replay(runnable);
-
         runnableAdaptor.call();
 
-        verify(runnable);
+        verify(runnable, Mockito.atLeastOnce()).run();
     }
 
 }

@@ -1,5 +1,11 @@
 package org.roboguice.astroboy.activity;
 
+import org.roboguice.astroboy.R;
+import org.roboguice.astroboy.controller.AstroboyRemoteControl;
+
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -10,18 +16,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-import com.google.inject.Guice;
-import com.google.inject.HierarchyTraversalFilter;
-import com.google.inject.HierarchyTraversalFilterFactory;
-import com.google.inject.Inject;
-import org.roboguice.astroboy.R;
-import org.roboguice.astroboy.controller.AstroboyRemoteControl;
-import roboguice.AnnotationDatabase;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.google.inject.Inject;
 
 /**
  * This activity uses an AstroboyRemoteControl to control Astroboy remotely!
@@ -34,6 +30,7 @@ import java.util.Set;
  *     an object's default constructor, versus when it does something "special"
  *     like call getSystemService()
  */
+@ContentView(R.layout.main)
 public class AstroboyMasterConsole extends RoboActivity {
 
     // Various views that we inject into the activity.
@@ -59,7 +56,6 @@ public class AstroboyMasterConsole extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // @Inject, @InjectResource, and @InjectExtra injection happens during super.onCreate()
-        setContentView(R.layout.main);
 
         sayText.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

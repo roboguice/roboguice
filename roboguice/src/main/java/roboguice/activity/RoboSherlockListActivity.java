@@ -15,10 +15,9 @@
  */
 package roboguice.activity;
 
-import android.app.Activity;
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.View;
+import java.util.HashMap;
+import java.util.Map;
+
 import roboguice.RoboGuice;
 import roboguice.activity.event.OnActivityResultEvent;
 import roboguice.activity.event.OnContentChangedEvent;
@@ -35,16 +34,19 @@ import roboguice.event.EventManager;
 import roboguice.inject.ContentViewListener;
 import roboguice.inject.RoboInjector;
 import roboguice.util.RoboContext;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockListActivity;
+
 import com.google.inject.Inject;
 import com.google.inject.Key;
 
-import java.util.HashMap;
-import java.util.Map;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.View;
 
 /**
  * @author Roberto Tyley

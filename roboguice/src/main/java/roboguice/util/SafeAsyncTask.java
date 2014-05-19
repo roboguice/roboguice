@@ -1,9 +1,12 @@
 package roboguice.util;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+
 import android.os.Handler;
 import android.util.Log;
-
-import java.util.concurrent.*;
 
 /**
  * A class similar but unrelated to android's {@link android.os.AsyncTask}.
@@ -20,7 +23,6 @@ import java.util.concurrent.*;
  * 
  * @param <ResultT>
  */
-@SuppressWarnings("deprecation")
 @Deprecated
 public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     public static final int DEFAULT_POOL_SIZE = 25;
@@ -28,7 +30,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
     protected Handler handler;
     protected Executor executor;
-    protected StackTraceElement[] launchLocation;
     protected FutureTask<Void> future;
 
 
@@ -90,7 +91,6 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     }
 
     protected void execute( StackTraceElement[] launchLocation ) {
-        this.launchLocation = launchLocation;
         executor.execute( future() );
     }
 

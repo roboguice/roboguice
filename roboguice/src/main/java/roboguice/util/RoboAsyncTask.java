@@ -1,12 +1,13 @@
 package roboguice.util;
 
+import java.util.concurrent.Executor;
+
 import roboguice.RoboGuice;
 
 import android.content.Context;
 import android.os.Handler;
 
-import java.util.concurrent.Executor;
-
+@SuppressWarnings("deprecation")
 public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
     protected Context context;
 

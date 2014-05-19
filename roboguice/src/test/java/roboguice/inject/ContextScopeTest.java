@@ -1,24 +1,27 @@
 package roboguice.inject;
 
-import android.app.Activity;
-import com.google.inject.Inject;
-import com.google.inject.Key;
-import com.google.inject.Singleton;
+import static org.junit.Assert.assertTrue;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.util.ActivityController;
+
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 
-import static junit.framework.Assert.assertTrue;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import com.google.inject.Inject;
+import com.google.inject.Key;
+import com.google.inject.Singleton;
+
+import android.app.Activity;
 
 @RunWith(RobolectricTestRunner.class)
 public class ContextScopeTest {
-
 
     @Test
     public void shouldHaveContextInScopeMapAfterOnCreate() throws Exception {

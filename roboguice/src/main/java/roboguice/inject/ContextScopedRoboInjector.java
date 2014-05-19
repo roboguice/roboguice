@@ -1,28 +1,33 @@
 package roboguice.inject;
 
-import roboguice.inject.ViewListener.ViewMembersInjector;
-
-import android.app.Activity;
-import android.content.Context;
-
-import com.google.inject.*;
-import com.google.inject.spi.TypeConverterBinding;
-
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import roboguice.inject.ViewListener.ViewMembersInjector;
+
+import com.google.inject.Binding;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.MembersInjector;
+import com.google.inject.Provider;
+import com.google.inject.Scope;
+import com.google.inject.TypeLiteral;
+import com.google.inject.config.Module;
+import com.google.inject.spi.TypeConverterBinding;
+
+//github.com/roboguice/roboguice/issues/174
+import android.content.Context;
+
 public class ContextScopedRoboInjector implements RoboInjector {
     protected Injector delegate;
     protected Context context;
     protected ContextScope scope;
-    protected ViewListener viewListener;
 
-    public ContextScopedRoboInjector(Context context, Injector applicationInjector, ViewListener viewListener) {
+    public ContextScopedRoboInjector(Context context, Injector applicationInjector) {
         this.delegate = applicationInjector;
         this.context = context;
-        this.viewListener = viewListener;
         this.scope = delegate.getInstance(ContextScope.class);
     }
 
@@ -247,38 +252,14 @@ public class ContextScopedRoboInjector implements RoboInjector {
     }
 
     @Override
-    public void injectViewMembers(Activity activity) {
+    public void injectViewMembers(Object instance) {
         synchronized (ContextScope.class) {
             scope.enter(context);
             try {
-                if( context!=activity )
-                    throw new UnsupportedOperationException("internal error, how did you get here?");
-
-                ViewMembersInjector.injectViews(activity);
+                ViewMembersInjector.injectViews(instance);
             } finally {
                 scope.exit(context);
             }
         }
     }
-
-    @Override
-    public void injectViewMembers(android.support.v4.app.Fragment fragment) {
-        injectViews(fragment);
-    }
-
-    @Override
-    public void injectViewMembers(android.app.Fragment fragment) {
-        injectViews(fragment);
-    }
-
-	private void injectViews(Object fragment) {
-		synchronized (ContextScope.class) {
-            scope.enter(context);
-            try {
-                ViewMembersInjector.injectViews(fragment);
-            } finally {
-                scope.exit(context);
-            }
-        }
-	}
 }

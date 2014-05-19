@@ -1,9 +1,9 @@
-RoboGuice
-=========
+RoboGuice [![Build Status on Travis:](https://travis-ci.org/roboguice/roboguice.png)](https://travis-ci.org/roboguice/roboguice) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice)
+========= 
 
 <img src="http://f.cl.ly/items/1G3K1n2L3g452n3i1M2q/roboguice-200px.png" align="left" />
 
-### Google Guice on Android, version 2.0
+### Google Guice on Android, version 2.0 
 
 RoboGuice 2 smoothes out some of the wrinkles in your Android development experience and makes things simple and fun. Do you always forget to check for null when you getIntent().getExtras()? RoboGuice 2 will help you. Think casting findViewById() to a TextView shouldn’t be necessary? RoboGuice 2 is on it.
 

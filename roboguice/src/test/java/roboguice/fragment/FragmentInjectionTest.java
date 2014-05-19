@@ -1,5 +1,22 @@
 package roboguice.fragment;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.util.ActivityController;
+
+import roboguice.RoboGuice;
+import roboguice.activity.RoboFragmentActivity;
+import roboguice.inject.InjectView;
+
+import com.google.inject.Inject;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,18 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import com.google.inject.Inject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.util.ActivityController;
-import roboguice.activity.RoboFragmentActivity;
-import roboguice.inject.InjectView;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class FragmentInjectionTest {
@@ -34,7 +39,6 @@ public class FragmentInjectionTest {
         fragmentTransaction.commit();
 
     }
-
 
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {

@@ -48,7 +48,7 @@
 		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
 		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
 		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
-		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
+		<maven-checkstyle-plugin.version>2.12.1</maven-checkstyle-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
@@ -177,7 +177,7 @@
 					<version>${maven-checkstyle-plugin.version}</version>
 					<configuration>
 						<configLocation>roboguice_checks.xml</configLocation>
-						<propertiesLocation>roboguice_checks.properties</propertiesLocation>
+						<suppressionsLocation>roboguice_checks_suppressions.xml</suppressionsLocation>
 						<enableRulesSummary>false</enableRulesSummary>
 						<consoleOutput>true</consoleOutput>
 					</configuration>

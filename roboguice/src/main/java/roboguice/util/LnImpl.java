@@ -29,7 +29,7 @@ public class LnImpl implements LnInterface {
         } catch( Exception e ) {
             try {
                 Log.e(packageName, "Error configuring logger", e);
-            } catch( RuntimeException f ) {
+            } catch( RuntimeException f ) { // NOPMD - Legal empty catch block 
                 // HACK ignore Stub! errors in mock objects during testing
             }
         }

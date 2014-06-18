@@ -22,7 +22,7 @@ public class AndroidCallableWrapper<ResultT> implements Runnable {
     protected AndroidCallableI<ResultT> delegate;
     protected StackTraceElement[] launchLocation;
 
-    @SuppressWarnings()
+    @SuppressWarnings("MALICIOUS_CODE")
     public AndroidCallableWrapper(Handler handler, AndroidCallableI<ResultT> delegate, StackTraceElement[] launchLocation ) {
         this.delegate = delegate;
         this.launchLocation = launchLocation;

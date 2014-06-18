@@ -36,10 +36,9 @@ import android.os.Bundle;
  * BUG hashmap should also key off of stage and modules list
  */
 public final class RoboGuice {
-    //CHECKSTYLE:OFF
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_FINAL")
+    @SuppressWarnings({"checkstyle:visibilitymodifier","checkstyle:staticvariablename"})
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
-    //CHECKSTYLE:ON
 
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();

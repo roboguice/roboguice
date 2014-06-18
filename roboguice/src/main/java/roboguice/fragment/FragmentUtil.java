@@ -15,19 +15,23 @@ public final class FragmentUtil {
     public static final String SUPPORT_PACKAGE = "android.support.v4.app.";
     public static final String NATIVE_PACKAGE = "android.app.";
 
-    //CHECKSTYLE :OFF
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
+    @SuppressWarnings({"checkstyle:visibilitymodifier","checkstyle:staticvariablename"})
     public static f nativeFrag = null;
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
+    @SuppressWarnings({"checkstyle:visibilitymodifier","checkstyle:staticvariablename"})
     public static f supportFrag = null;
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
+    @SuppressWarnings({"checkstyle:visibilitymodifier","checkstyle:staticvariablename"})
     public static Class<? extends Activity> supportActivity = null;
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
+    @SuppressWarnings({"checkstyle:visibilitymodifier","checkstyle:staticvariablename"})
     public static boolean hasNative = false;
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_REFACTORED_TO_BE_FINAL")
+    @SuppressWarnings({"checkstyle:visibilitymodifier","checkstyle:staticvariablename"})
     public static boolean hasSupport = false;
-    //CHECKSTYLE :ON
 
+    @SuppressWarnings("checkstyle:typename")
     public interface f<fragType,fragManagerType> {
         View getView(fragType frag);
         fragType findFragmentById(fragManagerType fm, int id);

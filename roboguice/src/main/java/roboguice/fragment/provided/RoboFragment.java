@@ -1,6 +1,12 @@
 package roboguice.fragment.provided;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import roboguice.RoboGuice;
+import roboguice.util.RoboContext;
+
+import com.google.inject.Key;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
@@ -14,17 +20,31 @@ import android.view.View;
  * @author Charles Munger
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public abstract class RoboFragment extends Fragment {
+public abstract class RoboFragment extends Fragment implements RoboContext {
+    protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>, Object>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
+        RoboGuice.getInjector(this).injectMembersWithoutViews(this);
     }
 
     @Override
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
+        RoboGuice.getInjector(this).injectViewMembers(this);
     }
+
+    @Override
+    public Map<Key<?>, Object> getScopedObjectMap() {
+        return scopedObjects;
+    }
+
+    @Override
+    public void onDestroy() {
+        RoboGuice.destroyInjector(this);
+        super.onDestroy();
+    }
+
 }

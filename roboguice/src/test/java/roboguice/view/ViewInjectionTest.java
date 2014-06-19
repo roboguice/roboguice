@@ -81,7 +81,6 @@ public class ViewInjectionTest {
 
 
 
-    @Ignore("getWindow().getDecoreView() doesn't seem to return the root view in robolectric?")
     @Test
     public void shouldBeAbleToInjectReferencesToTaggedViews() {
         final D activity = Robolectric.buildActivity(D.class).create().get();

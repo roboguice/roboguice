@@ -35,14 +35,14 @@ import android.content.ContextWrapper;
  *
  * Any usage of this class must call #enter(Context) before performing any operations with the
  * injector, and do so within a synchronized block on the ContextScope.class, eg:
- *
+ * <pre>
  * synchronized(ContextScope.class) {
  *     scope.enter(context);
  *
  *     // do something, eg.
  *     // injector.injectMembers(this);
  * }
- *
+ * </pre>
  * If you're using ContextScopedRoboInjector (which is the RoboGuice default), this is done for you automatically.
  *
  * If you're trying to use a Provider, you must either use ContextScopedProvider instead, or do your own synchronization

@@ -7,6 +7,8 @@ import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScopedRoboInjector;
+import roboguice.inject.FragmentScope;
+import roboguice.inject.FragmentScopedRoboInjector;
 import roboguice.inject.ResourceListener;
 import roboguice.inject.RoboInjector;
 import roboguice.inject.ViewListener;
@@ -18,6 +20,7 @@ import com.google.inject.Module;
 import com.google.inject.Stage;
 
 import android.app.Application;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -137,6 +140,19 @@ public final class RoboGuice {
         return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application));
     }
 
+    public static RoboInjector getInjector(Object fragment) {
+        Context context;
+        if( fragment instanceof Fragment ) {
+            context = ((Fragment) fragment).getActivity();
+        } else if( fragment instanceof android.support.v4.app.Fragment ) {
+            context = ((android.support.v4.app.Fragment) fragment).getActivity();
+        } else {
+            throw new IllegalArgumentException(String.format("%s does not appear to belong to a RoboGuice context (instanceof RoboContext)",fragment));
+        }
+
+        return new FragmentScopedRoboInjector(fragment, getInjector(context));
+    }
+
     /**
      * A shortcut for RoboGuice.getInjector(context).injectMembers(o);
      */
@@ -147,7 +163,7 @@ public final class RoboGuice {
 
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
-        return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
+        return new DefaultRoboModule(application, new ContextScope(application), new FragmentScope(application), getViewListener(application), getResourceListener(application));
     }
 
     @SuppressWarnings("ConstantConditions")

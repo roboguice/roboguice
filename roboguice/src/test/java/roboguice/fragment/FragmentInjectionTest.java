@@ -1,6 +1,7 @@
 package roboguice.fragment;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
@@ -84,8 +85,16 @@ public class FragmentInjectionTest {
         assertNotNull(activityD2.fragmentRef.ref);
         assertThat(activityD2.fragmentRef.v, equalTo(activityD2.fragmentRef.ref));
     }
+    
+    @Test
+    public void shouldUseFragmentScopePerFragment() {
+        final ActivityE activityE = Robolectric.buildActivity(ActivityE.class).create().start().resume().get();
 
-
+        assertNotNull(activityE.fragmentRef1.ref);
+        assertNotNull(activityE.fragmentRef2.ref);
+        assertThat(activityE.fragmentRef1.v, not(equalTo(activityE.fragmentRef2.v)));
+        assertThat(activityE.fragmentRef1.foo, not(equalTo(activityE.fragmentRef2.foo)));
+    }
 
     public static class ActivityA extends RoboFragmentActivity {
         FragmentA fragmentRef;
@@ -93,19 +102,13 @@ public class FragmentInjectionTest {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
-//            fragmentRef = new FragmentA();
-//            fragmentRef.onAttach(this);
-//            fragmentRef.onCreate(null);
             fragmentRef = new FragmentA();
             startFragment(this, fragmentRef);
-
         }
 
         public static class FragmentA extends RoboFragment {
             @InjectView(101) View v;
             @Inject Context context;
-
             View ref;
 
             @Override
@@ -121,25 +124,21 @@ public class FragmentInjectionTest {
 
     public static class ActivityB extends RoboFragmentActivity {
         @InjectView(100) View v;
-
         View viewRef;
         FragmentB fragmentRef;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             viewRef =  new View(this);
             viewRef.setId(100);
             setContentView(viewRef);
-
             fragmentRef = new FragmentB();
             startFragment(this, fragmentRef);
         }
 
         public static class FragmentB extends RoboFragment {
             @InjectView(101) View v;
-
             View viewRef;
 
             @Override
@@ -149,7 +148,6 @@ public class FragmentInjectionTest {
                 return viewRef;
             }
         }
-
     }
 
     public static class ActivityC extends RoboFragmentActivity {
@@ -162,14 +160,12 @@ public class FragmentInjectionTest {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView( new View(this) );
-
             fragmentRef = new FragmentC();
             startFragment(this, fragmentRef);
         }
 
         public static class FragmentC extends RoboFragment {
             @InjectView(101) View v;
-
             View viewRef;
 
             @Override
@@ -182,26 +178,19 @@ public class FragmentInjectionTest {
 
     }
 
-
-
     public static class ActivityD extends RoboFragmentActivity {
         FragmentD fragmentRef;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             fragmentRef = new FragmentD();
             startFragment(this,fragmentRef);
-
-
             setContentView(new FrameLayout(this));
-            
         }
 
         public static class FragmentD extends RoboFragment {
             @InjectView(101) View v;
-
             View ref;
 
             @Override
@@ -211,7 +200,36 @@ public class FragmentInjectionTest {
                 return ref;
             }
         }
+    }
+    
+    public static class ActivityE extends RoboFragmentActivity {
+        FragmentE fragmentRef1;
+        FragmentE fragmentRef2;
 
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            fragmentRef1 = new FragmentE();
+            startFragment(this,fragmentRef1);
+            fragmentRef2 = new FragmentE();
+            startFragment(this,fragmentRef2);
+            setContentView(new FrameLayout(this));
+        }
+
+        public static class FragmentE extends RoboFragment {
+            @InjectView(101) View v;
+            View ref;
+            @Inject FooImpl foo;
+
+            @Override
+            public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+                ref = new View(getActivity());
+                ref.setId(101);
+                return ref;
+            }
+        }
+        
+        static class FooImpl {}
     }
 
 }

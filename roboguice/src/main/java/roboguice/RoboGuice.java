@@ -7,6 +7,7 @@ import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScopedRoboInjector;
+import roboguice.inject.FragmentScope;
 import roboguice.inject.FragmentScopedRoboInjector;
 import roboguice.inject.ResourceListener;
 import roboguice.inject.RoboInjector;
@@ -162,7 +163,7 @@ public final class RoboGuice {
 
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
-        return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
+        return new DefaultRoboModule(application, new ContextScope(application), new FragmentScope(application), getViewListener(application), getResourceListener(application));
     }
 
     @SuppressWarnings("ConstantConditions")

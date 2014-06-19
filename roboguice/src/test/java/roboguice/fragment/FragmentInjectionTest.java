@@ -12,6 +12,9 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.util.ActivityController;
 
 import roboguice.activity.RoboFragmentActivity;
+import roboguice.fragment.RoboFragment;
+import roboguice.inject.ContextSingleton;
+import roboguice.inject.FragmentSingleton;
 import roboguice.inject.InjectView;
 
 import com.google.inject.Inject;
@@ -85,15 +88,17 @@ public class FragmentInjectionTest {
         assertNotNull(activityD2.fragmentRef.ref);
         assertThat(activityD2.fragmentRef.v, equalTo(activityD2.fragmentRef.ref));
     }
-    
+
     @Test
     public void shouldUseFragmentScopePerFragment() {
         final ActivityE activityE = Robolectric.buildActivity(ActivityE.class).create().start().resume().get();
 
-        assertNotNull(activityE.fragmentRef1.ref);
-        assertNotNull(activityE.fragmentRef2.ref);
-        assertThat(activityE.fragmentRef1.v, not(equalTo(activityE.fragmentRef2.v)));
         assertThat(activityE.fragmentRef1.foo, not(equalTo(activityE.fragmentRef2.foo)));
+        assertThat(activityE.fragmentRef1.bar, not(equalTo(activityE.fragmentRef2.bar)));
+        assertThat(activityE.fragmentRef1.qurtz, equalTo(activityE.fragmentRef2.qurtz));
+        assertThat(activityE.fragmentRef1.bar.foo, not(equalTo(activityE.fragmentRef2.bar.foo)));
+        assertThat(activityE.fragmentRef1.bar.foo, equalTo(activityE.fragmentRef1.foo));
+        assertThat(activityE.fragmentRef2.bar.foo, equalTo(activityE.fragmentRef2.foo));
     }
 
     public static class ActivityA extends RoboFragmentActivity {
@@ -201,7 +206,7 @@ public class FragmentInjectionTest {
             }
         }
     }
-    
+
     public static class ActivityE extends RoboFragmentActivity {
         FragmentE fragmentRef1;
         FragmentE fragmentRef2;
@@ -217,19 +222,18 @@ public class FragmentInjectionTest {
         }
 
         public static class FragmentE extends RoboFragment {
-            @InjectView(101) View v;
-            View ref;
-            @Inject FooImpl foo;
-
-            @Override
-            public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-                ref = new View(getActivity());
-                ref.setId(101);
-                return ref;
-            }
+            @Inject Foo foo;
+            @Inject Bar bar;
+            @Inject Qurtz qurtz;
         }
         
-        static class FooImpl {}
+        @FragmentSingleton static class Foo {}
+        
+        static class Bar {
+            @Inject Foo foo;
+        }
+        
+        @ContextSingleton static class Qurtz {
+        }
     }
-
 }

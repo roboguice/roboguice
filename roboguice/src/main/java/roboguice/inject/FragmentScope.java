@@ -27,7 +27,6 @@ import com.google.inject.Provider;
 import com.google.inject.Scope;
 
 import android.app.Application;
-import android.content.Context;
 import android.content.ContextWrapper;
 
 /**
@@ -53,13 +52,12 @@ import android.content.ContextWrapper;
  */
 public class FragmentScope implements Scope {
     //Object is used here to accomodate both native and support Fragment 
-    protected ThreadLocal<Stack<WeakReference<Context>>> contextThreadLocal = new ThreadLocal<Stack<WeakReference<Context>>>();
+    protected ThreadLocal<Stack<WeakReference<Object>>> contextThreadLocal = new ThreadLocal<Stack<WeakReference<Object>>>();
     protected Map<Key<?>,Object> applicationScopedObjects = new HashMap<Key<?>, Object>();
     protected Application application;
 
     public FragmentScope(Application application) {
         this.application = application;
-        enter(application);
     }
 
     /**
@@ -71,16 +69,16 @@ public class FragmentScope implements Scope {
      * @see FragmentScopedProvider
      * @param context the context to enter
      */
-    public void enter(Context context) {
+    public void enter(Object context) {
 
         // BUG synchronizing on FragmentScope.class may be overly conservative
         synchronized (FragmentScope.class) {
 
-            final Stack<WeakReference<Context>> stack = getContextStack();
+            final Stack<WeakReference<Object>> stack = getContextStack();
             final Map<Key<?>,Object> map = getScopedObjectMap(context);
 
             // Mark this thread as for this context
-            stack.push(new WeakReference<Context>(context));
+            stack.push(new WeakReference<Object>(context));
 
             // Add the context to the scope for key Context, Activity, etc.
             Class<?> c = context.getClass();
@@ -91,9 +89,9 @@ public class FragmentScope implements Scope {
         }
     }
 
-    public void exit(Context context) {
+    public void exit(Object context) {
         synchronized (FragmentScope.class) {
-            final Stack<WeakReference<Context>> stack = getContextStack();
+            final Stack<WeakReference<Object>> stack = getContextStack();
             final Object c = stack.pop().get();
             if( c!=null && c!=context )
                 throw new IllegalArgumentException(String.format("Scope for %s must be opened before it can be closed",context));
@@ -104,8 +102,8 @@ public class FragmentScope implements Scope {
         return new Provider<T>() {
             public T get() {
                 synchronized (FragmentScope.class) {
-                    final Stack<WeakReference<Context>> stack = getContextStack();
-                    final Context context = stack.peek().get(); // The context should never be finalized as long as the provider is still in memory
+                    final Stack<WeakReference<Object>> stack = getContextStack();
+                    final Object context = stack.peek().get(); // The context should never be finalized as long as the provider is still in memory
                     final Map<Key<?>, Object> objectsForScope = getScopedObjectMap(context);
                     if( objectsForScope==null )
                         return null;  // May want to consider throwing an exception here (if provider is used after onDestroy())
@@ -124,17 +122,17 @@ public class FragmentScope implements Scope {
     }
 
 
-    public Stack<WeakReference<Context>> getContextStack() {
-        Stack<WeakReference<Context>> stack = contextThreadLocal.get();
+    public Stack<WeakReference<Object>> getContextStack() {
+        Stack<WeakReference<Object>> stack = contextThreadLocal.get();
         if( stack==null ) {
-            stack = new Stack<WeakReference<Context>>();
+            stack = new Stack<WeakReference<Object>>();
             contextThreadLocal.set(stack);
         }
         return stack;
     }
 
-    protected Map<Key<?>,Object> getScopedObjectMap(final Context origContext) {
-        Context context = origContext;
+    protected Map<Key<?>,Object> getScopedObjectMap(final Object origContext) {
+        Object context = origContext;
         while( !(context instanceof RoboContext) && !(context instanceof Application) && context instanceof ContextWrapper )
             context = ((ContextWrapper)context).getBaseContext();
 
@@ -144,7 +142,7 @@ public class FragmentScope implements Scope {
 
 
         if( !(context instanceof RoboContext) )
-            throw new IllegalArgumentException(String.format("%s does not appear to belong to a RoboGuice context (instanceof RoboContext)",origContext));
+            throw new IllegalArgumentException(String.format("%s does not appear to be a RoboGuice context (instanceof RoboContext)",origContext));
 
         return ((RoboContext)context).getScopedObjectMap();
     }

@@ -19,39 +19,26 @@ import com.google.inject.spi.TypeConverterBinding;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
 
 public class FragmentScopedRoboInjector implements RoboInjector {
     protected Injector delegate;
-    protected Context context;
+    protected Object fragment;
     protected FragmentScope scope;
 
     public FragmentScopedRoboInjector(Object fragment, Injector activityInjector) {
         this.delegate = activityInjector;
-        this.context = getContext(fragment);
+        this.fragment = fragment;
         this.scope = delegate.getInstance(FragmentScope.class);
     }
     
-    private Context getContext(Object fragment) {
-        Context context;
-        if( fragment instanceof Fragment ) {
-            context = ((Fragment) fragment).getActivity();
-        } else if( fragment instanceof android.support.v4.app.Fragment ) {
-            context = ((android.support.v4.app.Fragment) fragment).getActivity();
-        } else {
-            throw new IllegalArgumentException(String.format("%s does not appear to belong to a RoboGuice context (instanceof RoboContext)",fragment));
-        }
-        return context;
-    }
-
     @Override
     public Injector createChildInjector(Iterable<? extends Module> modules) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.createChildInjector(modules);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -59,11 +46,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public Injector createChildInjector(Module... modules) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.createChildInjector(modules);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -71,11 +58,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> List<Binding<T>> findBindingsByType(TypeLiteral<T> type) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.findBindingsByType(type);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -83,11 +70,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public Map<Key<?>, Binding<?>> getAllBindings() {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getAllBindings();
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -95,11 +82,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> Binding<T> getBinding(Key<T> key) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getBinding(key);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -107,11 +94,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> Binding<T> getBinding(Class<T> type) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getBinding(type);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -119,11 +106,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public Map<Key<?>, Binding<?>> getBindings() {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getBindings();
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -131,11 +118,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> Binding<T> getExistingBinding(Key<T> key) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getExistingBinding(key);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -143,11 +130,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> T getInstance(Key<T> key) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getInstance(key);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -155,11 +142,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> T getInstance(Class<T> type) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getInstance(type);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -167,11 +154,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> MembersInjector<T> getMembersInjector(Class<T> type) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getMembersInjector(type);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -179,11 +166,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> MembersInjector<T> getMembersInjector(TypeLiteral<T> typeLiteral) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getMembersInjector(typeLiteral);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -191,11 +178,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public Injector getParent() {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getParent();
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -203,11 +190,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> Provider<T> getProvider(Key<T> key) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getProvider(key);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -215,11 +202,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public <T> Provider<T> getProvider(Class<T> type) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getProvider(type);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -227,11 +214,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public Map<Class<? extends Annotation>, Scope> getScopeBindings() {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getScopeBindings();
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -239,11 +226,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
     @Override
     public Set<TypeConverterBinding> getTypeConverterBindings() {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 return delegate.getTypeConverterBindings();
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -255,11 +242,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
 
     public void injectMembersWithoutViews( Object instance ) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 delegate.injectMembers(instance);
             }finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }
@@ -281,11 +268,11 @@ public class FragmentScopedRoboInjector implements RoboInjector {
 
     private void injectViews(Object fragment) {
         synchronized (FragmentScope.class) {
-            scope.enter(context);
+            scope.enter(fragment);
             try {
                 ViewMembersInjector.injectViews(fragment);
             } finally {
-                scope.exit(context);
+                scope.exit(fragment);
             }
         }
     }

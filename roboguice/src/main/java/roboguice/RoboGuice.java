@@ -113,7 +113,7 @@ public final class RoboGuice {
                     if( Strings.notEmpty(name)) {
                         final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
                         try {
-                            modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
+                            modules.add(clazz.getDeclaredConstructor(Application.class).newInstance(application));
                         } catch( NoSuchMethodException ignored ) {
                             modules.add( clazz.newInstance() );
                         }

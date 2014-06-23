@@ -38,6 +38,14 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<distributionManagement>
+		<site>
+			<id>github-pages-site</id>
+			<name>Deployment through GitHub's site deployment plugin</name>
+			<url>site/${project.version}</url>
+		</site>
+	</distributionManagement>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.6</java.version>
@@ -53,6 +61,10 @@
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
 		<jacoco-maven-plugin.version>0.6.2.201302030002</jacoco-maven-plugin.version>
+		<site-maven-plugin.version>0.9</site-maven-plugin.version>
+		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+		<maven-project-info-reports-plugin.version>2.7</maven-project-info-reports-plugin.version>
+
 		<!-- LIBRARIES -->
 		<android-platform.version>4.1.1.4</android-platform.version>
 		<android-map.version>7_r1</android-map.version>
@@ -73,6 +85,9 @@
 		<dexmaker.version>1.1</dexmaker.version>
 		<mockito.version>1.9.5</mockito.version>
 		<easymock.version>3.0</easymock.version>
+
+		<!-- https://github.com/github/maven-plugins -->
+		<github.global.server>github</github.global.server>
 	</properties>
 
 	<dependencyManagement>
@@ -139,6 +154,12 @@
 				<version>${findbugs-annotations.version}</version>
 				<type>jar</type>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin.version}</version>
+			</dependency>
+
 
 			<!-- TEST DEPENDENCIES -->
 			<dependency>
@@ -300,11 +321,15 @@
 							<id>pmd-check</id>
 							<goals>
 								<goal>check</goal>
-								<!-- Too many deduplications to check them 
-								<goal>cpd-check</goal> -->
+								<!-- Too many deduplications to check them <goal>cpd-check</goal> -->
 							</goals>
 						</execution>
 					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven-javadoc-plugin.version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -317,7 +342,13 @@
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
-
 </project>

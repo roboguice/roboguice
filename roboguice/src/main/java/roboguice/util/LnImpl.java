@@ -1,5 +1,7 @@
 package roboguice.util;
 
+import java.util.Locale;
+
 import com.google.inject.Inject;
 
 import android.app.Application;
@@ -22,14 +24,14 @@ public class LnImpl implements LnInterface {
             packageName = context.getPackageName();
             final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
             minimumLogLevel = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0 ? Log.VERBOSE : Log.INFO;
-            tag = packageName.toUpperCase();
+            tag = packageName.toUpperCase(Locale.US);
 
             Ln.d("Configuring Logging, minimum log level is %s", Ln.logLevelToString(minimumLogLevel) );
 
         } catch( Exception e ) {
             try {
                 Log.e(packageName, "Error configuring logger", e);
-            } catch( RuntimeException f ) { // NOPMD - Legal empty catch block 
+            } catch( RuntimeException f ) { // NOPMD - Legal empty catch block
                 // HACK ignore Stub! errors in mock objects during testing
             }
         }
@@ -194,10 +196,12 @@ public class LnImpl implements LnInterface {
     }
 
 
+    @Override
     public int getLoggingLevel() {
         return minimumLogLevel;
     }
 
+    @Override
     public void setLoggingLevel(int level) {
         minimumLogLevel = level;
     }

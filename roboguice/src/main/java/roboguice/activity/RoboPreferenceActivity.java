@@ -41,10 +41,12 @@ import roboguice.util.RoboContext;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceScreen;
@@ -57,9 +59,9 @@ import android.view.View;
  *
  * Note: there is currently a limitation that prevents you from using @InjectView if you use setContentView.
  * http://code.google.com/p/roboguice/issues/detail?id=70
- * 
+ *
  * @see RoboActivity
- * 
+ *
  * @author Toly Pochkin
  * @author Rodrigo Damazio
  * @author Mike Burton
@@ -191,6 +193,7 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
         if (RoboActivity.shouldInjectOnCreateView(name))
             return RoboActivity.injectOnCreateView(name, context, attrs);

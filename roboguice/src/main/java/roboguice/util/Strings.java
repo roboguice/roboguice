@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 public final class Strings {
@@ -26,7 +27,7 @@ public final class Strings {
      * Like join, but allows for a distinct final delimiter. For english
      * sentences such as "Alice, Bob and Charlie" use ", " and " and " as the
      * delimiters.
-     * 
+     *
      * @param delimiter
      *            usually ", "
      * @param lastDelimiter
@@ -152,7 +153,7 @@ public final class Strings {
 
     public static String capitalize(String s) {
         final String c = Strings.toString(s);
-        return c.length() >= 2 ? c.substring(0, 1).toUpperCase() + c.substring(1) : c.length() >= 1 ? c.toUpperCase() : c;
+        return c.length() >= 2 ? c.substring(0, 1).toUpperCase(Locale.US) + c.substring(1) : c.length() >= 1 ? c.toUpperCase(Locale.US) : c;
     }
 
     public static boolean equals(Object a, Object b) {
@@ -160,7 +161,7 @@ public final class Strings {
     }
 
     public static boolean equalsIgnoreCase(Object a, Object b) {
-        return Strings.toString(a).toLowerCase().equals(Strings.toString(b).toLowerCase());
+        return Strings.toString(a).toLowerCase(Locale.US).equals(Strings.toString(b).toLowerCase(Locale.US));
     }
 
     public static String[] chunk(String str, int chunkSize) {

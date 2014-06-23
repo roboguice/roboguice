@@ -24,14 +24,16 @@ import roboguice.util.RoboContext;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 
+import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 
 /**
  * A {@link RoboService} extends from {@link Service} to provide dynamic
  * injection of collaborators, using Google Guice.<br /> <br />
- * 
+ *
  * Your own services that usually extend from {@link Service} should now extend from
  * {@link RoboService}.<br /> <br />
  *
@@ -60,6 +62,7 @@ public abstract class RoboService extends Service implements RoboContext {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.ECLAIR)
     public int onStartCommand(Intent intent, int flags, int startId) {
         final int startCont = super.onStartCommand(intent,flags, startId);
         eventManager.fire(new OnStartEvent<Service>(this));

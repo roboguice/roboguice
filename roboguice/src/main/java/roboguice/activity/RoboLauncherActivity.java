@@ -39,11 +39,13 @@ import roboguice.util.RoboContext;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
@@ -51,9 +53,9 @@ import android.view.View;
 /**
  * A {@link RoboLauncherActivity} extends from {@link LauncherActivity} to provide
  * dynamic injection of collaborators, using Google Guice.<br />
- * 
+ *
  * @see RoboActivity
- * 
+ *
  * @author Toly Pochkin
  */
 public class RoboLauncherActivity extends LauncherActivity implements RoboContext {
@@ -164,6 +166,7 @@ public class RoboLauncherActivity extends LauncherActivity implements RoboContex
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
         if (RoboActivity.shouldInjectOnCreateView(name))
             return RoboActivity.injectOnCreateView(name, context, attrs);

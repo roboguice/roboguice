@@ -8,7 +8,7 @@ import android.view.View;
 
 /**
  * Provides an injected {@link ListFragment} based on support library v4.
- * A RoboListFragment will see all its members and views injected after {@link #onViewCreated(View, Bundle)}. 
+ * A RoboListFragment will see all its members and views injected after {@link #onViewCreated(View, Bundle)}.
  * @author Michael Burton
  */
 public abstract class RoboListFragment extends ListFragment {

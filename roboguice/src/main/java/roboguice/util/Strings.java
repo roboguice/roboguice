@@ -43,12 +43,15 @@ public final class Strings {
             return "";
 
         final Iterator<T> iter = objs.iterator();
-        final StringBuilder buffer = new StringBuilder(Strings.toString(iter.next()));
-        int i = 1;
+        final StringBuilder buffer = new StringBuilder();
         while (iter.hasNext()) {
             final T obj = iter.next();
-            if (notEmpty(obj))
-                buffer.append(++i == objs.size() ? lastDelimiter : delimiter).append(Strings.toString(obj));
+            if (notEmpty(obj)) {
+                if( buffer.length() != 0 ) {
+                    buffer.append( iter.hasNext() ? delimiter : lastDelimiter );
+                }
+                buffer.append(Strings.toString(obj));
+            }
         }
         return buffer.toString();
     }
@@ -62,12 +65,16 @@ public final class Strings {
             return "";
 
         final Iterator<T> iter = objs.iterator();
-        final StringBuilder buffer = new StringBuilder(Strings.toString(iter.next()));
+        final StringBuilder buffer = new StringBuilder();
 
         while (iter.hasNext()) {
             final T obj = iter.next();
-            if (notEmpty(obj))
-                buffer.append(delimiter).append(Strings.toString(obj));
+            if (notEmpty(obj)) {
+                if( buffer.length() != 0 ) {
+                    buffer.append(delimiter);
+                }
+                buffer.append(Strings.toString(obj));
+            }
         }
         return buffer.toString();
     }

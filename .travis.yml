@@ -18,5 +18,4 @@ android:
 #    - android-17
 
 script:
-    - if [ "$TRAVIS_BRANCH" == "master" ] ; then export target=deploy ; else export target=install ; fi
-    - mvn $target --settings target/travis/settings.xml
+    - if [ "$TRAVIS_BRANCH" == "master" ] ; then mvn deploy --settings target/travis/settings.xml ; else mvn install --settings target/travis/settings.xml ; fi

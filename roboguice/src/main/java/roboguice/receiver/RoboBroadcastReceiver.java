@@ -8,7 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 
 /**
- * To ensure proper ContextScope usage, override the handleReceive method
+ * To ensure proper ContextScope usage, override the handleReceive method.
  */
 public abstract class RoboBroadcastReceiver extends BroadcastReceiver {
 
@@ -16,6 +16,7 @@ public abstract class RoboBroadcastReceiver extends BroadcastReceiver {
      * the handleReceive method to ensure that the proper ContextScope is maintained.
      * @param context
      * @param intent
+     * @see #handleReceive(Context, Intent)
      */
     @Override
     public final void onReceive(Context context, Intent intent) {

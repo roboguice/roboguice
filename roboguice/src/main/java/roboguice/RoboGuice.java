@@ -7,6 +7,8 @@ import roboguice.config.DefaultRoboModule;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScopedRoboInjector;
+import roboguice.inject.FragmentScope;
+import roboguice.inject.FragmentScopedRoboInjector;
 import roboguice.inject.ResourceListener;
 import roboguice.inject.RoboInjector;
 import roboguice.inject.ViewListener;
@@ -18,6 +20,7 @@ import com.google.inject.Module;
 import com.google.inject.Stage;
 
 import android.app.Application;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -131,10 +134,21 @@ public final class RoboGuice {
 
     }
 
+    public static RoboInjector getInjector(Object contextOrFragment) {
+        Context context;
+        if( contextOrFragment instanceof Context ) {
+            context = (Context) contextOrFragment;
+            final Application application = (Application)context.getApplicationContext();
+            return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application));
+        } else if( contextOrFragment instanceof Fragment ) {
+            context = ((Fragment) contextOrFragment).getActivity();
+        } else if( contextOrFragment instanceof android.support.v4.app.Fragment ) {
+            context = ((android.support.v4.app.Fragment) contextOrFragment).getActivity();
+        } else {
+            throw new IllegalArgumentException(String.format("%s does not appear to belong to a RoboGuice context (instanceof RoboContext)",contextOrFragment));
+        }
 
-    public static RoboInjector getInjector(Context context) {
-        final Application application = (Application)context.getApplicationContext();
-        return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application));
+        return new FragmentScopedRoboInjector(contextOrFragment, getInjector(context));
     }
 
     /**
@@ -147,7 +161,7 @@ public final class RoboGuice {
 
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
-        return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
+        return new DefaultRoboModule(application, new ContextScope(application), new FragmentScope(application), getViewListener(application), getResourceListener(application));
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -180,11 +194,13 @@ public final class RoboGuice {
         return viewListener;
     }
 
-    public static void destroyInjector(Context context) {
-        final RoboInjector injector = getInjector(context);
-        injector.getInstance(EventManager.class).destroy();
+    public static void destroyInjector(Object contextOrFragment) {
+        final RoboInjector injector = getInjector(contextOrFragment);
+        if( contextOrFragment instanceof Context ) {
+            injector.getInstance(EventManager.class).destroy();
+        }
         //noinspection SuspiciousMethodCalls
-        injectors.remove(context); // it's okay, Context is an Application
+        injectors.remove(contextOrFragment); // it's okay, Context is an Application
     }
 
     public static final class Util {

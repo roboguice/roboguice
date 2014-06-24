@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -79,9 +78,6 @@ public class ViewInjectionTest {
 
     }
 
-
-
-    @Ignore("getWindow().getDecoreView() doesn't seem to return the root view in robolectric?")
     @Test
     public void shouldBeAbleToInjectReferencesToTaggedViews() {
         final D activity = Robolectric.buildActivity(D.class).create().get();

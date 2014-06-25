@@ -16,6 +16,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.Stage;
+import com.google.inject.util.Modules;
 
 import android.app.Application;
 import android.content.Context;
@@ -32,7 +33,7 @@ import android.os.Bundle;
  * 1. The base application injector, which is not typically used directly by the user.
  * 2. The ContextScopedInjector, which is obtained by calling {@link #getInjector(android.content.Context)}, and knows about
  *    your current context, whether it's an activity, service, or something else.
- * 
+ *
  * BUG hashmap should also key off of stage and modules list
  */
 public final class RoboGuice {
@@ -62,7 +63,7 @@ public final class RoboGuice {
             rtrn = injectors.get(application);
             if( rtrn!=null )
                 return rtrn;
-            
+
             return setBaseApplicationInjector(application, DEFAULT_STAGE);
         }
     }
@@ -92,43 +93,72 @@ public final class RoboGuice {
     }
 
     /**
+     * Shortcut to obtain an injector during tests. It will load all modules declared in manifest, add a {@code DefaultRoboModule},
+     * and override all bindings defined in test modules. We use default stage by default.
+     *
+     * RoboGuice.overrideApplicationInjector( app, new TestModule() );
+     *
+     * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
+     * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+     * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
+     * @see roboguice.RoboGuice#DEFAULT_STAGE
+     *
+     * If using this method with test cases, be sure to call {@link roboguice.RoboGuice.Util#reset()} in your test teardown methods
+     * to avoid polluting our other tests with your custom injector.  Don't do this in your real application though.
+     *
+     */
+    public static Injector overrideApplicationInjector(final Application application,  Module... overrideModules) {
+        synchronized (RoboGuice.class) {
+            final ArrayList<Module> baseModules = getModulesFromManifest(application);
+            final Injector rtrn = Guice.createInjector(DEFAULT_STAGE, Modules.override(baseModules).with(overrideModules));
+            injectors.put(application,rtrn);
+            return rtrn;
+        }
+    }
+
+    /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
     public static Injector setBaseApplicationInjector(Application application, Stage stage) {
 
         synchronized (RoboGuice.class) {
 
-            final ArrayList<Module> modules = new ArrayList<Module>();
-
-            try {
-                final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
-                final Bundle bundle = ai.metaData;
-                final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
-                final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
-                final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
-
-                modules.add(defaultRoboModule);
-
-                for (String name : moduleNames) {
-                    if( Strings.notEmpty(name)) {
-                        final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                        try {
-                            modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
-                        } catch( NoSuchMethodException ignored ) {
-                            modules.add( clazz.newInstance() );
-                        }
-                    }
-                }
-
-            } catch (Exception e) {
-                throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
-            }
+            final ArrayList<Module> modules = getModulesFromManifest(application);
 
             final Injector rtrn = setBaseApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));
             injectors.put(application,rtrn);
             return rtrn;
         }
 
+    }
+
+    private static ArrayList<Module> getModulesFromManifest(Application application) {
+        final ArrayList<Module> modules = new ArrayList<Module>();
+
+        try {
+            final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
+            final Bundle bundle = ai.metaData;
+            final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
+            final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
+            final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
+
+            modules.add(defaultRoboModule);
+
+            for (String name : moduleNames) {
+                if( Strings.notEmpty(name)) {
+                    final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
+                    try {
+                        modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
+                    } catch( NoSuchMethodException ignored ) {
+                        modules.add( clazz.newInstance() );
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
+        }
+        return modules;
     }
 
 

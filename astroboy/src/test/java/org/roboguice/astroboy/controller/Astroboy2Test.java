@@ -1,17 +1,21 @@
 package org.roboguice.astroboy.controller;
 
-import android.app.Application;
-import android.content.Context;
-import android.os.Vibrator;
-import com.google.inject.AbstractModule;
-import com.google.inject.util.Modules;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
+import android.app.Application;
+import android.content.Context;
+import android.os.Vibrator;
 
-import static org.mockito.Mockito.*;
+import com.google.inject.AbstractModule;
 
 /**
  * A testcase that swaps in a TestVibrator to verify that
@@ -26,19 +30,19 @@ public class Astroboy2Test {
     @Before
     public void setup() {
         // Override the default RoboGuice module
-        RoboGuice.setBaseApplicationInjector(application, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(application)).with(new MyTestModule()));
+        RoboGuice.overrideApplicationInjector(application, new MyTestModule());
 
         when(context.getApplicationContext()).thenReturn(application);
         when(application.getApplicationContext()).thenReturn(application);
 
     }
-    
+
     @After
     public void teardown() {
         // Don't forget to tear down our custom injector to avoid polluting other test classes
         RoboGuice.Util.reset();
     }
-    
+
     @Test
     public void brushingTeethShouldCausePhoneToVibrate() {
 

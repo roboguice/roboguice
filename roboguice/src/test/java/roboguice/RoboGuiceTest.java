@@ -3,6 +3,10 @@ package roboguice;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import javax.inject.Inject;
+
+import org.hamcrest.core.IsInstanceOf;
+import org.hamcrest.core.IsNull;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +19,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Stage;
 
 import android.app.Activity;
+import android.app.Application;
 
 @RunWith(RobolectricTestRunner.class)
 public class RoboGuiceTest {
@@ -62,4 +67,34 @@ public class RoboGuiceTest {
                 });
         assertThat(i[0], equalTo(1));
     }
+
+    @Test
+    public void shouldOverrideModulesForTests() {
+        RoboGuice.overrideApplicationInjector(Robolectric.application,
+                new AbstractModule() {
+                    @Override
+                    protected void configure() {
+                        bind(Bar.class).to(Bar1.class);
+                    }
+                });
+        Foo foo = RoboGuice.getInjector(Robolectric.application).getInstance(Foo.class);
+        assertThat(foo, IsNull.notNullValue());
+        assertThat(foo.bar, IsInstanceOf.instanceOf(Bar1.class));
+        assertThat(foo.bar, IsInstanceOf.instanceOf(Bar1.class));
+        //we received default robo module injections as well
+        assertThat(foo.application, IsNull.notNullValue());
+    }
+
+
+    static class Foo {
+        @Inject Application application;
+        @Inject Bar bar;
+    }
+
+    static class Bar {
+    }
+
+    static class Bar1 extends Bar{
+    }
+
 }

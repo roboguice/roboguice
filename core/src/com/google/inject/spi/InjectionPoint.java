@@ -692,8 +692,8 @@ public final class InjectionPoint {
         //recursive call on parents
         Class<?> parentRawType = rawType.getSuperclass();
         if( isWorthScanning(filter, parentRawType) ) {
-            overrideIndex.position = Position.MIDDLE;
             computeInjectableMembers(type.getSupertype(parentRawType), statics, errors, injectableMembers, overrideIndex, filter);
+            overrideIndex.position = Position.MIDDLE;
         } else {
             overrideIndex.position = Position.TOP; // we're at the top of the inheritance hierarchy
         }
@@ -730,7 +730,7 @@ public final class InjectionPoint {
                                 type, method, atInject);
                         if (checkForMisplacedBindingAnnotations(method, errors)
                                 || !isValidMethod(injectableMethod, errors)) {
-                            boolean removed = overrideIndex.removeIfOverriddenBy(method, false, injectableMethod);
+                        	boolean removed = overrideIndex.removeIfOverriddenBy(method, false, injectableMethod);
                             if(removed) {
                                 logger.log(Level.WARNING, "Method: {0} is not a valid injectable method ("
                                         + "because it either has misplaced binding annotations "
@@ -743,10 +743,10 @@ public final class InjectionPoint {
                         if (statics) {
                             injectableMembers.add(injectableMethod);
                         } else {
-                            // Forcibly remove the overridden method, otherwise we'll inject
-                            // it twice.
-                            overrideIndex.removeIfOverriddenBy(method, true, injectableMethod);
-                            overrideIndex.add(injectableMethod);
+                    		// Forcibly remove the overriden method, otherwise we'll inject
+                    		// it twice.
+                    		overrideIndex.removeIfOverriddenBy(method, true, injectableMethod);
+                        	overrideIndex.add(injectableMethod);
                         }
                     } else {
                         boolean removed = overrideIndex.removeIfOverriddenBy(method, false, null);

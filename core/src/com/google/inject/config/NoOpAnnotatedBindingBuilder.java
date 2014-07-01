@@ -63,11 +63,6 @@ public class NoOpAnnotatedBindingBuilder<T> implements AnnotatedBindingBuilder<T
     }
 
     @Override
-    public ScopedBindingBuilder toProvider(javax.inject.Provider<? extends T> provider) {
-        return scopedBindingBuilder;
-    }
-
-    @Override
     public ScopedBindingBuilder toProvider(Key<? extends javax.inject.Provider<? extends T>> providerKey) {
         return scopedBindingBuilder;
     }
@@ -97,6 +92,11 @@ public class NoOpAnnotatedBindingBuilder<T> implements AnnotatedBindingBuilder<T
         //nothing
     }
 
+	@Override
+	public ScopedBindingBuilder toProvider(javax.inject.Provider<? extends T> provider) {
+		return scopedBindingBuilder;
+	}
+
     private class NoOpLinkedBindingBuilder<U> implements LinkedBindingBuilder<U> {
         @Override
         public ScopedBindingBuilder to(Class<? extends U> implementation) {
@@ -120,11 +120,6 @@ public class NoOpAnnotatedBindingBuilder<T> implements AnnotatedBindingBuilder<T
 
         @Override
         public ScopedBindingBuilder toProvider(Provider<? extends U> provider) {
-            return scopedBindingBuilder;
-        }
-
-        @Override
-        public ScopedBindingBuilder toProvider(javax.inject.Provider<? extends U> provider) {
             return scopedBindingBuilder;
         }
 
@@ -167,6 +162,11 @@ public class NoOpAnnotatedBindingBuilder<T> implements AnnotatedBindingBuilder<T
         public void asEagerSingleton() {
             //nothing
         }
+
+		@Override
+		public ScopedBindingBuilder toProvider(javax.inject.Provider<? extends U> provider) {
+			return scopedBindingBuilder;
+		}
     }
 
     private static class NoOpScopedBindingBuilder implements ScopedBindingBuilder {

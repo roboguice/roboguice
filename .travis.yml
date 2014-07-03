@@ -24,5 +24,4 @@ before_script:
     - cd ..
 
 script:
-    - echo "Travis branch is $TRAVIS_BRANCH"
     - mvn install 

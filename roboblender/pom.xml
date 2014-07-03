@@ -3,7 +3,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>roboblender</artifactId>
-	<version>3.0-alpha-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Robo Blender</name>
         <description>The annotation processor of RoboGuice</description>
@@ -11,7 +10,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.0-alpha-SNAPSHOT</version>
+		<version>3.0-alpha-3-SNAPSHOT</version>
 	</parent>
 
 	<properties>

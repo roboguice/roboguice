@@ -8,8 +8,8 @@ env:
         - secure: "RCklprdsC5v87r76/jWexKzdcZbLLeUh2JyR7bako8lYtIjs2yhVofMxUenY3rQCVbMWyR68Je5uH4rNENmqqZZnG3hgb/yHNn/FMFuFDiGyaRMZbGjPYZy47nsfI89i8KWr8P8hT1Ro90Mp+Q/QOQu0Eca6VWZtSNTraxor0dc="
 
 
-before_install:
-    - git clone -b travis `git config --get remote.origin.url` target/travis
+#before_install:
+#    - git clone -b travis `git config --get remote.origin.url` target/travis
 
 android:
   components:

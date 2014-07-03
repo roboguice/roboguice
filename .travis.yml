@@ -17,6 +17,12 @@ android:
 #    - android-19
 #    - android-17
 
+#build guice fork before building RG
+before_script:
+    - cd guice
+    - mvn clean install -DskipTests=true -Djavadoc.skip=true
+    - cd ..
+
 script:
     - echo "Travis branch is $TRAVIS_BRANCH"
     - if [ "$TRAVIS_BRANCH" == "master" -a "TRAVIS_PULL_REQUEST" == "false" ] ; then mvn deploy --settings target/travis/settings.xml ; else mvn install --settings target/travis/settings.xml ; fi

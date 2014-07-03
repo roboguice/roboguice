@@ -17,7 +17,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Vibrator;
 
-import com.google.inject.config.AbstractModule;
+import com.google.inject.AbstractModule;
 import com.google.inject.util.Modules;
 
 /**

@@ -16,6 +16,11 @@
 			</arguments>
 		</buildCommand>
 		<buildCommand>
+			<name>edu.umd.cs.findbugs.plugin.eclipse.findbugsBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>org.eclipse.m2e.core.maven2Builder</name>
 			<arguments>
 			</arguments>
@@ -25,5 +30,6 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
+		<nature>edu.umd.cs.findbugs.plugin.eclipse.findbugsNature</nature>
 	</natures>
 </projectDescription>

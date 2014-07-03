@@ -20,7 +20,7 @@ import roboguice.activity.RoboActivity;
 import roboguice.util.Strings;
 
 import com.google.inject.Inject;
-import com.google.inject.config.AbstractModule;
+import com.google.inject.AbstractModule;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;

@@ -22,7 +22,7 @@ import java.util.Set;
 import com.google.inject.Guice;
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
-import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 

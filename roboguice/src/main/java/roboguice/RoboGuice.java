@@ -20,9 +20,9 @@ import roboguice.util.Strings;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
-import com.google.inject.config.HierarchyTraversalFilter;
-import com.google.inject.config.HierarchyTraversalFilterFactory;
-import com.google.inject.config.Module;
+import com.google.inject.HierarchyTraversalFilter;
+import com.google.inject.HierarchyTraversalFilterFactory;
+import com.google.inject.Module;
 import com.google.inject.internal.util.Stopwatch;
 
 import android.app.Application;

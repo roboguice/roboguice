@@ -12,7 +12,7 @@ import org.robolectric.RobolectricTestRunner;
 import roboguice.activity.RoboActivity;
 
 import com.google.inject.Stage;
-import com.google.inject.config.AbstractModule;
+import com.google.inject.AbstractModule;
 
 import android.app.Activity;
 

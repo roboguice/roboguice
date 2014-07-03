@@ -219,7 +219,7 @@ public class ActivityInjectionTest {
         }
     }
 
-    public static class ModuleA extends com.google.inject.config.AbstractModule {
+    public static class ModuleA extends com.google.inject.AbstractModule {
         @Override
         protected void configure() {
             requestStaticInjection(A.class);
@@ -233,7 +233,7 @@ public class ActivityInjectionTest {
         }
     }
 
-    public static class ModuleB extends com.google.inject.config.AbstractModule {
+    public static class ModuleB extends com.google.inject.AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(B.class);
@@ -245,7 +245,7 @@ public class ActivityInjectionTest {
         }
     }
 
-    public static class ModuleC extends com.google.inject.config.AbstractModule {
+    public static class ModuleC extends com.google.inject.AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(C.class);
@@ -262,7 +262,7 @@ public class ActivityInjectionTest {
         }
     }
 
-    public static class ModuleD extends com.google.inject.config.AbstractModule {
+    public static class ModuleD extends com.google.inject.AbstractModule {
         @Override
         public void configure() {
             requestStaticInjection(D.class);

@@ -232,7 +232,7 @@ public class SherlockActivityInjectionTest {
         }
     }
 
-    public static class BaseModule extends com.google.inject.config.AbstractModule {
+    public static class BaseModule extends com.google.inject.AbstractModule {
         @Override
         protected void configure() {
             bind(RoboSherlockActivity.class).toProvider(Key.get(new TypeLiteral<NullProvider<RoboSherlockActivity>>() {

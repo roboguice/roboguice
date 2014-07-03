@@ -22,8 +22,7 @@ import static com.google.inject.Asserts.assertNotSerializable;
 import static com.google.inject.Asserts.awaitClear;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.google.inject.config.AbstractModule;
-import com.google.inject.config.Module;
+import com.google.inject.Module;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.spi.Dependency;

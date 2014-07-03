@@ -14,7 +14,7 @@
 
 package com.google.inject.persist.jpa;
 
-import com.google.inject.config.AbstractModule;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.persist.PersistService;

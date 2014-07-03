@@ -17,10 +17,10 @@
 package com.google.inject.multibindings;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.inject.config.AbstractModule;
+import com.google.inject.AbstractModule;
 import com.google.inject.Binder;
 import com.google.inject.Key;
-import com.google.inject.config.Module;
+import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.InjectionPoint;
 import com.google.inject.spi.ModuleAnnotatedMethodScanner;

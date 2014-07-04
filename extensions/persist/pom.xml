@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.google.inject.extensions</groupId>
     <artifactId>extensions-parent</artifactId>
-    <version>4.0.1-SNAPSHOT</version>
+    <version>4.0.1-blender-SNAPSHOT</version>
   </parent>
 
   <artifactId>guice-persist</artifactId>
@@ -15,9 +15,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.hibernate.javax.persistence</groupId>
-      <artifactId>hibernate-jpa-2.0-api</artifactId>
-      <version>1.0.0.Final</version>
+      <groupId>javax.persistence</groupId>
+      <artifactId>persistence-api</artifactId>
+      <version>1.0</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -35,7 +35,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
-      <version>4.1.7.Final</version>
+      <version>3.4.0.GA</version>
       <scope>test</scope>
     </dependency>
     <dependency>

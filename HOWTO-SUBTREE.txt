@@ -1,0 +1,2 @@
+#how to get the latest version of guice fork branch on snicolas repo : 
+git merge --squash -s subtree --no-commit guice_branch 

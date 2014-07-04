@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.0-alpha-3-SNAPSHOT</version>
+		<version>3.0-alpha-3-blender-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>

@@ -10,19 +10,18 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.0-alpha-3-SNAPSHOT</version>
+		<version>3.0-alpha-3-blender-SNAPSHOT</version>
 	</parent>
 
 	<properties>
 		<velocity.version>1.7</velocity.version>
-		<blender.version>4.0-SNAPSHOT</blender.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>blender</artifactId>
-			<version>${blender.version}</version>
+			<version>${guice.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>

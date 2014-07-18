@@ -81,20 +81,20 @@ public class ResourceListener implements TypeListener {
                 final int id = getId(resources,annotation);
                 final Class<?> t = field.getType();
 
-                if (String.class.isAssignableFrom(t)) {
+                if (String.class == t) {
                     value = resources.getString(id);
-                } else if (boolean.class.isAssignableFrom(t) || Boolean.class.isAssignableFrom(t)) {
+                } else if (boolean.class == t || Boolean.class == t) {
                     value = resources.getBoolean(id);
+                } else if (int.class == t || Integer.class == t) {
+                    value = resources.getInteger(id);
+                } else if (String[].class == t) {
+                    value = resources.getStringArray(id);
+                } else if (int[].class == t || Integer[].class == t) {
+                    value = resources.getIntArray(id);
                 } else if (ColorStateList.class.isAssignableFrom(t)  ) {
                     value = resources.getColorStateList(id);
-                } else if (int.class.isAssignableFrom(t) || Integer.class.isAssignableFrom(t)) {
-                    value = resources.getInteger(id);
                 } else if (Drawable.class.isAssignableFrom(t)) {
                     value = resources.getDrawable(id);
-                } else if (String[].class.isAssignableFrom(t)) {
-                    value = resources.getStringArray(id);
-                } else if (int[].class.isAssignableFrom(t) || Integer[].class.isAssignableFrom(t)) {
-                    value = resources.getIntArray(id);
                 } else if (Animation.class.isAssignableFrom(t)) {
                     value = AnimationUtils.loadAnimation(application, id);
                 } else if (Movie.class.isAssignableFrom(t)  ) {

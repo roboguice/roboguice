@@ -150,6 +150,26 @@
         <artifactId>maven-javadoc-plugin</artifactId>
       </plugin>
     </plugins>
+    <!-- Add blender classifier to all artifacts -->
+    <pluginManagement>
+        <plugins>
+	      <plugin>
+	        <artifactId>maven-jar-plugin</artifactId>
+	        <executions>
+	          <execution>
+				<id>default-jar</id>
+			    <phase>package</phase>
+			    <goals>
+			      <goal>jar</goal>
+			    </goals>
+	      	    <configuration>
+	              <classifier>blender</classifier>
+	            </configuration>
+	          </execution>
+	        </executions>
+	      </plugin>
+	    </plugins>        
+    </pluginManagement>
   </build>
 
   <profiles>
@@ -208,7 +228,7 @@
                 </goals>
                 <configuration>
                   <classesDirectory>${project.build.directory}/munged/classes</classesDirectory>
-                  <classifier>no_aop</classifier>
+                  <classifier>no_aop-blender</classifier>
                   <archive>
                     <manifestFile>${project.build.directory}/munged/classes/META-INF/MANIFEST.MF</manifestFile>
                   </archive>

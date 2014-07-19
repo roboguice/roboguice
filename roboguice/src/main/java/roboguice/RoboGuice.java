@@ -122,9 +122,7 @@ public final class RoboGuice {
     public static Injector setBaseApplicationInjector(Application application, Stage stage) {
 
         synchronized (RoboGuice.class) {
-
             final ArrayList<Module> modules = getModulesFromManifest(application);
-
             final Injector rtrn = setBaseApplicationInjector(application, stage, modules.toArray(new Module[modules.size()]));
             injectors.put(application,rtrn);
             return rtrn;
@@ -148,7 +146,7 @@ public final class RoboGuice {
                 if( Strings.notEmpty(name)) {
                     final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
                     try {
-                        modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
+                        modules.add(clazz.getDeclaredConstructor(Application.class).newInstance(application));
                     } catch( NoSuchMethodException ignored ) {
                         modules.add( clazz.newInstance() );
                     }

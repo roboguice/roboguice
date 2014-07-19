@@ -1,14 +1,15 @@
 package roboguice.additionaltests;
 
 import android.content.Context;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+
 import roboguice.activity.RoboActivity;
 import roboguice.additionaltests.view.ShouldInjectCustomViewsView;
 import roboguice.inject.ContentView;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 

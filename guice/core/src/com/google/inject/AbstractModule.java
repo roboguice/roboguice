@@ -54,6 +54,22 @@ public abstract class AbstractModule implements Module {
 
   Binder binder;
 
+  @SuppressWarnings("rawtypes")
+  private AnnotatedBindingBuilder noOpAnnotatedBindingBuilder = new NoOpAnnotatedBindingBuilder();
+  private AnnotationDatabaseFinder annotationDatabaseFinder;
+
+  /**
+   * Sets the {@link AnnotationDatabaseFinder} to filter classes to bind.
+   * The {@link AnnotationDatabaseFinder} will know which classes can be injected and can't, 
+   * it also knows if a given annotation is used or not.
+   * <br/>
+   * This method <b>must</b> be called before configure to take effect.
+   * @param annotationDatabaseFinder used to filter classes to bind.
+   */
+  public void setAnnotationDatabaseFinder(AnnotationDatabaseFinder annotationDatabaseFinder) {
+    this.annotationDatabaseFinder = annotationDatabaseFinder;
+  }
+
   public final synchronized void configure(Binder builder) {
     checkState(this.binder == null, "Re-entry is not allowed.");
 
@@ -102,9 +118,27 @@ public abstract class AbstractModule implements Module {
   }
 
   /**
+   * If an {@link AnnotationDatabaseFinder} is used, this method will only bind
+   * the classes that are supposed to be injected.
    * @see Binder#bind(Class)
    */
+  @SuppressWarnings("unchecked")
   protected <T> AnnotatedBindingBuilder<T> bind(Class<T> clazz) {
+    if( isInjectable(clazz) ) {
+      return binder().bind(clazz);
+    } else {
+      return noOpAnnotatedBindingBuilder;
+    }
+  }
+
+  /**
+   * Allows to force a binding so that it doesn't depend
+   * on information provided by {@link AnnotationDatabase} if it
+   * is used. 
+   * @see Binder#bind(Class)
+   */
+  @SuppressWarnings("unchecked")
+  protected <T> AnnotatedBindingBuilder<T> superBind(Class<T> clazz) {
     return binder().bind(clazz);
   }
 
@@ -116,9 +150,14 @@ public abstract class AbstractModule implements Module {
   }
 
   /**
-   * @see Binder#install(Module)
+   * If a module has {@link AnnotationDatabaseFinder} then it is passed 
+   * to each submodule prior to installing it.
+   * @see Binder#install(Module).
    */
   protected void install(Module module) {
+    if( annotationDatabaseFinder != null && module instanceof AbstractModule) {
+      ((AbstractModule)module).setAnnotationDatabaseFinder(annotationDatabaseFinder);
+    }
     binder().install(module);
   }
 
@@ -254,7 +293,7 @@ public abstract class AbstractModule implements Module {
       TypeListener listener) {
     binder().bindListener(typeMatcher, listener);
   }
-  
+
   /**
    * @see Binder#bindListener(Matcher, ProvisionListener...)
    * @since 4.0
@@ -263,4 +302,35 @@ public abstract class AbstractModule implements Module {
       ProvisionListener... listener) {
     binder().bindListener(bindingMatcher, listener);
   }
+
+  /**
+   * Indicates whether or not instances of a given class can possibly be injected or not.
+   * @param clazz the class whose instance are injectable or not.
+   * @return Indicates whether or not instances of a given class can possibly be injected or not
+   * according to the {@link AnnotationDatabaseFinder} used by the module. If no {@link AnnotationDatabaseFinder}
+   * is used then this method always return true.
+   */
+  @SuppressWarnings("rawtypes")
+  protected boolean isInjectable(Class clazz) {
+    return annotationDatabaseFinder == null || annotationDatabaseFinder.getBindableClassesSet().contains(clazz.getName());
+  }
+
+  /**
+   * Indicates if a given annotation is used according to the {@link AnnotationDatabaseFinder}.
+   * @param annotationClass the annotation class (like {@link Inject}).
+   * @return true or false whether this annotation is used according to the {@link AnnotationDatabaseFinder}.
+   * If no {@link AnnotationDatabaseFinder} is used, then this method always return true.
+   */
+  @SuppressWarnings("rawtypes")
+  protected boolean hasInjectionPointsForAnnotation(Class annotationClass) {
+    return annotationDatabaseFinder == null 
+        || annotationDatabaseFinder.getMapAnnotationToMapClassContainingInjectionToInjectedConstructorSet().containsKey(annotationClass.getName())
+        || annotationDatabaseFinder.getMapAnnotationToMapClassContainingInjectionToInjectedMethodSet().containsKey(annotationClass.getName())
+        || annotationDatabaseFinder.getMapAnnotationToMapClassContainingInjectionToInjectedFieldSet().containsKey(annotationClass.getName());
+  }
+
+  public AnnotationDatabaseFinder getAnnotationDatabaseFinder() {
+    return annotationDatabaseFinder;
+  }
+
 }

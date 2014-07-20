@@ -112,7 +112,7 @@ public final class Guice {
     if( annotationDatabaseFinder == null ) {
       return hierarchyTraversalFilter;
     } else {
-      return new AnnotatedGuiceHierarchyTraversalFilter(annotationDatabaseFinder, hierarchyTraversalFilter);
+      return new AnnotatedHierarchyTraversalFilter(annotationDatabaseFinder, hierarchyTraversalFilter);
     }
   }
 
@@ -127,8 +127,9 @@ public final class Guice {
   /**
    * Sets the names of packages to take into account to find annotation databases. 
    * @param packageNames the names of packages to take into account to find annotation databases.
+ * @throws AnnotationDatabaseNotFoundException 
    */
-  public static void setAnnotationDatabasePackageNames(final String[] packageNames) {
+  public static void setAnnotationDatabasePackageNames(final String[] packageNames) throws AnnotationDatabaseNotFoundException {
     if( packageNames != null && packageNames.length != 0 ) {
       annotationDatabaseFinder = new AnnotationDatabaseFinder(packageNames);
     } else {

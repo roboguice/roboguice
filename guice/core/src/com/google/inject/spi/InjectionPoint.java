@@ -21,6 +21,8 @@ import static com.google.inject.internal.MoreTypes.getRawType;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.inject.AnnotationDatabase;
+import com.google.inject.AnnotationFieldNotFoundException;
 import com.google.inject.ConfigurationException;
 import com.google.inject.Guice;
 import com.google.inject.HierarchyTraversalFilter;
@@ -680,7 +682,11 @@ public final class InjectionPoint {
     overrideIndex.position = Position.BOTTOM; // we start at the bottom of inheritance hierarchy
 
   	filter.reset();
-  	computeInjectableMembers(type, statics, errors, injectableMembers, overrideIndex, filter);
+  	try {
+		computeInjectableMembers(type, statics, errors, injectableMembers, overrideIndex, filter);
+	} catch (AnnotationFieldNotFoundException e) {
+		errors.addMessage(e.getMessage());
+	}
 
     if (injectableMembers.isEmpty()) {
       return Collections.emptySet();
@@ -707,9 +713,11 @@ public final class InjectionPoint {
    *
    * @param statics true is this method should return static members, false for instance members
    * @param errors used to record errors
+   * @throws AnnotationFieldNotFoundException if a field is present in {@link AnnotationDatabase} 
+   *     but can't be found in <code>type</code>. 
    */
   private static void computeInjectableMembers(final TypeLiteral<?> type,
-      boolean statics, Errors errors, InjectableMembers injectableMembers, OverrideIndex overrideIndex, HierarchyTraversalFilter filter) {
+      boolean statics, Errors errors, InjectableMembers injectableMembers, OverrideIndex overrideIndex, HierarchyTraversalFilter filter) throws AnnotationFieldNotFoundException {
 
     Class<?> rawType = type.getRawType();
     if( !isWorthScanning(filter, rawType) ) {

@@ -17,7 +17,7 @@ import org.apache.velocity.app.Velocity;
 /**
  * Generates a AnnotationDatabase implementation for RoboGuice.
  * @author Mike Burton
- * @author SNI TODO use javawriter
+ * @author SNI
  */
 public class AnnotationDatabaseGenerator {
 
@@ -47,14 +47,12 @@ public class AnnotationDatabaseGenerator {
             w = new PrintWriter(jfo.openWriter());
             template.merge(context, w);
         } catch (Exception ex) {
-            ex.printStackTrace();
             throw new IOException("Impossible to generate annotation database.", ex);
         } finally {
             if( w != null ) {
                 try {
                     w.close();
                 } catch( Exception ex ) {
-                    ex.printStackTrace();
                     throw new IOException("Impossible to close annotation database.", ex);
                 }
             }

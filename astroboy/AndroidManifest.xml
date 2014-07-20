@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.roboguice.astroboy"
+    android:versionCode="1"
+    android:versionName="0.1-SNAPSHOT" >
+
+    <uses-sdk
+        android:minSdkVersion="3"
+        android:targetSdkVersion="19" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <application
+        android:icon="@drawable/icon"
+        android:label="Astroboy Master Console" >
+        <activity android:name=".activity.AstroboyMasterConsole" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activity.FightForcesOfEvilActivity" />
+
+        <meta-data
+            android:name="roboguice.annotations.packages"
+            android:value="astroboy" />
+    </application>
+
+</manifest>

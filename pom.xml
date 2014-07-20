@@ -1,0 +1,325 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.roboguice</groupId>
+	<artifactId>roboguice-aggregator</artifactId>
+	<name>Aggregator</name>
+	<version>3.0-alpha-3-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<prerequisites>
+		<maven>3.1.1</maven>
+	</prerequisites>
+
+	<modules>
+        <module>roboblender</module>
+		<module>roboguice</module>
+		<module>additional-tests</module>
+		<module>astroboy</module>
+	</modules>
+
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>6</version>
+	</parent>
+
+	<licenses>
+		<license>
+			<name>Apache 2</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<url>http://roboguice.org</url>
+	<scm>
+		<url>https://github.com/roboguice/roboguice</url>
+		<connection>scm:git:https://github.com/roboguice/roboguice.git</connection>
+		<developerConnection>scm:git:https://github.com/roboguice/roboguice.git</developerConnection>
+		<tag>HEAD</tag>
+	</scm>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.6</java.version>
+
+		<!-- PLUGINS -->
+		<android-maven-plugin.version>3.8.2</android-maven-plugin.version>
+		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
+		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
+		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
+		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
+		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
+		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
+		<jacoco-maven-plugin.version>0.6.2.201302030002</jacoco-maven-plugin.version>
+		<!-- LIBRARIES -->
+		<android-platform.version>4.1.1.4</android-platform.version>
+		<android-map.version>7_r1</android-map.version>
+		<android-build.version>19</android-build.version>
+		<guice.version>4.0-SNAPSHOT</guice.version>
+
+		<!--LIBRARIES -->
+		<android-map.version>7_r1</android-map.version>
+		<android-support-v4.version>19</android-support-v4.version>
+		<android-appcompat-v7.version>19</android-appcompat-v7.version>
+		<actionbarsherlock.version>4.2.0</actionbarsherlock.version>
+		<jsr305.version>2.0.3</jsr305.version>
+		<findbugs-annotations.version>1.0.0</findbugs-annotations.version>
+
+		<!--TESTING -->
+		<junit.version>4.11</junit.version>
+		<robolectric.version>2.2</robolectric.version>
+		<dexmaker.version>1.1</dexmaker.version>
+		<mockito.version>1.9.5</mockito.version>
+		<easymock.version>3.0</easymock.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- TEST DEPENDENCIES -->
+			<!-- http://stackoverflow.com/a/18463743/693752 -->
+
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- DEPENDENCIES -->
+			<dependency>
+				<groupId>com.google.android</groupId>
+				<artifactId>android</artifactId>
+				<version>${android-platform.version}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.android.maps</groupId>
+				<artifactId>maps</artifactId>
+				<version>${android-map.version}</version>
+				<scope>provided</scope>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>android.support</groupId>
+				<artifactId>compatibility-v4</artifactId>
+				<version>${android-support-v4.version}</version>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>android.support</groupId>
+				<artifactId>compatibility-v7-appcompat</artifactId>
+				<version>${android-appcompat-v7.version}</version>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>com.actionbarsherlock</groupId>
+				<artifactId>actionbarsherlock</artifactId>
+				<version>${actionbarsherlock.version}</version>
+				<type>jar</type>
+				<scope>provided</scope>
+				<optional>true</optional>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>jsr305</artifactId>
+				<version>${jsr305.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.inject</groupId>
+				<artifactId>guice</artifactId>
+				<version>${guice.version}</version>
+				<classifier>no_aop</classifier>
+			</dependency>
+			<dependency>
+				<groupId>findbugs</groupId>
+				<artifactId>annotations</artifactId>
+				<version>${findbugs-annotations.version}</version>
+				<type>jar</type>
+			</dependency>
+
+			<!-- TEST DEPENDENCIES -->
+			<dependency>
+				<groupId>org.robolectric</groupId>
+				<artifactId>robolectric</artifactId>
+				<version>${robolectric.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>${easymock.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-core</artifactId>
+				<version>${mockito.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.google.dexmaker</groupId>
+				<artifactId>dexmaker</artifactId>
+				<version>${dexmaker.version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>${maven-checkstyle-plugin.version}</version>
+					<configuration>
+						<configLocation>roboguice_checks.xml</configLocation>
+						<propertiesLocation>roboguice_checks.properties</propertiesLocation>
+						<enableRulesSummary>false</enableRulesSummary>
+						<consoleOutput>true</consoleOutput>
+					</configuration>
+					<executions>
+						<execution>
+							<id>checkstyle-check</id>
+							<phase>process-sources</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>findbugs-maven-plugin</artifactId>
+					<version>${findbugs-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<id>findbugs-check</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>${jacoco-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>report</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<includes>
+							<include>roboguice/**</include>
+						</includes>
+					</configuration>
+				</plugin>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-checkstyle-plugin
+										</artifactId>
+										<versionRange>
+											[${maven-checkstyle-plugin.version},)
+										</versionRange>
+										<goals>
+											<goal>check</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-enforcer-plugin</artifactId>
+										<versionRange>[1.0.0,)</versionRange>
+										<goals>
+											<goal>enforce</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jacoco</groupId>
+										<artifactId>jacoco-maven-plugin</artifactId>
+										<versionRange>[${jacoco-maven-plugin.version},)</versionRange>
+										<goals>
+											<goal>prepare-agent</goal>
+											<goal>report</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+				<!--<plugin> -->
+				<!--<groupId>org.apache.maven.plugins</groupId> -->
+				<!--<artifactId>maven-pmd-plugin</artifactId> -->
+				<!--<version>${maven-pmd-plugin.version}</version> -->
+				<!--<configuration> -->
+				<!--<targetJdk>1.5</targetJdk> -->
+				<!--</configuration> -->
+				<!--<executions> -->
+				<!--<execution> -->
+				<!--<id>pmd-check</id> -->
+				<!--<goals> -->
+				<!--<goal>check</goal> -->
+				<!--&lt;!&ndash; Too many deduplications to check them -->
+				<!--<goal>cpd-check</goal> -->
+				<!--&ndash;&gt; -->
+				<!--</goals> -->
+				<!--</execution> -->
+				<!--</executions> -->
+				<!--</plugin> -->
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<goals>deploy</goals>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

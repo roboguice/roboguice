@@ -26,4 +26,6 @@ local.properties
 *.iml
 .idea/
 
-
+#prevent adding guice.
+#It is a subree, not a folder
+guice/

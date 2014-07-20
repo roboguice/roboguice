@@ -132,7 +132,8 @@
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
 				<version>${guice.version}</version>
-				<classifier>no_aop</classifier>
+				<classifier>no_aop-blender</classifier>
+				<type>jar</type>
 			</dependency>
 			<dependency>
 				<groupId>findbugs</groupId>

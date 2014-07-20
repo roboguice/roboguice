@@ -35,8 +35,6 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
 
     private AnnotationDatabaseGenerator annotationDatabaseGenerator = new AnnotationDatabaseGenerator();
 
-    //TODO add a HashMap<String, Set<String>>
-
     /**
      * Maps each annotation name to an inner map.
      * The inner map maps classes (containing injection points) names to the list of injected field names.
@@ -119,7 +117,6 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
             jfo = processingEnv.getFiler().createSourceFile( className );
             annotationDatabaseGenerator.generateAnnotationDatabase(jfo, annotationDatabasePackageName, mapAnnotationToMapClassContainingInjectionToInjectedFieldSet, mapAnnotationToMapClassContainingInjectionToInjectedMethodSet, mapAnnotationToMapClassContainingInjectionToInjectedConstructorsSet, classesContainingInjectionPointsSet, bindableClasses);
         } catch (IOException e) {
-            e.printStackTrace();
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
         }
 
@@ -129,7 +126,6 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
     private void addClassToAnnotationDatabase(Element injectionPoint) {
         TypeElement typeElementRequiringScanning = (TypeElement) injectionPoint;
         String typeElementName = getTypeName(typeElementRequiringScanning);
-        //System.out.printf("Type: %s, is injected\n",typeElementName);
         classesContainingInjectionPointsSet.add(typeElementName);
     }
 
@@ -141,7 +137,6 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
 
         TypeElement typeElementRequiringScanning = (TypeElement) injectionPoint.getEnclosingElement();
         String typeElementName = getTypeName(typeElementRequiringScanning);
-        //System.out.printf("Type: %s, injection: %s \n",typeElementName, injectionPointName);
         addToInjectedFields(annotationClassName, typeElementName, injectionPointName);
     }
 
@@ -156,7 +151,6 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
 
         TypeElement typeElementRequiringScanning = (TypeElement) ((ExecutableElement) injectionPoint.getEnclosingElement()).getEnclosingElement();
         String typeElementName = getTypeName(typeElementRequiringScanning);
-        //System.out.printf("Type: %s, injection: %s \n",typeElementName, injectionPointName);
         if( injectionPointName.startsWith("<init>") ) {
             addToInjectedConstructors(annotationClassName, typeElementName, injectionPointName );
         } else {
@@ -175,7 +169,6 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
         TypeElement typeElementRequiringScanning = (TypeElement) injectionPoint.getEnclosingElement();
         String typeElementName = getTypeName(typeElementRequiringScanning);
 
-        //System.out.printf("Type: %s, injection: %s \n",typeElementName, injectionPointName);
         if( injectionPointName.startsWith("<init>") ) {
             addToInjectedConstructors(annotationClassName, typeElementName, injectionPointName );
         } else {

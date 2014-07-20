@@ -34,7 +34,7 @@ public class HierarchyTraversalFilter {
         return isWorthScanning(c);
     }
     
-    public Set<Field> getAllFields(String annotationClassName, Class<?> c) {
+    public Set<Field> getAllFields(String annotationClassName, Class<?> c) throws AnnotationFieldNotFoundException {
         HashSet<Field> set = new HashSet<Field>();
         for( Field field : c.getDeclaredFields() ) {
             set.add(field);

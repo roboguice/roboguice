@@ -19,7 +19,7 @@ import java.util.Set;
  * by the filter.
  * @author SNI
  */
-public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFilter {
+public class AnnotatedHierarchyTraversalFilter extends HierarchyTraversalFilter {
     private boolean hasHadInjectionPoints;
     private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet;
     private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet;
@@ -27,7 +27,7 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
     private HashSet<String> classesContainingInjectionPointsSet = new HashSet<String>();
     private HierarchyTraversalFilter delegate;
 
-    public  AnnotatedGuiceHierarchyTraversalFilter(AnnotationDatabaseFinder annotationDatabaseFinder, HierarchyTraversalFilter delegate ) {
+    public  AnnotatedHierarchyTraversalFilter(AnnotationDatabaseFinder annotationDatabaseFinder, HierarchyTraversalFilter delegate ) {
         this.delegate = delegate;
        
         mapAnnotationToMapClassWithInjectionNameToFieldSet = annotationDatabaseFinder.getMapAnnotationToMapClassContainingInjectionToInjectedFieldSet();
@@ -83,7 +83,7 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
     }
 
     @Override
-    public Set<Field> getAllFields(String annotationClassName, Class<?> c) {
+    public Set<Field> getAllFields(String annotationClassName, Class<?> c) throws AnnotationFieldNotFoundException {
         Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToFieldSet.get(annotationClassName);
 
         if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
@@ -96,7 +96,7 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
                     }
                     return fieldSet;
                 } catch( Exception ex ) {
-                    ex.printStackTrace();
+                    throw new AnnotationFieldNotFoundException("AnnotationDatabase contains a field that could not be found in the target class.", ex);
                 }
             }
         }

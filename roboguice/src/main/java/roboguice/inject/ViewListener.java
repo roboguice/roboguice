@@ -28,11 +28,12 @@ import javax.inject.Singleton;
 import roboguice.fragment.FragmentUtil;
 import roboguice.fragment.FragmentUtil.f;
 
+import com.google.inject.AnnotationFieldNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
@@ -56,7 +57,12 @@ public class ViewListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c)) { 
-            Set<Field> allFields = filter.getAllFields(InjectView.class.getName(), c);
+            Set<Field> allFields = null;
+            try {
+                allFields = filter.getAllFields(InjectView.class.getName(), c);
+            } catch (AnnotationFieldNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             if( allFields != null ) {
                 for (Field field : allFields) {
                     prepareViewMembersInjector(typeEncounter, field);
@@ -66,7 +72,11 @@ public class ViewListener implements TypeListener {
             //right now those loops could be merged. But it would be interesting 
             //to see if ViewMembersInjector should not be more distinguished
             //by introducing a FragmentMembersInjector
-            allFields = filter.getAllFields(InjectFragment.class.getName(), c);
+            try {
+                allFields = filter.getAllFields(InjectFragment.class.getName(), c);
+            } catch (AnnotationFieldNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             if( allFields != null ) {
                 for (Field field : allFields) {
                     prepareViewMembersInjector(typeEncounter, field);
@@ -107,7 +117,7 @@ public class ViewListener implements TypeListener {
                 final boolean isSupportActivity = FragmentUtil.hasSupport && FragmentUtil.supportActivity.isAssignableFrom(field.getDeclaringClass());
                 final boolean isNativeActivity = !isSupportActivity && Activity.class.isAssignableFrom(field.getDeclaringClass());
 
-                if ((isNativeActivity && assignableFromNative) || (isSupportActivity && assignableFromSupport)) {
+                if (isNativeActivity && assignableFromNative || isSupportActivity && assignableFromSupport) {
                     typeEncounter.register(new ViewMembersInjector<I>(field, field.getAnnotation(InjectFragment.class), typeEncounter, isNativeActivity ? FragmentUtil.nativeFrag:FragmentUtil.supportFrag));
                 } else if (isNativeActivity && !assignableFromNative) {
                     // Error messages - these filters are comprehensive. The
@@ -168,7 +178,7 @@ public class ViewListener implements TypeListener {
             synchronized (ViewMembersInjector.class) {
                 final Activity activity = activityProvider.get();
                 boolean isValidFragment = fragUtils != null && fragUtils.fragmentType().isInstance(instance);
-                final Object key = (isValidFragment || instance instanceof View) ? instance : activity;
+                final Object key = isValidFragment || instance instanceof View ? instance : activity;
                 if( key==null )
                     return;
 

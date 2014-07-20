@@ -65,7 +65,8 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<classifier>no_aop</classifier>
+			<version>4.0-SNAPSHOT</version>
+			<classifier>no_aop-blender</classifier>
 		</dependency>
 		<dependency>
 			<groupId>findbugs</groupId>
@@ -107,7 +108,7 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
-	<executions>
+				<executions>
 					<execution>
 						<id>default-compile</id>
 						<phase>compile</phase>
@@ -133,6 +134,32 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
+				<artifactId>android-maven-plugin</artifactId>
+				<version>${android-maven-plugin.version}</version>
+				<configuration>
+					<androidManifestFile>${project.basedir}/AndroidManifest.xml</androidManifestFile>
+					<resourceDirectory>${project.basedir}/res</resourceDirectory>
+					<sdk>
+						<platform>${android-build.version}</platform>
+					</sdk>
+					<generateApk>false</generateApk>
+					<lint>
+						<skip>false</skip>
+					</lint>
+				</configuration>
+				<executions>
+					<execution>
+						<id>lint-check</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>lint</goal>
+						</goals>
+					</execution>
+				</executions>
+				<extensions>true</extensions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -176,7 +203,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
 			</plugin>
-			<!-- By default RoboGuice uses annotation database system. Turn it off and replay all tests. -->
+			<!-- By default RoboGuice uses annotation database system. Turn it off 
+				and replay all tests. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -189,7 +217,7 @@
 							</environmentVariables>
 						</configuration>
 						<goals>
-						    <goal>test</goal>
+							<goal>test</goal>
 						</goals>
 						<phase>test</phase>
 					</execution>

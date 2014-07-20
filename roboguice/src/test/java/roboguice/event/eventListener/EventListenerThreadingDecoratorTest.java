@@ -10,10 +10,10 @@ import roboguice.event.EventListener;
 import roboguice.event.EventThread;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
-import com.google.inject.config.AbstractModule;
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.config.Module;
+import com.google.inject.Module;
 
 import android.os.Handler;
 

@@ -53,7 +53,7 @@ public class ViewMembersInjector<T> implements MembersInjector<T> {
         synchronized (ViewMembersInjector.class) {
             final Activity activity = activityProvider.get();
             boolean isValidFragment = fragUtils != null && fragUtils.fragmentType().isInstance(instance);
-            final Object key = (isValidFragment || instance instanceof View) ? instance : activity;
+            final Object key = isValidFragment || instance instanceof View ? instance : activity;
             if( key==null )
                 return;
 

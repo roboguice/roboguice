@@ -42,10 +42,12 @@ import com.google.inject.Inject;
 import com.google.inject.Key;
 
 import android.accounts.AccountAuthenticatorActivity;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
@@ -56,6 +58,7 @@ import android.view.View;
  *
  * @author Marcus Better
  */
+@TargetApi(Build.VERSION_CODES.ECLAIR)
 public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivity implements RoboContext {
     protected EventManager eventManager;
     protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>, Object>();
@@ -163,13 +166,11 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
         if (RoboActivity.shouldInjectOnCreateView(name))
             return RoboActivity.injectOnCreateView(name, context, attrs);
 
         return super.onCreateView(parent, name, context, attrs);
     }
-
-
-
 }

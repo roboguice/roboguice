@@ -12,7 +12,7 @@
 	</prerequisites>
 
 	<modules>
-        <module>roboblender</module>
+		<module>roboblender</module>
 		<module>roboguice</module>
 		<module>additional-tests</module>
 		<module>astroboy</module>
@@ -49,7 +49,7 @@
 		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
 		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
 		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
-		<maven-checkstyle-plugin.version>2.10</maven-checkstyle-plugin.version>
+		<maven-checkstyle-plugin.version>2.12.1</maven-checkstyle-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
@@ -178,7 +178,7 @@
 					<version>${maven-checkstyle-plugin.version}</version>
 					<configuration>
 						<configLocation>roboguice_checks.xml</configLocation>
-						<propertiesLocation>roboguice_checks.properties</propertiesLocation>
+						<suppressionsLocation>roboguice_checks_suppressions.xml</suppressionsLocation>
 						<enableRulesSummary>false</enableRulesSummary>
 						<consoleOutput>true</consoleOutput>
 					</configuration>
@@ -289,25 +289,24 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-				<!--<plugin> -->
-				<!--<groupId>org.apache.maven.plugins</groupId> -->
-				<!--<artifactId>maven-pmd-plugin</artifactId> -->
-				<!--<version>${maven-pmd-plugin.version}</version> -->
-				<!--<configuration> -->
-				<!--<targetJdk>1.5</targetJdk> -->
-				<!--</configuration> -->
-				<!--<executions> -->
-				<!--<execution> -->
-				<!--<id>pmd-check</id> -->
-				<!--<goals> -->
-				<!--<goal>check</goal> -->
-				<!--&lt;!&ndash; Too many deduplications to check them -->
-				<!--<goal>cpd-check</goal> -->
-				<!--&ndash;&gt; -->
-				<!--</goals> -->
-				<!--</execution> -->
-				<!--</executions> -->
-				<!--</plugin> -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>${maven-pmd-plugin.version}</version>
+					<configuration>
+						<targetJdk>1.5</targetJdk>
+					</configuration>
+					<executions>
+						<execution>
+							<id>pmd-check</id>
+							<goals>
+								<goal>check</goal>
+								<!-- Too many deduplications to check them <goal>cpd-check</goal> -->
+							</goals>
+						</execution>
+
+					</executions>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -321,5 +320,15 @@
 			</plugin>
 		</plugins>
 	</build>
+	
+	<profiles>
+	    <profile>
+	        <!-- To build Guice fork as well -->
+	        <id>guice</id>
+	        <modules>
+	            <module>guice</module>
+	        </modules>
+	    </profile>
+	</profiles>
 
 </project>

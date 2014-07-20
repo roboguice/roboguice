@@ -23,6 +23,7 @@ import java.util.Set;
 
 import roboguice.RoboGuice;
 
+import com.google.inject.AnnotationFieldNotFoundException;
 import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -30,7 +31,7 @@ import com.google.inject.Key;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 import com.google.inject.util.Types;
@@ -60,7 +61,12 @@ public class ExtrasListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c)) {
-            Set<Field> allFields = filter.getAllFields(InjectExtra.class.getName(), c);
+            Set<Field> allFields = null;
+            try {
+                allFields = filter.getAllFields(InjectExtra.class.getName(), c);
+            } catch (AnnotationFieldNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             if( allFields != null ) {
                 for (Field field : allFields) {
                     if (field.isAnnotationPresent(InjectExtra.class) )
@@ -118,7 +124,7 @@ public class ExtrasListener implements TypeListener {
 
             value = extras.get(id);
 
-            value = convert(field, value, RoboGuice.getBaseApplicationInjector(activity.getApplication()));
+            value = convert(field, value, RoboGuice.createBaseApplicationInjector(activity.getApplication()));
 
             /*
              * Please notice : null checking is done AFTER conversion. Having

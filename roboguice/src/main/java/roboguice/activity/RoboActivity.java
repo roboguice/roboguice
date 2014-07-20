@@ -41,10 +41,12 @@ import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.internal.util.Stopwatch;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
@@ -189,6 +191,7 @@ public class RoboActivity extends Activity implements RoboContext {
     }
 
     @Override
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
         if (RoboActivity.shouldInjectOnCreateView(name))
             return RoboActivity.injectOnCreateView(name, context, attrs);

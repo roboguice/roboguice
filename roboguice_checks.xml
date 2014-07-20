@@ -49,11 +49,6 @@
 		<property name="message" value="Line has trailing spaces." />
 	</module>
 
-	<!-- Checks exception for tests -->
-	<module name="SuppressionFilter">
-		<property name="file" value="${config_loc}/test_suppressions.xml" />
-	</module>
-
     <module name="SuppressionCommentFilter"/>
 
 
@@ -63,8 +58,11 @@
 	<!-- <property name="headerFile" value="${checkstyle.header.file}"/> -->
 	<!-- <property name="fileExtensions" value="java"/> -->
 	<!-- </module> -->
-
+ 
+    <!-- http://stackoverflow.com/a/4023351/693752 -->
+    <module name="SuppressWarningsFilter" />
 	<module name="TreeWalker">
+	    <module name="SuppressWarningsHolder" />
 
 		<!-- Checks for Javadoc comments. -->
 		<!-- See http://checkstyle.sf.net/config_javadoc.html -->

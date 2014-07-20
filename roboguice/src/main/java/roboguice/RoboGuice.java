@@ -1,6 +1,5 @@
 package roboguice;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,10 +19,11 @@ import roboguice.util.Strings;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
-import com.google.inject.config.HierarchyTraversalFilter;
-import com.google.inject.config.HierarchyTraversalFilterFactory;
-import com.google.inject.config.Module;
+import com.google.inject.HierarchyTraversalFilter;
+import com.google.inject.HierarchyTraversalFilterFactory;
+import com.google.inject.Module;
 import com.google.inject.internal.util.Stopwatch;
+import com.google.inject.util.Modules;
 
 import android.app.Application;
 import android.content.Context;
@@ -47,10 +47,9 @@ import android.util.Log;
  * TODO add documentation about annotation processing system
  */
 public final class RoboGuice {
-    //CHECKSTYLE:OFF
     @edu.umd.cs.findbugs.annotations.SuppressWarnings("MS_SHOULD_BE_FINAL")
+    @SuppressWarnings({"checkstyle:visibilitymodifier","checkstyle:staticvariablename"})
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
-    //CHECKSTYLE:ON
 
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
@@ -70,23 +69,25 @@ public final class RoboGuice {
             useAnnotationDatabases = Boolean.parseBoolean(useAnnotationsEnvVar);
         }
     }
-    
+
     private RoboGuice() {
     }
 
     /**
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
-    public static Injector getBaseApplicationInjector(Application application) {
+    public static Injector createBaseApplicationInjector(Application application) {
         Injector rtrn = injectors.get(application);
         if( rtrn!=null )
             return rtrn;
 
-        rtrn = injectors.get(application);
-        if( rtrn!=null )
-            return rtrn;
+        synchronized (RoboGuice.class) {
+            rtrn = injectors.get(application);
+            if( rtrn!=null )
+                return rtrn;
 
-        return createBaseApplicationInjector(application, DEFAULT_STAGE);
+            return createBaseApplicationInjector(application, DEFAULT_STAGE);
+        }
     }
 
     /**
@@ -97,7 +98,7 @@ public final class RoboGuice {
      * RoboGuice.setApplicationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
      *
      * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
-     * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, String[], com.google.inject.Module...)
+     * @see roboguice.RoboGuice#createBaseApplicationInjector(android.app.Application, com.google.inject.Stage, String[], com.google.inject.Module...)
      * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
      * @see roboguice.RoboGuice#DEFAULT_STAGE
      *
@@ -107,8 +108,33 @@ public final class RoboGuice {
      */
     public static Injector createBaseApplicationInjector(final Application application, Stage stage, Module... modules ) {
         final Stopwatch stopwatch = new Stopwatch();
-        initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
-        return createGuiceInjector(application, stage, stopwatch, modules);
+        synchronized (RoboGuice.class) {
+            initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
+            return createGuiceInjector(application, stage, stopwatch, modules);
+        }
+    }
+
+    /**
+     * Shortcut to obtain an injector during tests. It will load all modules declared in manifest, add a {@code DefaultRoboModule},
+     * and override all bindings defined in test modules. We use default stage by default.
+     *
+     * RoboGuice.overrideApplicationInjector( app, new TestModule() );
+     *
+     * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
+     * @see roboguice.RoboGuice#createBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+     * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
+     * @see roboguice.RoboGuice#DEFAULT_STAGE
+     *
+     * If using this method with test cases, be sure to call {@link roboguice.RoboGuice.Util#reset()} in your test teardown methods
+     * to avoid polluting our other tests with your custom injector.  Don't do this in your real application though.
+     */
+    public static Injector overrideApplicationInjector(final Application application,  Module... overrideModules) {
+        synchronized (RoboGuice.class) {
+            final List<Module> baseModules = getModulesFromManifest(application);
+            final Injector rtrn = Guice.createInjector(DEFAULT_STAGE, Modules.override(baseModules).with(overrideModules));
+            injectors.put(application,rtrn);
+            return rtrn;
+        }
     }
 
     /**
@@ -118,16 +144,39 @@ public final class RoboGuice {
     public static Injector createBaseApplicationInjector(Application application, Stage stage) {
         final Stopwatch stopwatch = new Stopwatch();
 
-        initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
+        synchronized (RoboGuice.class) {
+            initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
+            final List<Module> modules = getModulesFromManifest(application);
+            return createGuiceInjector(application, stage, stopwatch, modules.toArray(new Module[modules.size()]));
+        }
+    }
 
+    private static List<Module> getModulesFromManifest(Application application) {
         try {
-            List<Module> modules = createModules(application);
-            Module[] moduleArray = modules.toArray(new Module[modules.size()]);
-            return createGuiceInjector(application, stage, stopwatch, moduleArray);
+            final ArrayList<Module> modules = new ArrayList<Module>();
+
+            final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
+            final Bundle bundle = ai.metaData;
+            final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
+            final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
+            final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
+
+            modules.add(defaultRoboModule);
+
+            for (String name : moduleNames) {
+                if( Strings.notEmpty(name)) {
+                    final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
+                    try {
+                        modules.add(clazz.getDeclaredConstructor(Application.class).newInstance(application));
+                    } catch( NoSuchMethodException ignored ) {
+                        modules.add( clazz.newInstance() );
+                    }
+                }
+            }
+            return modules;
         } catch (Exception e) {
             throw new RuntimeException("Unable to instantiate your Module.  Check your roboguice.modules metadata in your AndroidManifest.xml",e);
-        }
-
+        }  
     }
 
     private static Injector createGuiceInjector(final Application application, Stage stage, final Stopwatch stopwatch, Module... modules) {
@@ -144,7 +193,7 @@ public final class RoboGuice {
 
     public static RoboInjector getInjector(Context context) {
         final Application application = (Application)context.getApplicationContext();
-        return new ContextScopedRoboInjector(context, getBaseApplicationInjector(application));
+        return new ContextScopedRoboInjector(context, createBaseApplicationInjector(application));
     }
 
     /**
@@ -246,33 +295,6 @@ public final class RoboGuice {
                 }
             });
         }
-    }
-
-    private static List<Module> createModules(Application application) throws NameNotFoundException, ClassNotFoundException,
-    InstantiationException, IllegalAccessException, InvocationTargetException {
-
-        final ArrayList<Module> modules = new ArrayList<Module>();
-
-        final ApplicationInfo ai = application.getPackageManager().getApplicationInfo(application.getPackageName(), PackageManager.GET_META_DATA);
-        final Bundle bundle = ai.metaData;
-        final String roboguiceModules = bundle!=null ? bundle.getString("roboguice.modules") : null;
-        final DefaultRoboModule defaultRoboModule = newDefaultRoboModule(application);
-        final String[] moduleNames = roboguiceModules!=null ? roboguiceModules.split("[\\s,]") : new String[]{};
-
-        modules.add(defaultRoboModule);
-
-        for (String name : moduleNames) {
-            if( Strings.notEmpty(name)) {
-                final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
-                try {
-                    modules.add(clazz.getDeclaredConstructor(Context.class).newInstance(application));
-                } catch( NoSuchMethodException ignored ) {
-                    modules.add( clazz.newInstance() );
-                }
-            }
-        }
-
-        return modules;
     }
 
     public static final class Util {

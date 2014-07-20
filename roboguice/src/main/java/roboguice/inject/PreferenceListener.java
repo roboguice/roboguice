@@ -21,11 +21,12 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Set;
 
+import com.google.inject.AnnotationFieldNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import com.google.inject.config.HierarchyTraversalFilter;
+import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
 
@@ -58,7 +59,12 @@ public class PreferenceListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while (isWorthScanning(c)) {
-            Set<Field> allFields = filter.getAllFields(InjectPreference.class.getName(), c);
+            Set<Field> allFields = null;
+            try {
+                allFields = filter.getAllFields(InjectPreference.class.getName(), c);
+            } catch (AnnotationFieldNotFoundException e) {
+                throw new RuntimeException(e);
+            }
             if (allFields != null) {
                 for (Field field : allFields) {
                     if (field.isAnnotationPresent(InjectPreference.class))

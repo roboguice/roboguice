@@ -20,6 +20,8 @@ import com.actionbarsherlock.app.SherlockActivity;
 
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
+import android.annotation.TargetApi;
+import android.os.Build;
 import android.os.Bundle;
 
 /**
@@ -36,6 +38,7 @@ import android.os.Bundle;
  * is never set or if it is set to null then error {@link android.accounts.AccountManager#ERROR_CODE_CANCELED}
  * will be called on the response.
  */
+@TargetApi(Build.VERSION_CODES.ECLAIR)
 public class SherlockAccountAuthenticatorActivity extends SherlockActivity {
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse = null;
     private Bundle mResultBundle = null;
@@ -55,6 +58,7 @@ public class SherlockAccountAuthenticatorActivity extends SherlockActivity {
      * icicle is non-zero.
      * @param icicle the save instance data of this Activity, may be null
      */
+    @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
@@ -69,6 +73,7 @@ public class SherlockAccountAuthenticatorActivity extends SherlockActivity {
     /**
      * Sends the result or a Constants.ERROR_CODE_CANCELED error if a result isn't present.
      */
+    @Override
     public void finish() {
         if (mAccountAuthenticatorResponse != null) {
             // send the result bundle back if set, otherwise send an error.

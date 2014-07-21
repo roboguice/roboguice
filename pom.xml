@@ -11,14 +11,6 @@
 		<maven>3.1.1</maven>
 	</prerequisites>
 
-	<modules>
-		<module>guice</module>
-		<module>roboblender</module>
-		<module>roboguice</module>
-		<module>additional-tests</module>
-		<module>astroboy</module>
-	</modules>
-
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
@@ -322,4 +314,31 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<!-- DO NOT CHANGE PROFILE ORDER, ITS MODULE ORDER TOO -->
+		<profile>
+			<!-- To build Guice fork as well -->
+			<id>guice</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>guice</module>
+			</modules>
+		</profile>
+		<profile>
+			<!-- To build RoboGuice fork as well -->
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>roboblender</module>
+				<module>roboguice</module>
+				<module>additional-tests</module>
+				<module>astroboy</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

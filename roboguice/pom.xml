@@ -73,7 +73,6 @@
 			<groupId>findbugs</groupId>
 			<artifactId>annotations</artifactId>
 			<type>jar</type>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- TEST DEPENDENCIES -->

@@ -9,8 +9,6 @@ env:
 
 
 before_install:
-    - ls -la
-    - git subtree add guice https://github.com/stephanenicolas/google-guice snicolas-mburton-blender-after-merge
     - git clone -b travis `git config --get remote.origin.url` target/travis
 
 android:

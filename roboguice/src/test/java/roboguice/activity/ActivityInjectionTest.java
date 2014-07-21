@@ -126,7 +126,7 @@ public class ActivityInjectionTest {
 
         final BlockingQueue<Context> queue = new ArrayBlockingQueue<Context>(1);
         new Thread() {
-            final Context context = RoboGuice.createInjector(ref.get()).getInstance(Context.class);
+            final Context context = RoboGuice.getInjector(ref.get()).getInstance(Context.class);
 
             @Override
             public void run() {
@@ -161,7 +161,7 @@ public class ActivityInjectionTest {
         final F f = Robolectric.buildActivity(F.class).create().get();
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
-            final ContextScopedProvider<Context> contextProvider = RoboGuice.createInjector(f).getInstance(Key.get(new TypeLiteral<ContextScopedProvider<Context>>(){}));
+            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(Key.get(new TypeLiteral<ContextScopedProvider<Context>>(){}));
 
             @Override
             public Context call() throws Exception {

@@ -60,7 +60,7 @@ public class RoboSherlockActivity extends SherlockActivity implements RoboContex
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final RoboInjector injector = RoboGuice.createInjector(this);
+        final RoboInjector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
@@ -129,7 +129,7 @@ public class RoboSherlockActivity extends SherlockActivity implements RoboContex
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.createInjector(this).injectViewMembers(this);
+        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

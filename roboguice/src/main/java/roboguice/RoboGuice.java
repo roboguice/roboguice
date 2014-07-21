@@ -40,7 +40,7 @@ import android.util.Log;
  * There are two types of injectors:
  *
  * 1. The base application injector, which is not typically used directly by the user.
- * 2. The ContextScopedInjector, which is obtained by calling {@link #createInjector(android.content.Context)}, and knows about
+ * 2. The ContextScopedInjector, which is obtained by calling {@link #getInjector(android.content.Context)}, and knows about
  *    your current context, whether it's an activity, service, or something else.
  * 
  * BUG hashmap should also key off of stage and modules list
@@ -191,7 +191,7 @@ public final class RoboGuice {
         }
     }
 
-    public static RoboInjector createInjector(Context context) {
+    public static RoboInjector getInjector(Context context) {
         final Application application = (Application)context.getApplicationContext();
         return new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application));
     }
@@ -200,7 +200,7 @@ public final class RoboGuice {
      * A shortcut for RoboGuice.getInjector(context).injectMembers(o);
      */
     public static <T> T injectMembers( Context context, T t ) {
-        createInjector(context).injectMembers(t);
+        getInjector(context).injectMembers(t);
         return t;
     }
 
@@ -243,7 +243,7 @@ public final class RoboGuice {
     }
 
     public static void destroyInjector(Context context) {
-        final RoboInjector injector = createInjector(context);
+        final RoboInjector injector = getInjector(context);
         injector.getInstance(EventManager.class).destroy();
         //noinspection SuspiciousMethodCalls
         injectors.remove(context); // it's okay, Context is an Application

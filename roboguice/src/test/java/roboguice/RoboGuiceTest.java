@@ -27,7 +27,7 @@ public class RoboGuiceTest {
     @Test
     public void destroyInjectorShouldRemoveContext() {
         final Activity activity = Robolectric.buildActivity(RoboActivity.class).get();
-        RoboGuice.createInjector(activity);
+        RoboGuice.getInjector(activity);
 
         assertThat(RoboGuice.injectors.size(), equalTo(1));
 
@@ -41,7 +41,7 @@ public class RoboGuiceTest {
     @Test
     public void resetShouldRemoveContext() {
         final Activity activity = Robolectric.buildActivity(RoboActivity.class).get();
-        RoboGuice.createInjector(activity);
+        RoboGuice.getInjector(activity);
 
         assertThat(RoboGuice.injectors.size(), equalTo(1));
 

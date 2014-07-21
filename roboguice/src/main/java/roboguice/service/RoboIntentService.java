@@ -50,7 +50,7 @@ public abstract class RoboIntentService extends IntentService implements RoboCon
 
     @Override
     public void onCreate() {
-        final Injector injector = RoboGuice.createInjector(this);
+        final Injector injector = RoboGuice.getInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembers(this);
         super.onCreate();

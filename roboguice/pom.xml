@@ -246,6 +246,40 @@
 					</execution>
 				</executions>
 			</plugin>
+<plugin>
+				<groupId>com.pyx4me</groupId>
+				<artifactId>proguard-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>proguard</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<options>
+						<option>-dontobfuscate</option>
+						<option>-dontoptimize</option>
+						<option>-optimizationpasses 5</option>
+						<option>-dontusemixedcaseclassnames</option>
+						<option>-dontskipnonpubliclibraryclasses</option>
+						<option>-dontpreverify</option>
+						<option>-verbose</option>
+						<option>-keep public class * { *; }</option>
+						<option>-ignorewarnings</option>
+					</options>
+					<includeDependency>false</includeDependency>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.proguard</groupId>
+						<artifactId>proguard-base</artifactId>
+						<version>4.11</version>
+						<scope>runtime</scope>
+					</dependency>
+				</dependencies>
+			</plugin>			
 		</plugins>
 	</build>
 

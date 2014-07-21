@@ -65,7 +65,7 @@ public abstract class RoboMapActivity extends MapActivity implements RoboContext
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final RoboInjector injector = RoboGuice.getInjector(this);
+        final RoboInjector injector = RoboGuice.createInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
@@ -140,7 +140,7 @@ public abstract class RoboMapActivity extends MapActivity implements RoboContext
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
+        RoboGuice.createInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

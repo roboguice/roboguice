@@ -22,9 +22,6 @@
         </activity>
         <activity android:name=".activity.FightForcesOfEvilActivity" />
 
-        <meta-data
-            android:name="roboguice.annotations.packages"
-            android:value="astroboy" />
     </application>
 
 </manifest>

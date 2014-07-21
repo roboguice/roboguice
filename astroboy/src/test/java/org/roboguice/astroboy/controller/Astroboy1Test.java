@@ -29,7 +29,7 @@ public class Astroboy1Test {
     public void setup() {
        RoboGuice.setUseAnnotationDatabases(false);
        context = Robolectric.buildActivity(RoboActivity.class).create().get();
-       astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
+       astroboy = RoboGuice.createInjector(context).getInstance(Astroboy.class);
     }
 
     @Test

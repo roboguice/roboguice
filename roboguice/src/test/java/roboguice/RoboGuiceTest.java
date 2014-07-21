@@ -27,7 +27,7 @@ public class RoboGuiceTest {
     @Test
     public void destroyInjectorShouldRemoveContext() {
         final Activity activity = Robolectric.buildActivity(RoboActivity.class).get();
-        RoboGuice.getInjector(activity);
+        RoboGuice.createInjector(activity);
 
         assertThat(RoboGuice.injectors.size(), equalTo(1));
 
@@ -41,7 +41,7 @@ public class RoboGuiceTest {
     @Test
     public void resetShouldRemoveContext() {
         final Activity activity = Robolectric.buildActivity(RoboActivity.class).get();
-        RoboGuice.getInjector(activity);
+        RoboGuice.createInjector(activity);
 
         assertThat(RoboGuice.injectors.size(), equalTo(1));
 
@@ -53,7 +53,7 @@ public class RoboGuiceTest {
     @Test
     public void shouldOnlyCallConfigureOnce() {
         final int[] i = {0};
-        RoboGuice.createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new AbstractModule() {
+        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new AbstractModule() {
             @Override
             protected void configure() {
                 ++i[0];

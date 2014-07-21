@@ -157,8 +157,8 @@ public class ViewInjectionTest {
                 ref.setId(101);
                 addView(ref);
 
-                RoboGuice.getInjector(getContext()).injectMembers(this);
-                RoboGuice.getInjector(getContext()).injectViewMembers(this);
+                RoboGuice.createInjector(getContext()).injectMembers(this);
+                RoboGuice.createInjector(getContext()).injectViewMembers(this);
             }
 
         }
@@ -193,7 +193,7 @@ public class ViewInjectionTest {
                 ref.setTag("101");
                 addView(ref);
 
-                RoboGuice.getInjector(getContext()).injectMembers(this);
+                RoboGuice.createInjector(getContext()).injectMembers(this);
             }
 
         }

@@ -59,7 +59,7 @@ public class PreferenceListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while (isWorthScanning(c)) {
-            Set<Field> allFields = null;
+            final Set<Field> allFields;
             try {
                 allFields = filter.getAllFields(InjectPreference.class.getName(), c);
             } catch (AnnotationFieldNotFoundException e) {

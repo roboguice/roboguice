@@ -52,7 +52,7 @@ public abstract class RoboService extends Service implements RoboContext {
 
     @Override
     public void onCreate() {
-        final Injector injector = RoboGuice.getInjector(this);
+        final Injector injector = RoboGuice.createInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembers(this);
         super.onCreate();

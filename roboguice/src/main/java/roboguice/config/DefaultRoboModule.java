@@ -82,7 +82,7 @@ import android.view.inputmethod.InputMethodManager;
  * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
  *
  * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
- * @see roboguice.RoboGuice#createBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+ * @see roboguice.RoboGuice#getOrCreateBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
  * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
  * @see roboguice.RoboGuice#DEFAULT_STAGE
  *

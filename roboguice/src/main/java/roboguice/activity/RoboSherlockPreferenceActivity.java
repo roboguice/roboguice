@@ -64,7 +64,7 @@ public class RoboSherlockPreferenceActivity extends SherlockPreferenceActivity i
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final RoboInjector injector = RoboGuice.getInjector(this);
+        final RoboInjector injector = RoboGuice.createInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         preferenceListener = injector.getInstance(PreferenceListener.class);
         injector.injectMembersWithoutViews(this);
@@ -77,7 +77,7 @@ public class RoboSherlockPreferenceActivity extends SherlockPreferenceActivity i
     public void setPreferenceScreen(PreferenceScreen preferenceScreen) {
         super.setPreferenceScreen(preferenceScreen);
 
-        final ContextScope scope = RoboGuice.getInjector(this).getInstance(ContextScope.class);
+        final ContextScope scope = RoboGuice.createInjector(this).getInstance(ContextScope.class);
         synchronized (ContextScope.class) {
             scope.enter(this);
             try {
@@ -150,7 +150,7 @@ public class RoboSherlockPreferenceActivity extends SherlockPreferenceActivity i
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
+        RoboGuice.createInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

@@ -3,7 +3,7 @@
   <parent>
     <artifactId>roboguice-aggregator</artifactId>
     <groupId>org.roboguice</groupId>
-    <version>3.0-alpha-3-SNAPSHOT</version>
+    <version>3.0-alpha-4-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>roboguice</artifactId>
@@ -169,7 +169,7 @@
     <dependency>
       <groupId>org.roboguice</groupId>
       <artifactId>roboblender</artifactId>
-      <version>3.0-alpha-3-SNAPSHOT</version>
+      <version>3.0-alpha-4-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>

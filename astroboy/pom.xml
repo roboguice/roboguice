@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.0-alpha-3-SNAPSHOT</version>
+		<version>3.0-alpha-4-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -84,9 +84,6 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
-					<compilerArgs>
-						<arg>-AguiceAnnotationDatabasePackageName=astroboy</arg>
-					</compilerArgs>
 				</configuration>
 			</plugin>
 		</plugins>

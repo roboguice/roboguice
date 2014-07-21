@@ -16,12 +16,12 @@ public abstract class RoboSherlockFragment extends SherlockFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
+        RoboGuice.createInjector(getActivity()).injectMembersWithoutViews(this);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
+        RoboGuice.createInjector(getActivity()).injectViewMembers(this);
     }
 }

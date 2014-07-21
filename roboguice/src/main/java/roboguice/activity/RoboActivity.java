@@ -87,7 +87,7 @@ public class RoboActivity extends Activity implements RoboContext {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         stopwatch = new Stopwatch();
-        final RoboInjector injector = RoboGuice.getInjector(this);
+        final RoboInjector injector = RoboGuice.createInjector(this);
         stopwatch.resetAndLog("RoboActivity creation of injector");
         eventManager = injector.getInstance(EventManager.class);
         stopwatch.resetAndLog("RoboActivity creation of eventmanager");
@@ -167,7 +167,7 @@ public class RoboActivity extends Activity implements RoboContext {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
+        RoboGuice.createInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 
@@ -210,8 +210,8 @@ public class RoboActivity extends Activity implements RoboContext {
         try {
             final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
             final View view = (View) constructor.newInstance(context, attrs);
-            RoboGuice.getInjector(context).injectMembers(view);
-            RoboGuice.getInjector(context).injectViewMembers(view);
+            RoboGuice.createInjector(context).injectMembers(view);
+            RoboGuice.createInjector(context).injectViewMembers(view);
             return view;
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -65,7 +65,7 @@ public class SherlockActivityInjectionTest {
     @Before
     public void setup() {
         RoboGuice
-                .createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
+                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
         Intent intent = new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober");
         activity = Robolectric.buildActivity(DummySherlockActivity.class).withIntent(intent).create().get();
@@ -105,7 +105,7 @@ public class SherlockActivityInjectionTest {
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
         RoboGuice
-                .createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
+                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
         @SuppressWarnings("unused")
         final B b = Robolectric.buildActivity(B.class).create().get();
     }
@@ -113,7 +113,7 @@ public class SherlockActivityInjectionTest {
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
         RoboGuice
-                .createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
+                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
         @SuppressWarnings("unused")
         final D d = Robolectric.buildActivity(D.class).create().get();
     }
@@ -121,7 +121,7 @@ public class SherlockActivityInjectionTest {
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
         RoboGuice
-                .createBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
+                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
         @SuppressWarnings("unused")
         final C c = Robolectric.buildActivity(C.class).create().get();
     }
@@ -139,7 +139,7 @@ public class SherlockActivityInjectionTest {
 
         final BlockingQueue<Context> queue = new ArrayBlockingQueue<Context>(1);
         new Thread() {
-            final Context context = RoboGuice.getInjector(ref.get()).getInstance(Context.class);
+            final Context context = RoboGuice.createInjector(ref.get()).getInstance(Context.class);
 
             @Override
             public void run() {
@@ -173,7 +173,7 @@ public class SherlockActivityInjectionTest {
         final F f = Robolectric.buildActivity(F.class).create().get();
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
-            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(
+            final ContextScopedProvider<Context> contextProvider = RoboGuice.createInjector(f).getInstance(
                     Key.get(new TypeLiteral<ContextScopedProvider<Context>>() {
                     }));
 

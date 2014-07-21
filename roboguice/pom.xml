@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.0-alpha-3-SNAPSHOT</version>
+		<version>3.0-alpha-4-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -230,8 +230,7 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 			</plugin>
-			<!-- Create RoboGuice uber jar. 
-			Shade all dependencies, minimize and shrink. -->
+			<!-- Create RoboGuice uber jar. Shade all dependencies, minimize and shrink. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>

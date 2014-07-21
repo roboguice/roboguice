@@ -63,7 +63,7 @@ public class RoboSherlockAccountAuthenticatorActivity extends SherlockAccountAut
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final RoboInjector injector = RoboGuice.getInjector(this);
+        final RoboInjector injector = RoboGuice.createInjector(this);
         eventManager = injector.getInstance(EventManager.class);
         injector.injectMembersWithoutViews(this);
         super.onCreate(savedInstanceState);
@@ -132,7 +132,7 @@ public class RoboSherlockAccountAuthenticatorActivity extends SherlockAccountAut
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
+        RoboGuice.createInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

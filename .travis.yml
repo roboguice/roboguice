@@ -9,6 +9,8 @@ env:
 
 
 before_install:
+    - ls -la
+    - git subtree add guice https://github.com/stephanenicolas/google-guice snicolas-mburton-blender-after-merge
     - git clone -b travis `git config --get remote.origin.url` target/travis
 
 android:
@@ -19,4 +21,4 @@ android:
 
 script:
     - echo "Travis branch is $TRAVIS_BRANCH"
-    - if [ "$TRAVIS_BRANCH" == "master" -a "TRAVIS_PULL_REQUEST" == "false" ] ; then mvn deploy -P guice --settings target/travis/settings.xml ; else mvn install -Pguice --settings target/travis/settings.xml ; fi
+    - if [ "$TRAVIS_BRANCH" == "master" -a "TRAVIS_PULL_REQUEST" == "false" ] ; then mvn deploy --settings target/travis/settings.xml ; else mvn install --settings target/travis/settings.xml ; fi

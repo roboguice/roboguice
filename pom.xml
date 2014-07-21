@@ -4,7 +4,7 @@
 	<groupId>org.roboguice</groupId>
 	<artifactId>roboguice-aggregator</artifactId>
 	<name>Aggregator</name>
-	<version>3.0-alpha-3-SNAPSHOT</version>
+	<version>3.0-alpha-4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<prerequisites>
@@ -12,6 +12,7 @@
 	</prerequisites>
 
 	<modules>
+		<module>guice</module>
 		<module>roboblender</module>
 		<module>roboguice</module>
 		<module>additional-tests</module>
@@ -321,15 +322,4 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	<profiles>
-	    <profile>
-	        <!-- To build Guice fork as well -->
-	        <id>guice</id>
-	        <modules>
-	            <module>guice</module>
-	        </modules>
-	    </profile>
-	</profiles>
-
 </project>

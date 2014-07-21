@@ -13,25 +13,25 @@ public abstract class RoboAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 
     protected RoboAsyncTask(Context context) {
         this.context = context;
-        RoboGuice.getInjector(context).injectMembers(this);
+        RoboGuice.createInjector(context).injectMembers(this);
     }
 
     protected RoboAsyncTask(Context context, Handler handler) {
         super(handler);
         this.context = context;
-        RoboGuice.getInjector(context).injectMembers(this);
+        RoboGuice.createInjector(context).injectMembers(this);
     }
 
     protected RoboAsyncTask(Context context, Handler handler, Executor executor) {
         super(handler, executor);
         this.context = context;
-        RoboGuice.getInjector(context).injectMembers(this);
+        RoboGuice.createInjector(context).injectMembers(this);
     }
 
     protected RoboAsyncTask(Context context, Executor executor) {
         super(executor);
         this.context = context;
-        RoboGuice.getInjector(context).injectMembers(this);
+        RoboGuice.createInjector(context).injectMembers(this);
     }
 
     public Context getContext() {

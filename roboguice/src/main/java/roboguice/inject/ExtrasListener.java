@@ -61,7 +61,7 @@ public class ExtrasListener implements TypeListener {
         }
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c)) {
-            Set<Field> allFields = null;
+            final Set<Field> allFields;
             try {
                 allFields = filter.getAllFields(InjectExtra.class.getName(), c);
             } catch (AnnotationFieldNotFoundException e) {
@@ -124,7 +124,7 @@ public class ExtrasListener implements TypeListener {
 
             value = extras.get(id);
 
-            value = convert(field, value, RoboGuice.createBaseApplicationInjector(activity.getApplication()));
+            value = convert(field, value, RoboGuice.getOrCreateBaseApplicationInjector(activity.getApplication()));
 
             /*
              * Please notice : null checking is done AFTER conversion. Having

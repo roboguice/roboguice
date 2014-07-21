@@ -55,7 +55,7 @@ public class ApplicationInjectionTest {
         @Override
         public void onCreate() {
             super.onCreate();
-            RoboGuice.getInjector(this).injectMembers(this);
+            RoboGuice.createInjector(this).injectMembers(this);
         }
 
         @Override
@@ -76,7 +76,7 @@ public class ApplicationInjectionTest {
         @Override
         public void onCreate() {
             super.onCreate();
-            RoboGuice.getInjector(this).injectMembers(this);
+            RoboGuice.createInjector(this).injectMembers(this);
         }
 
         @Override

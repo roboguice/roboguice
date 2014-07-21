@@ -40,7 +40,7 @@ public class Astroboy3Test {
     public void brushingTeethShouldCausePhoneToVibrate() {
 
         // get the astroboy instance
-        final Astroboy astroboy = RoboGuice.createInjector(Robolectric.application).getInstance(Astroboy.class);
+        final Astroboy astroboy = RoboGuice.getInjector(Robolectric.application).getInstance(Astroboy.class);
 
         // do the thing
         astroboy.brushTeeth();

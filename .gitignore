@@ -13,6 +13,7 @@ bin/
 gen/
 target/
 tmp/
+dependency-reduced-pom.xml
 
 # Local configuration file (sdk path, etc)
 local.properties

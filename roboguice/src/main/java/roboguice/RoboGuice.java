@@ -16,6 +16,7 @@ import roboguice.inject.RoboInjector;
 import roboguice.inject.ViewListener;
 import roboguice.util.Strings;
 
+import com.google.inject.AnnotationDatabaseNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
@@ -308,6 +309,14 @@ public final class RoboGuice {
             injectors.clear();
             resourceListeners.clear();
             viewListeners.clear();
+            //clear annotation database finder 
+            //restore hierarchy filter
+            try {
+                Guice.setAnnotationDatabasePackageNames(null);
+                Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory());
+            } catch (AnnotationDatabaseNotFoundException e) {
+                Log.e(RoboGuice.class.getName(), "Unable to clear annotation database.", e);
+            }            
         }
     }
 

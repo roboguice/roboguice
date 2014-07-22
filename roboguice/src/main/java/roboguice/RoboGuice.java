@@ -309,14 +309,14 @@ public final class RoboGuice {
             injectors.clear();
             resourceListeners.clear();
             viewListeners.clear();
-            //clear annotation database finder 
+            //clear annotation database finder
             //restore hierarchy filter
             try {
                 Guice.setAnnotationDatabasePackageNames(null);
                 Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory());
             } catch (AnnotationDatabaseNotFoundException e) {
                 Log.e(RoboGuice.class.getName(), "Unable to clear annotation database.", e);
-            }            
+            }
         }
     }
 

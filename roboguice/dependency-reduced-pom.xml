@@ -173,10 +173,6 @@
       <scope>provided</scope>
       <exclusions>
         <exclusion>
-          <artifactId>blender</artifactId>
-          <groupId>com.google.inject</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>velocity</artifactId>
           <groupId>org.apache.velocity</groupId>
         </exclusion>

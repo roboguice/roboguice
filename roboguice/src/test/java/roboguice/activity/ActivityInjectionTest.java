@@ -40,6 +40,7 @@ import com.google.inject.Key;
 import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 
+import android.R;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -57,10 +58,8 @@ public class ActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice
-                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
-        activity = Robolectric.buildActivity(DummyActivity.class)
-                .withIntent(new Intent(Robolectric.application, DummyActivity.class).putExtra("foobar", "goober")).create().get();
+        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
+        activity = Robolectric.buildActivity(DummyActivity.class).withIntent(new Intent(Robolectric.application,DummyActivity.class).putExtra("foobar","goober")).create().get();
     }
 
     @Test
@@ -70,7 +69,7 @@ public class ActivityInjectionTest {
 
     @Test
     public void shouldInjectView() {
-        assertThat(activity.text1, is(activity.findViewById(android.R.id.text1)));
+        assertThat(activity.text1, is(activity.findViewById(R.id.text1)));
     }
 
     @Test
@@ -96,22 +95,19 @@ public class ActivityInjectionTest {
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
-        RoboGuice
-                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
+        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
         Robolectric.buildActivity(B.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
-        RoboGuice
-                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
+        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
         Robolectric.buildActivity(D.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
-        RoboGuice
-                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
+        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
         Robolectric.buildActivity(C.class).create().get();
     }
 
@@ -165,9 +161,7 @@ public class ActivityInjectionTest {
         final F f = Robolectric.buildActivity(F.class).create().get();
 
         final FutureTask<Context> future = new FutureTask<Context>(new Callable<Context>() {
-            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(
-                    Key.get(new TypeLiteral<ContextScopedProvider<Context>>() {
-                    }));
+            final ContextScopedProvider<Context> contextProvider = RoboGuice.getInjector(f).getInstance(Key.get(new TypeLiteral<ContextScopedProvider<Context>>(){}));
 
             @Override
             public Context call() throws Exception {
@@ -188,9 +182,9 @@ public class ActivityInjectionTest {
         protected Activity activity;
         @Inject
         protected RoboActivity roboActivity;
-        @InjectView(android.R.id.text1)
+        @InjectView(R.id.text1)
         protected TextView text1;
-        @InjectResource(android.R.string.cancel)
+        @InjectResource(R.string.cancel)
         protected String cancel;
         @InjectExtra("foobar")
         protected String foobar;
@@ -203,11 +197,11 @@ public class ActivityInjectionTest {
 
             final TextView text1 = new TextView(this);
             root.addView(text1);
-            text1.setId(android.R.id.text1);
+            text1.setId(R.id.text1);
 
-            final LinearLayout included1 = addIncludedView(android.R.id.summary, android.R.string.ok);
+            final LinearLayout included1 = addIncludedView(R.id.summary, R.string.ok);
             root.addView(included1);
-            final LinearLayout included2 = addIncludedView(android.R.id.title, android.R.string.no);
+            final LinearLayout included2 = addIncludedView(R.id.title, R.string.no);
             root.addView(included2);
 
             setContentView(root);
@@ -219,7 +213,7 @@ public class ActivityInjectionTest {
 
             TextView textView = new TextView(this);
             container.addView(textView);
-            textView.setId(android.R.id.text2);
+            textView.setId(R.id.text2);
             textView.setText(stringResId);
             return container;
         }

@@ -9,11 +9,13 @@ import java.util.concurrent.FutureTask;
 
 import javax.inject.Inject;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 
 import android.content.Context;

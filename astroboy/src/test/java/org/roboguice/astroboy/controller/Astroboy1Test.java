@@ -1,14 +1,16 @@
 package org.roboguice.astroboy.controller;
 
-import android.content.Context;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
+
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
-
-import static org.junit.Assert.assertTrue;
+import android.content.Context;
 
 /**
  * A simple testcase that tests the {@link Astroboy} pojo.
@@ -20,9 +22,16 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class Astroboy1Test {
     
-    protected Context context = Robolectric.buildActivity(RoboActivity.class).create().get();
-    protected Astroboy astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
+    protected Context context;
+    protected Astroboy astroboy;
     
+    @Before
+    public void setup() {
+       RoboGuice.setUseAnnotationDatabases(false);
+       context = Robolectric.buildActivity(RoboActivity.class).create().get();
+       astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
+    }
+
     @Test
     public void stringShouldEndInExclamationMark() {
         assertTrue(astroboy.punch().endsWith("!"));

@@ -39,6 +39,7 @@ import roboguice.util.RoboContext;
 
 import com.google.inject.Inject;
 import com.google.inject.Key;
+import com.google.inject.internal.util.Stopwatch;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -81,14 +82,21 @@ public class RoboActivity extends Activity implements RoboContext {
     protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>, Object>();
 
     @Inject ContentViewListener ignored; // BUG find a better place to put this
+    private Stopwatch stopwatch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        stopwatch = new Stopwatch();
         final RoboInjector injector = RoboGuice.getInjector(this);
+        stopwatch.resetAndLog("RoboActivity creation of injector");
         eventManager = injector.getInstance(EventManager.class);
+        stopwatch.resetAndLog("RoboActivity creation of eventmanager");
         injector.injectMembersWithoutViews(this);
+        stopwatch.resetAndLog("RoboActivity inject members without views");
         super.onCreate(savedInstanceState);
+        stopwatch.resetAndLog("RoboActivity super onCreate");
         eventManager.fire(new OnCreateEvent<Activity>(this,savedInstanceState));
+        stopwatch.resetAndLog("RoboActivity fire event");
     }
 
     @Override
@@ -195,14 +203,15 @@ public class RoboActivity extends Activity implements RoboContext {
      * @return true if name begins with a lowercase character (indicating a package) and it doesn't start with com.android
      */
     protected static boolean shouldInjectOnCreateView(String name) {
-        return Character.isLowerCase(name.charAt(0)) && !name.startsWith("com.android") && !name.equals("fragment");
+        return false; // && Character.isLowerCase(name.charAt(0)) && !name.startsWith("com.android") && !name.equals("fragment");
     }
 
     protected static View injectOnCreateView(String name, Context context, AttributeSet attrs) {
         try {
             final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
             final View view = (View) constructor.newInstance(context, attrs);
-            RoboGuice.injectMembers(context, view);
+            RoboGuice.getInjector(context).injectMembers(view);
+            RoboGuice.getInjector(context).injectViewMembers(view);
             return view;
         } catch (Exception e) {
             throw new RuntimeException(e);

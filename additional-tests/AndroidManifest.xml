@@ -4,6 +4,7 @@
 
     <application android:label="Additional Tests">
         <meta-data android:name="roboguice.modules" android:value="roboguice.additionaltests.TestModule"/>
+        <meta-data android:name="roboguice.annotations.packages" android:value="roboguice,additionaltests,testadditionaltests"/>
     </application>
 
 </manifest>

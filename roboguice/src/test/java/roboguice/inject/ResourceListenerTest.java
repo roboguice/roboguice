@@ -2,11 +2,13 @@ package roboguice.inject;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 
 import android.os.Bundle;

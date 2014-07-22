@@ -36,7 +36,7 @@ public abstract class RoboSplashActivity extends Activity {
                 // Set the execution context for this thread in case the user
                 // want to use the injector
                 final Application app = getApplication();
-                RoboGuice.getBaseApplicationInjector(getApplication());
+                RoboGuice.getOrCreateBaseApplicationInjector(getApplication());
 
 
                 doStuffInBackground(app);

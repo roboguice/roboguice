@@ -6,7 +6,7 @@ import com.google.inject.AbstractModule;
 
 /**
  * This module only has a constructor with an application argument.
- * It allows to test dynamic module loading.
+ * It tests dynamic module loading.
  * @author SNI
  */
 public class TestModule extends AbstractModule {

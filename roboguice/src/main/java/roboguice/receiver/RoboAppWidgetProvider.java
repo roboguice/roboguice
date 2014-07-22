@@ -13,7 +13,7 @@ public abstract class RoboAppWidgetProvider extends AppWidgetProvider {
 
     @Override
     public final void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        final Injector injector = RoboGuice.getBaseApplicationInjector((Application) context.getApplicationContext());
+        final Injector injector = RoboGuice.getOrCreateBaseApplicationInjector((Application) context.getApplicationContext());
 
         injector.injectMembers(this);
         onHandleUpdate(context, appWidgetManager, appWidgetIds);

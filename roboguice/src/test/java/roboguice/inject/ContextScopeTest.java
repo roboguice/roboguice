@@ -4,6 +4,7 @@ import static org.junit.Assert.assertTrue;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -21,7 +22,6 @@ import android.app.Activity;
 
 @RunWith(RobolectricTestRunner.class)
 public class ContextScopeTest {
-
 
     @Test
     public void shouldHaveContextInScopeMapAfterOnCreate() throws Exception {
@@ -41,7 +41,7 @@ public class ContextScopeTest {
 
     @Test
     public void shouldBeAbleToOpenMultipleScopes() {
-        final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
+        final ContextScope scope = RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
         final Activity a = Robolectric.buildActivity(A.class).get();
         final Activity b = Robolectric.buildActivity(B.class).get();
 
@@ -53,7 +53,7 @@ public class ContextScopeTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotBeAbleToExitTheWrongScope() {
-        final ContextScope scope = RoboGuice.getBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
+        final ContextScope scope = RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
         final Activity a = Robolectric.buildActivity(A.class).get();
         final Activity b = Robolectric.buildActivity(B.class).get();
 

@@ -1,0 +1,8 @@
+A guice fork lies in the guice folder.
+It comes from 
+https://github.com/stephanenicolas/google-guice
+branch  snicolas-mburton-blender-after-merge
+will be changed to  snicolas-mburton/blender
+
+Documentation about subtrees:
+http://git-scm.com/book/en/Git-Tools-Subtree-Merging

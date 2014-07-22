@@ -49,14 +49,6 @@
 		<property name="message" value="Line has trailing spaces." />
 	</module>
 
-	<!-- This has been removed as the maven plugin handles it differently.
-	You may have to manage this at the IDE level. -->
-	<!-- Checks exception for tests 
-	<module name="SuppressionFilter">
-		<property name="file" value="${checkstyle.suppressions.location}/test_suppressions.xml" />
-	</module>
-	-->
-
     <module name="SuppressionCommentFilter"/>
 
 
@@ -66,8 +58,8 @@
 	<!-- <property name="headerFile" value="${checkstyle.header.file}"/> -->
 	<!-- <property name="fileExtensions" value="java"/> -->
 	<!-- </module> -->
-
-	<!-- http://stackoverflow.com/a/4023351/693752 -->
+ 
+    <!-- http://stackoverflow.com/a/4023351/693752 -->
     <module name="SuppressWarningsFilter" />
 	<module name="TreeWalker">
 	    <module name="SuppressWarningsHolder" />

@@ -53,9 +53,9 @@ import android.view.View;
 /**
  * A {@link RoboActivityGroup} extends from {@link ActivityGroup} to provide
  * dynamic injection of collaborators, using Google Guice.<br />
- *
+ * 
  * @see RoboActivity
- *
+ * 
  * @author Toly Pochkin
  */
 @Deprecated

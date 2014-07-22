@@ -20,10 +20,10 @@ local.properties
 #Eclipse files
 .project
 .classpath
+.checkstyle
 .settings/
 
 # IntelliJ IDEA files
 *.iml
 .idea/
-
 

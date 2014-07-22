@@ -1,6 +1,52 @@
 package roboguice.config;
 
-import android.app.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import roboguice.activity.RoboActivity;
+import roboguice.event.EventManager;
+import roboguice.event.ObservesTypeListener;
+import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
+import roboguice.fragment.FragmentUtil;
+import roboguice.inject.AccountManagerProvider;
+import roboguice.inject.AssetManagerProvider;
+import roboguice.inject.ContentResolverProvider;
+import roboguice.inject.ContextScope;
+import roboguice.inject.ContextScopedSystemServiceProvider;
+import roboguice.inject.ContextSingleton;
+import roboguice.inject.ExtrasListener;
+import roboguice.inject.HandlerProvider;
+import roboguice.inject.InjectExtra;
+import roboguice.inject.InjectPreference;
+import roboguice.inject.InjectResource;
+import roboguice.inject.NullProvider;
+import roboguice.inject.PreferenceListener;
+import roboguice.inject.ResourceListener;
+import roboguice.inject.ResourcesProvider;
+import roboguice.inject.SharedPreferencesProvider;
+import roboguice.inject.SystemServiceProvider;
+import roboguice.inject.ViewListener;
+import roboguice.service.RoboService;
+import roboguice.util.Ln;
+import roboguice.util.LnImpl;
+import roboguice.util.LnInterface;
+
+import com.google.inject.Provider;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
+import com.google.inject.AbstractModule;
+import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Named;
+
+import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.AlarmManager;
+import android.app.Application;
+import android.app.KeyguardManager;
+import android.app.NotificationManager;
+import android.app.SearchManager;
+import android.app.Service;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,34 +59,18 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Build.VERSION;
-import android.os.Build.VERSION_CODES;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
-import com.google.inject.AbstractModule;
-import com.google.inject.Provider;
-import com.google.inject.matcher.Matchers;
-import com.google.inject.name.Names;
-
-import roboguice.activity.RoboActivity;
-import roboguice.event.EventManager;
-import roboguice.event.ObservesTypeListener;
-import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
-import roboguice.fragment.FragmentUtil;
-import roboguice.inject.*;
-import roboguice.service.RoboService;
-import roboguice.util.Ln;
-import roboguice.util.LnImpl;
-import roboguice.util.LnInterface;
-import roboguice.util.Strings;
 
 /**
  * A Module that provides bindings and configuration to use Guice on Android.
@@ -52,7 +82,7 @@ import roboguice.util.Strings;
  * RoboGuice.setAppliationInjector( app, RoboGuice.DEFAULT_STAGE, Modules.override(RoboGuice.newDefaultRoboModule(app)).with(new MyModule() );
  *
  * @see com.google.inject.util.Modules#override(com.google.inject.Module...)
- * @see roboguice.RoboGuice#setBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
+ * @see roboguice.RoboGuice#getOrCreateBaseApplicationInjector(android.app.Application, com.google.inject.Stage, com.google.inject.Module...)
  * @see roboguice.RoboGuice#newDefaultRoboModule(android.app.Application)
  * @see roboguice.RoboGuice#DEFAULT_STAGE
  *
@@ -63,26 +93,32 @@ public class DefaultRoboModule extends AbstractModule {
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
 
     @SuppressWarnings("rawtypes")
-    protected static final Class ACCOUNT_MANAGER_CLASS;
-
-    static {
-        Class<?> c = null;
-        try {
-            c = Class.forName("android.accounts.AccountManager");
-        } catch( Throwable ignored ) {}
-        ACCOUNT_MANAGER_CLASS = c;
-    }
-
+    private static Map<Class, String> mapSystemSericeClassToName = new HashMap<Class, String>();
 
     protected Application application;
     protected ContextScope contextScope;
     protected ResourceListener resourceListener;
     protected ViewListener viewListener;
 
+    static {
+        mapSystemSericeClassToName.put(LocationManager.class, Context.LOCATION_SERVICE);
+        mapSystemSericeClassToName.put(WindowManager.class, Context.WINDOW_SERVICE);
+        mapSystemSericeClassToName.put(ActivityManager.class, Context.ACTIVITY_SERVICE);
+        mapSystemSericeClassToName.put(PowerManager.class, Context.POWER_SERVICE);
+        mapSystemSericeClassToName.put(AlarmManager.class, Context.ALARM_SERVICE);
+        mapSystemSericeClassToName.put(NotificationManager.class, Context.NOTIFICATION_SERVICE);
+        mapSystemSericeClassToName.put(KeyguardManager.class, Context.KEYGUARD_SERVICE);
+        mapSystemSericeClassToName.put(Vibrator.class, Context.VIBRATOR_SERVICE);
+        mapSystemSericeClassToName.put(ConnectivityManager.class, Context.CONNECTIVITY_SERVICE);
+        mapSystemSericeClassToName.put(WifiManager.class, Context.WIFI_SERVICE);
+        mapSystemSericeClassToName.put(InputMethodManager.class, Context.INPUT_METHOD_SERVICE);
+        mapSystemSericeClassToName.put(SensorManager.class, Context.SENSOR_SERVICE);
+        mapSystemSericeClassToName.put(TelephonyManager.class, Context.TELEPHONY_SERVICE);
+        mapSystemSericeClassToName.put(AudioManager.class, Context.ACCESSIBILITY_SERVICE);
+    }
+
 
     public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
-
-
         this.application = application;
         this.contextScope = contextScope;
         this.viewListener = viewListener;
@@ -92,41 +128,15 @@ public class DefaultRoboModule extends AbstractModule {
     /**
      * Configure this module to define Android related bindings.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     @Override
     protected void configure() {
 
         final Provider<Context> contextProvider = getProvider(Context.class);
-        final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
-        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
-
-        // Package Info
-        try {
-            final PackageInfo info = application.getPackageManager().getPackageInfo(application.getPackageName(),0);
-            bind(PackageInfo.class).toInstance(info);
-        } catch( PackageManager.NameNotFoundException e ) {
-            throw new RuntimeException(e);
-        }
-
-        String androidId = null;
-        final ContentResolver contentResolver = application.getContentResolver();
-        try {
-            androidId = Secure.getString(contentResolver, Secure.ANDROID_ID);
-        } catch( RuntimeException e) {
-            // ignore Stub! errors for Secure.getString() when mocking in test cases since there's no way to mock static methods
-        }
-
-        if(Strings.notEmpty(androidId))
-            bindConstant().annotatedWith(Names.named(Settings.Secure.ANDROID_ID)).to(androidId);
-
-
 
         // Singletons
         bind(ViewListener.class).toInstance(viewListener);
-        bind(PreferenceListener.class).toInstance(preferenceListener);
-        bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
-
-
 
         // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
@@ -138,7 +148,6 @@ public class DefaultRoboModule extends AbstractModule {
         bind(Service.class).toProvider(NullProvider.<Service>instance()).in(ContextSingleton.class);
         bind(RoboService.class).toProvider(NullProvider.<RoboService>instance()).in(ContextSingleton.class);
 
-        
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);
         bind(Resources.class).toProvider(ResourcesProvider.class);
@@ -147,45 +156,49 @@ public class DefaultRoboModule extends AbstractModule {
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
         bind(Handler.class).toProvider(HandlerProvider.class);
 
-
-
         // System Services
-        bind(LocationManager.class).toProvider(new SystemServiceProvider<LocationManager>(application, Context.LOCATION_SERVICE));
-        bind(WindowManager.class).toProvider(new SystemServiceProvider<WindowManager>(application, Context.WINDOW_SERVICE));
-        bind(ActivityManager.class).toProvider(new SystemServiceProvider<ActivityManager>(application, Context.ACTIVITY_SERVICE));
-        bind(PowerManager.class).toProvider(new SystemServiceProvider<PowerManager>(application, Context.POWER_SERVICE));
-        bind(AlarmManager.class).toProvider(new SystemServiceProvider<AlarmManager>(application, Context.ALARM_SERVICE));
-        bind(NotificationManager.class).toProvider(new SystemServiceProvider<NotificationManager>(application, Context.NOTIFICATION_SERVICE));
-        bind(KeyguardManager.class).toProvider(new SystemServiceProvider<KeyguardManager>(application, Context.KEYGUARD_SERVICE));
-        bind(Vibrator.class).toProvider(new SystemServiceProvider<Vibrator>(application, Context.VIBRATOR_SERVICE));
-        bind(ConnectivityManager.class).toProvider(new SystemServiceProvider<ConnectivityManager>(application, Context.CONNECTIVITY_SERVICE));
-        bind(WifiManager.class).toProvider(new SystemServiceProvider<WifiManager>(application, Context.WIFI_SERVICE));
-        bind(InputMethodManager.class).toProvider(new SystemServiceProvider<InputMethodManager>(application, Context.INPUT_METHOD_SERVICE));
-        bind(SensorManager.class).toProvider( new SystemServiceProvider<SensorManager>(application, Context.SENSOR_SERVICE));
-        bind(TelephonyManager.class).toProvider( new SystemServiceProvider<TelephonyManager>(application, Context.TELEPHONY_SERVICE));
-        bind(AudioManager.class).toProvider( new SystemServiceProvider<AudioManager>(application, Context.AUDIO_SERVICE));
+        for( Entry<Class, String> entry : mapSystemSericeClassToName.entrySet() ) {
+            bindSystemService(entry.getKey(), entry.getValue());
+        }
 
         // System Services that must be scoped to current context
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
         bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
 
-
         // Android Resources, Views and extras require special handling
-        bindListener(Matchers.any(), resourceListener);
-        bindListener(Matchers.any(), extrasListener);
+        if( hasInjectionPointsForAnnotation(InjectResource.class) ) {
+            bindListener(Matchers.any(), resourceListener);
+        }   
+
+        if( hasInjectionPointsForAnnotation(InjectExtra.class) ) {
+            final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
+            bindListener(Matchers.any(), extrasListener);
+        }
+
+        //should be bound only if we use InjectView or InjectFragment
         bindListener(Matchers.any(), viewListener);
-        bindListener(Matchers.any(), preferenceListener);
+
+        if( hasInjectionPointsForAnnotation(InjectPreference.class) ) {
+            final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
+            bind(PreferenceListener.class).toInstance(preferenceListener);
+            bindListener(Matchers.any(), preferenceListener);
+        }
+
+        //should always be bound as ContentViewListener relies on event system
         bindListener(Matchers.any(), new ObservesTypeListener(getProvider(EventManager.class), observerThreadingDecorator));
-
-
-        bind(LnInterface.class).to(LnImpl.class);
-
         requestInjection(observerThreadingDecorator);
 
-
-        requestStaticInjection(Ln.class);
+        if( isInjectable(Ln.class)) {
+            bind(LnInterface.class).to(LnImpl.class);
+            //should this be placed in if statement ?
+            requestStaticInjection(Ln.class);
+        }
 
         bindDynamicBindings();
+    }
+
+    private <T> void bindSystemService(Class<T> c, String androidServiceName) {
+        bind(c).toProvider(new SystemServiceProvider<T>(application, androidServiceName ));
     }
 
     @SuppressWarnings("unchecked")
@@ -198,10 +211,57 @@ public class DefaultRoboModule extends AbstractModule {
             bind(FragmentUtil.nativeFrag.fragmentManagerType()).toProvider(FragmentUtil.nativeFrag.fragmentManagerProviderType());
         }
 
-        // 2.0 Eclair
-        if( VERSION.SDK_INT>=VERSION_CODES.ECLAIR ) {
-            //noinspection unchecked
-            bind(ACCOUNT_MANAGER_CLASS).toProvider(AccountManagerProvider.class);
+        if( VERSION.SDK_INT>=Build.VERSION_CODES.ECLAIR ) {
+            try {
+                @SuppressWarnings("rawtypes")
+                Class c = Class.forName("android.accounts.AccountManager");
+                bind(c).toProvider(AccountManagerProvider.class);
+            } catch( Throwable ex ) {
+                Log.e(DefaultRoboModule.class.getName(), "Impossible to bind AccountManager", ex);
+            }
         }
     }
+    
+    // ----------------------------------
+    //  PROVIDER METHODS
+    //  used for lazy bindings, when
+    //  instance creation is costly.
+    // ----------------------------------
+
+    @Provides
+    @Singleton
+    public PackageInfo providesPackageInfo() {
+        try {
+            return application.getPackageManager().getPackageInfo(application.getPackageName(),0);
+        } catch( PackageManager.NameNotFoundException e ) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Provides
+    @Named(Settings.Secure.ANDROID_ID)
+    public String providesAndroidId() {
+        String androidId = null;
+        final ContentResolver contentResolver = application.getContentResolver();
+        try {
+            androidId = Secure.getString(contentResolver, Secure.ANDROID_ID);
+        } catch( RuntimeException e) {
+            // ignore Stub! errors for Secure.getString() when mocking in test cases since there's no way to mock static methods
+            Log.e(DefaultRoboModule.class.getName(), "Impossible to get the android device Id. This may fail 'normally' when testing.", e);
+        }
+
+        if(!"".equals(androidId)) {
+            return androidId;
+        } else {
+            throw new RuntimeException("No Android Id.");
+        }
+    }
+
+    @Provides
+    @Named(GLOBAL_EVENT_MANAGER_NAME)
+    @Singleton
+    public EventManager providesGlobalEventManager() {
+        return new EventManager();
+    }
+
 }

@@ -45,6 +45,7 @@ import com.google.inject.Key;
 import com.google.inject.Stage;
 import com.google.inject.TypeLiteral;
 
+import android.R;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
@@ -64,7 +65,7 @@ public class SherlockActivityInjectionTest {
     @Before
     public void setup() {
         RoboGuice
-                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
+                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
         ActionBarSherlock.registerImplementation(ActionBarSherlockRobolectric.class);
         Intent intent = new Intent(Robolectric.application, DummySherlockActivity.class).putExtra("foobar", "goober");
         activity = Robolectric.buildActivity(DummySherlockActivity.class).withIntent(intent).create().get();
@@ -77,7 +78,7 @@ public class SherlockActivityInjectionTest {
 
     @Test
     public void shouldInjectView() {
-        assertThat(activity.text1, is(activity.findViewById(android.R.id.text1)));
+        assertThat(activity.text1, is(activity.findViewById(R.id.text1)));
     }
 
     @Test
@@ -104,7 +105,7 @@ public class SherlockActivityInjectionTest {
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectViews() {
         RoboGuice
-                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
+                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
         @SuppressWarnings("unused")
         final B b = Robolectric.buildActivity(B.class).create().get();
     }
@@ -112,7 +113,7 @@ public class SherlockActivityInjectionTest {
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectExtras() {
         RoboGuice
-                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
+                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
         @SuppressWarnings("unused")
         final D d = Robolectric.buildActivity(D.class).create().get();
     }
@@ -120,7 +121,7 @@ public class SherlockActivityInjectionTest {
     @Test(expected = ConfigurationException.class)
     public void shouldNotStaticallyInjectPreferenceViews() {
         RoboGuice
-                .setBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
+                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleC());
         @SuppressWarnings("unused")
         final C c = Robolectric.buildActivity(C.class).create().get();
     }
@@ -194,9 +195,9 @@ public class SherlockActivityInjectionTest {
         protected Activity activity;
         @Inject
         protected RoboSherlockActivity roboSherlockActivity;
-        @InjectView(android.R.id.text1)
+        @InjectView(R.id.text1)
         protected TextView text1;
-        @InjectResource(android.R.string.cancel)
+        @InjectResource(R.string.cancel)
         protected String cancel;
         @InjectExtra("foobar")
         protected String foobar;
@@ -209,11 +210,11 @@ public class SherlockActivityInjectionTest {
 
             final TextView text1 = new TextView(this);
             root.addView(text1);
-            text1.setId(android.R.id.text1);
+            text1.setId(R.id.text1);
 
-            final LinearLayout included1 = addIncludedView(android.R.id.summary, android.R.string.ok);
+            final LinearLayout included1 = addIncludedView(R.id.summary, R.string.ok);
             root.addView(included1);
-            final LinearLayout included2 = addIncludedView(android.R.id.title, android.R.string.no);
+            final LinearLayout included2 = addIncludedView(R.id.title, R.string.no);
             root.addView(included2);
 
             setContentView(root);
@@ -225,7 +226,7 @@ public class SherlockActivityInjectionTest {
 
             TextView textView = new TextView(this);
             container.addView(textView);
-            textView.setId(android.R.id.text2);
+            textView.setId(R.id.text2);
             textView.setText(stringResId);
             return container;
         }
@@ -247,7 +248,7 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class A {
-            @InjectResource(android.R.string.cancel)
+            @InjectResource(R.string.cancel)
             static String s;
             @Inject
             static String t;

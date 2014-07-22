@@ -14,12 +14,10 @@ import roboguice.util.RoboContext;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 
-import android.annotation.TargetApi;
 import android.app.IntentService;
 import android.app.Service;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 
 /**
  * A {@link RoboIntentService} extends from {@link IntentService} to provide dynamic
@@ -60,7 +58,6 @@ public abstract class RoboIntentService extends IntentService implements RoboCon
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.ECLAIR)
     public int onStartCommand(Intent intent, int flags, int startId) {
         final int startCont = super.onStartCommand(intent, flags, startId);
         eventManager.fire(new OnStartEvent<Service>(this) );

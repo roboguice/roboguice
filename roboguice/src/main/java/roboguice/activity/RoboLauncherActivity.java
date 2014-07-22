@@ -53,9 +53,9 @@ import android.view.View;
 /**
  * A {@link RoboLauncherActivity} extends from {@link LauncherActivity} to provide
  * dynamic injection of collaborators, using Google Guice.<br />
- *
+ * 
  * @see RoboActivity
- *
+ * 
  * @author Toly Pochkin
  */
 public class RoboLauncherActivity extends LauncherActivity implements RoboContext {

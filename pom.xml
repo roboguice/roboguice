@@ -4,18 +4,12 @@
 	<groupId>org.roboguice</groupId>
 	<artifactId>roboguice-aggregator</artifactId>
 	<name>Aggregator</name>
-	<version>3.0-alpha-3-SNAPSHOT</version>
+	<version>3.0-alpha-4-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<prerequisites>
 		<maven>3.1.1</maven>
 	</prerequisites>
-
-	<modules>
-		<module>roboguice</module>
-		<module>additional-tests</module>
-		<module>astroboy</module>
-	</modules>
 
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
@@ -57,7 +51,7 @@
 		<android-platform.version>4.1.1.4</android-platform.version>
 		<android-map.version>7_r1</android-map.version>
 		<android-build.version>19</android-build.version>
-		<guice.version>3.0</guice.version>
+		<guice.version>4.0-SNAPSHOT</guice.version>
 
 		<!--LIBRARIES -->
 		<android-map.version>7_r1</android-map.version>
@@ -131,7 +125,8 @@
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
 				<version>${guice.version}</version>
-				<classifier>no_aop</classifier>
+				<classifier>no_aop-blender</classifier>
+				<type>jar</type>
 			</dependency>
 			<dependency>
 				<groupId>findbugs</groupId>
@@ -300,15 +295,14 @@
 							<id>pmd-check</id>
 							<goals>
 								<goal>check</goal>
-								<!-- Too many deduplications to check them 
-								<goal>cpd-check</goal> -->
+								<!-- Too many deduplications to check them <goal>cpd-check</goal> -->
 							</goals>
 						</execution>
+
 					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -321,4 +315,30 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<!-- DO NOT CHANGE PROFILE ORDER, ITS MODULE ORDER TOO -->
+		<profile>
+			<!-- To build Guice fork as well -->
+			<id>guice</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>guice</module>
+			</modules>
+		</profile>
+		<profile>
+			<!-- To build RoboGuice fork as well -->
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<module>roboblender</module>
+				<module>roboguice</module>
+				<module>additional-tests</module>
+				<module>astroboy</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>

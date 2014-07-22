@@ -15,8 +15,9 @@
  */
 package roboguice.inject;
 
-import android.app.Application;
 import com.google.inject.Provider;
+
+import android.app.Application;
 
 public class SystemServiceProvider<T> implements Provider<T> {
 

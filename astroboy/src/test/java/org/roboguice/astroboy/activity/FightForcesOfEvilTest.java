@@ -27,7 +27,7 @@ public class FightForcesOfEvilTest {
     @Before
     public void setup() {
         // Override the default RoboGuice module
-    	RoboGuice.overrideApplicationInjector(Robolectric.application, new MyTestModule());
+        RoboGuice.overrideApplicationInjector(Robolectric.application, new MyTestModule());
     }
 
     @After
@@ -38,9 +38,9 @@ public class FightForcesOfEvilTest {
 
     @Test
     public void createTriggersPunch() throws InterruptedException {
-    	Robolectric.buildActivity(FightForcesOfEvilActivity.class).create().start();
-    	Thread.sleep(6*1000);
-    	verify(astroboyMock, Mockito.times(10)).punch();
+        Robolectric.buildActivity(FightForcesOfEvilActivity.class).create().start();
+        Thread.sleep(6*1000);
+        verify(astroboyMock, Mockito.times(10)).punch();
     }
 
 

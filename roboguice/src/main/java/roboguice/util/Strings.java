@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 
 public final class Strings {
@@ -27,7 +26,7 @@ public final class Strings {
      * Like join, but allows for a distinct final delimiter. For english
      * sentences such as "Alice, Bob and Charlie" use ", " and " and " as the
      * delimiters.
-     *
+     * 
      * @param delimiter
      *            usually ", "
      * @param lastDelimiter
@@ -43,15 +42,12 @@ public final class Strings {
             return "";
 
         final Iterator<T> iter = objs.iterator();
-        final StringBuilder buffer = new StringBuilder();
+        final StringBuilder buffer = new StringBuilder(Strings.toString(iter.next()));
+        int i = 1;
         while (iter.hasNext()) {
             final T obj = iter.next();
-            if (notEmpty(obj)) {
-                if( buffer.length() != 0 ) {
-                    buffer.append( iter.hasNext() ? delimiter : lastDelimiter );
-                }
-                buffer.append(Strings.toString(obj));
-            }
+            if (notEmpty(obj))
+                buffer.append(++i == objs.size() ? lastDelimiter : delimiter).append(Strings.toString(obj));
         }
         return buffer.toString();
     }
@@ -65,16 +61,12 @@ public final class Strings {
             return "";
 
         final Iterator<T> iter = objs.iterator();
-        final StringBuilder buffer = new StringBuilder();
+        final StringBuilder buffer = new StringBuilder(Strings.toString(iter.next()));
 
         while (iter.hasNext()) {
             final T obj = iter.next();
-            if (notEmpty(obj)) {
-                if( buffer.length() != 0 ) {
-                    buffer.append(delimiter);
-                }
-                buffer.append(Strings.toString(obj));
-            }
+            if (notEmpty(obj))
+                buffer.append(delimiter).append(Strings.toString(obj));
         }
         return buffer.toString();
     }
@@ -160,7 +152,7 @@ public final class Strings {
 
     public static String capitalize(String s) {
         final String c = Strings.toString(s);
-        return c.length() >= 2 ? c.substring(0, 1).toUpperCase(Locale.US) + c.substring(1) : c.length() >= 1 ? c.toUpperCase(Locale.US) : c;
+        return c.length() >= 2 ? c.substring(0, 1).toUpperCase() + c.substring(1) : c.length() >= 1 ? c.toUpperCase() : c;
     }
 
     public static boolean equals(Object a, Object b) {
@@ -168,7 +160,7 @@ public final class Strings {
     }
 
     public static boolean equalsIgnoreCase(Object a, Object b) {
-        return Strings.toString(a).toLowerCase(Locale.US).equals(Strings.toString(b).toLowerCase(Locale.US));
+        return Strings.toString(a).toLowerCase().equals(Strings.toString(b).toLowerCase());
     }
 
     public static String[] chunk(String str, int chunkSize) {

@@ -6,8 +6,10 @@ import java.lang.reflect.Method;
 import roboguice.event.eventListener.ObserverMethodListener;
 import roboguice.event.eventListener.factory.EventListenerThreadingDecorator;
 
+import com.google.inject.Guice;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
+import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.spi.InjectionListener;
 import com.google.inject.spi.TypeEncounter;
 import com.google.inject.spi.TypeListener;
@@ -22,6 +24,7 @@ import com.google.inject.spi.TypeListener;
 public class ObservesTypeListener implements TypeListener {
     protected Provider<EventManager> eventManagerProvider;
     protected EventListenerThreadingDecorator observerThreadingDecorator;
+    private HierarchyTraversalFilter filter;
 
     public ObservesTypeListener(Provider<EventManager> eventManagerProvider, EventListenerThreadingDecorator observerThreadingDecorator) {
         this.eventManagerProvider = eventManagerProvider;
@@ -29,16 +32,26 @@ public class ObservesTypeListener implements TypeListener {
     }
 
     public <I> void hear(TypeLiteral<I> iTypeLiteral, TypeEncounter<I> iTypeEncounter) {
-        for( Class<?> c = iTypeLiteral.getRawType(); c!=Object.class ; c = c.getSuperclass() ) {
-            for (Method method : c.getDeclaredMethods())
+        if( filter == null ) {
+            filter = Guice.createHierarchyTraversalFilter();
+        } else {
+            filter.reset();
+        }
+        Class<?> c = iTypeLiteral.getRawType();
+        while( isWorthScanning(c)) {
+            for (Method method : filter.getAllMethods(Observes.class.getName(), c))
                 findContextObserver(method, iTypeEncounter);
 
             for( Class<?> interfaceClass : c.getInterfaces())
-                for (Method method : interfaceClass.getDeclaredMethods())
+                for (Method method : filter.getAllMethods(Observes.class.getName(), interfaceClass))
                     findContextObserver(method, iTypeEncounter);
 
-            
+            c = c.getSuperclass();
         }
+    }
+
+    private boolean isWorthScanning(Class<?> c) {
+        return filter.isWorthScanningForMethods(Observes.class.getName(), c);
     }
 
     protected <I> void findContextObserver(Method method, TypeEncounter<I> iTypeEncounter) {
@@ -92,8 +105,8 @@ public class ObservesTypeListener implements TypeListener {
         protected EventThread threadType;
 
         public ContextObserverMethodInjector(Provider<EventManager> eventManagerProvider,
-                                             EventListenerThreadingDecorator observerThreadingDecorator,  Method method,
-                                             Class<T> event, EventThread threadType) {
+                EventListenerThreadingDecorator observerThreadingDecorator,  Method method,
+                Class<T> event, EventThread threadType) {
             this.observerThreadingDecorator = observerThreadingDecorator;
             this.eventManagerProvider = eventManagerProvider;
             this.method = method;

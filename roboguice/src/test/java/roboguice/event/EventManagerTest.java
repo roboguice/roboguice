@@ -1,12 +1,11 @@
 package roboguice.event;
 
-import static org.mockito.Mockito.mock;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import roboguice.event.eventListener.ObserverMethodListener;
 
@@ -68,7 +67,7 @@ public class EventManagerTest {
                 eventManager.unregisterObserver(EventOne.class, this);
             }
         });
-        eventManager.registerObserver(EventOne.class, mock(EventListener.class));
+        eventManager.registerObserver(EventOne.class, Mockito.mock(EventListener.class));
 
         eventManager.fire(event);
     }

@@ -11,13 +11,13 @@ import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.MembersInjector;
-import com.google.inject.Module;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 import com.google.inject.TypeLiteral;
+import com.google.inject.Module;
 import com.google.inject.spi.TypeConverterBinding;
 
-import android.app.Activity;
+//github.com/roboguice/roboguice/issues/174
 import android.content.Context;
 
 public class ContextScopedRoboInjector implements RoboInjector {
@@ -252,35 +252,11 @@ public class ContextScopedRoboInjector implements RoboInjector {
     }
 
     @Override
-    public void injectViewMembers(Activity activity) {
+    public void injectViewMembers(Object instance) {
         synchronized (ContextScope.class) {
             scope.enter(context);
             try {
-                if( context!=activity )
-                    throw new UnsupportedOperationException("internal error, how did you get here?");
-
-                ViewMembersInjector.injectViews(activity);
-            } finally {
-                scope.exit(context);
-            }
-        }
-    }
-
-    @Override
-    public void injectViewMembers(android.support.v4.app.Fragment fragment) {
-        injectViews(fragment);
-    }
-
-    @Override
-    public void injectViewMembers(android.app.Fragment fragment) {
-        injectViews(fragment);
-    }
-
-    private void injectViews(Object fragment) {
-        synchronized (ContextScope.class) {
-            scope.enter(context);
-            try {
-                ViewMembersInjector.injectViews(fragment);
+                ViewMembersInjector.injectViews(instance);
             } finally {
                 scope.exit(context);
             }

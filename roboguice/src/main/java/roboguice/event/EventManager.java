@@ -1,13 +1,13 @@
 package roboguice.event;
 
 import java.lang.reflect.Method;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 import roboguice.event.eventListener.ObserverMethodListener;
 import roboguice.inject.ContextSingleton;
@@ -42,11 +42,10 @@ public class EventManager {
      * @param listener to be triggered
      * @param <T> event type
      */
-    @SuppressWarnings("rawtypes")
-    public <T> void registerObserver( Class<T> event, EventListener listener ) {
+    public <T> void registerObserver( Class<T> event, EventListener<?> listener ) {
         Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) {
-            observers = Collections.synchronizedSet(new LinkedHashSet<EventListener<?>>());
+            observers = new CopyOnWriteArraySet<EventListener<?>>();
             registrations.put(event, observers);
         }
 
@@ -72,23 +71,12 @@ public class EventManager {
      * @param listener to be unregistered
      * @param <T> event type
      */
-    @SuppressWarnings("rawtypes")
     public <T> void unregisterObserver(Class<T> event, EventListener<T> listener ) {
 
         final Set<EventListener<?>> observers = registrations.get(event);
         if (observers == null) return;
 
-        // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
-        //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        synchronized (observers) {
-            for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-                final EventListener registeredListener = iterator.next();
-                if (registeredListener == listener) {
-                    iterator.remove();
-                    break;
-                }
-            }
-        }
+        observers.remove(listener);
     }
 
     /**
@@ -97,7 +85,6 @@ public class EventManager {
      * @param instance to be unregistered
      * @param event observed
      */
-    @SuppressWarnings("rawtypes")
     public <T> void unregisterObserver(Object instance, Class<T> event) {
 
         final Set<EventListener<?>> observers = registrations.get(event);
@@ -105,17 +92,20 @@ public class EventManager {
 
         // As documented in http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Collections.html#synchronizedSet(java.util.Set)
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        synchronized (observers) {
-            for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
-                final EventListener listener = iterator.next();
-                if( listener instanceof ObserverMethodListener ) {
-                    final ObserverMethodListener observer = ((ObserverMethodListener)listener);
-                    if (observer.getInstance() == instance) {
-                        iterator.remove();
-                        break;
-                    }
+        ObserverMethodListener<?> toRemove = null;
+        
+        for (Iterator<EventListener<?>> iterator = observers.iterator(); iterator.hasNext();) {
+            final EventListener<?> listener = iterator.next();
+            if( listener instanceof ObserverMethodListener ) {
+                final ObserverMethodListener<?> observer = ((ObserverMethodListener<?>)listener);
+                if (observer.getInstance() == instance) {
+                    toRemove = observer;
+                    break;
                 }
             }
+        }
+        if( toRemove != null ) {
+            observers.remove(toRemove);
         }
     }
 
@@ -131,7 +121,7 @@ public class EventManager {
         final Set<EventListener<?>> observers = registrations.get(event.getClass());
         if (observers == null) return;
 
-        for (EventListener observer : copyObservers(observers))
+        for (EventListener observer : observers)
             //noinspection unchecked
             observer.onEvent(event);
 

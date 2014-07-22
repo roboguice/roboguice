@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.0-alpha-3-SNAPSHOT</version>
+		<version>3.0-alpha-4-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -23,6 +23,13 @@
 
 		<!-- DEPENDENCIES -->
 		<dependency>
+			<groupId>org.roboguice</groupId>
+			<artifactId>roboblender</artifactId>
+			<version>${project.version}</version>
+			<optional>true</optional>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
 			<scope>provided</scope>
@@ -36,12 +43,14 @@
 		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v4</artifactId>
+			<scope>provided</scope>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v7-appcompat</artifactId>
 			<optional>true</optional>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.actionbarsherlock</groupId>
@@ -58,7 +67,7 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>guice</artifactId>
-			<classifier>no_aop</classifier>
+			<classifier>no_aop-blender</classifier>
 		</dependency>
 		<dependency>
 			<groupId>findbugs</groupId>
@@ -100,6 +109,32 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
+				<executions>
+					<execution>
+						<id>default-compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<compilerArgs>
+								<arg>-AguiceAnnotationDatabasePackageName=roboguice</arg>
+							</compilerArgs>
+						</configuration>
+					</execution>
+					<execution>
+						<id>default-testCompile</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+						<configuration>
+							<compilerArgs>
+								<arg>-AguiceAnnotationDatabasePackageName=testroboguice</arg>
+							</compilerArgs>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>com.jayway.maven.plugins.android.generation2</groupId>
@@ -127,7 +162,6 @@
 				</executions>
 				<extensions>true</extensions>
 			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -170,10 +204,47 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
 			</plugin>
+			<!-- By default RoboGuice uses annotation database system. Turn it off 
+				and replay all tests. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>test-with-annotation-database-off</id>
+						<configuration>
+							<environmentVariables>
+								<roboguice.useAnnotationDatabases>false</roboguice.useAnnotationDatabases>
+							</environmentVariables>
+						</configuration>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<phase>test</phase>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- http://intellectualcramps.wordpress.com/2013/08/18/code-coverage-of-robolectric-tests-using-jacoco/ -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
+			</plugin>
+			<!-- Create RoboGuice uber jar. Shade all dependencies, minimize and shrink. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<minimizeJar>true</minimizeJar>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

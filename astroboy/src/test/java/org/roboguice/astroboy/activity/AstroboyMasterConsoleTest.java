@@ -33,9 +33,9 @@ public class AstroboyMasterConsoleTest {
     @Before
     public void setup() {
         // Override the default RoboGuice module
-    	astroboyMasterConsoleController = Robolectric.buildActivity(AstroboyMasterConsole.class);
-    	astroboyMasterConsole = astroboyMasterConsoleController.get();
-    	RoboGuice.overrideApplicationInjector(Robolectric.application, new MyTestModule());
+        astroboyMasterConsoleController = Robolectric.buildActivity(AstroboyMasterConsole.class);
+        astroboyMasterConsole = astroboyMasterConsoleController.get();
+        RoboGuice.overrideApplicationInjector(Robolectric.application, new MyTestModule());
         astroboyMasterConsoleController.create().start();
     }
 
@@ -47,16 +47,16 @@ public class AstroboyMasterConsoleTest {
 
     @Test
     public void clickOnBrushTeethTriggersRemoteControl() {
-    	astroboyMasterConsole.brushTeethButton.callOnClick();
-    	verify(astroboyRemoteControlMock).brushTeeth();
+        astroboyMasterConsole.brushTeethButton.callOnClick();
+        verify(astroboyRemoteControlMock).brushTeeth();
     }
 
 
     public class MyTestModule extends AbstractModule {
         @Override
         protected void configure() {
-        	bind(Vibrator.class).toInstance(vibratorMock);
-        	bind(Activity.class).toInstance(astroboyMasterConsole);
+            bind(Vibrator.class).toInstance(vibratorMock);
+            bind(Activity.class).toInstance(astroboyMasterConsole);
             bind(AstroboyRemoteControl.class).toInstance(astroboyRemoteControlMock);
         }
     }

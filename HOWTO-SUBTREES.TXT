@@ -5,4 +5,8 @@ branch  snicolas-mburton-blender-after-merge
 will be changed to  snicolas-mburton/blender
 
 Documentation about subtrees:
-http://git-scm.com/book/en/Git-Tools-Subtree-Merging
+* http://git-scm.com/book/en/Git-Tools-Subtree-Merging
+* http://blogs.atlassian.com/2013/05/alternatives-to-git-submodule-git-subtree/
+* http://makingsoftware.wordpress.com/2013/02/16/using-git-subtrees-for-repository-separation/
+* https://help.github.com/articles/working-with-subtree-merge
+* https://github.com/apenwarr/git-subtree/blob/master/git-subtree.txt

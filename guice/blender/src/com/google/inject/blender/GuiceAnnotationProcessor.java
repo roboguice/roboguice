@@ -20,6 +20,7 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Elements;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
@@ -59,6 +60,9 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
     /** Name of the package to generate the annotation database into.*/
     private String annotationDatabasePackageName;
 
+    /** Utilities for annotation processing. */
+    private Elements elementUtils;
+    
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
@@ -67,6 +71,7 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
         mapAnnotationToMapClassContainingInjectionToInjectedMethodSet = new HashMap<String, Map<String,Set<String>> >();
         mapAnnotationToMapClassContainingInjectionToInjectedConstructorsSet = new HashMap<String, Map<String,Set<String>> >();
         bindableClasses = new HashSet<String>();
+        elementUtils = processingEnv.getElementUtils();
     }
 
     @Override
@@ -111,15 +116,16 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
         JavaFileObject jfo;
         try {
             String className = "AnnotationDatabaseImpl";
+            String packageName = "";
             if( annotationDatabasePackageName != null && !annotationDatabasePackageName.isEmpty() ) {
                 className = annotationDatabasePackageName+'.'+className;
+                packageName = annotationDatabasePackageName;
             }
-            jfo = processingEnv.getFiler().createSourceFile( className );
+            jfo = processingEnv.getFiler().createSourceFile( className, elementUtils.getTypeElement(packageName+".package-info") );
             annotationDatabaseGenerator.generateAnnotationDatabase(jfo, annotationDatabasePackageName, mapAnnotationToMapClassContainingInjectionToInjectedFieldSet, mapAnnotationToMapClassContainingInjectionToInjectedMethodSet, mapAnnotationToMapClassContainingInjectionToInjectedConstructorsSet, classesContainingInjectionPointsSet, bindableClasses);
         } catch (IOException e) {
             processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, e.getMessage());
         }
-
         return true;
     }
 

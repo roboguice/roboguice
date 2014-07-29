@@ -178,9 +178,9 @@ public class DefaultRoboModule extends AbstractModule {
         //should be bound only if we use InjectView or InjectFragment
         bindListener(Matchers.any(), viewListener);
 
+        final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
+        superBind(PreferenceListener.class).toInstance(preferenceListener);
         if( hasInjectionPointsForAnnotation(InjectPreference.class) ) {
-            final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
-            bind(PreferenceListener.class).toInstance(preferenceListener);
             bindListener(Matchers.any(), preferenceListener);
         }
 

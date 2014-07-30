@@ -90,6 +90,11 @@ import android.view.inputmethod.InputMethodManager;
  */
 @SuppressWarnings("PMD")
 public class DefaultRoboModule extends AbstractModule {
+    /**
+     * Allows to retrieve the global, inter-context {@link EventManager}.  
+     * you MUST get the global {@link EventManager} either via a field annotated with {@code @Inject @Named} 
+     * or {@code getInjector.getInstance(key(EventManager.cass, Names.named())}.
+     */
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
 
     @SuppressWarnings("rawtypes")

@@ -173,7 +173,7 @@ public class DefaultRoboModule extends AbstractModule {
         // Android Resources, Views and extras require special handling
         if( hasInjectionPointsForAnnotation(InjectResource.class) ) {
             bindListener(Matchers.any(), resourceListener);
-        }   
+        }
 
         if( hasInjectionPointsForAnnotation(InjectExtra.class) ) {
             final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
@@ -226,7 +226,7 @@ public class DefaultRoboModule extends AbstractModule {
             }
         }
     }
-    
+
     // ----------------------------------
     //  PROVIDER METHODS
     //  used for lazy bindings, when

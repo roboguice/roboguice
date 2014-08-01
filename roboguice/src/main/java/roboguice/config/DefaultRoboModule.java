@@ -38,6 +38,7 @@ import com.google.inject.Singleton;
 import com.google.inject.AbstractModule;
 import com.google.inject.matcher.Matchers;
 import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -159,6 +160,7 @@ public class DefaultRoboModule extends AbstractModule {
         bind(ContentResolver.class).toProvider(ContentResolverProvider.class);
         bind(Application.class).toInstance(application);
         bind(EventListenerThreadingDecorator.class).toInstance(observerThreadingDecorator);
+        bind(EventManager.class).annotatedWith(Names.named(GLOBAL_EVENT_MANAGER_NAME)).to(EventManager.class).asEagerSingleton();
         bind(Handler.class).toProvider(HandlerProvider.class);
 
         // System Services
@@ -260,13 +262,6 @@ public class DefaultRoboModule extends AbstractModule {
         } else {
             throw new RuntimeException("No Android Id.");
         }
-    }
-
-    @Provides
-    @Named(GLOBAL_EVENT_MANAGER_NAME)
-    @Singleton
-    public EventManager providesGlobalEventManager() {
-        return new EventManager();
     }
 
 }

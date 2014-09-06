@@ -259,14 +259,13 @@
 				</executions>
 				<configuration>
 					<options>
-						<option>-dontobfuscate</option>
 						<option>-dontoptimize</option>
-						<option>-optimizationpasses 5</option>
 						<option>-dontusemixedcaseclassnames</option>
 						<option>-dontskipnonpubliclibraryclasses</option>
 						<option>-dontpreverify</option>
 						<option>-verbose</option>
 						<option>-keep public class * { *; }</option>
+						<option>-keepname public class roboguice.** { *; }</option>
 						<option>-ignorewarnings</option>
 					</options>
 					<includeDependency>false</includeDependency>

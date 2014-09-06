@@ -240,9 +240,6 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
-						<configuration>
-							<minimizeJar>true</minimizeJar>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -264,14 +261,18 @@
 						<option>-dontskipnonpubliclibraryclasses</option>
 						<option>-dontpreverify</option>
 						<option>-verbose</option>
-						<option>-keepattributes *Annotation*</option>
-						<option>-keepattributes Signature</option>
+						<option>-keepattributes Exceptions,Signature,Deprecated, Synthetic,EnclosingMethod,InnerClasses,*Annotation*</option>
 						<option>-keep public class * { *; }</option>
+						<!-- from -->>
+						<option>-keep public class * { public protected &lt;methods&gt;; }</option>
+						<option>-keep !public class * { public protected &lt;methods&gt;; }</option>
 						<option>-keepname public class roboguice.** { *; }</option>
 						<option>-keepname public class com.google.inject.AnnotationDatabase { *; }</option>
 						<option>-keep class com.google.inject.Binder</option>
 						<option>-keep public class com.google.inject.Inject</option>
 						<option>-ignorewarnings</option>
+						<option>-renamesourcefileattribute SourceFile</option>
+						<option>-keepattributes SourceFile,LineNumberTable</option>
 					</options>
 					<includeDependency>false</includeDependency>
 				</configuration>

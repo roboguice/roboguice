@@ -261,11 +261,16 @@
 						<option>-dontskipnonpubliclibraryclasses</option>
 						<option>-dontpreverify</option>
 						<option>-verbose</option>
-						<option>-keepattributes Exceptions,Signature,InnerClasses,*Annotation*</option>
+						<option>-keepattributes
+							Exceptions,Signature,InnerClasses,*Annotation*</option>
 						<option>-keep public class * { *; }</option>
 						<!-- from http://stackoverflow.com/q/17675882/693752 -->
-						<option>-keep public class * { public protected &lt;methods&gt;; }</option>
+						<option>-keep public class * { public abstract &lt;methods&gt;; }</option>
 						<option>-keep !public class * { public protected &lt;methods&gt;; }</option>
+						<option>-keepname public class roboguice.** { *; }</option>
+						<option>-keepname public class com.google.inject.AnnotationDatabase { *; }</option>
+						<option>-keep class com.google.inject.Binder</option>
+						<option>-keep public class com.google.inject.Inject</option>
 						<option>-ignorewarnings</option>
 					</options>
 					<includeDependency>false</includeDependency>

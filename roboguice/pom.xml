@@ -246,7 +246,7 @@
 					</execution>
 				</executions>
 			</plugin>
-<plugin>
+			<plugin>
 				<groupId>com.pyx4me</groupId>
 				<artifactId>proguard-maven-plugin</artifactId>
 				<executions>
@@ -264,8 +264,13 @@
 						<option>-dontskipnonpubliclibraryclasses</option>
 						<option>-dontpreverify</option>
 						<option>-verbose</option>
+						<option>-keepattributes *Annotation*</option>
+						<option>-keepattributes Signature</option>
 						<option>-keep public class * { *; }</option>
 						<option>-keepname public class roboguice.** { *; }</option>
+						<option>-keepname public class com.google.inject.AnnotationDatabase { *; }</option>
+						<option>-keep class com.google.inject.Binder</option>
+						<option>-keep public class com.google.inject.Inject</option>
 						<option>-ignorewarnings</option>
 					</options>
 					<includeDependency>false</includeDependency>

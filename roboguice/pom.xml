@@ -271,8 +271,6 @@
 						<option>-keep class com.google.inject.Binder</option>
 						<option>-keep public class com.google.inject.Inject</option>
 						<option>-ignorewarnings</option>
-						<option>-renamesourcefileattribute SourceFile</option>
-						<option>-keepattributes SourceFile,LineNumberTable</option>
 					</options>
 					<includeDependency>false</includeDependency>
 				</configuration>

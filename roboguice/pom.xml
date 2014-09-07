@@ -240,6 +240,9 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
+						<configuration>
+							<minimizeJar>true</minimizeJar>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
@@ -263,9 +266,18 @@
 						<option>-verbose</option>
 						<option>-keepattributes
 							Exceptions,Signature,InnerClasses,*Annotation*</option>
-						<option>-keep public class * { *; }</option>
+						<option>-keepclassmembers class * { @com.google.inject.Provides &lt;methods&gt;; }</option>
+						<option>-keepclassmembers class * { @roboguice.event.Observes  &lt;methods&gt;; }</option>
+						<option>-keepclassmembers class * { @java.lang.Override  &lt;methods&gt;; }</option>
+						<option>-keepclassmembers class * { @com.google.inject.Inject *; }</option>
+						<option>-keepclassmembers class * { @javax.inject.Inject *; }</option>
+						<option>-keepclassmembers class * { @roboguice.inject.InjectView *; }</option>
+						<option>-keepclassmembers class * { @roboguice.inject.InjectResource *; }</option>
+						<option>-keepclassmembers class * { @roboguice.inject.InjectPreference *; }</option>
+						<option>-keepclassmembers class * { @roboguice.inject.InjectFragment *; }</option>
+						<option>-keepclassmembers class * { @roboguice.inject.InjectExtra *; }</option>
 						<!-- from http://stackoverflow.com/q/17675882/693752 -->
-						<option>-keep public class * { public abstract &lt;methods&gt;; }</option>
+						<option>-keep public class * { public protected &lt;methods&gt;; }</option>
 						<option>-keep !public class * { public protected &lt;methods&gt;; }</option>
 						<option>-keepname public class roboguice.** { *; }</option>
 						<option>-keepname public class com.google.inject.AnnotationDatabase { *; }</option>
@@ -273,7 +285,7 @@
 						<option>-keep public class com.google.inject.Inject</option>
 						<option>-ignorewarnings</option>
 					</options>
-					<includeDependency>false</includeDependency>
+					<includeDependency>true</includeDependency>
 				</configuration>
 				<dependencies>
 					<dependency>

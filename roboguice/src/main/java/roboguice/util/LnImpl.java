@@ -37,8 +37,6 @@ public class LnImpl implements LnInterface {
         }
     }
 
-
-
     @Override
     public int v(Throwable t) {
         return getLoggingLevel() <= Log.VERBOSE ? println(Log.VERBOSE, Log.getStackTraceString(t)) : 0;
@@ -50,7 +48,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = args.length>0 ? String.format(s,args) : s;
+        final String message = formatArgs(s, args);
         return println(Log.VERBOSE, message);
     }
 
@@ -60,7 +58,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.VERBOSE, message);
     }
 
@@ -75,7 +73,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = args.length>0 ? String.format(s,args) : s;
+        final String message = formatArgs(s, args);
         return println(Log.DEBUG, message);
     }
 
@@ -85,7 +83,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.DEBUG, message);
     }
 
@@ -100,7 +98,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length > 0 ? String.format(s, args) : s) + '\n' + Log.getStackTraceString(throwable);
+        final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.INFO, message);
     }
 
@@ -110,7 +108,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = args.length>0 ? String.format(s,args) : s;
+        final String message = formatArgs(s, args);
         return println(Log.INFO, message);
     }
 
@@ -125,7 +123,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.WARN, message);
     }
 
@@ -135,7 +133,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = args.length>0 ? String.format(s,args) : s;
+        final String message = formatArgs(s, args);
         return println(Log.WARN, message);
     }
 
@@ -150,7 +148,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = (args.length>0 ? String.format(s,args) : s) + '\n' + Log.getStackTraceString(throwable);
+        final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.ERROR, message);
     }
 
@@ -160,7 +158,7 @@ public class LnImpl implements LnInterface {
             return 0;
 
         final String s = Strings.toString(s1);
-        final String message = args.length>0 ? String.format(s,args) : s;
+        final String message = formatArgs(s, args);
         return println(Log.ERROR, message);
     }
 
@@ -224,6 +222,18 @@ public class LnImpl implements LnInterface {
         }
 
         return tag;
+    }
+    
+    //protected for testing.
+    protected String formatArgs(final String s, Object... args) {
+        //this is a bit tricky : if args is null, it is passed to formatting
+        //(and yes this can still break depending on conversion of the formatter, see String.format)
+        //else if there is no args, we return the message as-is, otherwise we pass args to formatting normally.
+        if( args != null && args.length == 0 ) {
+            return s;
+        } else {
+            return String.format(s,args);            
+        }
     }
 
 

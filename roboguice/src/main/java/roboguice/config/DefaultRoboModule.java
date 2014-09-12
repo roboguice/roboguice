@@ -15,9 +15,7 @@ import roboguice.inject.ContentResolverProvider;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScopedSystemServiceProvider;
 import roboguice.inject.ContextSingleton;
-import roboguice.inject.ExtrasListener;
 import roboguice.inject.HandlerProvider;
-import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectResource;
 import roboguice.inject.NullProvider;
@@ -175,11 +173,6 @@ public class DefaultRoboModule extends AbstractModule {
         // Android Resources, Views and extras require special handling
         if( hasInjectionPointsForAnnotation(InjectResource.class) ) {
             bindListener(Matchers.any(), resourceListener);
-        }
-
-        if( hasInjectionPointsForAnnotation(InjectExtra.class) ) {
-            final ExtrasListener extrasListener = new ExtrasListener(contextProvider);
-            bindListener(Matchers.any(), extrasListener);
         }
 
         //should be bound only if we use InjectView or InjectFragment

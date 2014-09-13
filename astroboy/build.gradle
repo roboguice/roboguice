@@ -27,6 +27,7 @@ repositories {
 }
 
 dependencies {
+   provided("org.roboguice:roboblender:$ROBOGUICE_VERSION")
    compile "org.roboguice:roboguice:$ROBOGUICE_VERSION"
 }
 
@@ -115,4 +116,14 @@ gradle.projectsEvaluated {
     }
   }
 }
+
 check.dependsOn test
+
+    afterEvaluate { project ->
+        android.applicationVariants.each { variant ->
+            variant.javaCompile.options.compilerArgs += [
+                '-s', 'build/generated'
+            ]
+        }
+    }
+

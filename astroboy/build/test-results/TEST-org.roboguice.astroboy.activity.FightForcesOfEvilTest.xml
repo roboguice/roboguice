@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.roboguice.astroboy.activity.FightForcesOfEvilTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2014-09-13T13:17:50" hostname="sni.group.on" time="6.321">
-  <properties/>
-  <testcase name="createTriggersPunch" classname="org.roboguice.astroboy.activity.FightForcesOfEvilTest" time="6.321"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

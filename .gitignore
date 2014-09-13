@@ -29,4 +29,5 @@ local.properties
 .idea/
 
 #gradle
+build/
 .gradle/

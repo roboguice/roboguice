@@ -2,6 +2,7 @@ package org.roboguice.astroboy.view;
 
 import org.roboguice.astroboy.R;
 
+import roboguice.RoboGuice;
 import roboguice.inject.InjectView;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -26,10 +27,18 @@ public class CustomView extends LinearLayout {
     public CustomView(Context context) {
         super(context);
         initializeView(context);
+        onFinishInflate();
     }
 
     public void initializeView(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_custom, this, true);
+    }
+    
+    @Override
+    protected void onFinishInflate() {
+    	super.onFinishInflate();
+        RoboGuice.getInjector(getContext()).injectMembersWithoutViews(this);
+        RoboGuice.getInjector(getContext()).injectViewMembers(this);
     }
 
     @Override

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.roboguice.astroboy.controller.Astroboy1Test" tests="1" skipped="0" failures="0" errors="0" timestamp="2014-09-13T13:17:56" hostname="sni.group.on" time="0.045">
-  <properties/>
-  <testcase name="stringShouldEndInExclamationMark" classname="org.roboguice.astroboy.controller.Astroboy1Test" time="0.045"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

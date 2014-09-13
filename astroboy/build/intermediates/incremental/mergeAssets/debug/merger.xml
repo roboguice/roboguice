@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="/Users/administrateur/git/roboguice/astroboy/assets" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/Users/administrateur/git/roboguice/astroboy/src/debug/assets" />
+    </dataSet>
+
+</merger>

@@ -27,10 +27,8 @@ import roboguice.RoboGuice;
 import roboguice.activity.SherlockActivityInjectionTest.ModuleA.A;
 import roboguice.activity.SherlockActivityInjectionTest.ModuleB.B;
 import roboguice.activity.SherlockActivityInjectionTest.ModuleC.C;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleD.D;
 import roboguice.inject.ContextScopedProvider;
 import roboguice.inject.ContextSingleton;
-import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
@@ -87,11 +85,6 @@ public class SherlockActivityInjectionTest {
     }
 
     @Test
-    public void shouldInjectExtras() {
-        assertThat(activity.foobar, is("goober"));
-    }
-
-    @Test
     public void shouldStaticallyInject() {
         assertThat(A.t, equalTo(""));
     }
@@ -108,14 +101,6 @@ public class SherlockActivityInjectionTest {
                 .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
         @SuppressWarnings("unused")
         final B b = Robolectric.buildActivity(B.class).create().get();
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldNotStaticallyInjectExtras() {
-        RoboGuice
-                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
-        @SuppressWarnings("unused")
-        final D d = Robolectric.buildActivity(D.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
@@ -199,8 +184,6 @@ public class SherlockActivityInjectionTest {
         protected TextView text1;
         @InjectResource(R.string.cancel)
         protected String cancel;
-        @InjectExtra("foobar")
-        protected String foobar;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -283,24 +266,6 @@ public class SherlockActivityInjectionTest {
         public static class C extends RoboSherlockActivity {
             @InjectPreference("xxx")
             static Preference v;
-
-            @Override
-            protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-            }
-        }
-    }
-
-    public static class ModuleD extends BaseModule {
-        @Override
-        public void configure() {
-            super.configure();
-            requestStaticInjection(D.class);
-        }
-
-        public static class D extends RoboSherlockActivity {
-            @InjectExtra("xxx")
-            static String s;
 
             @Override
             protected void onCreate(Bundle savedInstanceState) {

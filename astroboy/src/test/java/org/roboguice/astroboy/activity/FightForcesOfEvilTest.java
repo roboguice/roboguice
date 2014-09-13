@@ -13,6 +13,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import roboguice.RoboGuice;
+import android.content.Intent;
 
 import com.google.inject.AbstractModule;
 
@@ -38,7 +39,9 @@ public class FightForcesOfEvilTest {
 
     @Test
     public void createTriggersPunch() throws InterruptedException {
-        Robolectric.buildActivity(FightForcesOfEvilActivity.class).create().start();
+    	Intent intent = new Intent(Robolectric.application, FightForcesOfEvilActivity.class);
+    	intent.putExtra(FightForcesOfEvilActivity.EXTRA_APP_NAME, "foo");
+        Robolectric.buildActivity(FightForcesOfEvilActivity.class).withIntent(intent).create().start();
         Thread.sleep(6*1000);
         verify(astroboyMock, Mockito.times(10)).punch();
     }

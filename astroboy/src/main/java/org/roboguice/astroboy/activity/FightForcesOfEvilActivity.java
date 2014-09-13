@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.Astroboy;
 
+import com.github.stephanenicolas.injectextra.InjectExtra;
+
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
@@ -24,21 +26,22 @@ import android.widget.TextView;
  */
 public class FightForcesOfEvilActivity extends RoboActivity {
 
-    @InjectView(R.id.expletive) TextView expletiveText;
+    public static final String EXTRA_APP_NAME = "EXTRA_APP_NAME";
+
+	@InjectView(R.id.expletive) TextView expletiveText;
 
     // You can also inject resources such as Strings, Drawables, and Animations
     @InjectResource(R.anim.expletive_animation) Animation expletiveAnimation;
 
-    // AstroboyRemoteControl is annotated as @ContextSingleton, so the instance
-    // we get in FightForcesOfEvilActivity will be a different instance than
-    // the one we got in AstroboyMasterConsole
-    //@Inject AstroboyRemoteControl remoteControl;
+    @InjectExtra(EXTRA_APP_NAME)
+    private String appName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fight_evil);
 
+        expletiveText.setText(appName);
         expletiveText.setAnimation(expletiveAnimation);
         expletiveAnimation.start();
 

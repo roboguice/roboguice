@@ -85,7 +85,9 @@ public class AstroboyMasterConsole extends RoboActivity {
         // Fighting the forces of evil deserves its own activity
         fightEvilButton.setOnClickListener( new OnClickListener() {
             public void onClick(View view) {
-                startActivity(new Intent(AstroboyMasterConsole.this, FightForcesOfEvilActivity.class));
+                Intent intent = new Intent(AstroboyMasterConsole.this, FightForcesOfEvilActivity.class);
+                intent.putExtra(FightForcesOfEvilActivity.EXTRA_APP_NAME, "astroboy");
+				startActivity(intent);
             }
         });
 

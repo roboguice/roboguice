@@ -46,6 +46,11 @@
 			<artifactId>roboguice</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.stephanenicolas.injectextra</groupId>
+			<artifactId>injectextra-annotations</artifactId>
+			<version>1.0.4</version>
+		</dependency>
 
 		<!-- TEST DEPENDENCIES -->
 		<dependency>

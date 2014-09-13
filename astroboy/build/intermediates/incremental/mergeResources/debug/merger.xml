@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="main" >
+        <source path="/Users/administrateur/git/roboguice/astroboy/res" >
+            <file
+                name="expletive_animation"
+                path="/Users/administrateur/git/roboguice/astroboy/res/anim/expletive_animation.xml"
+                qualifiers=""
+                type="anim" />
+            <file
+                name="icon"
+                path="/Users/administrateur/git/roboguice/astroboy/res/drawable-hdpi/icon.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="icon"
+                path="/Users/administrateur/git/roboguice/astroboy/res/drawable-ldpi/icon.png"
+                qualifiers="ldpi-v4"
+                type="drawable" />
+            <file
+                name="icon"
+                path="/Users/administrateur/git/roboguice/astroboy/res/drawable-mdpi/icon.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="fight_evil"
+                path="/Users/administrateur/git/roboguice/astroboy/res/layout/fight_evil.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="main"
+                path="/Users/administrateur/git/roboguice/astroboy/res/layout/main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="view_custom"
+                path="/Users/administrateur/git/roboguice/astroboy/res/layout/view_custom.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                path="/Users/administrateur/git/roboguice/astroboy/res/values/strings.xml"
+                qualifiers="" >
+                <string name="app_name" >Astroboy
+                </string>
+            </file>
+        </source>
+        <source path="/Users/administrateur/git/roboguice/astroboy/build/generated/res/rs/debug" />
+        <source path="/Users/administrateur/git/roboguice/astroboy/build/generated/res/generated/debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/Users/administrateur/git/roboguice/astroboy/src/debug/res" />
+    </dataSet>
+
+</merger>

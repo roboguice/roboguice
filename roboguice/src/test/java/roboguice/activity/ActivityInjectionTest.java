@@ -27,9 +27,7 @@ import roboguice.RoboGuice;
 import roboguice.activity.ActivityInjectionTest.ModuleA.A;
 import roboguice.activity.ActivityInjectionTest.ModuleB.B;
 import roboguice.activity.ActivityInjectionTest.ModuleC.C;
-import roboguice.activity.ActivityInjectionTest.ModuleD.D;
 import roboguice.inject.ContextScopedProvider;
-import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectPreference;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
@@ -78,11 +76,6 @@ public class ActivityInjectionTest {
     }
 
     @Test
-    public void shouldInjectExtras() {
-        assertThat(activity.foobar, is("goober"));
-    }
-
-    @Test
     public void shouldStaticallyInject() {
         assertThat(A.t, equalTo(""));
     }
@@ -97,12 +90,6 @@ public class ActivityInjectionTest {
     public void shouldNotStaticallyInjectViews() {
         RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
         Robolectric.buildActivity(B.class).create().get();
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldNotStaticallyInjectExtras() {
-        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleD());
-        Robolectric.buildActivity(D.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
@@ -186,8 +173,6 @@ public class ActivityInjectionTest {
         protected TextView text1;
         @InjectResource(R.string.cancel)
         protected String cancel;
-        @InjectExtra("foobar")
-        protected String foobar;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -259,17 +244,6 @@ public class ActivityInjectionTest {
             protected void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
             }
-        }
-    }
-
-    public static class ModuleD extends com.google.inject.AbstractModule {
-        @Override
-        public void configure() {
-            requestStaticInjection(D.class);
-        }
-
-        public static class D extends RoboActivity{
-            @InjectExtra("xxx") static String s;
         }
     }
 

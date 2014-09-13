@@ -305,6 +305,34 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
+				<groupId>org.fortasoft</groupId>
+				<artifactId>gradle-maven-plugin</artifactId>
+				<version>1.0.5</version>
+				<inherited>false</inherited>
+				<configuration>
+				    <gradleVersion>1.12</gradleVersion>
+					<gradleProjectDirectory>
+						${project.basedir}/astroboy
+					</gradleProjectDirectory>
+					<tasks>
+						<task>test</task>
+					</tasks>
+					<args>
+						<arg>-d</arg>
+					</args>
+				</configuration>
+				<executions>
+					<execution>
+						<!-- You can bind this to any phase you like -->
+						<phase>test</phase>
+						<goals>
+							<!-- goal must be "invoke" -->
+							<goal>invoke</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>

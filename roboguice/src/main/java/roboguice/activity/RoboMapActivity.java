@@ -140,7 +140,6 @@ public abstract class RoboMapActivity extends MapActivity implements RoboContext
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

@@ -25,11 +25,9 @@ import org.robolectric.util.ActivityController;
 
 import roboguice.RoboGuice;
 import roboguice.activity.ActivityInjectionTest.ModuleA.A;
-import roboguice.activity.ActivityInjectionTest.ModuleB.B;
 import roboguice.activity.ActivityInjectionTest.ModuleC.C;
 import roboguice.inject.ContextScopedProvider;
 import roboguice.inject.InjectPreference;
-import roboguice.inject.InjectView;
 
 import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
@@ -65,11 +63,6 @@ public class ActivityInjectionTest {
     }
 
     @Test
-    public void shouldInjectView() {
-        assertThat(activity.text1, is(activity.findViewById(R.id.text1)));
-    }
-
-    @Test
     public void shouldStaticallyInject() {
         assertThat(A.t, equalTo(""));
     }
@@ -78,12 +71,6 @@ public class ActivityInjectionTest {
     public void shouldInjectActivityAndRoboActivity() {
         assertEquals(activity, activity.activity);
         assertEquals(activity, activity.roboActivity);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldNotStaticallyInjectViews() {
-        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
-        Robolectric.buildActivity(B.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
@@ -163,8 +150,6 @@ public class ActivityInjectionTest {
         protected Activity activity;
         @Inject
         protected RoboActivity roboActivity;
-        @InjectView(R.id.text1)
-        protected TextView text1;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -208,18 +193,6 @@ public class ActivityInjectionTest {
         }
     }
 
-    public static class ModuleB extends com.google.inject.AbstractModule {
-        @Override
-        public void configure() {
-            requestStaticInjection(B.class);
-        }
-
-        public static class B extends RoboActivity {
-            @InjectView(0)
-            static View v;
-        }
-    }
-
     public static class ModuleC extends com.google.inject.AbstractModule {
         @Override
         public void configure() {
@@ -238,11 +211,6 @@ public class ActivityInjectionTest {
     }
 
     public static class F extends RoboActivity {}
-
-    public static class PojoA {
-        @InjectView(100)
-        View v;
-    }
 
     public static class G extends RoboActivity {
         @Inject Application application;

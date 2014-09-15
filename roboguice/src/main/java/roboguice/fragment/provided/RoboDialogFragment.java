@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.app.DialogFragment;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 
 /**
  * Provides an injected {@link DialogFragment} based on the native HONEY_COMB+ Fragments.
@@ -21,9 +20,4 @@ public abstract class RoboDialogFragment extends DialogFragment {
         RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
-    }
 }

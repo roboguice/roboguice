@@ -56,6 +56,11 @@
 			<artifactId>injectresource-annotations</artifactId>
 			<version>1.0.2</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.stephanenicolas.injectview</groupId>
+			<artifactId>injectview-annotations</artifactId>
+			<version>1.0.1</version>
+		</dependency>
 
 		<!-- TEST DEPENDENCIES -->
 		<dependency>

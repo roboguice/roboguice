@@ -153,7 +153,6 @@ public class RoboTabActivity extends TabActivity implements RoboContext {
     @Deprecated
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

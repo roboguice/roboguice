@@ -25,12 +25,10 @@ import org.robolectric.RobolectricTestRunner;
 
 import roboguice.RoboGuice;
 import roboguice.activity.SherlockActivityInjectionTest.ModuleA.A;
-import roboguice.activity.SherlockActivityInjectionTest.ModuleB.B;
 import roboguice.activity.SherlockActivityInjectionTest.ModuleC.C;
 import roboguice.inject.ContextScopedProvider;
 import roboguice.inject.ContextSingleton;
 import roboguice.inject.InjectPreference;
-import roboguice.inject.InjectView;
 import roboguice.inject.NullProvider;
 
 import com.actionbarsherlock.ActionBarSherlock;
@@ -74,11 +72,6 @@ public class SherlockActivityInjectionTest {
     }
 
     @Test
-    public void shouldInjectView() {
-        assertThat(activity.text1, is(activity.findViewById(R.id.text1)));
-    }
-
-    @Test
     public void shouldStaticallyInject() {
         assertThat(A.t, equalTo(""));
     }
@@ -87,14 +80,6 @@ public class SherlockActivityInjectionTest {
     public void shouldInjectActivityAndRoboSherlockActivity() {
         assertEquals(activity, activity.activity);
         assertEquals(activity, activity.roboSherlockActivity);
-    }
-
-    @Test(expected = ConfigurationException.class)
-    public void shouldNotStaticallyInjectViews() {
-        RoboGuice
-                .getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleB());
-        @SuppressWarnings("unused")
-        final B b = Robolectric.buildActivity(B.class).create().get();
     }
 
     @Test(expected = ConfigurationException.class)
@@ -174,8 +159,6 @@ public class SherlockActivityInjectionTest {
         protected Activity activity;
         @Inject
         protected RoboSherlockActivity roboSherlockActivity;
-        @InjectView(R.id.text1)
-        protected TextView text1;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -225,24 +208,6 @@ public class SherlockActivityInjectionTest {
         public static class A {
             @Inject
             static String t;
-        }
-    }
-
-    public static class ModuleB extends BaseModule {
-        @Override
-        protected void configure() {
-            super.configure();
-            requestStaticInjection(B.class);
-        }
-
-        public static class B extends RoboSherlockActivity {
-            @InjectView(0)
-            static View v;
-
-            @Override
-            protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-            }
         }
     }
 

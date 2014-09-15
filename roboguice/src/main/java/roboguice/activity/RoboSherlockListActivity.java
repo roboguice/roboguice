@@ -129,7 +129,6 @@ public class RoboSherlockListActivity extends SherlockListActivity implements Ro
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

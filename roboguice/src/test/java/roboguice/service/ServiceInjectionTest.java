@@ -11,7 +11,6 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 
 import roboguice.RoboGuice;
-import roboguice.inject.InjectView;
 
 import com.google.inject.ConfigurationException;
 
@@ -39,12 +38,6 @@ public class ServiceInjectionTest {
         assertThat( roboService.context, equalTo((Context)roboService) );
     }
 
-    @Test(expected=ConfigurationException.class)
-    public void shouldNotAllowViewsInServices() {
-        final RoboServiceB roboService = new RoboServiceB();
-        roboService.onCreate();
-    }
-
     public static class RoboServiceA extends RoboService {
         @Inject Context context;
 
@@ -63,15 +56,6 @@ public class ServiceInjectionTest {
 
         @Override
         protected void onHandleIntent(Intent intent) {
-        }
-    }
-
-    public static class RoboServiceB extends RoboService {
-        @InjectView(100) View v;
-
-        @Override
-        public IBinder onBind(Intent intent) {
-            return null;
         }
     }
 

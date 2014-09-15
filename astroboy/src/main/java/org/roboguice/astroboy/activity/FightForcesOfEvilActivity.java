@@ -9,9 +9,9 @@ import org.roboguice.astroboy.controller.Astroboy;
 
 import com.github.stephanenicolas.injectextra.InjectExtra;
 import com.github.stephanenicolas.injectresource.InjectResource;
+import com.github.stephanenicolas.injectview.InjectView;
 
 import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
 import roboguice.util.RoboAsyncTask;
 import android.content.Context;
 import android.os.Bundle;

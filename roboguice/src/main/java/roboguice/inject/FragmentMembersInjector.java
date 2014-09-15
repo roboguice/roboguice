@@ -13,7 +13,6 @@ import com.google.inject.Provider;
 import com.google.inject.spi.TypeEncounter;
 
 import android.app.Activity;
-import android.content.Context;
 
 /**
  * This class gets twice as many providers as necessary to do its job, look into optimizations in the future if this is a bottleneck
@@ -67,54 +66,4 @@ public class FragmentMembersInjector<T> implements MembersInjector<T> {
         }
     }
     
-    /**
-     * This is when the view references are actually evaluated.
-     * @param activityOrFragment an activity or fragment
-     */
-    @SuppressWarnings("unchecked")
-    public void reallyInjectMembers( Object activityOrFragment ) {
-
-        final T instance = instanceRef.get();
-        if( instance==null )
-            return;
-
-        if( activityOrFragment instanceof Context && !(activityOrFragment instanceof Activity ))
-            throw new UnsupportedOperationException("Can't inject fragment into a non-Activity context");
-
-        Object fragment = null;
-
-        try {
-            final InjectFragment injectFragment = (InjectFragment) annotation;
-            final int id = injectFragment.value();
-
-            if( id>=0 )
-                fragment = fragUtils.findFragmentById(fragManager.get(), id);
-            else
-                fragment = fragUtils.findFragmentByTag(fragManager.get(),injectFragment.tag());
-
-            if (fragment == null && Nullable.notNullable(field))
-                throw new NullPointerException(String.format("Can't inject null value into %s.%s when field is not @Nullable", field.getDeclaringClass(), field.getName()));
-
-            field.setAccessible(true);
-            field.set(instance, fragment);
-
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-
-        } catch (IllegalArgumentException f) {
-            throw new IllegalArgumentException(String.format("Can't assign %s value %s to %s field %s", fragment != null ? fragment.getClass() : "(null)", fragment,
-                    field.getType(), field.getName()), f);
-        }
-    }
-
-
-    protected static void injectViews(Object activityOrFragment) {
-        synchronized ( FragmentMembersInjector.class ) {
-
-            final ArrayList<FragmentMembersInjector<?>> injectors = VIEW_MEMBERS_INJECTORS.get(activityOrFragment);
-            if(injectors!=null)
-                for(FragmentMembersInjector<?> viewMembersInjector : injectors)
-                    viewMembersInjector.reallyInjectMembers(activityOrFragment);
-        }
-    }
 }

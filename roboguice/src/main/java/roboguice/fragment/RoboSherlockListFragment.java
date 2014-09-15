@@ -5,7 +5,6 @@ import roboguice.RoboGuice;
 import com.actionbarsherlock.app.SherlockListFragment;
 
 import android.os.Bundle;
-import android.view.View;
 
 /**
  * Provides an injected {@link SherlockListFragment} based on ActionBarSherlock's Fragments.
@@ -17,11 +16,5 @@ public abstract class RoboSherlockListFragment extends SherlockListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
     }
 }

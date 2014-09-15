@@ -167,7 +167,6 @@ public class RoboActivity extends Activity implements RoboContext {
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 
@@ -211,7 +210,6 @@ public class RoboActivity extends Activity implements RoboContext {
             final Constructor<?> constructor = Class.forName(name).getConstructor(Context.class, AttributeSet.class);
             final View view = (View) constructor.newInstance(context, attrs);
             RoboGuice.getInjector(context).injectMembers(view);
-            RoboGuice.getInjector(context).injectViewMembers(view);
             return view;
         } catch (Exception e) {
             throw new RuntimeException(e);

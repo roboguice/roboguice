@@ -157,7 +157,6 @@ public class RoboActionBarActivity extends ActionBarActivity implements RoboCont
     @Override
     public void onSupportContentChanged() {
         super.onSupportContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

@@ -2,8 +2,9 @@ package org.roboguice.astroboy.view;
 
 import org.roboguice.astroboy.R;
 
+import com.github.stephanenicolas.injectview.InjectView;
+
 import roboguice.RoboGuice;
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;

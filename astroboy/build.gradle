@@ -11,6 +11,7 @@ buildscript {
     classpath 'com.github.stephanenicolas.morpheus:morpheus-plugin:1.0.0'
     classpath("com.github.stephanenicolas.injectextra:injectextra-plugin:1.0.4")
     classpath("com.github.stephanenicolas.injectresource:injectresource-plugin:1.0.2")
+    classpath("com.github.stephanenicolas.injectview:injectview-plugin:1.0.1")
     //for tests
     classpath 'com.github.jcandksolutions.gradle:android-unit-test:1.3.0'
   }
@@ -19,6 +20,7 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'com.github.stephanenicolas.injectextra'
 apply plugin: 'com.github.stephanenicolas.injectresource'
+apply plugin: 'com.github.stephanenicolas.injectview'
 
 repositories {
   mavenCentral()
@@ -99,6 +101,7 @@ dependencies {
 //TODO make it easier
 import com.github.stephanenicolas.injectextra.InjectExtraProcessor;
 import com.github.stephanenicolas.injectresource.InjectResourceProcessor;
+import com.github.stephanenicolas.injectview.InjectViewProcessor;
 
 gradle.projectsEvaluated {
   //testDebug should trigger transformation of source classes (not tests)
@@ -117,6 +120,16 @@ gradle.projectsEvaluated {
       }
 
       transformerClassName = InjectResourceProcessor.class.getSimpleName()
+
+      transformTask = "transform${transformerClassName}${variantName}"
+      copyTransformedTask = "copyTransformed${transformerClassName}${variantName}"
+      try {
+        task.dependsOn(project.tasks.getByName(transformTask))
+        task.dependsOn(project.tasks.getByName(copyTransformedTask))
+      } catch (Exception e) {
+      }
+      
+      transformerClassName = InjectViewProcessor.class.getSimpleName()
 
       transformTask = "transform${transformerClassName}${variantName}"
       copyTransformedTask = "copyTransformed${transformerClassName}${variantName}"

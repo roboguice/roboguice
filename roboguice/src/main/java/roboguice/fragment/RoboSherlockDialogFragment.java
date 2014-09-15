@@ -5,7 +5,6 @@ import roboguice.RoboGuice;
 import com.actionbarsherlock.app.SherlockDialogFragment;
 
 import android.os.Bundle;
-import android.view.View;
 
 /**
  * Provides an injected {@link SherlockDialogFragment} based on ActionBarSherlock's Dialog Fragments.
@@ -17,11 +16,5 @@ public abstract class RoboSherlockDialogFragment extends SherlockDialogFragment 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
     }
 }

@@ -4,7 +4,6 @@ import roboguice.RoboGuice;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.view.View;
 
 /**
  * Provides an injected {@link DialogFragment} based on support library v4.
@@ -16,11 +15,5 @@ public abstract class RoboDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
     }
 }

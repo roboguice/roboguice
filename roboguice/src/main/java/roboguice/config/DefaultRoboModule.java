@@ -22,7 +22,6 @@ import roboguice.inject.PreferenceListener;
 import roboguice.inject.ResourcesProvider;
 import roboguice.inject.SharedPreferencesProvider;
 import roboguice.inject.SystemServiceProvider;
-import roboguice.inject.ViewListener;
 import roboguice.service.RoboService;
 import roboguice.util.Ln;
 import roboguice.util.LnImpl;
@@ -99,7 +98,6 @@ public class DefaultRoboModule extends AbstractModule {
 
     protected Application application;
     protected ContextScope contextScope;
-    protected ViewListener viewListener;
 
     static {
         mapSystemSericeClassToName.put(LocationManager.class, Context.LOCATION_SERVICE);
@@ -119,10 +117,9 @@ public class DefaultRoboModule extends AbstractModule {
     }
 
 
-    public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener) {
+    public DefaultRoboModule(final Application application, ContextScope contextScope) {
         this.application = application;
         this.contextScope = contextScope;
-        this.viewListener = viewListener;
     }
 
     /**
@@ -134,9 +131,6 @@ public class DefaultRoboModule extends AbstractModule {
 
         final Provider<Context> contextProvider = getProvider(Context.class);
         final EventListenerThreadingDecorator observerThreadingDecorator = new EventListenerThreadingDecorator();
-
-        // Singletons
-        bind(ViewListener.class).toInstance(viewListener);
 
         // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
@@ -165,9 +159,6 @@ public class DefaultRoboModule extends AbstractModule {
         // System Services that must be scoped to current context
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
         bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
-
-        //should be bound only if we use InjectView or InjectFragment
-        bindListener(Matchers.any(), viewListener);
 
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
         superBind(PreferenceListener.class).toInstance(preferenceListener);

@@ -132,7 +132,6 @@ public class RoboSherlockAccountAuthenticatorActivity extends SherlockAccountAut
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

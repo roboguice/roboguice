@@ -6,7 +6,6 @@ import android.annotation.TargetApi;
 import android.app.ListFragment;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 
 /**
  * Provides an injected {@link ListFragment} based on the native HONEY_COMB+ fragments.
@@ -21,9 +20,4 @@ public abstract class RoboListFragment extends ListFragment {
         RoboGuice.getInjector(getActivity()).injectMembersWithoutViews(this);
     }
 
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        RoboGuice.getInjector(getActivity()).injectViewMembers(this);
-    }
 }

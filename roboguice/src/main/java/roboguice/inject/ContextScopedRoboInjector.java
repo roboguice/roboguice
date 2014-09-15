@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import roboguice.inject.ViewListener.ViewMembersInjector;
-
 import com.google.inject.Binding;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -246,18 +244,6 @@ public class ContextScopedRoboInjector implements RoboInjector {
             try {
                 delegate.injectMembers(instance);
             }finally {
-                scope.exit(context);
-            }
-        }
-    }
-
-    @Override
-    public void injectViewMembers(Object instance) {
-        synchronized (ContextScope.class) {
-            scope.enter(context);
-            try {
-                ViewMembersInjector.injectViews(instance);
-            } finally {
                 scope.exit(context);
             }
         }

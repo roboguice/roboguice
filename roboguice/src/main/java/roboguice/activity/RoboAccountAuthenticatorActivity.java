@@ -142,7 +142,6 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

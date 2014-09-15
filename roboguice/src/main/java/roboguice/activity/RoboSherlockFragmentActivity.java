@@ -113,7 +113,6 @@ public class RoboSherlockFragmentActivity extends SherlockFragmentActivity imple
     @Override
     public void onContentChanged() {
         super.onContentChanged();
-        RoboGuice.getInjector(this).injectViewMembers(this);
         eventManager.fire(new OnContentChangedEvent(this));
     }
 

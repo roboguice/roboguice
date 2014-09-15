@@ -29,7 +29,6 @@ import roboguice.activity.ActivityInjectionTest.ModuleB.B;
 import roboguice.activity.ActivityInjectionTest.ModuleC.C;
 import roboguice.inject.ContextScopedProvider;
 import roboguice.inject.InjectPreference;
-import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 
 import com.google.inject.ConfigurationException;
@@ -68,11 +67,6 @@ public class ActivityInjectionTest {
     @Test
     public void shouldInjectView() {
         assertThat(activity.text1, is(activity.findViewById(R.id.text1)));
-    }
-
-    @Test
-    public void shouldInjectStringResource() {
-        assertThat(activity.cancel, is("Cancel"));
     }
 
     @Test
@@ -171,8 +165,6 @@ public class ActivityInjectionTest {
         protected RoboActivity roboActivity;
         @InjectView(R.id.text1)
         protected TextView text1;
-        @InjectResource(R.string.cancel)
-        protected String cancel;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -211,8 +203,6 @@ public class ActivityInjectionTest {
         }
 
         public static class A {
-            @InjectResource(android.R.string.cancel)
-            static String s;
             @Inject
             static String t;
         }

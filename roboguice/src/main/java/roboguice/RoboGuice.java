@@ -11,7 +11,6 @@ import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.event.EventManager;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScopedRoboInjector;
-import roboguice.inject.ResourceListener;
 import roboguice.inject.RoboInjector;
 import roboguice.inject.ViewListener;
 import roboguice.util.Ln;
@@ -55,8 +54,6 @@ public final class RoboGuice {
 
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,Injector> injectors = new WeakHashMap<Application,Injector>();
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
-    protected static WeakHashMap<Application,ResourceListener> resourceListeners = new WeakHashMap<Application, ResourceListener>();
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="MS_SHOULD_BE_FINAL")
     protected static WeakHashMap<Application,ViewListener> viewListeners = new WeakHashMap<Application, ViewListener>();
 
@@ -207,26 +204,11 @@ public final class RoboGuice {
     }
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {
-        return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application), getResourceListener(application));
+        return new DefaultRoboModule(application, new ContextScope(application), getViewListener(application));
     }
 
     public static void setUseAnnotationDatabases(boolean useAnnotationDatabases) {
         RoboGuice.useAnnotationDatabases = useAnnotationDatabases;
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value="NP_LOAD_OF_KNOWN_NULL_VALUE", justification="Double check lock")
-    protected static ResourceListener getResourceListener( Application application ) {
-        ResourceListener resourceListener = resourceListeners.get(application);
-        if( resourceListener==null ) {
-            synchronized (RoboGuice.class) {
-                if( resourceListener==null ) {
-                    resourceListener = new ResourceListener(application);
-                    resourceListeners.put(application,resourceListener);
-                }
-            }
-        }
-        return resourceListener;
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -308,7 +290,6 @@ public final class RoboGuice {
          */
         public static void reset() {
             injectors.clear();
-            resourceListeners.clear();
             viewListeners.clear();
             //clear annotation database finder
             //restore hierarchy filter

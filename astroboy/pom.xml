@@ -51,6 +51,11 @@
 			<artifactId>injectextra-annotations</artifactId>
 			<version>1.0.4</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.stephanenicolas.injectresource</groupId>
+			<artifactId>injectresource-annotations</artifactId>
+			<version>1.0.2</version>
+		</dependency>
 
 		<!-- TEST DEPENDENCIES -->
 		<dependency>
@@ -89,6 +94,15 @@
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<!--  skip tests as they are ran by gradle -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.17</version>
+				<configuration>
+					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>

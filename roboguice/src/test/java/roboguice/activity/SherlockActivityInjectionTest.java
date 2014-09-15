@@ -30,7 +30,6 @@ import roboguice.activity.SherlockActivityInjectionTest.ModuleC.C;
 import roboguice.inject.ContextScopedProvider;
 import roboguice.inject.ContextSingleton;
 import roboguice.inject.InjectPreference;
-import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import roboguice.inject.NullProvider;
 
@@ -77,11 +76,6 @@ public class SherlockActivityInjectionTest {
     @Test
     public void shouldInjectView() {
         assertThat(activity.text1, is(activity.findViewById(R.id.text1)));
-    }
-
-    @Test
-    public void shouldInjectStringResource() {
-        assertThat(activity.cancel, is("Cancel"));
     }
 
     @Test
@@ -182,8 +176,6 @@ public class SherlockActivityInjectionTest {
         protected RoboSherlockActivity roboSherlockActivity;
         @InjectView(R.id.text1)
         protected TextView text1;
-        @InjectResource(R.string.cancel)
-        protected String cancel;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -231,8 +223,6 @@ public class SherlockActivityInjectionTest {
         }
 
         public static class A {
-            @InjectResource(R.string.cancel)
-            static String s;
             @Inject
             static String t;
         }

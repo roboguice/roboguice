@@ -10,17 +10,18 @@ buildscript {
     classpath 'com.android.tools.build:gradle:0.12.2'
     classpath 'com.github.stephanenicolas.morpheus:morpheus-plugin:1.0.0'
     classpath("com.github.stephanenicolas.injectextra:injectextra-plugin:1.0.4")
+    classpath("com.github.stephanenicolas.injectresource:injectresource-plugin:1.0.2")
     //for tests
     classpath 'com.github.jcandksolutions.gradle:android-unit-test:1.3.0'
   }
 }
 
 apply plugin: 'com.android.application'
-apply plugin: 'injectextra'
+apply plugin: 'com.github.stephanenicolas.injectextra'
+apply plugin: 'com.github.stephanenicolas.injectresource'
 
 repositories {
   mavenCentral()
-  mavenLocal()
 
   // NOTE: This is only needed when developing the plugin!
   mavenLocal()
@@ -97,6 +98,7 @@ dependencies {
 //this is needed if you use robolectric and want to use injection of extras in test.
 //TODO make it easier
 import com.github.stephanenicolas.injectextra.InjectExtraProcessor;
+import com.github.stephanenicolas.injectresource.InjectResourceProcessor;
 
 gradle.projectsEvaluated {
   //testDebug should trigger transformation of source classes (not tests)
@@ -113,6 +115,16 @@ gradle.projectsEvaluated {
         task.dependsOn(project.tasks.getByName(copyTransformedTask))
       } catch (Exception e) {
       }
+
+      transformerClassName = InjectResourceProcessor.class.getSimpleName()
+
+      transformTask = "transform${transformerClassName}${variantName}"
+      copyTransformedTask = "copyTransformed${transformerClassName}${variantName}"
+      try {
+        task.dependsOn(project.tasks.getByName(transformTask))
+        task.dependsOn(project.tasks.getByName(copyTransformedTask))
+      } catch (Exception e) {
+      }
     }
   }
 }
@@ -122,7 +134,7 @@ check.dependsOn test
     afterEvaluate { project ->
         android.applicationVariants.each { variant ->
             variant.javaCompile.options.compilerArgs += [
-                '-s', 'build/generated'
+                '-s', project.file('build/generated')
             ]
         }
     }

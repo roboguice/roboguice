@@ -17,10 +17,8 @@ import roboguice.inject.ContextScopedSystemServiceProvider;
 import roboguice.inject.ContextSingleton;
 import roboguice.inject.HandlerProvider;
 import roboguice.inject.InjectPreference;
-import roboguice.inject.InjectResource;
 import roboguice.inject.NullProvider;
 import roboguice.inject.PreferenceListener;
-import roboguice.inject.ResourceListener;
 import roboguice.inject.ResourcesProvider;
 import roboguice.inject.SharedPreferencesProvider;
 import roboguice.inject.SystemServiceProvider;
@@ -101,7 +99,6 @@ public class DefaultRoboModule extends AbstractModule {
 
     protected Application application;
     protected ContextScope contextScope;
-    protected ResourceListener resourceListener;
     protected ViewListener viewListener;
 
     static {
@@ -122,11 +119,10 @@ public class DefaultRoboModule extends AbstractModule {
     }
 
 
-    public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener, ResourceListener resourceListener) {
+    public DefaultRoboModule(final Application application, ContextScope contextScope, ViewListener viewListener) {
         this.application = application;
         this.contextScope = contextScope;
         this.viewListener = viewListener;
-        this.resourceListener = resourceListener;
     }
 
     /**
@@ -169,11 +165,6 @@ public class DefaultRoboModule extends AbstractModule {
         // System Services that must be scoped to current context
         bind(LayoutInflater.class).toProvider(new ContextScopedSystemServiceProvider<LayoutInflater>(contextProvider,Context.LAYOUT_INFLATER_SERVICE));
         bind(SearchManager.class).toProvider(new ContextScopedSystemServiceProvider<SearchManager>(contextProvider,Context.SEARCH_SERVICE));
-
-        // Android Resources, Views and extras require special handling
-        if( hasInjectionPointsForAnnotation(InjectResource.class) ) {
-            bindListener(Matchers.any(), resourceListener);
-        }
 
         //should be bound only if we use InjectView or InjectFragment
         bindListener(Matchers.any(), viewListener);

@@ -1,0 +1,311 @@
+<?xml version="1.0"?>
+
+<project name="guice" default="compile">
+  <!-- common definitions are stored in common.xml. -->
+  <import file="common.xml"/>
+
+  <path id="compile.classpath">
+    <fileset dir="${lib.dir}" includes="*.jar"/>
+    <fileset dir="${lib.dir}/build" includes="*.jar"/>
+  </path>
+  
+  <path id="javadoc.classpath">
+  	<path refid="compile.classpath"/>
+    <fileset dir="extensions">
+    	<include name="*/lib/*.jar"/>
+    </fileset>
+    <pathelement location="${build.dir}/classes"/>
+  </path>
+
+
+  <target name="jar" depends="jar.withdeps, manifest" description="Build jar.">
+    <jar jarfile="${build.dir}/dist/guice-${version}.jar"
+        manifest="${build.dir}/META-INF/MANIFEST.MF">
+      <zipfileset src="${build.dir}/${ant.project.name}-with-deps.jar"/>
+    </jar>
+  </target>
+
+  <target name="dist" depends="distjars, javadoc"
+       description="Build entire distribution.">
+    <ant antfile="extensions/servlet/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/spring/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/struts2/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/assistedinject/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/jmx/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/jndi/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/throwingproviders/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/multibindings/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/persist/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/grapher/build.xml" target="distjars" inheritAll="false"/>
+    <ant antfile="extensions/testlib/build.xml" target="distjars" inheritAll="false"/>
+
+    <copy toDir="${build.dir}/dist"> 
+      <fileset dir="extensions/servlet/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist"> 
+      <fileset dir="extensions/spring/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/struts2/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/assistedinject/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/jmx/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/jndi/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/throwingproviders/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/multibindings/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/persist/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/grapher/build" includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist">
+      <fileset dir="extensions/testlib/build" includes="*.jar"/>
+    </copy>
+
+    <copy toDir="${build.dir}/dist" file="COPYING"/> 
+    <copy toDir="${build.dir}/dist"> 
+      <fileset dir="${lib.dir}" 
+        includes="*.jar"/>
+    </copy>
+    <copy toDir="${build.dir}/dist"> 
+      <fileset dir="${build.dir}" includes="javadoc/**/*"/>
+    </copy>
+
+    <zip destfile="${build.dir}/guice-${version}.zip">
+      <zipfileset dir="${build.dir}/dist" prefix="guice-${version}" excludes="*-src.jar"/>
+    </zip>
+    <zip destfile="${build.dir}/guice-${version}-src.zip">
+      <zipfileset dir="." prefix="guice-${version}-src"
+          excludes="build/**,**/.svn/**,classes/**,.settings/**,bin/**,latest-api-diffs/**,latest-javadoc/**,.classpath,.project"/>
+    </zip>
+  </target>
+
+  <target name="test.dist"
+    description="Execute JUnit tests against distribution jar.">
+    <antcall target="test.dist.run">
+      <param name="jvmarg-value" value="-Dguice_include_stack_traces="/>
+    </antcall>
+    <antcall target="test.dist.run">
+      <param name="jvmarg-value" value="-Dguice_include_stack_traces=OFF"/>
+    </antcall>
+    <antcall target="test.dist.run">
+      <param name="jvmarg-value" value="-Dguice_include_stack_traces=COMPLETE"/>
+    </antcall>
+  </target>
+
+  <target name="test.dist.run"
+    depends="jar, test.withdeps"
+    description="Execute JUnit tests against distribution jar with the given jvmarg.">
+    <java fork="true"
+        classname="junit.textui.TestRunner"
+        failonerror="true"
+        taskname="junit">
+      <classpath>
+        <pathelement location="${build.dir}/guice-${version}-tests.jar"/>
+        <pathelement location="${build.dir}/dist/guice-${version}.jar"/>
+        <pathelement location="lib/javax.inject.jar"/>
+        <pathelement location="lib/aopalliance.jar"/>
+        <pathelement location="lib/guava-16.0.1.jar"/>
+        <pathelement location="lib/build/guava-testlib-16.0.1.jar"/>
+        <pathelement location="lib/build/junit.jar"/>
+        <pathelement location="lib/build/servlet-api-2.5.jar"/>
+        <pathelement location="lib/build/easymock.jar"/>
+        <pathelement location="lib/build/javax.inject-tck.jar"/>
+        <pathelement location="lib/build/bnd-0.0.384.jar"/>
+        <pathelement location="lib/build/felix-2.0.5.jar"/>
+      </classpath>
+      <arg value="com.google.inject.AllTests"/>
+      <jvmarg value="${jvmarg-value}"/>
+      <syspropertyset>
+        <propertyref name="guice.custom.loader"/>
+        <propertyref name="version"/>
+        <propertyref name="build.dir"/>
+        <propertyref name="lib.dir"/>
+      </syspropertyset>
+    </java>
+  </target>
+
+  <property name="old.api" value="3.0"/>
+  <property name="new.api" value="latest"/>
+  <target name="jdiff" depends="compile">
+    <property name="jdiff.home" value="lib/build/jdiff"/>
+    <property name="jdiff.tmp" value="build/docs/latest-api-diffs"/>
+    <delete dir="${jdiff.tmp}"/>
+    <mkdir dir="${jdiff.tmp}"/>
+
+    <!-- Generate API for current version. -->
+    <javadoc packagenames="com.google.*"
+             docletpath="${jdiff.home}/jdiff.jar${path.separator}${jdiff.home}/xerces.jar"
+             maxmemory="1024M"
+             classpathref="javadoc.classpath">
+      <fileset dir="${src.dir}" defaultexcludes="yes">
+        <include name="com/google/**"/>
+        <exclude name="com/google/inject/internal/**"/>
+      </fileset>
+      <fileset dir="${servlet.src.dir}"/>
+      <fileset dir="${spring.src.dir}"/>
+      <fileset dir="${assistedinject.src.dir}"/>
+      <fileset dir="${jmx.src.dir}"/>
+      <fileset dir="${jndi.src.dir}"/>
+      <fileset dir="${throwingproviders.src.dir}"/>
+      <fileset dir="${multibindings.src.dir}"/>
+      <fileset dir="${persist.src.dir}"/>
+      <fileset dir="${struts2.src.dir}"/>
+      <fileset dir="${grapher.src.dir}"/>
+      <fileset dir="${testlib.src.dir}"/>
+
+      <doclet name="jdiff.JDiff" path="${jdiff.home}/jdiff.jar:${jdiff.home}/xerces.jar">
+        <param name="-apidir" value="${jdiff.tmp}" />
+        <param name="-apiname" value="${new.api}" />
+      </doclet>
+    </javadoc>
+
+    <!-- Do a diff against the previous version. -->
+    <javadoc packagenames="com.google.*"
+             destdir="${jdiff.tmp}"
+             docletpath="${jdiff.home}/jdiff.jar${path.separator}${jdiff.home}/xerces.jar"
+             maxmemory="512M"
+             sourcefiles="${jdiff.home}/Null.java"
+             classpathref="javadoc.classpath">
+      <doclet name="jdiff.JDiff">
+        <param name="-oldapi" value="${old.api}"/>
+        <param name="-oldapidir" value="latest-api-diffs"/>
+        <param name="-javadocold" value="http://google.github.io/guice/api-docs/${old.api}/javadoc/"/>
+        <param name="-newapi" value="${new.api}"/>
+        <param name="-newapidir" value="${jdiff.tmp}"/>
+        <param name="-javadocnew" value="http://google.github.io/guice/api-docs/${new.api}/javadoc/"/>
+        <param name="-stats"/>
+        <param name="-docchanges"/>
+      </doclet>
+    </javadoc>
+  </target>
+
+  <target name="javadoc" depends="compile">
+    <javadoc packagenames="com.google.*"
+             destdir="build/docs/javadoc"
+             maxmemory="512M"
+             classpathref="javadoc.classpath"
+             additionalparam="-Xdoclint:none -notimestamp"
+             windowtitle="Guice ${new.api} API"
+             author="false"
+             protected="true">
+      <group title="Guice Core" packages="com.google.inject:com.google.inject.util:com.google.inject.spi:com.google.inject.name:com.google.inject.matcher:com.google.inject.binder"/>
+      <fileset dir="${src.dir}" defaultexcludes="yes">
+        <include name="com/google/inject/**"/>
+        <exclude name="com/google/inject/internal/**"/>
+      </fileset>      
+
+      <group title="Servlet Extension" packages="com.google.inject.servlet"/>
+      <fileset dir="${servlet.src.dir}"/>
+
+      <group title="AssistedInject Extension" packages="com.google.inject.assistedinject"/>
+      <fileset dir="${assistedinject.src.dir}"/>
+      
+      <group title="Multibinder Extension" packages="com.google.inject.multibindings"/>
+      <fileset dir="${multibindings.src.dir}"/>
+
+      <group title="ThrowingProviders Extension" packages="com.google.inject.throwingproviders"/>
+      <fileset dir="${throwingproviders.src.dir}"/>
+
+      <group title="Test Libraries Extension" packages="com.google.inject.testing.*"/>
+      <fileset dir="${testlib.src.dir}"/>
+
+      <group title="Grapher Extension" packages="com.google.inject.grapher:com.google.inject.grapher.*"/>
+      <fileset dir="${grapher.src.dir}"/>
+
+      <group title="Persist Extension" packages="com.google.inject.persist:com.google.inject.persist.*"/>
+      <fileset dir="${persist.src.dir}"/>
+
+      <group title="Spring Extension" packages="com.google.inject.spring"/>
+      <fileset dir="${spring.src.dir}"/>
+
+      <group title="Struts2 Extension" packages="com.google.inject.struts2"/>
+      <fileset dir="${struts2.src.dir}"/> 
+
+      <group title="JNDI Extension" packages="com.google.inject.jndi"/>     
+      <fileset dir="${jndi.src.dir}"/>
+
+      <group title="JMX Extension" packages="com.google.inject.tools.jmx"/>
+      <fileset dir="${jmx.src.dir}"/>      
+
+      <link href="http://aopalliance.sourceforge.net/doc/"/>
+      <link href="http://docs.oracle.com/javase/7/docs/api/"/>
+      <link href="http://atinject.googlecode.com/svn/trunk/javadoc/"/>
+      <link href="http://docs.guava-libraries.googlecode.com/git/javadoc/"/>
+      <link href="https://tomcat.apache.org/tomcat-5.5-doc/servletapi/"/>
+    </javadoc>
+  </target>
+
+  <target name="no_aop"
+          description="Create a copy of the Guice source that doesn't do bytecode generation.">
+    <taskdef name="munge" classname="MungeTask" classpath="lib/build/munge.jar"/>
+    <mkdir dir="build/no_aop"/>
+    <munge todir="build/no_aop">
+      <fileset dir=".">
+        <!-- exclude generated files -->
+        <exclude name="build/**"/>
+        <exclude name="classes/**"/>
+        <exclude name="latest-api-diffs/**"/>
+        <exclude name="javadoc/**"/>
+        <exclude name="latest-javadoc/**"/>
+        <!-- exclude AOP-specific libraries -->
+        <exclude name="lib/aopalliance.jar"/>
+        <exclude name="lib/build/asm-*.jar"/>
+        <exclude name="lib/build/cglib-*.jar"/>
+        <!-- exclude AOP-specific classes -->
+        <exclude name="**/LineNumbers.java"/>
+        <exclude name="**/InterceptorBindingProcessor.java"/>
+        <exclude name="**/ProxyFactory.java"/>
+        <exclude name="**/ProxyFactoryTest.java"/>
+        <exclude name="**/InterceptorStackCallback.java"/>
+        <exclude name="**/InterceptorBinding.java"/>
+        <exclude name="**/MethodAspect.java"/>
+        <exclude name="**/MethodInterceptionTest.java"/>
+        <exclude name="**/BytecodeGenTest.java"/>
+        <exclude name="**/IntegrationTest.java"/>
+        <exclude name="**/MethodInterceptionTest.java"/>
+      </fileset>
+      <arg value="-DNO_AOP" />
+    </munge>
+    <replace file="build/no_aop/common.xml" value="">
+      <replacetoken><![CDATA[<zipfileset src="${common.basedir}/lib/build/asm-5.0.3.jar"/>]]></replacetoken>
+    </replace>
+    <replace file="build/no_aop/common.xml" value="">
+      <replacetoken><![CDATA[<zipfileset src="${common.basedir}/lib/build/cglib-3.1.jar"/>]]></replacetoken>
+    </replace>
+    <replace file="build/no_aop/common.xml" value="">
+      <replacetoken><![CDATA[<zipfileset src="${common.basedir}/lib/build/cglib-3.1.jar"><include name="LICENSE"/><include name="NOTICE"/></zipfileset>]]></replacetoken>
+    </replace>
+    <replace file="build/no_aop/common.xml" value='Bundle-Name" value="$${ant.project.name} (no_aop)'>
+      <replacetoken><![CDATA[Bundle-Name" value="${ant.project.name}]]></replacetoken>
+    </replace>
+  </target>
+
+  <target name="clean.all"
+      depends="clean"
+      description="Remove generated files.">
+    <ant dir="extensions/servlet" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/spring" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/struts2" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/assistedinject" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/jmx" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/jndi" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/throwingproviders" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/multibindings" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/persist" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/grapher" antfile="build.xml" target="clean"/>
+    <ant dir="extensions/testlib" antfile="build.xml" target="clean"/>
+  </target>
+
+</project>

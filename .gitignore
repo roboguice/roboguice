@@ -28,3 +28,7 @@ local.properties
 *.iml
 .idea/
 
+#gradle files (for v4)
+.gradle/
+build/
+roboguice-plugin/

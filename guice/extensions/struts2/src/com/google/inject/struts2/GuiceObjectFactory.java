@@ -23,7 +23,6 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 import com.google.inject.internal.Annotations;
 import com.google.inject.servlet.ServletModule;
-
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ObjectFactory;
 import com.opensymphony.xwork2.config.ConfigurationException;
@@ -40,7 +39,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * @deprecated Use {@link com.google.inject.servlet.Struts2Factory} instead.
+ * @deprecated Use {@link com.google.inject.struts2.Struts2Factory} instead.
  */
 @Deprecated
 public class GuiceObjectFactory extends ObjectFactory {

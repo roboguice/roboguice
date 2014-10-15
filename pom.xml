@@ -4,7 +4,7 @@
 	<groupId>org.roboguice</groupId>
 	<artifactId>roboguice-aggregator</artifactId>
 	<name>Aggregator</name>
-	<version>3.0-alpha-4-SNAPSHOT</version>
+	<version>3.0-alpha-6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<prerequisites>
@@ -51,7 +51,7 @@
 		<android-platform.version>4.1.1.4</android-platform.version>
 		<android-map.version>7_r1</android-map.version>
 		<android-build.version>19</android-build.version>
-		<guice.version>4.0-SNAPSHOT</guice.version>
+		<guice.version>4.0-blender-SNAPSHOT</guice.version>
 
 		<!--LIBRARIES -->
 		<android-map.version>7_r1</android-map.version>
@@ -125,7 +125,7 @@
 				<groupId>com.google.inject</groupId>
 				<artifactId>guice</artifactId>
 				<version>${guice.version}</version>
-				<classifier>no_aop-blender</classifier>
+				<classifier>no_aop</classifier>
 				<type>jar</type>
 			</dependency>
 			<dependency>

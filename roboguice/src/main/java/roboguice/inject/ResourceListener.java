@@ -19,7 +19,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 
-import com.google.inject.AnnotationFieldNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.MembersInjector;
 import com.google.inject.TypeLiteral;
@@ -57,11 +56,7 @@ public class ResourceListener implements TypeListener {
         Class<?> c = typeLiteral.getRawType();
         while (isWorthScanning(c)) {
             Set<Field> allFields = null;
-            try {
-                allFields = filter.getAllFields(InjectResource.class.getName(), c);
-            } catch (AnnotationFieldNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            allFields = filter.getAllFields(InjectResource.class.getName(), c);
             if (allFields != null) {
                 for (Field field : allFields) {
                     if (field.isAnnotationPresent(InjectResource.class) && !Modifier.isStatic(field.getModifiers()))

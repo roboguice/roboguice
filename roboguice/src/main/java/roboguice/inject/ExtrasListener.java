@@ -23,7 +23,6 @@ import java.util.Set;
 
 import roboguice.RoboGuice;
 
-import com.google.inject.AnnotationFieldNotFoundException;
 import com.google.inject.Binding;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -62,11 +61,7 @@ public class ExtrasListener implements TypeListener {
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c)) {
             final Set<Field> allFields;
-            try {
-                allFields = filter.getAllFields(InjectExtra.class.getName(), c);
-            } catch (AnnotationFieldNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            allFields = filter.getAllFields(InjectExtra.class.getName(), c);
             if( allFields != null ) {
                 for (Field field : allFields) {
                     if (field.isAnnotationPresent(InjectExtra.class) )

@@ -323,6 +323,7 @@ public class InjectionPointTest extends TestCase {
     @javax.inject.Inject String atField;
     @com.google.inject.Inject String gField;
 
+
     @javax.inject.Inject public void atInject() {}
     @com.google.inject.Inject public void gInject() {}
 

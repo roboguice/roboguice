@@ -18,7 +18,6 @@ package com.google.inject;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.internal.MoreTypesTest;
-import com.google.inject.internal.RehashableKeysTest;
 import com.google.inject.internal.UniqueAnnotationsTest;
 import com.google.inject.internal.WeakKeySetTest;
 import com.google.inject.internal.util.LineNumbersTest;
@@ -41,7 +40,6 @@ import com.google.inject.util.NoopOverrideTest;
 import com.google.inject.util.OverrideModuleTest;
 import com.google.inject.util.ProvidersTest;
 import com.google.inject.util.TypesTest;
-
 import com.googlecode.guice.GuiceTck;
 import com.googlecode.guice.Jsr330Test;
 
@@ -97,7 +95,6 @@ public class AllTests {
     suite.addTestSuite(ProvisionListenerTest.class);
     // ProxyFactoryTest is AOP-only
     suite.addTestSuite(ReflectionTest.class);
-    suite.addTestSuite(RehashableKeysTest.class);
     suite.addTestSuite(RequestInjectionTest.class);
     suite.addTestSuite(RequireAtInjectOnConstructorsTest.class);
     suite.addTestSuite(ScopesTest.class);

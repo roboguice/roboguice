@@ -186,7 +186,7 @@ public class DefaultRoboModule extends AbstractModule {
         bindListener(Matchers.any(), viewListener);
 
         final PreferenceListener preferenceListener = new PreferenceListener(contextProvider,application);
-        superBind(PreferenceListener.class).toInstance(preferenceListener);
+        superbind(PreferenceListener.class).toInstance(preferenceListener);
         if( hasInjectionPointsForAnnotation(InjectPreference.class) ) {
             bindListener(Matchers.any(), preferenceListener);
         }

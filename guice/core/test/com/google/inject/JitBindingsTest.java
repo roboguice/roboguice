@@ -21,7 +21,6 @@ import static com.google.inject.Asserts.assertContains;
 import static com.google.inject.JitBindingsTest.GetBindingCheck.ALLOW_BINDING;
 import static com.google.inject.JitBindingsTest.GetBindingCheck.ALLOW_BINDING_PROVIDER;
 import static com.google.inject.JitBindingsTest.GetBindingCheck.FAIL_ALL;
-
 import junit.framework.TestCase;
 
 import java.util.Set;
@@ -323,8 +322,13 @@ public class JitBindingsTest extends TestCase {
     });
     ensureWorks(child, Foo.class, Bar.class);
     ensureFails(child, ALLOW_BINDING, FooImpl.class);
-    ensureInChild(parent, FooImpl.class, FooBar.class, Foo.class);
-    
+    ensureInChild(parent, FooImpl.class, Foo.class);
+    // TODO(sameb): FooBar may or may not be in a child injector, depending on if GC has run.
+    // We should fix failed child injectors to remove their contents from the parent blacklist
+    // immediately, rather than waiting on GC to do it.
+    // FooBar was succesfully inserted into the child injector (and parent blacklist), but then
+    // JIT bindings it depended on failed, making the child injector invalid.
+
     Injector grandchild = child.createChildInjector(new AbstractModule() {
       @Override
       protected void configure() {

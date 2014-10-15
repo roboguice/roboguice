@@ -14,10 +14,8 @@ import roboguice.inject.ContextScopedRoboInjector;
 import roboguice.inject.ResourceListener;
 import roboguice.inject.RoboInjector;
 import roboguice.inject.ViewListener;
-import roboguice.util.Ln;
 import roboguice.util.Strings;
 
-import com.google.inject.AnnotationDatabaseNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
@@ -33,6 +31,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 
 /**
@@ -254,6 +253,8 @@ public final class RoboGuice {
     private static void initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(Application application) {
         if( useAnnotationDatabases ) {
             Log.d(RoboGuice.class.getName(), "Using annotation database(s).");
+            long start = SystemClock.currentThreadTimeMillis();
+
             try {
                 Set<String> packageNameList = new HashSet<String>();
 
@@ -285,6 +286,8 @@ public final class RoboGuice {
                 packageNameList.toArray(packageNames);
 
                 Guice.setAnnotationDatabasePackageNames(packageNames);
+                long end = SystemClock.currentThreadTimeMillis();
+                Log.d(RoboGuice.class.getName(), "Time spent loading annotation databases : " + (end-start));
             } catch( Exception ex ) {
                 throw new IllegalStateException("Unable to use annotation database(s)", ex);
             }
@@ -312,12 +315,8 @@ public final class RoboGuice {
             viewListeners.clear();
             //clear annotation database finder
             //restore hierarchy filter
-            try {
-                Guice.setAnnotationDatabasePackageNames(null);
-                Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory());
-            } catch (AnnotationDatabaseNotFoundException e) {
-                Ln.e(e, "Unable to clear annotation database.");
-            }
+            Guice.setAnnotationDatabasePackageNames(null);
+            Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory());
         }
     }
 

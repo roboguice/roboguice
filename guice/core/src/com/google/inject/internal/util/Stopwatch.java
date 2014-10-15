@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 public final class Stopwatch {
   private static final Logger logger = Logger.getLogger(Stopwatch.class.getName());
 
-//  useful for debug
 //  static {
 //      logger.setLevel(Level.ALL); 
 //      logger.addHandler( new Handler() {
@@ -41,11 +40,14 @@ public final class Stopwatch {
 //
 //        @Override
 //        public void flush() {
+//            
 //        }
 //
 //        @Override
 //        public void close() throws SecurityException {
+//            
 //        }
+//          
 //      });
 //  }
   

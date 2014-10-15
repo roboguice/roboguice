@@ -26,18 +26,25 @@ public class AnnotationDatabaseFinder {
     private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassContainingInjectionToInjectedConstructorSet = new HashMap<String, Map<String, Set<String>>>();
     private HashSet<String> bindableClassesSet = new HashSet<String>();
 
-    public AnnotationDatabaseFinder(String[] additionalPackageNames) throws AnnotationDatabaseNotFoundException {
-        for( String pkg : additionalPackageNames ) {
-        	try {
+    public AnnotationDatabaseFinder(String[] additionalPackageNames) {
+        try {
+            for( String pkg : additionalPackageNames ) {
                 String annotationDatabaseClassName = "AnnotationDatabaseImpl";
                 if( pkg != null && !"".equals(pkg) ) {
                     annotationDatabaseClassName = pkg + "." + annotationDatabaseClassName;
                 }
                 AnnotationDatabase annotationDatabase = getAnnotationDatabaseInstance(annotationDatabaseClassName);
                 addAnnotationDatabase(annotationDatabase);
-        	} catch (Exception e) {
-        		throw new AnnotationDatabaseNotFoundException(e);
-        	}
+            }
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

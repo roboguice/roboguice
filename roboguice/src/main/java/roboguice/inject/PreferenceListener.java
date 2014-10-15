@@ -21,7 +21,6 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Set;
 
-import com.google.inject.AnnotationFieldNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
@@ -60,11 +59,7 @@ public class PreferenceListener implements TypeListener {
         Class<?> c = typeLiteral.getRawType();
         while (isWorthScanning(c)) {
             final Set<Field> allFields;
-            try {
-                allFields = filter.getAllFields(InjectPreference.class.getName(), c);
-            } catch (AnnotationFieldNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            allFields = filter.getAllFields(InjectPreference.class.getName(), c);
             if (allFields != null) {
                 for (Field field : allFields) {
                     if (field.isAnnotationPresent(InjectPreference.class))

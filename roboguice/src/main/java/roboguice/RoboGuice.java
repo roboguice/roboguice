@@ -14,10 +14,8 @@ import roboguice.inject.ContextScopedRoboInjector;
 import roboguice.inject.ResourceListener;
 import roboguice.inject.RoboInjector;
 import roboguice.inject.ViewListener;
-import roboguice.util.Ln;
 import roboguice.util.Strings;
 
-import com.google.inject.AnnotationDatabaseNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
@@ -317,12 +315,8 @@ public final class RoboGuice {
             viewListeners.clear();
             //clear annotation database finder
             //restore hierarchy filter
-            try {
-                Guice.setAnnotationDatabasePackageNames(null);
-                Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory());
-            } catch (AnnotationDatabaseNotFoundException e) {
-                Ln.e(e, "Unable to clear annotation database.");
-            }
+            Guice.setAnnotationDatabasePackageNames(null);
+            Guice.setHierarchyTraversalFilterFactory(new HierarchyTraversalFilterFactory());
         }
     }
 

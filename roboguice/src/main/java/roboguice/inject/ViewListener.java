@@ -28,7 +28,6 @@ import javax.inject.Singleton;
 import roboguice.fragment.FragmentUtil;
 import roboguice.fragment.FragmentUtil.f;
 
-import com.google.inject.AnnotationFieldNotFoundException;
 import com.google.inject.Guice;
 import com.google.inject.MembersInjector;
 import com.google.inject.Provider;
@@ -58,11 +57,7 @@ public class ViewListener implements TypeListener {
         Class<?> c = typeLiteral.getRawType();
         while( isWorthScanning(c)) { 
             Set<Field> allFields = null;
-            try {
-                allFields = filter.getAllFields(InjectView.class.getName(), c);
-            } catch (AnnotationFieldNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            allFields = filter.getAllFields(InjectView.class.getName(), c);
             if( allFields != null ) {
                 for (Field field : allFields) {
                     prepareViewMembersInjector(typeEncounter, field);
@@ -72,11 +67,7 @@ public class ViewListener implements TypeListener {
             //right now those loops could be merged. But it would be interesting 
             //to see if ViewMembersInjector should not be more distinguished
             //by introducing a FragmentMembersInjector
-            try {
-                allFields = filter.getAllFields(InjectFragment.class.getName(), c);
-            } catch (AnnotationFieldNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            allFields = filter.getAllFields(InjectFragment.class.getName(), c);
             if( allFields != null ) {
                 for (Field field : allFields) {
                     prepareViewMembersInjector(typeEncounter, field);

@@ -120,7 +120,7 @@ public class DefaultRoboModule extends AbstractModule {
         mapSystemSericeClassToName.put(InputMethodManager.class, Context.INPUT_METHOD_SERVICE);
         mapSystemSericeClassToName.put(SensorManager.class, Context.SENSOR_SERVICE);
         mapSystemSericeClassToName.put(TelephonyManager.class, Context.TELEPHONY_SERVICE);
-        mapSystemSericeClassToName.put(AudioManager.class, Context.ACCESSIBILITY_SERVICE);
+        mapSystemSericeClassToName.put(AudioManager.class, Context.AUDIO_SERVICE);
     }
 
 

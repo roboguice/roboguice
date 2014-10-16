@@ -4,7 +4,6 @@ import roboguice.RoboGuice;
 
 import android.app.Activity;
 import android.app.Application;
-import android.os.Bundle;
 
 /**
  * An activity that can be used to display a splash page while initializing the
@@ -25,8 +24,8 @@ public abstract class RoboSplashActivity extends Activity {
     protected int minDisplayMs = (int) DEFAULT_SPLASH_DELAY_MS;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onStart() {
+        super.onStart();
 
         final long start = System.currentTimeMillis();
 

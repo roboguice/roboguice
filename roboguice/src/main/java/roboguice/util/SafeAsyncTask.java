@@ -100,7 +100,10 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
         return future.cancel(mayInterruptIfRunning);
     }
-
+    
+    public boolean isCancelled(){
+        return future == null ? false : future.isCancelled();
+    }
 
     /**
      * @throws Exception, captured on passed to onException() if present.
@@ -142,7 +145,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
     protected void onThrowable( Throwable t ) throws RuntimeException {
         Log.e("roboguice", "Throwable caught during background processing", t);
     }
-    
+
     /**
      * @throws RuntimeException, ignored
      */

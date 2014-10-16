@@ -44,6 +44,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Application;
+import android.app.DownloadManager;
 import android.app.KeyguardManager;
 import android.app.NotificationManager;
 import android.app.SearchManager;
@@ -121,6 +122,9 @@ public class DefaultRoboModule extends AbstractModule {
         mapSystemSericeClassToName.put(SensorManager.class, Context.SENSOR_SERVICE);
         mapSystemSericeClassToName.put(TelephonyManager.class, Context.TELEPHONY_SERVICE);
         mapSystemSericeClassToName.put(AudioManager.class, Context.AUDIO_SERVICE);
+        if( VERSION.SDK_INT>=Build.VERSION_CODES.GINGERBREAD ) {
+            mapSystemSericeClassToName.put(DownloadManager.class, Context.DOWNLOAD_SERVICE);
+        }
     }
 
 

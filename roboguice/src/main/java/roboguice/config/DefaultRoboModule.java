@@ -150,7 +150,8 @@ public class DefaultRoboModule extends AbstractModule {
 
         // ContextSingleton bindings
         bindScope(ContextSingleton.class, contextScope);
-        bind(ContextScope.class).toInstance(contextScope);
+        //we need to super bind as we inject the scope by code only, not by annotations
+        superbind(ContextScope.class).toInstance(contextScope);
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
         bind(Context.class).toProvider(NullProvider.<Context>instance()).in(ContextSingleton.class);
         bind(Activity.class).toProvider(NullProvider.<Activity>instance()).in(ContextSingleton.class);

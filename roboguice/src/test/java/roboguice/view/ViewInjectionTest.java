@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 
 @RunWith(RobolectricTestRunner.class)
 public class ViewInjectionTest {
-
+    
     @Test
     public void shouldInjectViewsIntoActivitiesAndViews() {
         final C activity = Robolectric.buildActivity(C.class).create().get();

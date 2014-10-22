@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.google.inject.extensions</groupId>
     <artifactId>extensions-parent</artifactId>
-    <version>4.0-blender-SNAPSHOT</version>
+    <version>3.0</version>
   </parent>
 
   <artifactId>guice-spring</artifactId>

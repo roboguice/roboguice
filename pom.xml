@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.roboguice</groupId>
 	<artifactId>roboguice-aggregator</artifactId>
 	<name>Aggregator</name>
-	<version>3.0</version>
+	<version>3.0-alpha-6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<prerequisites>
@@ -28,7 +29,7 @@
 		<url>git:ssh://git@github.com/roboguice/roboguice.git</url>
 		<connection>scm:git:ssh://github.com/roboguice/roboguice.git</connection>
 		<developerConnection>scm:git:ssh://github.com/roboguice/roboguice.git</developerConnection>
-		<tag>roboguice-aggregator-3.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<properties>
@@ -50,7 +51,7 @@
 		<android-platform.version>4.1.1.4</android-platform.version>
 		<android-map.version>7_r1</android-map.version>
 		<android-build.version>19</android-build.version>
-		<guice.version>3.0</guice.version>
+		<guice.version>4.0-blender-SNAPSHOT</guice.version>
 
 		<!--LIBRARIES -->
 		<android-map.version>7_r1</android-map.version>

@@ -13,6 +13,7 @@
 
   <groupId>com.google.inject.extensions</groupId>
   <artifactId>extensions-parent</artifactId>
+  <version>3.0</version>
 
   <name>Google Guice - Extensions</name>
 
@@ -121,4 +122,8 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>roboguice-aggregator-3.0</tag>
+  </scm>
 </project>

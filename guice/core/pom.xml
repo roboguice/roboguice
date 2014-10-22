@@ -10,6 +10,7 @@
   </parent>
 
   <artifactId>guice</artifactId>
+  <version>3.0</version>
 
   <name>Google Guice - Core Library</name>
 
@@ -331,4 +332,8 @@
       </build>
     </profile>
   </profiles>
+
+  <scm>
+    <tag>roboguice-aggregator-3.0</tag>
+  </scm>
 </project>

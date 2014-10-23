@@ -32,3 +32,6 @@ local.properties
 .gradle/
 build/
 roboguice-plugin/
+
+#Others
+CHANGELOG.md~

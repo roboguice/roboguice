@@ -242,6 +242,13 @@
 						</goals>
 						<configuration>
 							<minimizeJar>true</minimizeJar>
+							<relocations>
+				                <relocation>
+				                  <!-- guava -->
+				                  <pattern>com.google.common</pattern>
+				                  <shadedPattern>org.roboguice.shaded.goole.common</shadedPattern>
+				                </relocation>
+   				            </relocations>
 						</configuration>
 					</execution>
 				</executions>

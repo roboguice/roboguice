@@ -321,9 +321,6 @@
 		<profile>
 			<!-- To build Guice fork as well -->
 			<id>guice</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
 			<modules>
 				<module>guice</module>
 			</modules>

@@ -35,7 +35,7 @@ It works, and people are using it. Why not give it a spin?
             <br></a>LinkedIn Pulse
         </td>
         <td width="72" align="center">
-            <a title="Groupon" href="http://market.android.com/details?id=com.groupon" rel="nofollow"><img src="https://lh3.ggpht.com/nXp3U0RvBFXE-dAyADHiWTX5zhpojXDy0nEboqP8bmt1hf8Up50Qa8SztQvxMPxw0eE=w300" width="72" height="72"></a><br>
+            <a title="Groupon" href="http://market.android.com/details?id=com.groupon" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/groupon.png" width="72" height="72"></a><br>
             <br>
             Groupon
         </td>

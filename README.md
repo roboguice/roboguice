@@ -29,7 +29,7 @@ It works, and people are using it. Why not give it a spin?
 <table>
     <tr>
         <td width="72" align="center">
-            <a title="Facebook Messenger" href="http://market.android.com/details?id=com.facebook.orca" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/fb-messenger.png" width="72" height="72"></a><br>
+            <a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/skype.png" width="72" height="72"></a><br>
             <br>
             Facebook Messenger
         </td>

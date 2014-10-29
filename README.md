@@ -1,11 +1,8 @@
-RoboGuice [![Build Status on Travis:](https://travis-ci.org/roboguice/roboguice.png)](https://travis-ci.org/roboguice/roboguice) [![Maven Central](https://raw.githubusercontent.com/roboguice/roboguice/master/assets/rg-maven-badge.png)](http://search.maven.org/#artifactdetails%7Corg.roboguice%7Croboguice%7C3.0%7Cpom)
+<img src="http://f.cl.ly/items/1G3K1n2L3g452n3i1M2q/roboguice-200px.png" align="left" />
+### Google Guice on Android, version 3.0
+[![Build Status on Travis:](https://travis-ci.org/roboguice/roboguice.png)](https://travis-ci.org/roboguice/roboguice) [![Maven Central](https://raw.githubusercontent.com/roboguice/roboguice/master/assets/rg-maven-badge.png)](http://search.maven.org/#artifactdetails%7Corg.roboguice%7Croboguice%7C3.0%7Cpom)
 <!-- Restore badge after bug fix in heroku https://github.com/jirutka/maven-badges/issues/2 or version update
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice)-->
-========= 
-
-<img src="http://f.cl.ly/items/1G3K1n2L3g452n3i1M2q/roboguice-200px.png" align="left" />
-
-### Google Guice on Android
 
 RoboGuice 3 smoothes out some of the wrinkles in your Android development experience and makes things simple and fun. Do you always forget to check for null when you getIntent().getExtras()? RoboGuice 3 will help you. Think casting findViewById() to a TextView shouldn’t be necessary? RoboGuice 3 is on it.
 
@@ -29,23 +26,23 @@ It works, and people are using it. Why not give it a spin?
 <table>
     <tr>
         <td width="72" align="center">
-            <a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/skype.png" width="72" height="72"></a><br>
+            <a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="https://raw.github.com/wiki/roboguice/roboguice/images/skype.png" width="72" height="72"></a><br>
             <br>
-            Facebook Messenger
+            Skype
         </td>
         <td width="72" align="center">
-            <a title="Pulse" href="https://market.android.com/details?id=com.alphonso.pulse" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/pulse.png" width="72" height="72"><br>
-            <br></a>Pulse
+            <a title="LinkedIn Pulse" href="https://market.android.com/details?id=com.alphonso.pulse" rel="nofollow"><img src="https://lh5.ggpht.com/Esh_RIyitVbyb1QsXsMOwlUHcqJgRh6aduk1qUBNwKiJqeeVILIasJ5knAx2iLKtMFY=w300" width="72" height="72"><br>
+            <br></a>LinkedIn Pulse
         </td>
         <td width="72" align="center">
-            <a title="Groupon" href="http://market.android.com/details?id=com.groupon" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/groupon.png" width="72" height="72"></a><br>
+            <a title="Groupon" href="http://market.android.com/details?id=com.groupon" rel="nofollow"><img src="https://lh3.ggpht.com/nXp3U0RvBFXE-dAyADHiWTX5zhpojXDy0nEboqP8bmt1hf8Up50Qa8SztQvxMPxw0eE=w300" width="72" height="72"></a><br>
             <br>
             Groupon
         </td>
         <td width="72" align="center">
-            <a title="Google Docs" href="https://market.android.com/details?id=com.google.android.apps.docs" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/google-docs.png" width="72" height="72"></a><br>
+            <a title="Nike+" href="https://play.google.com/store/apps/details?id=com.nike.plusgps" rel="nofollow"><img src="https://lh3.ggpht.com/S8wXaKwGEJYlPgbfPIkwtleLVcfn1ED0ifUmkZ912uu9I-xhuW0tfPVvrwbITILs9t2p=w300" width="72" height="72"></a><br>
             <br>
-            Google Docs
+            Nike+
         </td>
     </tr>
     <tr>
@@ -131,15 +128,14 @@ It works, and people are using it. Why not give it a spin?
             <a title="Bento" href="https://play.google.com/store/apps/details?id=br.gov.rs.bentogoncalves.guia" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/bento.png" width="72" height="72"></a>Bento
         </td>
 		<td width="72" align="center">
-		    <a title="Gymglish" href="https://play.google.com/store/apps/details?id=com.gymglish.ggmobile" rel="nofollow"><img src="https://lh5.ggpht.com/2zBbA4WgY_yZ2HBSPuvbeuva0-NDDHBQLdjcomlyQ4zhpUIgcrDpoP7Z5YEI1if1Dg=w300-rw" width="72" height="72"></a>Gymglish
+		    <a title="Gymglish" href="https://play.google.com/store/apps/details?id=com.gymglish.ggmobile" rel="nofollow"><img src="https://lh3.ggpht.com/aZoBtUmHo0IFdyBoCQwIwSuG_8etXco-K5s77n1Kw90PAmZ4HQieB7-jJ-WQ1zO3vx06=w300" width="72" height="72"></a>Gymglish
+		</td>
+    </tr>
+    <tr>
+		<td width="72" align="center">
+		    <a title="Starbucks" href="https://play.google.com/store/apps/details?id=com.starbucks.mobilecard" rel="nofollow"><img src="https://lh4.ggpht.com/m0b74lPyYDhg_pxyBQMEeYU6hBbLBPuzyLHjCErYtJDn5Oy4nsnVsGlSZyXFj9XTrPU=w300" width="72" height="72"></a>Starbucks
 		</td>
     </tr>
 </table>
 
 
-<p>
-YourKit is kindly supporting Roboguice open source project with its full-featured Java Profiler.
-YourKit, LLC is the creator of innovative and intelligent tools for profiling
-Java and .NET applications. Take a look at YourKit's leading software products:
-<a href="http://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a> and
-<a href="http://www.yourkit.com/.net/profiler/index.jsp">YourKit .NET Profiler</a>.

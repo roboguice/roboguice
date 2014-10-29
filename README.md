@@ -1,4 +1,4 @@
-RoboGuice [![Build Status on Travis:](https://travis-ci.org/roboguice/roboguice.png)](https://travis-ci.org/roboguice/roboguice) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice/badge.svg)](http://search.maven.org/#artifactdetails%7Corg.roboguice%7Croboguice%7C3.0%7Cpom)
+RoboGuice [![Build Status on Travis:](https://travis-ci.org/roboguice/roboguice.png)](https://travis-ci.org/roboguice/roboguice) [![Maven Central](https://raw.githubusercontent.com/roboguice/roboguice/master/assets/rg-maven-badge.png)](http://search.maven.org/#artifactdetails%7Corg.roboguice%7Croboguice%7C3.0%7Cpom)
 <!-- Restore badge after bug fix in heroku https://github.com/jirutka/maven-badges/issues/2 or version update
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice)-->
 

@@ -34,18 +34,18 @@ It works, and people are using it. Why not give it a spin?
             Skype
         </td>
         <td width="72" align="center">
-            <a title="Pulse" href="https://market.android.com/details?id=com.alphonso.pulse" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/pulse.png" width="72" height="72"><br>
-            <br></a>Pulse
+            <a title="LinkedIn Pulse" href="https://market.android.com/details?id=com.alphonso.pulse" rel="nofollow"><img src="https://lh5.ggpht.com/Esh_RIyitVbyb1QsXsMOwlUHcqJgRh6aduk1qUBNwKiJqeeVILIasJ5knAx2iLKtMFY=w300" width="72" height="72"><br>
+            <br></a>LinkedIn Pulse
         </td>
         <td width="72" align="center">
-            <a title="Groupon" href="http://market.android.com/details?id=com.groupon" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/groupon.png" width="72" height="72"></a><br>
+            <a title="Groupon" href="http://market.android.com/details?id=com.groupon" rel="nofollow"><img src="https://lh3.ggpht.com/nXp3U0RvBFXE-dAyADHiWTX5zhpojXDy0nEboqP8bmt1hf8Up50Qa8SztQvxMPxw0eE=w300" width="72" height="72"></a><br>
             <br>
             Groupon
         </td>
         <td width="72" align="center">
-            <a title="Google Docs" href="https://market.android.com/details?id=com.google.android.apps.docs" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/google-docs.png" width="72" height="72"></a><br>
+            <a title="Nike+" href="https://play.google.com/store/apps/details?id=com.nike.plusgps" rel="nofollow"><img src="https://lh3.ggpht.com/S8wXaKwGEJYlPgbfPIkwtleLVcfn1ED0ifUmkZ912uu9I-xhuW0tfPVvrwbITILs9t2p=w300" width="72" height="72"></a><br>
             <br>
-            Google Docs
+            Nike+
         </td>
     </tr>
     <tr>
@@ -137,9 +137,3 @@ It works, and people are using it. Why not give it a spin?
 </table>
 
 
-<p>
-YourKit is kindly supporting Roboguice open source project with its full-featured Java Profiler.
-YourKit, LLC is the creator of innovative and intelligent tools for profiling
-Java and .NET applications. Take a look at YourKit's leading software products:
-<a href="http://www.yourkit.com/java/profiler/index.jsp">YourKit Java Profiler</a> and
-<a href="http://www.yourkit.com/.net/profiler/index.jsp">YourKit .NET Profiler</a>.

@@ -131,7 +131,7 @@ It works, and people are using it. Why not give it a spin?
             <a title="Bento" href="https://play.google.com/store/apps/details?id=br.gov.rs.bentogoncalves.guia" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/bento.png" width="72" height="72"></a>Bento
         </td>
 		<td width="72" align="center">
-		    <a title="Gymglish" href="https://play.google.com/store/apps/details?id=com.gymglish.ggmobile" rel="nofollow"><img src="https://lh5.ggpht.com/2zBbA4WgY_yZ2HBSPuvbeuva0-NDDHBQLdjcomlyQ4zhpUIgcrDpoP7Z5YEI1if1Dg=w300-rw" width="72" height="72"></a>Gymglish
+		    <a title="Gymglish" href="https://play.google.com/store/apps/details?id=com.gymglish.ggmobile" rel="nofollow"><img src="https://lh3.ggpht.com/aZoBtUmHo0IFdyBoCQwIwSuG_8etXco-K5s77n1Kw90PAmZ4HQieB7-jJ-WQ1zO3vx06=w300" width="72" height="72"></a>Gymglish
 		</td>
     </tr>
 </table>

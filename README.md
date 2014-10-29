@@ -26,7 +26,7 @@ It works, and people are using it. Why not give it a spin?
 <table>
     <tr>
         <td width="72" align="center">
-            <a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="https://lh5.ggpht.com/1CxNUEdzrREikWZoaHIU5J63x2gOxTb7R-ZIbJd51uPBFt0jUj8AX2bMOhKiIBcuAqtH=w300" width="72" height="72"></a><br>
+            <a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="https://raw.github.com/wiki/roboguice/roboguice/images/skype.png" width="72" height="72"></a><br>
             <br>
             Skype
         </td>

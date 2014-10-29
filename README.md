@@ -29,9 +29,9 @@ It works, and people are using it. Why not give it a spin?
 <table>
     <tr>
         <td width="72" align="center">
-            <a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/skype.png" width="72" height="72"></a><br>
+            <a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="https://lh5.ggpht.com/1CxNUEdzrREikWZoaHIU5J63x2gOxTb7R-ZIbJd51uPBFt0jUj8AX2bMOhKiIBcuAqtH=w300" width="72" height="72"></a><br>
             <br>
-            Facebook Messenger
+            Skype
         </td>
         <td width="72" align="center">
             <a title="Pulse" href="https://market.android.com/details?id=com.alphonso.pulse" rel="nofollow"><img src="http://donnfelker.github.com/roboguice/images/app-icons/pulse.png" width="72" height="72"><br>

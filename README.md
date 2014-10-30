@@ -23,115 +23,115 @@ It works, and people are using it. Why not give it a spin?
 <br/>
 
 <!-- DO YOU WANT TO SEE YOUR APP LISTED HERE?
-  -- Download your app icon from Google Play, add it to the assets directory,
-  -- then modify this README.md file and submit a PR with your changes -->
+   - Download your app icon from Google Play, add it to the assets directory,
+   - then modify this README.md file and submit a PR with your changes. -->
 <table>
 	<tr>
-		<td width="72" align="center">
-			<a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/skype.png" width="72" height="72"></a><br>
+		<td width="100" align="center">
+			<a title="Skype" href="http://market.android.com/details?id=com.skype.raider" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/skype.png" width="100" height="100"></a><br>
 			<br>
 			Skype
 		</td>
-		<td width="72" align="center">
-			<a title="LinkedIn Pulse" href="https://market.android.com/details?id=com.alphonso.pulse" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/pulse.png" width="72" height="72"><br>
+		<td width="100" align="center">
+			<a title="LinkedIn Pulse" href="https://market.android.com/details?id=com.alphonso.pulse" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/pulse.png" width="100" height="100"><br>
 			<br></a> LinkedIn Pulse
 		</td>
-		<td width="72" align="center">
-			<a title="Groupon" href="http://market.android.com/details?id=com.groupon" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/groupon.png" width="72" height="72"></a><br>
+		<td width="100" align="center">
+			<a title="Groupon" href="http://market.android.com/details?id=com.groupon" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/groupon.png" width="100" height="100"></a><br>
 			<br>
 			Groupon
 		</td>
-		<td width="72" align="center">
-			<a title="Nike+" href="https://play.google.com/store/apps/details?id=com.nike.plusgps" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/nike.png" width="72" height="72"></a><br>
+		<td width="100" align="center">
+			<a title="Nike+" href="https://play.google.com/store/apps/details?id=com.nike.plusgps" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/nike.png" width="100" height="100"></a><br>
 			<br>
 			Nike+
 		</td>
-		<td width="72" align="center">
-			<a title="OpenTable" href="http://market.android.com/details?id=com.opentable" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/opentable.png" width="72" height="72"></a><br>
+		<td width="100" align="center">
+			<a title="OpenTable" href="http://market.android.com/details?id=com.opentable" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/opentable.png" width="100" height="100"></a><br>
 			<br>
 			OpenTable
 		</td>
 	</tr>
 	<tr>
-		<td width="72" align="center">
-			<a title="TripIt!" href="http://market.android.com/details?id=com.tripit" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/tripit.png" width="72" height="72"></a>TripIt!
+		<td width="100" align="center">
+			<a title="TripIt!" href="http://market.android.com/details?id=com.tripit" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/tripit.png" width="100" height="100"></a>TripIt!
 		</td>
-		<td width="72" align="center">
-			<a title="SwiftKey" href="http://market.android.com/details?id=com.touchtype.swiftkey" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/swiftkey.png" width="72" height="72"></a>SwiftKey
+		<td width="100" align="center">
+			<a title="SwiftKey" href="http://market.android.com/details?id=com.touchtype.swiftkey" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/swiftkey.png" width="100" height="100"></a>SwiftKey
 		</td>
-		<td width="72" align="center">
-			<a title="Video to Facebook" href="https://market.android.com/details?id=net.eworldui.videouploader" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/video-to-facebook.png" width="72" height="72"></a>Video to Facebook
+		<td width="100" align="center">
+			<a title="Video to Facebook" href="https://market.android.com/details?id=net.eworldui.videouploader" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/video-to-facebook.png" width="100" height="100"></a>Video to Facebook
 		</td>
-		<td width="72" align="center">
-			<a title="Cars.com" href="http://market.android.com/details?id=com.cars.android" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/cars.png" width="72" height="72"></a>Cars.com
+		<td width="100" align="center">
+			<a title="Cars.com" href="http://market.android.com/details?id=com.cars.android" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/cars.png" width="100" height="100"></a>Cars.com
 		</td>
-		<td width="72" align="center">
-			<a title="Android Shuffle" href="https://market.android.com/details?id=org.dodgybits.android.shuffle" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/android-shuffle.png" width="72" height="72"></a>Android Shuffle
-		</td>
-	</tr>
-	<tr>
-		<td width="72" align="center">
-			<a title="GeoBeagle" href="https://market.android.com/details?id=com.google.code.geobeagle" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/geobeagle.png" width="72" height="72"></a>GeoBeagle
-		</td>
-		<td width="72" align="center">
-			<a title="Crossfit Travel" href="http://market.android.com/details?id=com.agilevent.crossfittravel" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/crossfit.png" width="72" height="72"></a>Crossfit Travel
-		</td>
-		<td width="72" align="center">
-			<a title="Agit (Android Git)" href="https://market.android.com/details?id=com.madgag.agit" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/agit.png" width="72" height="72"></a>Agit (Android Git)
-		</td>
-		<td width="72" align="center">
-			<a title="Digg" href="http://www.digg.com" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/digg.png" width="72" height="72"></a>Digg
-		</td>
-		<td width="72" align="center">
-			<a title="TaskBomb" href="https://market.android.com/details?id=org.androidideas.taskbomb" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/taskbomb.png" width="72" height="72"></a>TaskBomb
+		<td width="100" align="center">
+			<a title="Android Shuffle" href="https://market.android.com/details?id=org.dodgybits.android.shuffle" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/android-shuffle.png" width="100" height="100"></a>Android Shuffle
 		</td>
 	</tr>
 	<tr>
-		<td width="72" align="center">
-			<a title="Wifi Syncr" href="https://market.android.com/details?id=com.appricoo.android.tools.wifisyncr" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/wifi-syncer.png" width="72" height="72"></a>Wifi Syncr
+		<td width="100" align="center">
+			<a title="GeoBeagle" href="https://market.android.com/details?id=com.google.code.geobeagle" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/geobeagle.png" width="100" height="100"></a>GeoBeagle
 		</td>
-		<td width="72" align="center">
-			<a title="CardStar" href="https://market.android.com/details?id=com.cardstar.android" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/cardstar.png" width="72" height="72"></a>CardStar
+		<td width="100" align="center">
+			<a title="Crossfit Travel" href="http://market.android.com/details?id=com.agilevent.crossfittravel" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/crossfit.png" width="100" height="100"></a>Crossfit Travel
 		</td>
-		<td width="72" align="center">
-			<a title="MyEpisodes Manager" href="https://market.android.com/details?id=eu.vranckaert.episodeWatcher" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/my-episodes-manager.png" width="72" height="72"></a>MyEpisodes Manager
+		<td width="100" align="center">
+			<a title="Agit (Android Git)" href="https://market.android.com/details?id=com.madgag.agit" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/agit.png" width="100" height="100"></a>Agit (Android Git)
 		</td>
-		<td width="72" align="center">
-			<a title="WorkTime" href="https://market.android.com/details?id=eu.vranckaert.worktime" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/worktime.png" width="72" height="72"></a>WorkTime
+		<td width="100" align="center">
+			<a title="Digg" href="http://www.digg.com" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/digg.png" width="100" height="100"></a>Digg
 		</td>
-		<td width="72" align="center">
-			<a title="Bartab" href="https://market.android.com/details?id=com.webtab.bartab.droid" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/bartab.png" width="72" height="72"></a>Bartab
-		</td>
-	</tr>
-	<tr>
-		<td width="72" align="center">
-			<a title="CallerID" href="https://market.android.com/details?id=com.integralblue.callerid" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/callerid.png" width="72" height="72"></a>CallerID
-		</td>
-		<td width="72" align="center">
-			<a title="ChessMates" href="https://play.google.com/store/apps/details?id=com.aptitudelabs.chess" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/chessmates.png" width="72" height="72"></a>ChessMates
-		</td>
-		<td width="72" align="center">
-			<a title="Moola" href="https://play.google.com/store/apps/details?id=nefarious.apps.moolapro" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/moola.png" width="72" height="72"></a>Moola
-		</td>
-		<td width="72" align="center">
-			<a title="Crunchyroll" href="https://play.google.com/store/apps/details?id=com.crunchyroll.crunchyroid" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/crunchyroll.png" width="72" height="72"></a>Crunchyroll
-		</td>
-		<td width="72" align="center">
-			<a title="MOTOACTV" href="https://play.google.com/store/apps/details?id=com.motorola.notification" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/motoactv.png" width="72" height="72"></a>MOTOACTV
+		<td width="100" align="center">
+			<a title="TaskBomb" href="https://market.android.com/details?id=org.androidideas.taskbomb" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/taskbomb.png" width="100" height="100"></a>TaskBomb
 		</td>
 	</tr>
 	<tr>
-		<td width="72" align="center">
-			<a title="Zynk" href="https://play.google.com/store/apps/details?id=me.zynk.zynkcorp" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/zynk.png" width="72" height="72"></a>Zynk
+		<td width="100" align="center">
+			<a title="Wifi Syncr" href="https://market.android.com/details?id=com.appricoo.android.tools.wifisyncr" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/wifi-syncer.png" width="100" height="100"></a>Wifi Syncr
 		</td>
-		<td width="72" align="center">
-			<a title="Bento" href="https://play.google.com/store/apps/details?id=br.gov.rs.bentogoncalves.guia" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/bento.png" width="72" height="72"></a>Bento
+		<td width="100" align="center">
+			<a title="CardStar" href="https://market.android.com/details?id=com.cardstar.android" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/cardstar.png" width="100" height="100"></a>CardStar
 		</td>
-		<td width="72" align="center">
-			<a title="Gymglish" href="https://play.google.com/store/apps/details?id=com.gymglish.ggmobile" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/gymglish.png" width="72" height="72"></a>Gymglish
+		<td width="100" align="center">
+			<a title="MyEpisodes Manager" href="https://market.android.com/details?id=eu.vranckaert.episodeWatcher" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/my-episodes-manager.png" width="100" height="100"></a>MyEpisodes Manager
 		</td>
-		<td width="72" align="center">
-			<a title="Starbucks" href="https://play.google.com/store/apps/details?id=com.starbucks.mobilecard" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/starbucks.png" width="72" height="72"></a>Starbucks
+		<td width="100" align="center">
+			<a title="WorkTime" href="https://market.android.com/details?id=eu.vranckaert.worktime" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/worktime.png" width="100" height="100"></a>WorkTime
+		</td>
+		<td width="100" align="center">
+			<a title="Bartab" href="https://market.android.com/details?id=com.webtab.bartab.droid" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/bartab.png" width="100" height="100"></a>Bartab
+		</td>
+	</tr>
+	<tr>
+		<td width="100" align="center">
+			<a title="CallerID" href="https://market.android.com/details?id=com.integralblue.callerid" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/callerid.png" width="100" height="100"></a>CallerID
+		</td>
+		<td width="100" align="center">
+			<a title="ChessMates" href="https://play.google.com/store/apps/details?id=com.aptitudelabs.chess" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/chessmates.png" width="100" height="100"></a>ChessMates
+		</td>
+		<td width="100" align="center">
+			<a title="Moola" href="https://play.google.com/store/apps/details?id=nefarious.apps.moolapro" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/moola.png" width="100" height="100"></a>Moola
+		</td>
+		<td width="100" align="center">
+			<a title="Crunchyroll" href="https://play.google.com/store/apps/details?id=com.crunchyroll.crunchyroid" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/crunchyroll.png" width="100" height="100"></a>Crunchyroll
+		</td>
+		<td width="100" align="center">
+			<a title="MOTOACTV" href="https://play.google.com/store/apps/details?id=com.motorola.notification" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/motoactv.png" width="100" height="100"></a>MOTOACTV
+		</td>
+	</tr>
+	<tr>
+		<td width="100" align="center">
+			<a title="Zynk" href="https://play.google.com/store/apps/details?id=me.zynk.zynkcorp" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/zynk.png" width="100" height="100"></a>Zynk
+		</td>
+		<td width="100" align="center">
+			<a title="Bento" href="https://play.google.com/store/apps/details?id=br.gov.rs.bentogoncalves.guia" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/bento.png" width="100" height="100"></a>Bento
+		</td>
+		<td width="100" align="center">
+			<a title="Gymglish" href="https://play.google.com/store/apps/details?id=com.gymglish.ggmobile" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/gymglish.png" width="100" height="100"></a>Gymglish
+		</td>
+		<td width="100" align="center">
+			<a title="Starbucks" href="https://play.google.com/store/apps/details?id=com.starbucks.mobilecard" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/starbucks.png" width="100" height="100"></a>Starbucks
 		</td>
 	</tr>
 </table>

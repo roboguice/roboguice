@@ -42,13 +42,13 @@ It works, and people are using it. Why not give it a spin?
 			<br>
 			Nike+
 		</td>
-	</tr>
-	<tr>
 		<td width="72" align="center">
 			<a title="OpenTable" href="http://market.android.com/details?id=com.opentable" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/opentable.png" width="72" height="72"></a><br>
 			<br>
 			OpenTable
 		</td>
+	</tr>
+	<tr>
 		<td width="72" align="center">
 			<a title="TripIt!" href="http://market.android.com/details?id=com.tripit" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/tripit.png" width="72" height="72"></a>TripIt!
 		</td>
@@ -58,22 +58,20 @@ It works, and people are using it. Why not give it a spin?
 		<td width="72" align="center">
 			<a title="Video to Facebook" href="https://market.android.com/details?id=net.eworldui.videouploader" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/video-to-facebook.png" width="72" height="72"></a>Video to Facebook
 		</td>
-	</tr>
-	<tr>
 		<td width="72" align="center">
 			<a title="Cars.com" href="http://market.android.com/details?id=com.cars.android" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/cars.png" width="72" height="72"></a>Cars.com
 		</td>
 		<td width="72" align="center">
 			<a title="Android Shuffle" href="https://market.android.com/details?id=org.dodgybits.android.shuffle" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/android-shuffle.png" width="72" height="72"></a>Android Shuffle
 		</td>
+	</tr>
+	<tr>
 		<td width="72" align="center">
 			<a title="GeoBeagle" href="https://market.android.com/details?id=com.google.code.geobeagle" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/geobeagle.png" width="72" height="72"></a>GeoBeagle
 		</td>
 		<td width="72" align="center">
 			<a title="Crossfit Travel" href="http://market.android.com/details?id=com.agilevent.crossfittravel" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/crossfit.png" width="72" height="72"></a>Crossfit Travel
 		</td>
-	</tr>
-	<tr>
 		<td width="72" align="center">
 			<a title="Agit (Android Git)" href="https://market.android.com/details?id=com.madgag.agit" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/agit.png" width="72" height="72"></a>Agit (Android Git)
 		</td>
@@ -83,11 +81,11 @@ It works, and people are using it. Why not give it a spin?
 		<td width="72" align="center">
 			<a title="TaskBomb" href="https://market.android.com/details?id=org.androidideas.taskbomb" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/taskbomb.png" width="72" height="72"></a>TaskBomb
 		</td>
+	</tr>
+	<tr>
 		<td width="72" align="center">
 			<a title="Wifi Syncr" href="https://market.android.com/details?id=com.appricoo.android.tools.wifisyncr" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/wifi-syncer.png" width="72" height="72"></a>Wifi Syncr
 		</td>
-	</tr>
-	<tr>
 		<td width="72" align="center">
 			<a title="CardStar" href="https://market.android.com/details?id=com.cardstar.android" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/cardstar.png" width="72" height="72"></a>CardStar
 		</td>
@@ -114,11 +112,11 @@ It works, and people are using it. Why not give it a spin?
 		<td width="72" align="center">
 			<a title="Crunchyroll" href="https://play.google.com/store/apps/details?id=com.crunchyroll.crunchyroid" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/crunchyroll.png" width="72" height="72"></a>Crunchyroll
 		</td>
-	</tr>
-	<tr>
 		<td width="72" align="center">
 			<a title="MOTOACTV" href="https://play.google.com/store/apps/details?id=com.motorola.notification" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/motoactv.png" width="72" height="72"></a>MOTOACTV
 		</td>
+	</tr>
+	<tr>
 		<td width="72" align="center">
 			<a title="Zynk" href="https://play.google.com/store/apps/details?id=me.zynk.zynkcorp" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/zynk.png" width="72" height="72"></a>Zynk
 		</td>
@@ -128,8 +126,6 @@ It works, and people are using it. Why not give it a spin?
 		<td width="72" align="center">
 			<a title="Gymglish" href="https://play.google.com/store/apps/details?id=com.gymglish.ggmobile" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/gymglish.png" width="72" height="72"></a>Gymglish
 		</td>
-	</tr>
-	<tr>
 		<td width="72" align="center">
 			<a title="Starbucks" href="https://play.google.com/store/apps/details?id=com.starbucks.mobilecard" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/starbucks.png" width="72" height="72"></a>Starbucks
 		</td>

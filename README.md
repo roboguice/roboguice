@@ -21,6 +21,10 @@ It works, and people are using it. Why not give it a spin?
 <br/>
 <br/>
 <br/>
+
+<!-- DO YOU WANT TO SEE YOUR APP LISTED HERE?
+  -- Download your app icon from Google Play, add it to the assets directory,
+  -- then modify this README.md file and submit a PR with your changes -->
 <table>
 	<tr>
 		<td width="72" align="center">

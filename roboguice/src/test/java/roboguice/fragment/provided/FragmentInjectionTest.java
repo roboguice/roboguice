@@ -1,9 +1,18 @@
 package roboguice.fragment.provided;
 
+import static android.os.Build.VERSION_CODES.HONEYCOMB;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
+import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.widget.LinearLayout;
+import com.google.inject.AbstractModule;
+import org.easymock.EasyMock;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -11,7 +20,9 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ActivityController;
 
+import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
+import roboguice.event.EventManager;
 import roboguice.inject.InjectView;
 
 import com.google.inject.Inject;
@@ -32,7 +43,7 @@ public class FragmentInjectionTest {
     public void shadowActivityGetApplicationContextShouldNotReturnNull() {
         assertNotNull(new Activity().getApplicationContext());
     }
-	
+
     @Test
     public void shouldInjectPojosAndViewsIntoFragments() {
         final ActivityA activity = Robolectric.buildActivity(ActivityA.class).create().start().resume().get();
@@ -86,8 +97,6 @@ public class FragmentInjectionTest {
         assertThat(activity2.fragmentRef.v, equalTo(activity2.fragmentRef.ref));
     }
 
-
-
     public static class ActivityA extends RoboActivity {
         FragmentA fragmentRef;
 
@@ -98,7 +107,6 @@ public class FragmentInjectionTest {
             fragmentRef = new FragmentA();
             fragmentRef.onAttach(this);
             fragmentRef.onCreate(null);
-
         }
 
         public static class FragmentA extends RoboFragment {
@@ -111,11 +119,13 @@ public class FragmentInjectionTest {
             public void onCreate(Bundle savedInstanceState) {
                 super.onCreate(savedInstanceState);
             }
-            
+
             @Override
             public void onViewCreated(View view, Bundle savedInstanceState) {
                 super.onViewCreated(view, savedInstanceState);
             }
+
+            @TargetApi(HONEYCOMB)
             @Override
             public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 ref = new View(getActivity());
@@ -123,7 +133,6 @@ public class FragmentInjectionTest {
                 return ref;
             }
         }
-
     }
 
 
@@ -144,7 +153,6 @@ public class FragmentInjectionTest {
             fragmentRef = new FragmentB();
             fragmentRef.onAttach(this);
             fragmentRef.onCreate(null);
-
         }
 
         public static class FragmentB extends RoboFragment {
@@ -152,6 +160,7 @@ public class FragmentInjectionTest {
 
             View viewRef;
 
+            @TargetApi(HONEYCOMB)
             @Override
             public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 viewRef = new View(getActivity());
@@ -159,7 +168,6 @@ public class FragmentInjectionTest {
                 return viewRef;
             }
         }
-
     }
 
     public static class ActivityC extends RoboActivity {
@@ -177,7 +185,6 @@ public class FragmentInjectionTest {
             fragmentRef = new FragmentC();
             fragmentRef.onAttach(this);
             fragmentRef.onCreate(null);
-
         }
 
         public static class FragmentC extends RoboFragment {
@@ -185,6 +192,7 @@ public class FragmentInjectionTest {
 
             View viewRef;
 
+            @TargetApi(HONEYCOMB)
             @Override
             public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 viewRef = new View(getActivity());
@@ -192,7 +200,6 @@ public class FragmentInjectionTest {
                 return viewRef;
             }
         }
-
     }
 
 
@@ -209,17 +216,6 @@ public class FragmentInjectionTest {
             fragmentRef.onCreate(null);
 
             setContentView(new FrameLayout(this));
-            
-        }
-
-        @Override
-        protected void onPause() {
-            super.onPause();
-        }
-
-        @Override
-        protected void onResume() {
-            super.onResume();
         }
 
         public static class FragmentD extends RoboFragment {
@@ -227,6 +223,7 @@ public class FragmentInjectionTest {
 
             View ref;
 
+            @TargetApi(HONEYCOMB)
             @Override
             public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
                 ref = new View(getActivity());
@@ -239,7 +236,5 @@ public class FragmentInjectionTest {
                 super.onCreate(savedInstanceState);
             }
         }
-
     }
-
 }

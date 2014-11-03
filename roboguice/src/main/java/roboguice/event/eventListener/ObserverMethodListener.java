@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 
 import roboguice.event.EventListener;
 import roboguice.event.eventListener.javaassist.RuntimeSupport;
-import roboguice.util.Ln;
+import roboguice.logging.Ln;
 
 /**
  * Observer Method Event Listener.  This class calls to the method on the given instance during onEvent().

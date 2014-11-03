@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>roboguice</artifactId>
-	<name>RoboGuice</name>
-	<description>A framework for using Google Guice dependency injection in Android.</description>
+	<artifactId>roboguice-log</artifactId>
+	<name>RoboGuice Log</name>
+	<description>Logging component of RoboGuice. Can be used standalone.</description>
 
 	<parent>
 		<groupId>org.roboguice</groupId>
@@ -28,11 +28,6 @@
 			<optional>true</optional>
 			<scope>provided</scope>
 		</dependency>
-    <dependency>
-      <groupId>org.roboguice</groupId>
-      <artifactId>roboguice-log</artifactId>
-      <version>${project.version}</version>
-    </dependency>
 		<dependency>
 			<groupId>com.google.android</groupId>
 			<artifactId>android</artifactId>
@@ -122,7 +117,8 @@
 						</goals>
 						<configuration>
 							<compilerArgs>
-								<arg>-AguiceAnnotationDatabasePackageName=roboguice</arg>
+								<arg>-AguiceAnnotationDatabasePackageName=roboguice.log</arg>
+								<arg>-AguiceUsesFragmentUtil=false</arg>
 							</compilerArgs>
 						</configuration>
 					</execution>
@@ -134,8 +130,9 @@
 						</goals>
 						<configuration>
 							<compilerArgs>
-								<arg>-AguiceAnnotationDatabasePackageName=testroboguice</arg>
-							</compilerArgs>
+								<arg>-AguiceAnnotationDatabasePackageName=testroboguice.log</arg>
+                <arg>-AguiceUsesFragmentUtil=false</arg>
+              </compilerArgs>
 						</configuration>
 					</execution>
 				</executions>

@@ -15,6 +15,7 @@ import org.robolectric.shadows.ShadowLooper;
 
 import android.os.Looper;
 import android.util.Log;
+import roboguice.logging.Ln;
 
 @RunWith(RobolectricTestRunner.class)
 public class AndroidCallableTest {

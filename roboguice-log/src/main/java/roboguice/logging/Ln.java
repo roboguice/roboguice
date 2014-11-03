@@ -1,5 +1,6 @@
-package roboguice.util;
+package roboguice.logging;
 
+import android.app.Application;
 import com.google.inject.Inject;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
@@ -47,7 +48,9 @@ import edu.umd.cs.findbugs.annotations.SuppressWarnings;
  * Ln.e( exception, "Error during some operation");
  * Ln.w( exception, "Error during %s operation", "some other");
  *
- *
+ * If you don't use RoboGuice core, you have to invoke {@link #initialize(Application)}
+ * to get all features of Ln. Otherwise, Ln will still work but won't
+ * provide all its logging capabilities.
  */
 @SuppressWarnings({"ImplicitArrayToString"})
 public final class Ln {
@@ -56,13 +59,22 @@ public final class Ln {
      * lnImpl is initially set to LnImpl() with sensible defaults, then replaced
      * by whatever binding you choose during guice static injection pass.
      */
-    @SuppressWarnings(value="MS_SHOULD_BE_FINAL")
+    @SuppressWarnings(value="MS_PKGPROTECT")
     @Inject(optional = true) protected static LnInterface lnImpl = new LnImpl();
 
 
 
     private Ln() {}
 
+    /**
+     * If you don't use RoboGuice core, you have to invoke this method
+     * to get all features of Ln. Otherwise, Ln will still work but won't
+     * provide all its logging capabilities.
+     * @param application the application where Ln will be used.
+     */
+    public static void initialize(Application application) {
+        lnImpl = new LnImpl(application);
+    }
 
 
     public static int v(Throwable t) {

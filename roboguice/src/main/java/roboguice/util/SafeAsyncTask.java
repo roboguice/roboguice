@@ -7,6 +7,8 @@ import java.util.concurrent.FutureTask;
 
 import android.os.Handler;
 import android.util.Log;
+import roboguice.logging.Ln;
+
 
 /**
  * A class similar but unrelated to android's {@link android.os.AsyncTask}.
@@ -20,7 +22,7 @@ import android.util.Log;
  * hard to add.
  *
  * If using your own executor, you must call future() to get a runnable you can execute.
- * 
+ *
  * @param <ResultT>
  */
 @Deprecated
@@ -100,7 +102,7 @@ public abstract class SafeAsyncTask<ResultT> implements Callable<ResultT> {
 
         return future.cancel(mayInterruptIfRunning);
     }
-    
+
     public boolean isCancelled(){
         return future == null ? false : future.isCancelled();
     }

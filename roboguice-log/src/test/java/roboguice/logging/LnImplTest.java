@@ -1,11 +1,11 @@
-package roboguice.util;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+package roboguice.logging;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class LnImplTest {
@@ -17,7 +17,7 @@ public class LnImplTest {
         final String expected = "Message: null";
         assertThat(new LnImpl().formatArgs(s, null), equalTo(expected));
     }
-    
+
     @Test
     public void shouldFormatArgs_whenArgsIs0Length() {
         // https://github.com/roboguice/roboguice/issues/223

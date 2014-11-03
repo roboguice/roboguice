@@ -28,9 +28,9 @@ import roboguice.inject.SharedPreferencesProvider;
 import roboguice.inject.SystemServiceProvider;
 import roboguice.inject.ViewListener;
 import roboguice.service.RoboService;
-import roboguice.util.Ln;
-import roboguice.util.LnImpl;
-import roboguice.util.LnInterface;
+import roboguice.logging.Ln;
+import roboguice.logging.LnImpl;
+import roboguice.logging.LnInterface;
 
 import com.google.inject.Provider;
 import com.google.inject.Provides;
@@ -93,8 +93,8 @@ import android.view.inputmethod.InputMethodManager;
 @SuppressWarnings("PMD")
 public class DefaultRoboModule extends AbstractModule {
     /**
-     * Allows to retrieve the global, inter-context {@link EventManager}.  
-     * you MUST get the global {@link EventManager} either via a field annotated with {@code @Inject @Named} 
+     * Allows to retrieve the global, inter-context {@link EventManager}.
+     * you MUST get the global {@link EventManager} either via a field annotated with {@code @Inject @Named}
      * or {@code getInjector.getInstance(key(EventManager.cass, Names.named())}.
      */
     public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";

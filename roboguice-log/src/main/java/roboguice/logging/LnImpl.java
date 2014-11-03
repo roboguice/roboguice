@@ -1,4 +1,4 @@
-package roboguice.util;
+package roboguice.logging;
 
 import java.util.Locale;
 
@@ -7,6 +7,7 @@ import com.google.inject.Inject;
 import android.app.Application;
 import android.content.pm.ApplicationInfo;
 import android.util.Log;
+import roboguice.util.Strings;
 
 public class LnImpl implements LnInterface {
 
@@ -223,7 +224,7 @@ public class LnImpl implements LnInterface {
 
         return tag;
     }
-    
+
     //protected for testing.
     protected String formatArgs(final String s, Object... args) {
         //this is a bit tricky : if args is null, it is passed to formatting
@@ -232,7 +233,7 @@ public class LnImpl implements LnInterface {
         if( args != null && args.length == 0 ) {
             return s;
         } else {
-            return String.format(s,args);            
+            return String.format(s,args);
         }
     }
 

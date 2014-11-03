@@ -1,5 +1,7 @@
 package roboguice.util;
 
+import roboguice.logging.Ln;
+
 /**
  * An abstract instance of {@link AndroidCallableI} with empty default implementations for {@link #onPreCall()}
  * and {@link #onFinally()}.

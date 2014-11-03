@@ -332,6 +332,7 @@
 			</activation>
 			<modules>
 				<module>roboblender</module>
+				<module>roboguice-log</module>
 				<module>roboguice</module>
 				<module>additional-tests</module>
 				<module>astroboy</module>

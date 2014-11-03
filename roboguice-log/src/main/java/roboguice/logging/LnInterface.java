@@ -1,4 +1,4 @@
-package roboguice.util;
+package roboguice.logging;
 
 public interface LnInterface {
     int v(Throwable t);

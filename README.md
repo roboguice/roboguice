@@ -133,6 +133,9 @@ It works, and people are using it. Why not give it a spin?
 		<td width="130" align="center">
 			<a title="Starbucks" href="https://play.google.com/store/apps/details?id=com.starbucks.mobilecard" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/starbucks.png" width="100" height="100"></a>Starbucks
 		</td>
+		<td width="130" align="center">
+			<a title="Getaways by Groupon" href="https://play.google.com/store/apps/details?id=com.groupon.travel" rel="nofollow"><img src="https://raw.githubusercontent.com/roboguice/roboguice/master/assets/starbucks.png" width="100" height="100"></a>Getaways by Groupon
+		</td>
 	</tr>
 </table>
 

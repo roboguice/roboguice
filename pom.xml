@@ -3,7 +3,7 @@
 	<groupId>org.roboguice</groupId>
 	<artifactId>roboguice-aggregator</artifactId>
 	<name>Aggregator</name>
-	<version>3.0</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<prerequisites>

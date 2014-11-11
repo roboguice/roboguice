@@ -35,6 +35,7 @@ import javax.tools.JavaFileObject;
 public class GuiceAnnotationProcessor extends AbstractProcessor {
 
     public static final String TEMPLATE_ANNOTATION_DATABASE_PATH = "templates/AnnotationDatabaseImpl.vm";
+    private static final String GOOGLE_INJECT_FQCN = "com.google.inject.Inject"; 
 
     //TODO add a HashMap<String, Set<String>>
 
@@ -97,7 +98,8 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
                 }
             }
         }
-
+        
+        addAssistedInjectSupport();
 
         for( Map<String, Set<String>> entryAnnotationToclassesContainingInjectionPoints : mapAnnotationToMapClassContainingInjectionToInjectedFieldSet.values() ) {
             classesContainingInjectionPointsSet.addAll(entryAnnotationToclassesContainingInjectionPoints.keySet());
@@ -127,6 +129,14 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
         }
 
         return true;
+    }
+    
+    private void addAssistedInjectSupport() {
+        String factoryProviderClass = "com.google.inject.assistedinject.FactoryProvider2";
+        String injectedMethodName = "initialize";
+        String injectedParameterType = "com.google.inject.Injector";
+        String injectionPoint = addParameterTypeName(injectedMethodName, injectedParameterType);
+        addToInjectedMethods(GOOGLE_INJECT_FQCN, factoryProviderClass, injectionPoint);
     }
 
     protected AnnotationDatabaseGenerator createAnnotationDatabaseGenerator() {
@@ -169,7 +179,7 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
         for( VariableElement variable : ((ExecutableElement)enclosing).getParameters() ) {
             String parameterTypeName = getTypeName(variable);
             bindableClasses.add( parameterTypeName );
-            injectionPointName += ":"+parameterTypeName;
+            injectionPointName = addParameterTypeName(injectionPointName, parameterTypeName);
         }
 
         TypeElement typeElementRequiringScanning = (TypeElement) ((ExecutableElement) injectionPoint.getEnclosingElement()).getEnclosingElement();
@@ -180,6 +190,10 @@ public class GuiceAnnotationProcessor extends AbstractProcessor {
         } else {
             addToInjectedMethods(annotationClassName, typeElementName, injectionPointName );
         }
+    }
+    
+    private String addParameterTypeName(String injectionPointName, String parameterTypeName) {
+        return injectionPointName + ":" + parameterTypeName;
     }
 
     private void addMethodOrConstructorToAnnotationDatabase(String annotationClassName, Element injectionPoint) {

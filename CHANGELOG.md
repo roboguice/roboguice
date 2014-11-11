@@ -4,6 +4,10 @@ Release notes for RoboGuice
 Version 3.1 (Planned)
 -----------
 
+Enhancements : 
+
+* Blender and RoboBlender have new extension point. https://github.com/roboguice/roboguice/issues/256
+
 Version 3.0.1 (released November 10th 2014)
 -----------
 

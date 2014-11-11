@@ -4,6 +4,12 @@ Release notes for RoboGuice
 Version 3.1 (Planned)
 -----------
 
+Version 3.0.1 (released November 10th 2014)
+-----------
+
+Bug fix 
+
+* Inject constructor now work with AnnotationDatabase turned on or off. https://github.com/roboguice/roboguice/issues/261. Thx to Falc0r & mgrzechocinski 
 
 Version 3.0 (Released October 23 2014)
 -----------

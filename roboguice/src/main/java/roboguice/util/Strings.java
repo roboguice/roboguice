@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 public final class Strings {
@@ -161,6 +162,10 @@ public final class Strings {
 
     public static boolean equalsIgnoreCase(Object a, Object b) {
         return Strings.toString(a).toLowerCase().equals(Strings.toString(b).toLowerCase());
+    }
+
+    public static boolean equalsIgnoreCase(Object a, Object b, Locale locale) {
+        return Strings.toString(a).toLowerCase(locale).equals(Strings.toString(b).toLowerCase(locale));
     }
 
     public static String[] chunk(String str, int chunkSize) {

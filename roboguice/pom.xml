@@ -223,11 +223,12 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- http://intellectualcramps.wordpress.com/2013/08/18/code-coverage-of-robolectric-tests-using-jacoco/ -->
+			<!-- http://intellectualcramps.wordpress.com/2013/08/18/code-coverage-of-robolectric-tests-using-jacoco/ 
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 			</plugin>
+-->
 			<!-- Create RoboGuice uber jar. Shade all dependencies, minimize and shrink. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

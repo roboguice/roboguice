@@ -49,7 +49,7 @@
 		<!-- LIBRARIES -->
 		<android-platform.version>4.1.1.4</android-platform.version>
 		<android-map.version>7_r1</android-map.version>
-		<android-build.version>19</android-build.version>
+		<android-build.version>20</android-build.version>
 		<guice.version>4.0-blender-SNAPSHOT</guice.version>
 
 		<!--LIBRARIES -->

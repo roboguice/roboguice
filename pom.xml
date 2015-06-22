@@ -55,7 +55,7 @@
 		<!--LIBRARIES -->
 		<android-map.version>7_r1</android-map.version>
 		<android-support-v4.version>19</android-support-v4.version>
-		<android-appcompat-v7.version>19</android-appcompat-v7.version>
+		<android-appcompat-v7.version>22.2.0</android-appcompat-v7.version>
 		<actionbarsherlock.version>4.2.0</actionbarsherlock.version>
 		<jsr305.version>2.0.3</jsr305.version>
 		<findbugs-annotations.version>1.0.0</findbugs-annotations.version>

@@ -100,18 +100,6 @@
 							</compilerArgs>
 						</configuration>
 					</execution>
-					<execution>
-						<id>default-testCompile</id>
-						<phase>test-compile</phase>
-						<goals>
-							<goal>testCompile</goal>
-						</goals>
-						<configuration>
-							<compilerArgs>
-								<arg>-AguiceAnnotationDatabasePackageName=testadditionaltests</arg>
-							</compilerArgs>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 			<!-- By default RoboGuice uses annotation database system. Turn it off 

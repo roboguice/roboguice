@@ -1,23 +1,13 @@
 package roboguice.service;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import roboguice.RoboGuice;
-import roboguice.context.event.OnConfigurationChangedEvent;
-import roboguice.context.event.OnCreateEvent;
-import roboguice.context.event.OnDestroyEvent;
-import roboguice.context.event.OnStartEvent;
-import roboguice.event.EventManager;
-import roboguice.util.RoboContext;
-
+import android.app.IntentService;
+import android.content.Intent;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-
-import android.app.IntentService;
-import android.app.Service;
-import android.content.Intent;
-import android.content.res.Configuration;
+import java.util.HashMap;
+import java.util.Map;
+import roboguice.RoboGuice;
+import roboguice.util.RoboContext;
 
 /**
  * A {@link RoboIntentService} extends from {@link IntentService} to provide dynamic
@@ -38,56 +28,36 @@ import android.content.res.Configuration;
  */
 public abstract class RoboIntentService extends IntentService implements RoboContext {
 
-    protected EventManager eventManager;
-    protected HashMap<Key<?>,Object> scopedObjects = new HashMap<Key<?>, Object>();
-
-
+    protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
     public RoboIntentService(String name) {
         super(name);
     }
 
-
     @Override
     public void onCreate() {
         final Injector injector = RoboGuice.getInjector(this);
-        eventManager = injector.getInstance(EventManager.class);
         injector.injectMembers(this);
         super.onCreate();
-        eventManager.fire(new OnCreateEvent<Service>(this,null) );
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         final int startCont = super.onStartCommand(intent, flags, startId);
-        eventManager.fire(new OnStartEvent<Service>(this) );
         return startCont;
     }
 
     @Override
     public void onDestroy() {
         try {
-            if(eventManager!=null) // may be null during test: http://code.google.com/p/roboguice/issues/detail?id=140
-                eventManager.fire(new OnDestroyEvent<Service>(this) );
+            RoboGuice.destroyInjector(this);
         } finally {
-            try {
-                RoboGuice.destroyInjector(this);
-            } finally {
-                super.onDestroy();
-            }
+            super.onDestroy();
         }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        final Configuration currentConfig = getResources().getConfiguration();
-        super.onConfigurationChanged(newConfig);
-        eventManager.fire(new OnConfigurationChangedEvent<Service>(this,currentConfig,newConfig) );
     }
 
     @Override
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }
-
 }

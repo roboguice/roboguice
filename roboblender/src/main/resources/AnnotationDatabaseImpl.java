@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import com.google.inject.AnnotationDatabase;
-import roboguice.fragment.FragmentUtil;
 
 public class AnnotationDatabaseImpl extends AnnotationDatabase {
 
@@ -93,14 +92,6 @@ public class AnnotationDatabaseImpl extends AnnotationDatabase {
 #foreach( $className in $injectedClasses )
         injectedClasses.add("$className");
 #end
-
-        if(FragmentUtil.hasNative) {
-            injectedClasses.add("android.app.FragmentManager");
-        }
-
-        if(FragmentUtil.hasSupport) {
-            injectedClasses.add("android.support.v4.app.FragmentManager");
-        }
     }
 
 }

@@ -20,22 +20,11 @@ import com.google.inject.blender.GuiceAnnotationProcessor;
  * @author MikeBurton
  * @author SNI
  */
-@SupportedAnnotationTypes({"com.google.inject.Inject", "com.google.inject.Provides", "javax.inject.Inject", "roboguice.inject.InjectView", "roboguice.inject.InjectResource", "roboguice.inject.InjectPreference", "roboguice.inject.InjectExtra", "roboguice.inject.InjectFragment", "roboguice.event.Observes", "roboguice.inject.ContentView"})
-@SupportedOptions({"guiceAnnotationDatabasePackageName", "guiceUsesFragmentUtil"})
+@SupportedAnnotationTypes({"com.google.inject.Inject", "com.google.inject.Provides", "javax.inject.Inject"})
+@SupportedOptions({"guiceAnnotationDatabasePackageName"})
 public class RoboGuiceAnnotationProcessor extends GuiceAnnotationProcessor {
 
     public static final String TEMPLATE_ANNOTATION_DATABASE_PATH = "templates/RGAnnotationDatabaseImpl.vm";
-
-    private boolean isUsingFragmentUtil = true;
-
-    @Override
-    public synchronized void init(ProcessingEnvironment processingEnv) {
-        super.init(processingEnv);
-        String isUsingFragmentUtilString = processingEnv.getOptions().get("guiceUsesFragmentUtil");
-        if (isUsingFragmentUtilString!=null) {
-            isUsingFragmentUtil = Boolean.parseBoolean(isUsingFragmentUtilString);
-        }
-    }
 
 	@Override
 	public SourceVersion getSupportedSourceVersion() {
@@ -52,7 +41,6 @@ public class RoboGuiceAnnotationProcessor extends GuiceAnnotationProcessor {
     protected void configure(AnnotationDatabaseGenerator annotationDatabaseGenerator) {
         super.configure(annotationDatabaseGenerator);
         annotationDatabaseGenerator.setTemplatePath(TEMPLATE_ANNOTATION_DATABASE_PATH);
-        ((RoboGuiceAnnotationDatabaseGenerator)annotationDatabaseGenerator).setUsingFragmentUtil(isUsingFragmentUtil);
     }
 
 }

@@ -75,6 +75,7 @@ import roboguice.util.LnInterface;
  */
 @SuppressWarnings("PMD")
 public class DefaultRoboModule extends AbstractModule {
+    public static final String GLOBAL_EVENT_MANAGER_NAME = "GlobalEventManager";
 
     @SuppressWarnings("rawtypes")
     private static Map<Class, String> mapSystemSericeClassToName = new HashMap<Class, String>();

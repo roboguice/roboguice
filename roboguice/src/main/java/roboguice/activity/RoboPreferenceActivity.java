@@ -38,22 +38,14 @@ import roboguice.util.RoboContext;
  */
 public abstract class RoboPreferenceActivity extends PreferenceActivity implements RoboContext {
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
+    protected Injector injector;
 
     /** {@inheritDoc } */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = RoboGuice.getInjector(this);
-        injector.injectMembers(this);
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            RoboGuice.destroyInjector(this);
-        } finally {
-            super.onDestroy();
-        }
+        injector = RoboGuice.getInjector(this);
+        injector.injectMembers(this);
     }
 
     @Override

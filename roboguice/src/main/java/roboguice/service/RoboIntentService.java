@@ -1,7 +1,6 @@
 package roboguice.service;
 
 import android.app.IntentService;
-import android.content.Intent;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import java.util.HashMap;
@@ -29,6 +28,7 @@ import roboguice.util.RoboContext;
 public abstract class RoboIntentService extends IntentService implements RoboContext {
 
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
+    protected Injector injector;
 
     public RoboIntentService(String name) {
         super(name);
@@ -36,24 +36,9 @@ public abstract class RoboIntentService extends IntentService implements RoboCon
 
     @Override
     public void onCreate() {
-        final Injector injector = RoboGuice.getInjector(this);
-        injector.injectMembers(this);
         super.onCreate();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        final int startCont = super.onStartCommand(intent, flags, startId);
-        return startCont;
-    }
-
-    @Override
-    public void onDestroy() {
-        try {
-            RoboGuice.destroyInjector(this);
-        } finally {
-            super.onDestroy();
-        }
+        injector = RoboGuice.getInjector(this);
+        injector.injectMembers(this);
     }
 
     @Override

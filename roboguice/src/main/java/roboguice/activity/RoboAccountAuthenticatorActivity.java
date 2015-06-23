@@ -19,7 +19,6 @@ package roboguice.activity;
 
 import android.accounts.AccountAuthenticatorActivity;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import com.google.inject.Injector;
@@ -38,26 +37,13 @@ import roboguice.util.RoboContext;
 @TargetApi(Build.VERSION_CODES.ECLAIR)
 public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivity implements RoboContext {
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
+    protected Injector injector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        final Injector injector = RoboGuice.getInjector(this);
-        injector.injectMembers(this);
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            RoboGuice.destroyInjector(this);
-        } finally {
-            super.onDestroy();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        injector = RoboGuice.getInjector(this);
+        injector.injectMembers(this);
     }
 
     @Override

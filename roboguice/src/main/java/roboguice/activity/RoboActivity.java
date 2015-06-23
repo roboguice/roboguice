@@ -55,27 +55,18 @@ public class RoboActivity extends Activity implements RoboContext {
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
     private Stopwatch stopwatch;
+    protected Injector injector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         stopwatch = new Stopwatch();
-        final Injector injector = RoboGuice.getInjector(this);
+        super.onCreate(savedInstanceState);
+        stopwatch.resetAndLog("RoboActivity super onCreate");
+        injector = RoboGuice.getInjector(this);
         stopwatch.resetAndLog("RoboActivity creation of injector");
         stopwatch.resetAndLog("RoboActivity creation of eventmanager");
         injector.injectMembers(this);
         stopwatch.resetAndLog("RoboActivity inject members without views");
-        super.onCreate(savedInstanceState);
-        stopwatch.resetAndLog("RoboActivity super onCreate");
-        stopwatch.resetAndLog("RoboActivity fire event");
-    }
-
-    @Override
-    protected void onDestroy() {
-        try {
-            RoboGuice.destroyInjector(this);
-        } finally {
-            super.onDestroy();
-        }
     }
 
     @Override

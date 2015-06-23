@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.WeakHashMap;
 import roboguice.config.DefaultRoboModule;
 import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.inject.ContextScope;
@@ -45,7 +44,7 @@ public final class RoboGuice {
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
 
     @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "MS_SHOULD_BE_FINAL")
-    protected static WeakHashMap<Application, Injector> injectors = new WeakHashMap<Application, Injector>();
+    protected static Injector injector;
 
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default. */
     private static boolean useAnnotationDatabases = true;
@@ -65,15 +64,13 @@ public final class RoboGuice {
      * Return the cached Injector instance for this application, or create a new one if necessary.
      */
     public static Injector getOrCreateBaseApplicationInjector(Application application) {
-        Injector rtrn = injectors.get(application);
-        if (rtrn != null) {
-            return rtrn;
+        if (injector != null) {
+            return injector;
         }
 
         synchronized (RoboGuice.class) {
-            rtrn = injectors.get(application);
-            if (rtrn != null) {
-                return rtrn;
+            if (injector != null) {
+                return injector;
             }
 
             return getOrCreateBaseApplicationInjector(application, DEFAULT_STAGE);
@@ -100,7 +97,7 @@ public final class RoboGuice {
         final Stopwatch stopwatch = new Stopwatch();
         synchronized (RoboGuice.class) {
             initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
-            return createGuiceInjector(application, stage, stopwatch, modules);
+            return createGuiceInjector(stage, stopwatch, modules);
         }
     }
 
@@ -121,9 +118,8 @@ public final class RoboGuice {
     public static Injector overrideApplicationInjector(final Application application, Module... overrideModules) {
         synchronized (RoboGuice.class) {
             final List<Module> baseModules = extractModulesFromManifest(application);
-            final Injector rtrn = Guice.createInjector(DEFAULT_STAGE, Modules.override(baseModules).with(overrideModules));
-            injectors.put(application, rtrn);
-            return rtrn;
+            injector = Guice.createInjector(DEFAULT_STAGE, Modules.override(baseModules).with(overrideModules));
+            return injector;
         }
     }
 
@@ -137,7 +133,7 @@ public final class RoboGuice {
         synchronized (RoboGuice.class) {
             initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
             final List<Module> modules = extractModulesFromManifest(application);
-            return createGuiceInjector(application, stage, stopwatch, modules.toArray(new Module[modules.size()]));
+            return createGuiceInjector(stage, stopwatch, modules.toArray(new Module[modules.size()]));
         }
     }
 
@@ -169,12 +165,11 @@ public final class RoboGuice {
         }
     }
 
-    private static Injector createGuiceInjector(final Application application, Stage stage, final Stopwatch stopwatch, Module... modules) {
+    private static Injector createGuiceInjector(Stage stage, final Stopwatch stopwatch, Module... modules) {
         try {
             synchronized (RoboGuice.class) {
-                final Injector rtrn = Guice.createInjector(stage, modules);
-                injectors.put(application, rtrn);
-                return rtrn;
+                injector = Guice.createInjector(stage, modules);
+                return injector;
             }
         } finally {
             stopwatch.resetAndLog("BaseApplicationInjector creation");
@@ -200,11 +195,6 @@ public final class RoboGuice {
 
     public static void setUseAnnotationDatabases(boolean useAnnotationDatabases) {
         RoboGuice.useAnnotationDatabases = useAnnotationDatabases;
-    }
-
-    public static void destroyInjector(Context context) {
-        //noinspection SuspiciousMethodCalls
-        injectors.remove(context); // it's okay, Context is an Application
     }
 
     private static void initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(Application application) {
@@ -265,7 +255,7 @@ public final class RoboGuice {
          * It should not be called in a real application.
          */
         public static void reset() {
-            injectors.clear();
+            injector = null;
             //clear annotation database finder
             //restore hierarchy filter
             Guice.setAnnotationDatabasePackageNames(null);

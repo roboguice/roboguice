@@ -1,22 +1,20 @@
 package roboguice.activity;
 
-import roboguice.RoboGuice;
-
 import android.app.Activity;
 import android.app.Application;
+import roboguice.RoboGuice;
 
 /**
  * An activity that can be used to display a splash page while initializing the
  * guice injector in the background.
- * 
+ *
  * Use of this class is definitely not required in order to use RoboGuice, but
  * it can be useful if your app startup times are longer than desired.
- * 
+ *
  * To use, simply override onCreate to call setContentView. Then override
  * startNextActivity to specify where to go next.
  *
  * @author Mike Burton
- *
  */
 public abstract class RoboSplashActivity extends Activity {
     private static final double DEFAULT_SPLASH_DELAY_MS = 2.5 * 1000;
@@ -37,7 +35,6 @@ public abstract class RoboSplashActivity extends Activity {
                 final Application app = getApplication();
                 RoboGuice.getOrCreateBaseApplicationInjector(getApplication());
 
-
                 doStuffInBackground(app);
 
                 // Make sure we display splash for MIN_DISPLAY_MS
@@ -52,9 +49,7 @@ public abstract class RoboSplashActivity extends Activity {
 
                 startNextActivity();
                 andFinishThisOne();
-
             }
-
         }).start();
     }
 
@@ -80,5 +75,4 @@ public abstract class RoboSplashActivity extends Activity {
      * This method should call startActivity to launch a new activity.
      */
     protected abstract void startNextActivity();
-
 }

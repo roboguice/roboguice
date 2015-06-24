@@ -62,7 +62,9 @@ public class RoboActivity extends Activity implements RoboContext {
         stopwatch = new Stopwatch();
         super.onCreate(savedInstanceState);
         stopwatch.resetAndLog("RoboActivity super onCreate");
-        injector = RoboGuice.getInjector(this);
+        if (injector == null) {
+            injector = RoboGuice.getInjector(this);
+        }
         stopwatch.resetAndLog("RoboActivity creation of injector");
         stopwatch.resetAndLog("RoboActivity creation of eventmanager");
         injector.injectMembers(this);

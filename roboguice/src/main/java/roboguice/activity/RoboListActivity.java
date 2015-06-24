@@ -38,7 +38,9 @@ public class RoboListActivity extends ListActivity implements RoboContext {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        injector = RoboGuice.getInjector(this);
+        if (injector == null) {
+            injector = RoboGuice.getInjector(this);
+        }
         injector.injectMembers(this);
     }
 

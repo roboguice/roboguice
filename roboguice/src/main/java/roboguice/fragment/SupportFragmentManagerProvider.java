@@ -1,10 +1,11 @@
-package roboguice.inject;
+package roboguice.fragment;
 
 import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import roboguice.inject.ContextSingleton;
 
 @ContextSingleton
 public class SupportFragmentManagerProvider implements Provider<FragmentManager> {

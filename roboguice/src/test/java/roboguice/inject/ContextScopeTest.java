@@ -28,11 +28,11 @@ public class ContextScopeTest {
         final ActivityController<A> aController = Robolectric.buildActivity(A.class);
         final A a = aController.get();
 
-        assertThat(a.getScopedObjectMap().size(), equalTo(0));
+        assertThat(RoboGuice.getInjector(a).getScopedObjects().size(), equalTo(0));
         aController.create();
 
         boolean found=false;
-        for( Object o : a.getScopedObjectMap().values() )
+        for( Object o : RoboGuice.getInjector(a).getScopedObjects().values() )
             if( o==a )
                 found = true;
 
@@ -45,8 +45,8 @@ public class ContextScopeTest {
         final Activity a = Robolectric.buildActivity(A.class).get();
         final Activity b = Robolectric.buildActivity(B.class).get();
 
-        scope.enter(a);
-        scope.enter(b);
+        scope.enter(a, RoboGuice.getInjector(a).getScopedObjects());
+        scope.enter(b, RoboGuice.getInjector(b).getScopedObjects());
         scope.exit(b);
         scope.exit(a);
     }
@@ -57,8 +57,8 @@ public class ContextScopeTest {
         final Activity a = Robolectric.buildActivity(A.class).get();
         final Activity b = Robolectric.buildActivity(B.class).get();
 
-        scope.enter(a);
-        scope.enter(b);
+        scope.enter(a, RoboGuice.getInjector(a).getScopedObjects());
+        scope.enter(b, RoboGuice.getInjector(b).getScopedObjects());
         scope.exit(a);
     }
 
@@ -67,16 +67,16 @@ public class ContextScopeTest {
         final ActivityController<B> bController = Robolectric.buildActivity(B.class);
         final B b = bController.get();
 
-        assertThat(b.getScopedObjectMap().size(), equalTo(0));
+        assertThat(RoboGuice.getInjector(b).getScopedObjects().size(), equalTo(0));
         bController.create();
 
         boolean found=false;
-        for( Object o : b.getScopedObjectMap().values() )
+        for( Object o : RoboGuice.getInjector(b).getScopedObjects().values() )
             if( o==b )
                 found = true;
 
         assertTrue("Couldn't find context in scope map", found);
-        assertTrue(b.getScopedObjectMap().containsKey(Key.get(C.class)));
+        assertTrue(RoboGuice.getInjector(b).getScopedObjects().containsKey(Key.get(C.class)));
     }
 
     public static class A extends RoboActivity {

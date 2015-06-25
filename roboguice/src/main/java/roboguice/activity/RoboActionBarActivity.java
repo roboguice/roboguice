@@ -19,11 +19,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import com.google.inject.Injector;
-import com.google.inject.Key;
-import java.util.HashMap;
-import java.util.Map;
 import roboguice.RoboGuice;
-import roboguice.util.RoboContext;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -51,8 +47,7 @@ import roboguice.util.RoboContext;
  *
  * @author Mike Burton
  */
-public class RoboActionBarActivity extends ActionBarActivity implements RoboContext {
-    protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
+public class RoboActionBarActivity extends ActionBarActivity {
     protected Injector injector;
 
     @Override
@@ -68,10 +63,5 @@ public class RoboActionBarActivity extends ActionBarActivity implements RoboCont
     protected void onDestroy() {
         RoboGuice.destroyInjector(this);
         super.onDestroy();
-    }
-
-    @Override
-    public Map<Key<?>, Object> getScopedObjectMap() {
-        return scopedObjects;
     }
 }

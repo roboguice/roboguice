@@ -20,11 +20,9 @@ import android.support.v4.app.FragmentActivity;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import java.util.HashMap;
-import java.util.Map;
 import roboguice.RoboGuice;
-import roboguice.util.RoboContext;
 
-public class RoboFragmentActivity extends FragmentActivity implements RoboContext {
+public class RoboFragmentActivity extends FragmentActivity {
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
     protected Injector injector;
 
@@ -41,10 +39,5 @@ public class RoboFragmentActivity extends FragmentActivity implements RoboContex
     protected void onDestroy() {
         RoboGuice.destroyInjector(this);
         super.onDestroy();
-    }
-
-    @Override
-    public Map<Key<?>, Object> getScopedObjectMap() {
-        return scopedObjects;
     }
 }

@@ -12,12 +12,13 @@ import com.google.inject.Guice;
 import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.HierarchyTraversalFilterFactory;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import com.google.inject.internal.util.Stopwatch;
 import com.google.inject.util.Modules;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -52,7 +53,12 @@ public final class RoboGuice {
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default. */
     private static boolean useAnnotationDatabases = true;
 
-    private static Map<Context, ContextScopedRoboInjector> mapContextToInjector = Collections.synchronizedMap(new IdentityHashMap<Context, ContextScopedRoboInjector>());
+    //both maps are used together, we only synchronize on the first one.
+    //TODO create data structure to hold injector + scoped objects --> single map.
+    private static Map<Context, ContextScopedRoboInjector> mapContextToInjector = new IdentityHashMap<Context, ContextScopedRoboInjector>();
+    private static Map<Context, Map<Key<?>, Object>> mapContextToScopedObjects = new HashMap<Context, Map<Key<?>, Object>>();
+    private static ContextScope contextScope;
+
     //used for testing
     static {
         String useAnnotationsEnvVar = System.getenv("roboguice.useAnnotationDatabases");
@@ -173,6 +179,7 @@ public final class RoboGuice {
         try {
             synchronized (RoboGuice.class) {
                 injector = Guice.createInjector(stage, modules);
+                contextScope = injector.getInstance(ContextScope.class);
                 return injector;
             }
         } finally {
@@ -180,24 +187,30 @@ public final class RoboGuice {
         }
     }
 
-    public static Injector getInjector(Context context) {
-        final ContextScopedRoboInjector contextScopedRoboInjector = mapContextToInjector.get(context);
+    public static ContextScopedRoboInjector getInjector(Context context) {
+        ContextScopedRoboInjector contextScopedRoboInjector = mapContextToInjector.get(context);
         if (contextScopedRoboInjector != null) {
             return contextScopedRoboInjector;
         }
         synchronized (mapContextToInjector) {
+            contextScopedRoboInjector = mapContextToInjector.get(context);
             if (contextScopedRoboInjector != null) {
                 return contextScopedRoboInjector;
             }
 
             final Application application = (Application) context.getApplicationContext();
-            return new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application));
+            final HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
+            final ContextScopedRoboInjector newContextScopedRoboInjector = new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application), contextScope, scopedObjects);
+            mapContextToInjector.put(context, newContextScopedRoboInjector);
+            mapContextToScopedObjects.put(context, scopedObjects);
+            return newContextScopedRoboInjector;
         }
     }
 
     public static void destroyInjector(Context context) {
         synchronized (mapContextToInjector) {
             mapContextToInjector.remove(context);
+            mapContextToScopedObjects.remove(context);
         }
     }
 

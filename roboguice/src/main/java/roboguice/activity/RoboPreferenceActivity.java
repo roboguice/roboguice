@@ -20,9 +20,7 @@ import android.preference.PreferenceActivity;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import java.util.HashMap;
-import java.util.Map;
 import roboguice.RoboGuice;
-import roboguice.util.RoboContext;
 
 /**
  * A {@link RoboPreferenceActivity} extends from {@link PreferenceActivity} to provide
@@ -36,7 +34,7 @@ import roboguice.util.RoboContext;
  * @author Mike Burton
  * @see RoboActivity
  */
-public abstract class RoboPreferenceActivity extends PreferenceActivity implements RoboContext {
+public abstract class RoboPreferenceActivity extends PreferenceActivity {
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
     protected Injector injector;
 
@@ -54,10 +52,5 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     protected void onDestroy() {
         RoboGuice.destroyInjector(this);
         super.onDestroy();
-    }
-
-    @Override
-    public Map<Key<?>, Object> getScopedObjectMap() {
-        return scopedObjects;
     }
 }

@@ -20,9 +20,7 @@ import android.os.Bundle;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import java.util.HashMap;
-import java.util.Map;
 import roboguice.RoboGuice;
-import roboguice.util.RoboContext;
 
 /**
  * A {@link RoboListActivity} extends from {@link ListActivity} to provide
@@ -31,7 +29,7 @@ import roboguice.util.RoboContext;
  * @author Mike Burton
  * @see RoboActivity
  */
-public class RoboListActivity extends ListActivity implements RoboContext {
+public class RoboListActivity extends ListActivity {
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
     protected Injector injector;
 
@@ -48,10 +46,5 @@ public class RoboListActivity extends ListActivity implements RoboContext {
     protected void onDestroy() {
         RoboGuice.destroyInjector(this);
         super.onDestroy();
-    }
-
-    @Override
-    public Map<Key<?>, Object> getScopedObjectMap() {
-        return scopedObjects;
     }
 }

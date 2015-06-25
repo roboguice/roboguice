@@ -14,9 +14,7 @@ import android.app.Service;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import java.util.HashMap;
-import java.util.Map;
 import roboguice.RoboGuice;
-import roboguice.util.RoboContext;
 
 /**
  * A {@link RoboService} extends from {@link Service} to provide dynamic
@@ -35,7 +33,7 @@ import roboguice.util.RoboContext;
  * @author Mike Burton
  * @author Christine Karman
  */
-public abstract class RoboService extends Service implements RoboContext {
+public abstract class RoboService extends Service {
 
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
     protected Injector injector;
@@ -53,10 +51,5 @@ public abstract class RoboService extends Service implements RoboContext {
     public void onDestroy() {
         RoboGuice.destroyInjector(this);
         super.onDestroy();
-    }
-
-    @Override
-    public Map<Key<?>, Object> getScopedObjectMap() {
-        return scopedObjects;
     }
 }

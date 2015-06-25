@@ -24,9 +24,7 @@ import android.os.Bundle;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import java.util.HashMap;
-import java.util.Map;
 import roboguice.RoboGuice;
-import roboguice.util.RoboContext;
 
 /**
  * A subclass of {@link AccountAuthenticatorActivity} that provides dependency injection
@@ -35,7 +33,7 @@ import roboguice.util.RoboContext;
  * @author Marcus Better
  */
 @TargetApi(Build.VERSION_CODES.ECLAIR)
-public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivity implements RoboContext {
+public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivity {
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
     protected Injector injector;
 
@@ -52,10 +50,5 @@ public class RoboAccountAuthenticatorActivity extends AccountAuthenticatorActivi
     protected void onDestroy() {
         RoboGuice.destroyInjector(this);
         super.onDestroy();
-    }
-
-    @Override
-    public Map<Key<?>, Object> getScopedObjectMap() {
-        return scopedObjects;
     }
 }

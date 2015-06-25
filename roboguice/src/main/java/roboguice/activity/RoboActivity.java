@@ -21,9 +21,7 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.internal.util.Stopwatch;
 import java.util.HashMap;
-import java.util.Map;
 import roboguice.RoboGuice;
-import roboguice.util.RoboContext;
 
 /**
  * A {@link RoboActivity} extends from {@link Activity} to provide dynamic
@@ -51,7 +49,7 @@ import roboguice.util.RoboContext;
  *
  * @author Mike Burton
  */
-public class RoboActivity extends Activity implements RoboContext {
+public class RoboActivity extends Activity {
     protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
     private Stopwatch stopwatch;
@@ -75,11 +73,5 @@ public class RoboActivity extends Activity implements RoboContext {
     protected void onDestroy() {
         RoboGuice.destroyInjector(this);
         super.onDestroy();
-    }
-
-
-    @Override
-    public Map<Key<?>, Object> getScopedObjectMap() {
-        return scopedObjects;
     }
 }

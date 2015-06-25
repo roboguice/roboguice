@@ -51,6 +51,12 @@ public abstract class RoboPreferenceActivity extends PreferenceActivity implemen
     }
 
     @Override
+    protected void onDestroy() {
+        RoboGuice.destroyInjector(this);
+        super.onDestroy();
+    }
+
+    @Override
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }

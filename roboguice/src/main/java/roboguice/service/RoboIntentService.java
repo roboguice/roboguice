@@ -44,6 +44,12 @@ public abstract class RoboIntentService extends IntentService implements RoboCon
     }
 
     @Override
+    public void onDestroy() {
+        RoboGuice.destroyInjector(this);
+        super.onDestroy();
+    }
+
+    @Override
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }

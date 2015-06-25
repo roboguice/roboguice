@@ -65,6 +65,12 @@ public class RoboActionBarActivity extends ActionBarActivity implements RoboCont
     }
 
     @Override
+    protected void onDestroy() {
+        RoboGuice.destroyInjector(this);
+        super.onDestroy();
+    }
+
+    @Override
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }

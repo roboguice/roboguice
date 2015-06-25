@@ -50,6 +50,12 @@ public abstract class RoboService extends Service implements RoboContext {
     }
 
     @Override
+    public void onDestroy() {
+        RoboGuice.destroyInjector(this);
+        super.onDestroy();
+    }
+
+    @Override
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }

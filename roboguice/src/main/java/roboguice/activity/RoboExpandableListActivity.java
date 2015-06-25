@@ -46,6 +46,12 @@ public class RoboExpandableListActivity extends ExpandableListActivity implement
     }
 
     @Override
+    protected void onDestroy() {
+        RoboGuice.destroyInjector(this);
+        super.onDestroy();
+    }
+
+    @Override
     public Map<Key<?>, Object> getScopedObjectMap() {
         return scopedObjects;
     }

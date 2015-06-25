@@ -13,7 +13,7 @@ public abstract class RoboLoader<D> extends Loader<D> {
 
     public RoboLoader(Context context) {
         super(context);
-        RoboGuice.injectMembers(context, this);
+        RoboGuice.getInjector(context).injectMembers(this);
     }
 
 }

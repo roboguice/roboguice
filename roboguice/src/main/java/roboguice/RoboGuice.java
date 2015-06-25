@@ -17,8 +17,11 @@ import com.google.inject.Stage;
 import com.google.inject.internal.util.Stopwatch;
 import com.google.inject.util.Modules;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import roboguice.config.DefaultRoboModule;
 import roboguice.config.RoboGuiceHierarchyTraversalFilter;
@@ -49,6 +52,7 @@ public final class RoboGuice {
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default. */
     private static boolean useAnnotationDatabases = true;
 
+    private static Map<Context, ContextScopedRoboInjector> mapContextToInjector = Collections.synchronizedMap(new IdentityHashMap<Context, ContextScopedRoboInjector>());
     //used for testing
     static {
         String useAnnotationsEnvVar = System.getenv("roboguice.useAnnotationDatabases");
@@ -177,16 +181,24 @@ public final class RoboGuice {
     }
 
     public static Injector getInjector(Context context) {
-        final Application application = (Application) context.getApplicationContext();
-        return new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application));
+        final ContextScopedRoboInjector contextScopedRoboInjector = mapContextToInjector.get(context);
+        if (contextScopedRoboInjector != null) {
+            return contextScopedRoboInjector;
+        }
+        synchronized (mapContextToInjector) {
+            if (contextScopedRoboInjector != null) {
+                return contextScopedRoboInjector;
+            }
+
+            final Application application = (Application) context.getApplicationContext();
+            return new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application));
+        }
     }
 
-    /**
-     * A shortcut for RoboGuice.getInjector(context).injectMembers(o);
-     */
-    public static <T> T injectMembers(Context context, T t) {
-        getInjector(context).injectMembers(t);
-        return t;
+    public static void destroyInjector(Context context) {
+        synchronized (mapContextToInjector) {
+            mapContextToInjector.remove(context);
+        }
     }
 
     public static DefaultRoboModule newDefaultRoboModule(final Application application) {

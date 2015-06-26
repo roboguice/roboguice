@@ -9,7 +9,7 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import roboguice.RoboGuice;
-import roboguice.activity.RoboActivity;
+import roboguice.activity.TestRoboActivity;
 import android.content.Context;
 
 /**
@@ -28,7 +28,7 @@ public class Astroboy1Test {
     @Before
     public void setup() {
        RoboGuice.setUseAnnotationDatabases(false);
-       context = Robolectric.buildActivity(RoboActivity.class).create().get();
+       context = Robolectric.buildActivity(TestRoboActivity.class).create().get();
        astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
     }
 

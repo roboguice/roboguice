@@ -41,7 +41,6 @@ import com.google.inject.name.Named;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import roboguice.activity.RoboActivity;
 import roboguice.inject.AccountManagerProvider;
 import roboguice.inject.AssetManagerProvider;
 import roboguice.inject.ContentResolverProvider;
@@ -53,7 +52,6 @@ import roboguice.inject.NullProvider;
 import roboguice.inject.ResourcesProvider;
 import roboguice.inject.SharedPreferencesProvider;
 import roboguice.inject.SystemServiceProvider;
-import roboguice.service.RoboService;
 import roboguice.util.Ln;
 import roboguice.util.LnImpl;
 import roboguice.util.LnInterface;
@@ -124,9 +122,7 @@ public class DefaultRoboModule extends AbstractModule {
         bind(AssetManager.class).toProvider(AssetManagerProvider.class);
         bind(Context.class).toProvider(NullProvider.<Context>instance()).in(ContextSingleton.class);
         bind(Activity.class).toProvider(NullProvider.<Activity>instance()).in(ContextSingleton.class);
-        bind(RoboActivity.class).toProvider(NullProvider.<RoboActivity>instance()).in(ContextSingleton.class);
         bind(Service.class).toProvider(NullProvider.<Service>instance()).in(ContextSingleton.class);
-        bind(RoboService.class).toProvider(NullProvider.<RoboService>instance()).in(ContextSingleton.class);
 
         // Sundry Android Classes
         bind(SharedPreferences.class).toProvider(SharedPreferencesProvider.class);

@@ -16,7 +16,7 @@ public class ServiceInjectionTest {
 
     @Test
     public void shouldBeAbleToInjectInRoboService() {
-        final RoboServiceA roboService = new RoboServiceA();
+        final TestRoboServiceA roboService = new TestRoboServiceA();
         roboService.onCreate();
 
         assertThat(roboService.context, equalTo((Context) roboService));
@@ -24,13 +24,13 @@ public class ServiceInjectionTest {
 
     @Test
     public void shouldBeAbleToInjectInRoboIntentService() {
-        final RoboIntentServiceA roboService = new RoboIntentServiceA("");
+        final TestRoboIntentServiceA roboService = new TestRoboIntentServiceA("");
         roboService.onCreate();
 
         assertThat(roboService.context, equalTo((Context) roboService));
     }
 
-    public static class RoboServiceA extends RoboService {
+    public static class TestRoboServiceA extends TestRoboService {
         @Inject Context context;
 
         @Override
@@ -39,10 +39,10 @@ public class ServiceInjectionTest {
         }
     }
 
-    public static class RoboIntentServiceA extends RoboIntentService {
+    public static class TestRoboIntentServiceA extends TestRoboIntentService {
         @Inject Context context;
 
-        public RoboIntentServiceA(String name) {
+        public TestRoboIntentServiceA(String name) {
             super(name);
         }
 

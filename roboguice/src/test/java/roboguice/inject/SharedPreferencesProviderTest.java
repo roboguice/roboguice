@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.lang.reflect.Field;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -16,7 +15,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.tester.android.content.TestSharedPreferences;
 
 import roboguice.RoboGuice;
-import roboguice.activity.RoboActivity;
+import roboguice.activity.TestRoboActivity;
 import roboguice.util.Strings;
 
 import com.google.inject.Inject;
@@ -101,7 +100,7 @@ public class SharedPreferencesProviderTest {
         }
     }
 
-    public static class A extends RoboActivity {
+    public static class A extends TestRoboActivity {
         @Inject
         SharedPreferences prefs;
     }

@@ -8,17 +8,14 @@ import static org.mockito.Mockito.when;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import roboguice.RoboGuice;
-import roboguice.activity.RoboActivity;
+import roboguice.activity.TestRoboActivity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Vibrator;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.util.Modules;
 
 /**
  * A testcase that swaps in a TestVibrator to verify that
@@ -27,7 +24,7 @@ import com.google.inject.util.Modules;
  */
 public class Astroboy2Test {
     protected Application application = mock(Application.class, RETURNS_DEEP_STUBS);
-    protected Context context = mock(RoboActivity.class, RETURNS_DEEP_STUBS);
+    protected Context context = mock(TestRoboActivity.class, RETURNS_DEEP_STUBS);
     protected Vibrator vibratorMock = mock(Vibrator.class);
 
     @Before

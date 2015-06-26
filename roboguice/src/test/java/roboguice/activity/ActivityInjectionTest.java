@@ -25,12 +25,12 @@ import static org.junit.Assert.assertThat;
 @RunWith(RobolectricTestRunner.class)
 public class ActivityInjectionTest {
 
-    protected DummyActivity activity;
+    protected DummyActivityTest activity;
 
     @Before
     public void setup() {
         RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
-        activity = Robolectric.buildActivity(DummyActivity.class).withIntent(new Intent(Robolectric.application, DummyActivity.class).putExtra("foobar", "goober")).create().get();
+        activity = Robolectric.buildActivity(DummyActivityTest.class).withIntent(new Intent(Robolectric.application, DummyActivityTest.class).putExtra("foobar", "goober")).create().get();
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ActivityInjectionTest {
     @Test
     public void shouldInjectActivityAndRoboActivity() {
         assertEquals(activity, activity.activity);
-        assertEquals(activity, activity.roboActivity);
+        assertEquals(activity, activity.testRoboActivity);
     }
 
     @Test
@@ -55,13 +55,13 @@ public class ActivityInjectionTest {
         assertThat(g.application, equalTo(Robolectric.application));
     }
 
-    public static class DummyActivity extends RoboActivity {
+    public static class DummyActivityTest extends TestRoboActivity {
         @Inject
         protected String emptyString;
         @Inject
         protected Activity activity;
         @Inject
-        protected RoboActivity roboActivity;
+        protected TestRoboActivity testRoboActivity;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +105,7 @@ public class ActivityInjectionTest {
         }
     }
 
-    public static class G extends RoboActivity {
+    public static class G extends TestRoboActivity {
         @Inject Application application;
     }
 }

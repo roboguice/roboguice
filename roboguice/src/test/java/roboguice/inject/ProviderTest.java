@@ -9,14 +9,12 @@ import java.util.concurrent.FutureTask;
 
 import javax.inject.Inject;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
-import roboguice.RoboGuice;
-import roboguice.activity.RoboActivity;
+import roboguice.activity.TestRoboActivity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -58,7 +56,7 @@ public class ProviderTest {
     }
 
 
-    public static class A extends RoboActivity {
+    public static class A extends TestRoboActivity {
         @Inject ContextScopedProvider<Context> contextProvider;
 
         @Override
@@ -67,14 +65,14 @@ public class ProviderTest {
         }
     }
 
-    public static class B extends RoboActivity {
+    public static class B extends TestRoboActivity {
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
         }
     }
 
-    public static class C extends RoboActivity {
+    public static class C extends TestRoboActivity {
         @Inject ContextScopedProvider<Context> contextProvider;
 
         @Override

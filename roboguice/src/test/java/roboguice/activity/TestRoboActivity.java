@@ -22,5 +22,4 @@ public class TestRoboActivity extends Activity {
         RoboGuice.destroyInjector(this);
         super.onDestroy();
     }
-
 }

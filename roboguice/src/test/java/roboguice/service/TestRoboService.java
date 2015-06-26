@@ -25,7 +25,6 @@ import roboguice.RoboGuice;
  */
 public abstract class TestRoboService extends Service {
 
-    protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
     protected Injector injector;
 
     @Override

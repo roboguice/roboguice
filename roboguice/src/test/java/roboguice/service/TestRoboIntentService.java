@@ -25,7 +25,6 @@ import roboguice.RoboGuice;
  */
 public abstract class TestRoboIntentService extends IntentService {
 
-    protected HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
     protected Injector injector;
 
     public TestRoboIntentService(String name) {

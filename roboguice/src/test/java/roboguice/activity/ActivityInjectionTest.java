@@ -46,7 +46,6 @@ public class ActivityInjectionTest {
     @Test
     public void shouldInjectActivityAndRoboActivity() {
         assertEquals(activity, activity.activity);
-        assertEquals(activity, activity.testRoboActivity);
     }
 
     @Test
@@ -60,8 +59,6 @@ public class ActivityInjectionTest {
         protected String emptyString;
         @Inject
         protected Activity activity;
-        @Inject
-        protected TestRoboActivity testRoboActivity;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {

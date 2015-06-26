@@ -50,6 +50,7 @@ public abstract class Lazy<T> {
         this.context = context;
     }
 
+    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "DC_DOUBLECHECK")
     public T get() {
         if (instance != null) {
             return instance;

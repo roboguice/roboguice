@@ -47,8 +47,7 @@ public final class RoboGuice {
     @SuppressWarnings({"checkstyle:visibilitymodifier", "checkstyle:staticvariablename"})
     public static Stage DEFAULT_STAGE = Stage.PRODUCTION;
 
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "MS_SHOULD_BE_FINAL")
-    protected static Injector injector;
+    private static Injector injector;
 
     /** Enables or disables using annotation databases to optimize roboguice. Used for testing. Enabled by default. */
     private static boolean useAnnotationDatabases = true;

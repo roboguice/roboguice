@@ -3,7 +3,7 @@
 	<groupId>org.roboguice</groupId>
 	<artifactId>roboguice-aggregator</artifactId>
 	<name>Aggregator</name>
-	<version>3.1-SNAPSHOT</version>
+	<version>4.0.0-RC1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<prerequisites>
@@ -40,7 +40,7 @@
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
 		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
-		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
+		<findbugs-maven-plugin.version>3.0.1</findbugs-maven-plugin.version>
 		<maven-checkstyle-plugin.version>2.12.1</maven-checkstyle-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>

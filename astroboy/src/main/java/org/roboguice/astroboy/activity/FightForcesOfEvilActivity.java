@@ -1,5 +1,9 @@
 package org.roboguice.astroboy.activity;
 
+import android.app.Activity;
+import android.view.animation.AnimationUtils;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import java.util.Random;
 
 import javax.inject.Inject;
@@ -7,9 +11,6 @@ import javax.inject.Inject;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.Astroboy;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectResource;
-import roboguice.inject.InjectView;
 import roboguice.util.RoboAsyncTask;
 import android.content.Context;
 import android.os.Bundle;
@@ -22,12 +23,12 @@ import android.widget.TextView;
  *     - How to use RoboAsyncTask to do background tasks with injection
  *     - What it means to be a @Singleton
  */
-public class FightForcesOfEvilActivity extends RoboActivity {
+public class FightForcesOfEvilActivity extends Activity {
 
-    @InjectView(R.id.expletive) TextView expletiveText;
+    @Bind(R.id.expletive) TextView expletiveText;
 
     // You can also inject resources such as Strings, Drawables, and Animations
-    @InjectResource(R.anim.expletive_animation) Animation expletiveAnimation;
+     Animation expletiveAnimation;
 
     // AstroboyRemoteControl is annotated as @ContextSingleton, so the instance
     // we get in FightForcesOfEvilActivity will be a different instance than
@@ -38,7 +39,8 @@ public class FightForcesOfEvilActivity extends RoboActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fight_evil);
-
+        ButterKnife.bind(this);
+        expletiveAnimation = AnimationUtils.loadAnimation(this, R.anim.expletive_animation);
         expletiveText.setAnimation(expletiveAnimation);
         expletiveAnimation.start();
 

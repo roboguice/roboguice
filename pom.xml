@@ -334,7 +334,7 @@
 				<module>roboblender</module>
 				<module>roboguice</module>
 				<module>additional-tests</module>
-				<!-- <module>astroboy</module> -->
+				<module>astroboy</module>
 			</modules>
 		</profile>
 	</profiles>

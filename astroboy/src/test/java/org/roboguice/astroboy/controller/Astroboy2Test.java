@@ -5,12 +5,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.app.Activity;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import roboguice.RoboGuice;
-import roboguice.activity.TestRoboActivity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Vibrator;
@@ -24,7 +24,7 @@ import com.google.inject.AbstractModule;
  */
 public class Astroboy2Test {
     protected Application application = mock(Application.class, RETURNS_DEEP_STUBS);
-    protected Context context = mock(TestRoboActivity.class, RETURNS_DEEP_STUBS);
+    protected Context context = mock(Activity.class, RETURNS_DEEP_STUBS);
     protected Vibrator vibratorMock = mock(Vibrator.class);
 
     @Before

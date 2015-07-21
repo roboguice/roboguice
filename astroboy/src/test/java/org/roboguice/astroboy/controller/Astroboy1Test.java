@@ -2,6 +2,7 @@ package org.roboguice.astroboy.controller;
 
 import static org.junit.Assert.assertTrue;
 
+import android.app.Activity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +10,6 @@ import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 
 import roboguice.RoboGuice;
-import roboguice.activity.TestRoboActivity;
 import android.content.Context;
 
 /**
@@ -28,7 +28,7 @@ public class Astroboy1Test {
     @Before
     public void setup() {
        RoboGuice.setUseAnnotationDatabases(false);
-       context = Robolectric.buildActivity(TestRoboActivity.class).create().get();
+       context = Robolectric.buildActivity(Activity.class).create().get();
        astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
     }
 

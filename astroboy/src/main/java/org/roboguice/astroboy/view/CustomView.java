@@ -1,8 +1,9 @@
 package org.roboguice.astroboy.view;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import org.roboguice.astroboy.R;
 
-import roboguice.inject.InjectView;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -13,10 +14,10 @@ import android.widget.TextView;
 
 public class CustomView extends LinearLayout {
 
-    @InjectView(R.id.close_tv)
-    private Button buttonCloseTv;
-    @InjectView(R.id.tv_status)
-    private TextView textviewStatus;
+    @Bind(R.id.close_tv)
+    Button buttonCloseTv;
+    @Bind(R.id.tv_status)
+    TextView textviewStatus;
 
     public CustomView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,6 +31,7 @@ public class CustomView extends LinearLayout {
 
     public void initializeView(Context context) {
         LayoutInflater.from(context).inflate(R.layout.view_custom, this, true);
+        ButterKnife.bind(this);
     }
 
     @Override

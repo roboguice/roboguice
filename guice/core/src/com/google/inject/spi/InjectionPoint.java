@@ -65,6 +65,7 @@ public final class InjectionPoint {
     private static HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
 
     private final boolean optional;
+    private final boolean isField;
     private final Member member;
     private final TypeLiteral<?> declaringType;
     private final ImmutableList<Dependency<?>> dependencies;
@@ -72,6 +73,7 @@ public final class InjectionPoint {
 
     InjectionPoint(TypeLiteral<?> declaringType, Method method, boolean optional) {
         member = method;
+        isField = false;
         this.declaringType = declaringType;
         this.optional = optional;
         dependencies = forMember(method, declaringType, method.getParameterAnnotations());
@@ -79,6 +81,7 @@ public final class InjectionPoint {
 
     InjectionPoint(TypeLiteral<?> declaringType, Constructor<?> constructor) {
         member = constructor;
+        isField = false;
         this.declaringType = declaringType;
         optional = false;
         dependencies = forMember(
@@ -87,6 +90,7 @@ public final class InjectionPoint {
 
     InjectionPoint(TypeLiteral<?> declaringType, Field field, boolean optional) {
         member = field;
+        isField = true;
         this.declaringType = declaringType;
         this.optional = optional;
 
@@ -164,6 +168,10 @@ public final class InjectionPoint {
      */
     public boolean isOptional() {
         return optional;
+    }
+
+    public boolean isField() {
+        return isField;
     }
 
     /**

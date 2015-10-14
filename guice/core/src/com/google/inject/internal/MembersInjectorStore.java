@@ -128,7 +128,7 @@ final class MembersInjectorStore {
         Errors errorsForMember = injectionPoint.isOptional()
             ? new Errors(injectionPoint)
             : errors.withSource(injectionPoint);
-        SingleMemberInjector injector = injectionPoint.getMember() instanceof Field
+        SingleMemberInjector injector = injectionPoint.isField()
             ? new SingleFieldInjector(this.injector, injectionPoint, errorsForMember)
             : new SingleMethodInjector(this.injector, injectionPoint, errorsForMember);
         injectors.add(injector);

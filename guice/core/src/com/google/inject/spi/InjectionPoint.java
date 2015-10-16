@@ -63,20 +63,20 @@ import com.google.inject.internal.util.Classes;
 public final class InjectionPoint {
 
     private static final Logger logger = Logger.getLogger(InjectionPoint.class.getName());
-    private static final HashMap<Pair<TypeLiteral<?>,Boolean>,List<InjectableMember>> cachedInjectableMembersByRawType = new HashMap<Pair<TypeLiteral<?>,Boolean>, List<InjectableMember>>();
     private static HierarchyTraversalFilter filter = Guice.createHierarchyTraversalFilter();
 
     private final boolean optional;
     private final Member member;
     private final TypeLiteral<?> declaringType;
     private final ImmutableList<Dependency<?>> dependencies;
-
+    private final boolean isField;
 
     InjectionPoint(TypeLiteral<?> declaringType, Method method, boolean optional) {
         this.member = method;
         this.declaringType = declaringType;
         this.optional = optional;
         this.dependencies = forMember(method, declaringType, method.getParameterAnnotations());
+        isField = false;
     }
 
     InjectionPoint(TypeLiteral<?> declaringType, Constructor<?> constructor) {
@@ -85,6 +85,7 @@ public final class InjectionPoint {
         this.optional = false;
         this.dependencies = forMember(
                 constructor, declaringType, constructor.getParameterAnnotations());
+        isField = false;
     }
 
     InjectionPoint(TypeLiteral<?> declaringType, Field field, boolean optional) {
@@ -107,6 +108,7 @@ public final class InjectionPoint {
 
         this.dependencies = ImmutableList.<Dependency<?>>of(
                 newDependency(key, Nullability.allowsNull(annotations), -1));
+        isField = true;
     }
 
     private ImmutableList<Dependency<?>> forMember(Member member, TypeLiteral<?> type,
@@ -166,6 +168,10 @@ public final class InjectionPoint {
      */
     public boolean isOptional() {
         return optional;
+    }
+
+    public boolean isField() {
+        return isField;
     }
 
     /**
@@ -613,36 +619,6 @@ public final class InjectionPoint {
         }
     }
 
-
-    static class Pair<A,B> {
-        final A a;
-        final B b;
-
-        public Pair(A a, B b) {
-            this.a = a;
-            this.b = b;
-        }
-
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Pair pair = (Pair) o;
-
-            return a.equals(pair.a) && b.equals(pair.b);
-
-        }
-
-        @Override
-        public int hashCode() {
-            int result = a.hashCode();
-            result = 31 * result + b.hashCode();
-            return result;
-        }
-    }
-
     private static Set<InjectionPoint> getInjectionPoints(final TypeLiteral<?> type,
             boolean statics, Errors errors) {
         LinkedList<InjectableMember>  injectableMembers = new LinkedList<InjectableMember>();
@@ -683,12 +659,6 @@ public final class InjectionPoint {
         if( !isWorthScanning(filter, rawType) ) {
           return;
         }
-        Pair<TypeLiteral<?>,Boolean> cacheKey = new Pair<TypeLiteral<?>, Boolean>(type,statics);
-        List<InjectableMember> cachedInjectableMembers = cachedInjectableMembersByRawType.get(cacheKey);
-        if( cachedInjectableMembers!=null && cachedInjectableMembers.size()>0 ) {
-            injectableMembers.addAll(cachedInjectableMembers);
-            return;
-        }
 
         //recursive call on parents
         Class<?> parentRawType = rawType.getSuperclass();
@@ -701,23 +671,19 @@ public final class InjectionPoint {
 
         Set<Field> allFields = filter.getAllFields(Inject.class.getName(), rawType);
         if( allFields != null ) {
-            try {
-                for( Field field : allFields ) {
-                    //System.out.printf("Field %s is injectable in class %s ",field.getName(),rawType.getName());
-                    if (Modifier.isStatic(field.getModifiers()) == statics) {
-                        Annotation atInject = getAtInject(field);
-                        if (atInject != null) {
-                            //System.out.printf("Field %s is gonna be injected in class %s ",field.getName(),rawType.getName());
-                            InjectableField injectableField = new InjectableField(type, field, atInject);
-                          if (injectableField.jsr330 && Modifier.isFinal(field.getModifiers())) {
-                                errors.cannotInjectFinalField(field);
-                            }
-                            injectableMembers.add(injectableField);
+            for( Field field : allFields ) {
+                //System.out.printf("Field %s is injectable in class %s ",field.getName(),rawType.getName());
+                if (Modifier.isStatic(field.getModifiers()) == statics) {
+                    Annotation atInject = getAtInject(field);
+                    if (atInject != null) {
+                        //System.out.printf("Field %s is gonna be injected in class %s ",field.getName(),rawType.getName());
+                        InjectableField injectableField = new InjectableField(type, field, atInject);
+                      if (injectableField.jsr330 && Modifier.isFinal(field.getModifiers())) {
+                            errors.cannotInjectFinalField(field);
                         }
+                        injectableMembers.add(injectableField);
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }
 
@@ -761,8 +727,6 @@ public final class InjectionPoint {
                 }
             }
         }
-
-        cachedInjectableMembersByRawType.put(cacheKey,new ArrayList<InjectableMember>(injectableMembers));
     }
 
     private static boolean isWorthScanning(HierarchyTraversalFilter filter, Class<?> rawType) {

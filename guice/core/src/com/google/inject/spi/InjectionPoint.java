@@ -195,7 +195,7 @@ public final class InjectionPoint {
     }
 
     @Override public boolean equals(Object o) {
-        return o instanceof InjectionPoint
+        return o.getClass() == InjectionPoint.class
                 && member.equals(((InjectionPoint) o).member)
                 && declaringType.equals(((InjectionPoint) o).declaringType);
     }

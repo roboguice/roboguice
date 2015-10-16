@@ -27,6 +27,9 @@ public class ContextScopedRoboInjector implements Injector {
         this.delegate = applicationInjector;
         this.context = context;
         this.scope = scope;
+        if (scope == null) {
+            throw new RuntimeException("Scope can't be null");
+        }
         this.scopedObjects = scopedObjects;
     }
 

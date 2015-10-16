@@ -126,9 +126,9 @@ public final class RoboGuice {
      */
     public static Injector overrideApplicationInjector(final Application application, Module... overrideModules) {
         synchronized (RoboGuice.class) {
+            initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
             final List<Module> baseModules = extractModulesFromManifest(application);
-            injector = Guice.createInjector(DEFAULT_STAGE, Modules.override(baseModules).with(overrideModules));
-            return injector;
+            return createGuiceInjector(DEFAULT_STAGE, null, Modules.override(baseModules).with(overrideModules));
         }
     }
 
@@ -182,7 +182,9 @@ public final class RoboGuice {
                 return injector;
             }
         } finally {
-            stopwatch.resetAndLog("BaseApplicationInjector creation");
+            if (stopwatch != null) {
+                stopwatch.resetAndLog("BaseApplicationInjector creation");
+            }
         }
     }
 

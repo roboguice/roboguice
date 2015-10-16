@@ -99,6 +99,20 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
+				<executions>
+				        <execution>
+				                <id>default-compile</id>
+				                <phase>compile</phase>
+				                <goals>
+				                        <goal>compile</goal>
+				                </goals>
+				                <configuration>
+				                        <compilerArgs>
+				                                <arg>-Aincludes=org.roboguice.astroboy.*</arg>
+				                        </compilerArgs>
+				                </configuration>
+				        </execution>
+				</executions>
 			</plugin>
 		</plugins>
 

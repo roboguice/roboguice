@@ -59,12 +59,6 @@ public class AstroboyMasterConsole extends Activity {
         setContentView(R.layout.main);
         ButterKnife.bind(this);
         RoboGuice.getInjector(this).injectMembers(this);
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 100; i++) {
-            RoboGuice.getInjector(this).getInstance(A.class);
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("100 iterations of creation of A (ms):" + (end-start));
 
         sayText.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

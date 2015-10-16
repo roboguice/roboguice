@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>4.0.0-RC1-SNAPSHOT</version>
+		<version>4.0.0-RC2-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>

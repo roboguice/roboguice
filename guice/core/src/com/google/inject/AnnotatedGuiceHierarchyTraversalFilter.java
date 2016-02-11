@@ -21,9 +21,9 @@ import java.util.Set;
  */
 public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFilter {
     private boolean hasHadInjectionPoints;
-    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet;
-    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet;
-    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet;
+    private HashMap<String, Map<String, String[]>> mapAnnotationToMapClassWithInjectionNameToConstructorSet;
+    private HashMap<String, Map<String, String[]>> mapAnnotationToMapClassWithInjectionNameToMethodSet;
+    private HashMap<String, Map<String, String[]>> mapAnnotationToMapClassWithInjectionNameToFieldSet;
     private HashSet<String> classesContainingInjectionPointsSet = new HashSet<String>();
     private HierarchyTraversalFilter delegate;
 
@@ -63,7 +63,7 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
 
     @Override
     public boolean isWorthScanningForFields(String annotationClassName, Class<?> c) {
-        Map<String, Set<String>> classesContainingInjectionPointsForAnnotation;
+        Map<String, String[]> classesContainingInjectionPointsForAnnotation;
         if( hasHadInjectionPoints ) {
             return delegate.isWorthScanning(c);
         } else if( c != null ) {
@@ -84,10 +84,10 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
 
     @Override
     public Set<Field> getAllFields(String annotationClassName, Class<?> c) {
-        Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToFieldSet.get(annotationClassName);
+        Map<String, String[]> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToFieldSet.get(annotationClassName);
 
         if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
-            Set<String> fieldNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
+            String[] fieldNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
             if( fieldNameSet != null ) {
                 Set<Field> fieldSet = new HashSet<Field>();
                 try {
@@ -106,7 +106,7 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
 
     @Override
     public boolean isWorthScanningForMethods(String annotationClassName, Class<?> c) {
-        Map<String, Set<String>> classesContainingInjectionPointsForAnnotation;
+        Map<String, String[]> classesContainingInjectionPointsForAnnotation;
 
         if( hasHadInjectionPoints ) {
             return delegate.isWorthScanning(c);
@@ -130,10 +130,10 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
     public Set<Method> getAllMethods(String annotationClassName, Class<?> c) {
         
         //System.out.printf("map of methods : %s \n",mapAnnotationToMapClassWithInjectionNameToMethodSet.toString());
-        Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToMethodSet.get(annotationClassName);
+        Map<String, String[]> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToMethodSet.get(annotationClassName);
 
         if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
-            Set<String> methodNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
+            String[] methodNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
             if( methodNameSet != null ) {
                 Set<Method> methodSet = new HashSet<Method>();
                 try {
@@ -159,7 +159,7 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
 
     @Override
     public boolean isWorthScanningForConstructors(String annotationClassName, Class<?> c) {
-        Map<String, Set<String>> classesContainingInjectionPointsForAnnotation;
+        Map<String, String[]> classesContainingInjectionPointsForAnnotation;
 
         if( hasHadInjectionPoints ) {
             return delegate.isWorthScanning(c);
@@ -182,10 +182,10 @@ public class AnnotatedGuiceHierarchyTraversalFilter extends HierarchyTraversalFi
     public Set<Constructor<?>> getAllConstructors(String annotationClassName, Class<?> c) {
         
         //System.out.printf("map of methods : %s \n",mapAnnotationToMapClassWithInjectionNameToConstructorSet.toString());
-        Map<String, Set<String>> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToConstructorSet.get(annotationClassName);
+        Map<String, String[]> classesContainingInjectionPointsForAnnotation = mapAnnotationToMapClassWithInjectionNameToConstructorSet.get(annotationClassName);
 
         if( c != null && classesContainingInjectionPointsForAnnotation!= null ) {
-            Set<String> methodNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
+            String[] methodNameSet = classesContainingInjectionPointsForAnnotation.get(c.getName());
             if( methodNameSet != null ) {
                 Set<Constructor<?>> methodSet = new HashSet<Constructor<?>>();
                 try {

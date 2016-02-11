@@ -55,7 +55,6 @@ public final class RoboGuice {
     //both maps are used together, we only synchronize on the first one.
     //TODO create data structure to hold injector + scoped objects --> single map.
     private static Map<Context, ContextScopedRoboInjector> mapContextToInjector = new IdentityHashMap<Context, ContextScopedRoboInjector>();
-    private static Map<Context, Map<Key<?>, Object>> mapContextToScopedObjects = new HashMap<Context, Map<Key<?>, Object>>();
     private static ContextScope contextScope;
 
     //used for testing
@@ -199,11 +198,11 @@ public final class RoboGuice {
                 return contextScopedRoboInjector;
             }
 
+
             final Application application = (Application) context.getApplicationContext();
             final HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
             final ContextScopedRoboInjector newContextScopedRoboInjector = new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application), contextScope, scopedObjects);
             mapContextToInjector.put(context, newContextScopedRoboInjector);
-            mapContextToScopedObjects.put(context, scopedObjects);
             return newContextScopedRoboInjector;
         }
     }
@@ -211,7 +210,6 @@ public final class RoboGuice {
     public static void destroyInjector(Context context) {
         synchronized (mapContextToInjector) {
             mapContextToInjector.remove(context);
-            mapContextToScopedObjects.remove(context);
         }
     }
 

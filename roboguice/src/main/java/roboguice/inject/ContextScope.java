@@ -116,7 +116,7 @@ public class ContextScope implements Scope {
         };
     }
 
-    public Stack<ScopedObjects> getContextStack() {
+    private Stack<ScopedObjects> getContextStack() {
         Stack<ScopedObjects> stack = contextThreadLocal.get();
         if (stack == null) {
             stack = new Stack<ScopedObjects>();

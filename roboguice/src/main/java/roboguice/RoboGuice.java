@@ -12,13 +12,11 @@ import com.google.inject.Guice;
 import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.HierarchyTraversalFilterFactory;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.Stage;
 import com.google.inject.internal.util.Stopwatch;
 import com.google.inject.util.Modules;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.List;
@@ -200,8 +198,7 @@ public final class RoboGuice {
 
 
             final Application application = (Application) context.getApplicationContext();
-            final HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
-            final ContextScopedRoboInjector newContextScopedRoboInjector = new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application), contextScope, scopedObjects);
+            final ContextScopedRoboInjector newContextScopedRoboInjector = new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application), contextScope);
             mapContextToInjector.put(context, newContextScopedRoboInjector);
             return newContextScopedRoboInjector;
         }

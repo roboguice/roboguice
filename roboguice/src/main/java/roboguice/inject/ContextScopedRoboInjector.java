@@ -11,6 +11,7 @@ import com.google.inject.Scope;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.TypeConverterBinding;
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,16 +22,15 @@ public class ContextScopedRoboInjector implements Injector {
     protected Injector delegate;
     protected Context context;
     protected ContextScope scope;
-    private Map<Key<?>, Object> scopedObjects;
+    private final HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
-    public ContextScopedRoboInjector(Context context, Injector applicationInjector, ContextScope scope, Map<Key<?>, Object> scopedObjects) {
+    public ContextScopedRoboInjector(Context context, Injector applicationInjector, ContextScope scope) {
         this.delegate = applicationInjector;
         this.context = context;
         this.scope = scope;
         if (scope == null) {
             throw new RuntimeException("Scope can't be null");
         }
-        this.scopedObjects = scopedObjects;
     }
 
     @Override

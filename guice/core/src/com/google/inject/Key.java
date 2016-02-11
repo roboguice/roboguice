@@ -454,7 +454,7 @@ public class Key<T> {
     }
 
     @Override public boolean equals(Object o) {
-      if (!(o instanceof AnnotationInstanceStrategy)) {
+      if (!(o.getClass() == AnnotationInstanceStrategy.class)) {
         return false;
       }
 
@@ -501,7 +501,7 @@ public class Key<T> {
     }
 
     @Override public boolean equals(Object o) {
-      if (!(o instanceof AnnotationTypeStrategy)) {
+      if (!(o.getClass() == AnnotationTypeStrategy.class)) {
         return false;
       }
 

@@ -195,7 +195,7 @@ public final class InjectionPoint {
     }
 
     @Override public boolean equals(Object o) {
-        return o instanceof InjectionPoint
+        return o.getClass() == InjectionPoint.class
                 && member.equals(((InjectionPoint) o).member)
                 && declaringType.equals(((InjectionPoint) o).declaringType);
     }
@@ -772,7 +772,7 @@ public final class InjectionPoint {
     /**
      * A method signature. Used to handle method overridding.
      */
-    static class Signature {
+    final static class Signature {
 
         final String name;
         final Class[] parameterTypes;
@@ -795,7 +795,7 @@ public final class InjectionPoint {
         }
 
         @Override public boolean equals(Object o) {
-            if (!(o instanceof Signature)) {
+            if (!(o.getClass() == Signature.class)) {
                 return false;
             }
 

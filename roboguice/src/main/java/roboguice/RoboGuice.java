@@ -51,7 +51,6 @@ public final class RoboGuice {
     private static boolean useAnnotationDatabases = true;
 
     //both maps are used together, we only synchronize on the first one.
-    //TODO create data structure to hold injector + scoped objects --> single map.
     private static Map<Context, ContextScopedRoboInjector> mapContextToInjector = new IdentityHashMap<Context, ContextScopedRoboInjector>();
     private static ContextScope contextScope;
 

@@ -730,7 +730,8 @@ public final class InjectionPoint {
     }
 
     private static boolean isWorthScanning(HierarchyTraversalFilter filter, Class<?> rawType) {
-        boolean worthScanning = filter.isWorthScanningForFields(Inject.class.getName(), rawType);
+        boolean worthScanning = filter.isWorthScanningForFields(Inject.class.getName(), rawType)
+                || filter.isWorthScanningForMethods(Inject.class.getName(), rawType);
         //System.out.printf( "Class %s is worth %b \n", rawType.getName(), worthScanning);
         return worthScanning;
     }

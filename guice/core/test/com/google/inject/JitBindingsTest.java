@@ -491,7 +491,7 @@ public class JitBindingsTest extends TestCase {
         }
       });
 
-    WantsTypeLiterals<String> foo = injector.getInstance(new Key<WantsTypeLiterals<String>>() {});
+    WantsTypeLiterals<String> foo = injector.getInstance(Key.get(new TypeLiteral<WantsTypeLiterals<String>>() {}));
     assertEquals(foo.literal.getRawType(), String.class);
     assertEquals(of("bar"), foo.set);
   }

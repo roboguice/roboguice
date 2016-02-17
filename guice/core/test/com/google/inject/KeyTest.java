@@ -61,12 +61,6 @@ public class KeyTest extends TestCase {
     assertEquals(Foo.class, ki.getAnnotationType());
   }
 
-  public void testKeyEquality() {
-    Key<List<String>> a = new Key<List<String>>(Foo.class) {};
-    Key<List<String>> b = Key.get(new TypeLiteral<List<String>>() {}, Foo.class);
-    assertEqualsBothWays(a, b);
-  }
-
   public void testProviderKey() throws NoSuchMethodException {
     Key<?> actual = Key.get(getClass().getMethod("foo", List.class, List.class)
         .getGenericParameterTypes()[0]).providerKey();
@@ -80,10 +74,10 @@ public class KeyTest extends TestCase {
     Method m = getClass().getMethod("foo", List.class, List.class);
     Type[] types = m.getGenericParameterTypes();
     assertEquals(types[0], types[1]);
-    Key<List<String>> k = new Key<List<String>>() {};
+    Key<List<String>> k = Key.get(new TypeLiteral<List<String>>() {});
     assertEquals(types[0], k.getTypeLiteral().getType());
     assertFalse(types[0].equals(
-        new Key<List<Integer>>() {}.getTypeLiteral().getType()));
+            Key.get(new TypeLiteral<List<Integer>>() {}).getTypeLiteral().getType()));
   }
 
   /**
@@ -223,7 +217,7 @@ public class KeyTest extends TestCase {
   }
 
   private static <T> Key<T> createKey() {
-    return new Key<T>() {};
+    return Key.get(new TypeLiteral<T>() {});
   }
 
   interface B {}
@@ -291,11 +285,11 @@ public class KeyTest extends TestCase {
     };
     Module module = new AbstractModule() {
       @Override protected void configure() {
-        bind(new Key<List<String>>() {}).toInstance(new ArrayList<String>());
+        bind(Key.get(new TypeLiteral<List<String>>() {})).toInstance(new ArrayList<String>());
         bind(new TypeLiteral<List<Integer>>() {}).toInstance(new ArrayList<Integer>());
 
-        stringProvider.set(getProvider(new Key<List<String>>() {}));
-        intProvider.set(binder().getProvider(Dependency.get(new Key<List<Integer>>() {})));
+        stringProvider.set(getProvider(Key.get(new TypeLiteral<List<String>>() {})));
+        intProvider.set(binder().getProvider(Dependency.get(Key.get(new TypeLiteral<List<Integer>>() {}))));
 
         binder().requestInjection(new TypeLiteral<Object>() {}, foo);
       }
@@ -307,7 +301,7 @@ public class KeyTest extends TestCase {
 
     Runnable runner = new Runnable() {
       @Override public void run() {
-        injector.getInstance(new Key<Typed<String>>() {});
+        injector.getInstance(Key.get(new TypeLiteral<Typed<String>>() {}));
         injector.getInstance(Key.get(new TypeLiteral<Typed<Integer>>() {}));
       }
     };

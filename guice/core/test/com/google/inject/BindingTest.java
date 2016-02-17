@@ -244,8 +244,8 @@ public class BindingTest extends TestCase {
 
   public void testToConstructorBindingsOnParameterizedTypes() throws NoSuchMethodException {
     final Constructor<C> constructor = C.class.getConstructor(Stage.class, Object.class);
-    final Key<Object> s = new Key<Object>(named("s")) {};
-    final Key<Object> i = new Key<Object>(named("i")) {};
+    final Key<Object> s = Key.get(Object.class, named("s"));
+    final Key<Object> i = Key.get(Object.class, named("i"));
 
     Injector injector = Guice.createInjector(new AbstractModule() {
       protected void configure() {
@@ -397,13 +397,13 @@ public class BindingTest extends TestCase {
       protected void configure() {
         bind(D.class).toInstance(new D(Stage.PRODUCTION));
         bind(Object.class).to(D.class);
-        getProvider(new Key<C<Stage>>() {});
+        getProvider(Key.get(new TypeLiteral<C<Stage>>() {}));
       }
     });
 
     Map<Key<?>,Binding<?>> bindings = injector.getAllBindings();
     assertEquals(ImmutableSet.of(Key.get(Injector.class), Key.get(Stage.class), Key.get(D.class),
-        Key.get(Logger.class), Key.get(Object.class), new Key<C<Stage>>() {}),
+        Key.get(Logger.class), Key.get(Object.class), Key.get(new TypeLiteral<C<Stage>>() {})),
         bindings.keySet());
 
     // add a JIT binding
@@ -411,12 +411,12 @@ public class BindingTest extends TestCase {
 
     Map<Key<?>,Binding<?>> bindings2 = injector.getAllBindings();
     assertEquals(ImmutableSet.of(Key.get(Injector.class), Key.get(Stage.class), Key.get(D.class),
-        Key.get(Logger.class), Key.get(Object.class), new Key<C<Stage>>() {}, Key.get(F.class)),
+        Key.get(Logger.class), Key.get(Object.class), Key.get(new TypeLiteral<C<Stage>>() {}), Key.get(F.class)),
         bindings2.keySet());
 
     // the original map shouldn't have changed
     assertEquals(ImmutableSet.of(Key.get(Injector.class), Key.get(Stage.class), Key.get(D.class),
-        Key.get(Logger.class), Key.get(Object.class), new Key<C<Stage>>() {}),
+        Key.get(Logger.class), Key.get(Object.class), Key.get(new TypeLiteral<C<Stage>>() {})),
         bindings.keySet());
 
     // check the bindings' values

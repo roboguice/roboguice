@@ -80,7 +80,7 @@ public class GenericInjectionTest extends TestCase {
   }
 
   public void testInjectingParameterizedDependenciesForImplicitBinding() {
-    assertParameterizedDepsInjected(new Key<ParameterizedDeps<String, Integer>>() {},
+    assertParameterizedDepsInjected(Key.get(new TypeLiteral<ParameterizedDeps<String, Integer>>() {}),
         Modules.EMPTY_MODULE);
   }
 
@@ -177,7 +177,7 @@ public class GenericInjectionTest extends TestCase {
         bind(String.class).toInstance("tee");
       }
     });
-    InjectsT<String> injectsT = injector.getInstance(new Key<InjectsT<String>>() {});
+    InjectsT<String> injectsT = injector.getInstance(Key.get(new TypeLiteral<InjectsT<String>>() {}));
     assertEquals("tee", injectsT.t);
   }
 

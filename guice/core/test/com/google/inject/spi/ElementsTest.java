@@ -488,7 +488,7 @@ public class ElementsTest extends TestCase {
             assertEquals(Key.get(Iterable.class), command.getKey());
             command.acceptTargetVisitor(new FailingTargetVisitor<T>() {
               @Override public Void visit(ProviderKeyBinding<? extends T> binding) {
-                assertEquals(new Key<TProvider<List>>() {}, binding.getProviderKey());
+                assertEquals(Key.get(new TypeLiteral<TProvider<List>>() {}), binding.getProviderKey());
                 return null;
               }
             });
@@ -1169,7 +1169,7 @@ public class ElementsTest extends TestCase {
 
         new FailingElementVisitor() {
           @Override public <T> Void visit(Binding<T> binding) {
-            assertEquals(new Key<A>() {}, binding.getKey());
+            assertEquals(Key.get(new TypeLiteral<A>() {}), binding.getKey());
 
             return binding.acceptTargetVisitor(new FailingTargetVisitor<T>() {
               @Override public Void visit(ConstructorBinding<? extends T> constructorBinding) {
@@ -1184,7 +1184,7 @@ public class ElementsTest extends TestCase {
 
         new FailingElementVisitor() {
           @Override public <T> Void visit(Binding<T> binding) {
-            assertEquals(new Key<B>() {}, binding.getKey());
+            assertEquals(Key.get(new TypeLiteral<B>() {}), binding.getKey());
             binding.acceptScopingVisitor(new FailingBindingScopingVisitor() {
               @Override public Void visitScopeAnnotation(Class<? extends Annotation> annotation) {
                 assertEquals(Singleton.class, annotation);

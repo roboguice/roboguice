@@ -24,8 +24,12 @@ public class ContextScopedRoboInjector implements Injector {
     protected ContextScope scope;
     private final HashMap<Key<?>, Object> scopedObjects = new HashMap<Key<?>, Object>();
 
-    public ContextScopedRoboInjector(Context context, Injector applicationInjector, ContextScope scope) {
-        this.delegate = applicationInjector;
+    public ContextScopedRoboInjector(Context context, Injector applicationInjector, ContextScope scope, Iterable<? extends Module> modules) {
+        if (modules == null) {
+            this.delegate = applicationInjector;
+        } else {
+            this.delegate = applicationInjector.createChildInjector(modules);
+        }
         this.context = context;
         this.scope = scope;
         if (scope == null) {

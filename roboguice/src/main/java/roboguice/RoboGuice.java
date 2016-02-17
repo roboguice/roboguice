@@ -183,8 +183,11 @@ public final class RoboGuice {
             }
         }
     }
-
     public static ContextScopedRoboInjector getInjector(Context context) {
+        return getInjector(context, null);
+    }
+
+    public static ContextScopedRoboInjector getInjector(Context context, Iterable<? extends Module> modules) {
         ContextScopedRoboInjector contextScopedRoboInjector = mapContextToInjector.get(context);
         if (contextScopedRoboInjector != null) {
             return contextScopedRoboInjector;
@@ -197,7 +200,7 @@ public final class RoboGuice {
 
 
             final Application application = (Application) context.getApplicationContext();
-            final ContextScopedRoboInjector newContextScopedRoboInjector = new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application), contextScope);
+            final ContextScopedRoboInjector newContextScopedRoboInjector = new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application), contextScope, modules);
             mapContextToInjector.put(context, newContextScopedRoboInjector);
             return newContextScopedRoboInjector;
         }

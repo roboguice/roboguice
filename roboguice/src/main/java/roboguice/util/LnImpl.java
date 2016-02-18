@@ -47,7 +47,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.VERBOSE )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.VERBOSE, message);
     }
@@ -57,7 +57,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.VERBOSE )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.VERBOSE, message);
     }
@@ -72,7 +72,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.DEBUG )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.DEBUG, message);
     }
@@ -82,7 +82,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.DEBUG )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.DEBUG, message);
     }
@@ -97,7 +97,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.INFO )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.INFO, message);
     }
@@ -107,7 +107,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.INFO )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.INFO, message);
     }
@@ -122,7 +122,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.WARN )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.WARN, message);
     }
@@ -132,7 +132,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.WARN )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.WARN, message);
     }
@@ -147,7 +147,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.ERROR )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.ERROR, message);
     }
@@ -157,7 +157,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.ERROR )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.ERROR, message);
     }
@@ -236,5 +236,8 @@ public class LnImpl implements LnInterface {
         }
     }
 
+    private String toString(Object s1) {
+        return s1 == null ? "" : s1.toString();
+    }
 
 }

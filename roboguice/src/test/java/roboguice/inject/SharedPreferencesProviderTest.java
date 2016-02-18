@@ -1,6 +1,6 @@
 package roboguice.inject;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -16,7 +16,6 @@ import org.robolectric.tester.android.content.TestSharedPreferences;
 
 import roboguice.RoboGuice;
 import roboguice.activity.TestRoboActivity;
-import roboguice.util.Strings;
 
 import com.google.inject.Inject;
 import com.google.inject.AbstractModule;
@@ -35,7 +34,8 @@ public class SharedPreferencesProviderTest {
         final Field f = TestSharedPreferences.class.getDeclaredField("filename");
         f.setAccessible(true);
 
-        assertTrue(Strings.notEmpty(f.get(a.prefs)));
+        assertThat(f.get(a.prefs), notNullValue());
+        assertThat((String) f.get(a.prefs), is(not("")));
         assertThat(f.get(a.prefs), equalTo(f.get(PreferenceManager.getDefaultSharedPreferences(a))));
     }
 
@@ -67,7 +67,8 @@ public class SharedPreferencesProviderTest {
             final Field f = TestSharedPreferences.class.getDeclaredField("filename");
             f.setAccessible(true);
 
-            assertTrue(Strings.notEmpty(f.get(a.prefs)));
+            assertThat(f.get(a.prefs), notNullValue());
+            assertThat((String) f.get(a.prefs), is(not("")));
             assertEquals("default.xml", f.get(a.prefs));
 
         } finally {
@@ -90,7 +91,8 @@ public class SharedPreferencesProviderTest {
             final Field f = TestSharedPreferences.class.getDeclaredField("filename");
             f.setAccessible(true);
 
-            assertTrue(Strings.notEmpty(f.get(a.prefs)));
+            assertThat(f.get(a.prefs), notNullValue());
+            assertThat((String) f.get(a.prefs), is(not("")));
             assertEquals("FOOBAR", f.get(a.prefs));
 
         } finally {

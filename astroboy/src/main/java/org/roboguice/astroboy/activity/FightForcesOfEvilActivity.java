@@ -1,6 +1,7 @@
 package org.roboguice.astroboy.activity;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.view.animation.AnimationUtils;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -11,11 +12,11 @@ import javax.inject.Inject;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.Astroboy;
 
-import roboguice.util.RoboAsyncTask;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.animation.Animation;
 import android.widget.TextView;
+import roboguice.RoboGuice;
 
 /**
  * Things you'll learn in this class:
@@ -46,23 +47,16 @@ public class FightForcesOfEvilActivity extends Activity {
 
         // Throw some punches
         for( int i=0; i<10; ++i )
-            new AsyncPunch(this) {
-                @Override
-                protected void onSuccess(String expletive) throws Exception {
-                    expletiveText.setText(expletive);
-                }
-
-                // We could also override onException() and onFinally() if we wanted
-                
-            }.execute();
-
+            new AsyncPunch(this, expletiveText).execute();
     }
 
 
 
     // This class will call Astroboy.punch() in the background
-    public static class AsyncPunch extends RoboAsyncTask<String> {
+    public static class AsyncPunch extends AsyncTask<Void, Void, String> {
 
+        private final Context context;
+        private final TextView expletiveText;
         // Because Astroboy is a @Singleton, this will be the same
         // instance that we inject elsewhere in our app.
         // Random of course will be a new instance of java.util.Random, since
@@ -70,13 +64,25 @@ public class FightForcesOfEvilActivity extends Activity {
         @Inject Astroboy astroboy;
         @Inject Random random;
 
-        public AsyncPunch(Context context) {
-            super(context);
+        public AsyncPunch(Context context, TextView expletiveText) {
+            this.context = context;
+            this.expletiveText = expletiveText;
+            RoboGuice.getInjector(context).injectMembers(this);
         }
 
-        public String call() throws Exception {
-            Thread.sleep(random.nextInt(5*1000));
+        @Override
+        protected String doInBackground(Void... objects) {
+            try {
+                Thread.sleep(random.nextInt(5*1000));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             return astroboy.punch();
+        }
+
+        @Override
+        protected void onPostExecute(String expletive) {
+            expletiveText.setText(expletive);
         }
     }
 }

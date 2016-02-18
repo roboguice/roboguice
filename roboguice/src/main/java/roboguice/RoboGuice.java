@@ -26,7 +26,6 @@ import roboguice.config.DefaultRoboModule;
 import roboguice.config.RoboGuiceHierarchyTraversalFilter;
 import roboguice.inject.ContextScope;
 import roboguice.inject.ContextScopedRoboInjector;
-import roboguice.util.Strings;
 
 /**
  * Manages injectors for RoboGuice applications.
@@ -155,7 +154,7 @@ public final class RoboGuice {
             modules.add(defaultRoboModule);
 
             for (String name : moduleNames) {
-                if (Strings.notEmpty(name)) {
+                if (name != null && !"".equals(name)) {
                     final Class<? extends Module> clazz = Class.forName(name).asSubclass(Module.class);
                     try {
                         modules.add(clazz.getDeclaredConstructor(Application.class).newInstance(application));

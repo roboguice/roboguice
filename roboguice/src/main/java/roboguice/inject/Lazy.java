@@ -45,7 +45,7 @@ public class Lazy<T> {
     private T instance;
     private Class<T> type;
 
-    public Lazy(Class type, Context context) {
+    public Lazy(Class<T> type, Context context) {
         this.type = type;
         this.context = context;
     }

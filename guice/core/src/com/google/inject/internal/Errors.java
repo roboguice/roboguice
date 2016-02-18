@@ -812,7 +812,7 @@ public final class Errors implements Serializable {
     } else if (source instanceof InjectionPoint) {
       formatInjectionPoint(formatter, null, (InjectionPoint) source, elementSource);
 
-    } else if (source instanceof Class) {
+    } else if (source.getClass() == Class.class) {
       formatter.format("  at %s%s%n", StackTraceElements.forType((Class<?>) source), modules);
 
     } else if (source instanceof Member) {

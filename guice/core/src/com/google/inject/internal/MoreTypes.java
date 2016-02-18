@@ -136,7 +136,7 @@ public class MoreTypes {
    * Returns true if {@code type} is free from type variables.
    */
   private static boolean isFullySpecified(Type type) {
-    if (type instanceof Class) {
+    if (type.getClass() == Class.class) {
       return true;
 
     } else if (type instanceof CompositeType) {
@@ -156,7 +156,7 @@ public class MoreTypes {
    * type is {@link Serializable}.
    */
   public static Type canonicalize(Type type) {
-    if (type instanceof Class) {
+    if (type.getClass() == Class.class) {
       Class<?> c = (Class<?>) type;
       return c.isArray() ? new GenericArrayTypeImpl(canonicalize(c.getComponentType())) : c;
 
@@ -183,7 +183,7 @@ public class MoreTypes {
   }
 
   public static Class<?> getRawType(Type type) {
-    if (type instanceof Class<?>) {
+    if (type.getClass() == Class.class) {
       // type is a normal class.
       return (Class<?>) type;
 
@@ -194,7 +194,7 @@ public class MoreTypes {
       // Neal isn't either but suspects some pathological case related
       // to nested classes exists.
       Type rawType = parameterizedType.getRawType();
-      checkArgument(rawType instanceof Class,
+      checkArgument(rawType.getClass() == Class.class,
           "Expected a Class, but <%s> is of type %s", type, type.getClass().getName());
       return (Class<?>) rawType;
 
@@ -221,7 +221,7 @@ public class MoreTypes {
       // also handles (a == null && b == null)
       return true;
 
-    } else if (a instanceof Class) {
+    } else if (a.getClass() == Class.class) {
       // Class already specifies equals().
       return a.equals(b);
 
@@ -276,7 +276,7 @@ public class MoreTypes {
   }
 
   public static String typeToString(Type type) {
-    return type instanceof Class ? ((Class) type).getName() : type.toString();
+    return type.getClass() == Class.class ? ((Class) type).getName() : type.toString();
   }
 
   /**
@@ -363,7 +363,7 @@ public class MoreTypes {
    */
   private static Class<?> declaringClassOf(TypeVariable typeVariable) {
     GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
-    return genericDeclaration instanceof Class
+    return genericDeclaration.getClass() == Class.class
         ? (Class<?>) genericDeclaration
         : null;
   }
@@ -445,7 +445,7 @@ public class MoreTypes {
     }
 
     private static void ensureOwnerType(Type ownerType, Type rawType) {
-      if (rawType instanceof Class<?>) {
+      if (rawType.getClass() == Class.class) {
         Class rawTypeAsClass = (Class) rawType;
         checkArgument(ownerType != null || rawTypeAsClass.getEnclosingClass() == null,
             "No owner type for enclosed %s", rawType);
@@ -555,7 +555,7 @@ public class MoreTypes {
   }
 
   private static void checkNotPrimitive(Type type, String use) {
-    checkArgument(!(type instanceof Class<?>) || !((Class) type).isPrimitive(),
+    checkArgument(!(type.getClass() == Class.class) || !((Class) type).isPrimitive(),
         "Primitive types are not allowed in %s: %s", use, type);
   }
 

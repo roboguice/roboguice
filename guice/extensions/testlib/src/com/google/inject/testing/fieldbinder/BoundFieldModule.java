@@ -204,7 +204,7 @@ public final class BoundFieldModule implements Module {
     private Optional<TypeLiteral<?>> getNaturalFieldType() {
       if (isTransparentProvider(type.getRawType())) {
         Type providerType = type.getType();
-        if (providerType instanceof Class) {
+        if (providerType.getClass() == Class.class) {
           return Optional.absent();
         }
         Preconditions.checkState(providerType instanceof ParameterizedType);

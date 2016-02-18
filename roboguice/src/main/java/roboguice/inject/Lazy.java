@@ -2,8 +2,6 @@ package roboguice.inject;
 
 import android.content.Context;
 import com.google.inject.Key;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import roboguice.RoboGuice;
 import roboguice.util.Ln;
 
@@ -39,14 +37,16 @@ import roboguice.util.Ln;
  *
  * @param <T> the type to lazily inject.
  */
-public abstract class Lazy<T> {
+public class Lazy<T> {
     /** Used to debug startup and check that no lazy deps are created eagerly before GRP24. */
     private static boolean verboseLogging = false;
 
     private Context context;
     private T instance;
+    private Class<T> type;
 
-    public Lazy(Context context) {
+    public Lazy(Class type, Context context) {
+        this.type = type;
         this.context = context;
     }
 
@@ -63,12 +63,11 @@ public abstract class Lazy<T> {
             ContextScope scope = null;
             try {
                 final ContextScopedRoboInjector injector = RoboGuice.getInjector(context);
-                scope = injector.getInstance(ContextScope.class);
+                scope = injector.getContextScope();
                 scope.enter(context, injector.getScopedObjects());
                 //this is very hacky,
                 //but in this case it has no side-effect
                 //http://stackoverflow.com/q/1901164/693752
-                final Type type = ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 
                 if (verboseLogging) {
                     Ln.d("Creating lazy instance of type: %s", type.toString());

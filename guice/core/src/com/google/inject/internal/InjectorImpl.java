@@ -681,7 +681,7 @@ final class InjectorImpl implements Injector, Lookups {
 
     // this is unforunate. We don't support building TypeLiterals for type variable like 'T'. If
     // this proves problematic, we can probably fix TypeLiteral to support type variables
-    if (!(innerType instanceof Class)
+    if (!(innerType.getClass() == Class.class)
         && !(innerType instanceof GenericArrayType)
         && !(innerType instanceof ParameterizedType)) {
       throw errors.cannotInjectTypeLiteralOf(innerType).toException();
@@ -998,6 +998,7 @@ final class InjectorImpl implements Injector, Lookups {
   }
 
   public <T> Provider<T> getProvider(Class<T> type) {
+    //System.out.println("creating provider of class : " + type);
     return getProvider(Key.get(type));
   }
 
@@ -1005,6 +1006,7 @@ final class InjectorImpl implements Injector, Lookups {
     final Key<T> key = dependency.getKey();
     final BindingImpl<? extends T> binding = getBindingOrThrow(key, errors, JitLimitation.NO_JIT);
 
+    //System.out.println("creating provider of key : " + key);
     return new Provider<T>() {
       public T get() {
         final Errors errors = new Errors(dependency);
@@ -1033,6 +1035,7 @@ final class InjectorImpl implements Injector, Lookups {
   }
 
   public <T> Provider<T> getProvider(final Key<T> key) {
+    //System.out.println("creating provider of key : " + key);
     Errors errors = new Errors(key);
     try {
       Provider<T> result = getProviderOrThrow(Dependency.get(key), errors);

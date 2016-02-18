@@ -8,6 +8,7 @@ import java.util.Map;
 public class ScopedObjects {
     private WeakReference<Context> contextWeakReference;
     private Map<Key<?>, Object> scopedObjects;
+    private int enterCount;
 
     public ScopedObjects(WeakReference<Context> contextWeakReference, Map<Key<?>, Object> scopedObjects) {
         this.contextWeakReference = contextWeakReference;
@@ -20,5 +21,13 @@ public class ScopedObjects {
 
     public Map<Key<?>, Object> getScopedObjects() {
         return scopedObjects;
+    }
+
+    public int getEnterCount() {
+        return enterCount;
+    }
+
+    public void setEnterCount(int enterCount) {
+        this.enterCount = enterCount;
     }
 }

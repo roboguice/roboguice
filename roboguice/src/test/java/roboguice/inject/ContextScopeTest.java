@@ -24,7 +24,6 @@ public class ContextScopeTest {
         final ActivityController<A> aController = Robolectric.buildActivity(A.class);
         final A a = aController.get();
 
-        assertThat(RoboGuice.getInjector(a).getScopedObjects().size(), equalTo(0));
         aController.create();
 
         boolean found = false;
@@ -64,7 +63,6 @@ public class ContextScopeTest {
         final ActivityController<B> bController = Robolectric.buildActivity(B.class);
         final B b = bController.get();
 
-        assertThat(RoboGuice.getInjector(b).getScopedObjects().size(), equalTo(0));
         bController.create();
 
         boolean found = false;

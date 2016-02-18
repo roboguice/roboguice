@@ -57,7 +57,7 @@ public final class DependencyAndSource {
    * class in question.
    */
   public String getBindingSource() {
-    if (source instanceof Class) {
+    if (source.getClass() == Class.class) {
       return StackTraceElements.forType((Class) source).toString();
     } else if (source instanceof Member) {
       return StackTraceElements.forMember((Member) source).toString();

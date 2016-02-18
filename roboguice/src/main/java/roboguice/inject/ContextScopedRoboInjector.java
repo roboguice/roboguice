@@ -35,6 +35,13 @@ public class ContextScopedRoboInjector implements Injector {
         if (scope == null) {
             throw new RuntimeException("Scope can't be null");
         }
+        // Add the context to the scope for key Context, Activity, etc.
+        Class<?> c = context.getClass();
+        do {
+            scopedObjects.put(Key.get(c), context);
+            c = c.getSuperclass();
+        } while (c != Object.class);
+
     }
 
     @Override
@@ -87,6 +94,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> Binding<T> getBinding(Key<T> key) {
+        //System.out.println("in getBinding");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -99,6 +107,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> Binding<T> getBinding(Class<T> type) {
+        //System.out.println("in getBinding");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -111,6 +120,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public Map<Key<?>, Binding<?>> getBindings() {
+        //System.out.println("in getBindings");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -123,6 +133,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> Binding<T> getExistingBinding(Key<T> key) {
+        //System.out.println("in getExistingBindings");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -135,6 +146,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> T getInstance(Key<T> key) {
+        //System.out.println("in getInstance");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -147,6 +159,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> T getInstance(Class<T> type) {
+        //System.out.println("in getInstance");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -159,6 +172,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> MembersInjector<T> getMembersInjector(Class<T> type) {
+        //System.out.println("in getMembersInjector");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -171,6 +185,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> MembersInjector<T> getMembersInjector(TypeLiteral<T> typeLiteral) {
+        //System.out.println("in getMembersInjector");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -195,6 +210,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> Provider<T> getProvider(Key<T> key) {
+        //System.out.println("in getProvider");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -207,6 +223,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public <T> Provider<T> getProvider(Class<T> type) {
+        //System.out.println("in getProvider");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -219,6 +236,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public Map<Class<? extends Annotation>, Scope> getScopeBindings() {
+        //System.out.println("in getScopeBindings");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -243,6 +261,7 @@ public class ContextScopedRoboInjector implements Injector {
 
     @Override
     public void injectMembers(Object instance) {
+        //System.out.println("in injectMembers");
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);
             try {
@@ -251,6 +270,10 @@ public class ContextScopedRoboInjector implements Injector {
                 scope.exit(context);
             }
         }
+    }
+
+    public ContextScope getContextScope() {
+        return scope;
     }
 
     public Map<Key<?>, Object> getScopedObjects() {

@@ -99,7 +99,7 @@ public final class RoboGuice {
      * <b>One of RoboGuice's entry points</b>.
      */
     public static Injector getOrCreateBaseApplicationInjector(final Application application, Stage stage, Module... modules) {
-        final Stopwatch stopwatch = new Stopwatch();
+        final Stopwatch stopwatch = null;
         synchronized (RoboGuice.class) {
             initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
             return createGuiceInjector(stage, stopwatch, modules);
@@ -133,7 +133,7 @@ public final class RoboGuice {
      * <b>One of RoboGuice's entry points</b>.
      */
     public static Injector getOrCreateBaseApplicationInjector(Application application, Stage stage) {
-        final Stopwatch stopwatch = new Stopwatch();
+        final Stopwatch stopwatch = null;
 
         synchronized (RoboGuice.class) {
             initializeAnnotationDatabaseFinderAndHierarchyTraversalFilterFactory(application);
@@ -197,7 +197,6 @@ public final class RoboGuice {
             if (contextScopedRoboInjector != null) {
                 return contextScopedRoboInjector;
             }
-
 
             final Application application = (Application) context.getApplicationContext();
             final ContextScopedRoboInjector newContextScopedRoboInjector = new ContextScopedRoboInjector(context, getOrCreateBaseApplicationInjector(application), contextScope, modules);

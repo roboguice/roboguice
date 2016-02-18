@@ -141,7 +141,7 @@ final class TypeConverterBindingProcessor extends AbstractProcessor {
     internalConvertToTypes(injector, new AbstractMatcher<TypeLiteral<?>>() {
       public boolean matches(TypeLiteral<?> typeLiteral) {
         Type type = typeLiteral.getType();
-        if (!(type instanceof Class)) {
+        if (!(type.getClass() == Class.class)) {
           return false;
         }
         Class<?> clazz = (Class<?>) type;

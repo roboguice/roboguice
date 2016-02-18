@@ -16,7 +16,7 @@ public class ContextScopedProvider<T> {
     public T get(Context context) {
         //see https://github.com/roboguice/roboguice/issues/112
         final ContextScopedRoboInjector contextScopedRoboInjector = RoboGuice.getInjector(context);
-        final ContextScope scope = contextScopedRoboInjector.getInstance(ContextScope.class);
+        final ContextScope scope = contextScopedRoboInjector.getContextScope();
         final Map<Key<?>, Object> scopedObjects = contextScopedRoboInjector.getScopedObjects();
         synchronized (ContextScope.class) {
             scope.enter(context, scopedObjects);

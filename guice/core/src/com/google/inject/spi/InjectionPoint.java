@@ -796,7 +796,7 @@ public final class InjectionPoint {
         }
 
         @Override public boolean equals(Object o) {
-            if (!(o.getClass() == Signature.class)) {
+            if (o.getClass() != Signature.class) {
                 return false;
             }
 

@@ -145,4 +145,12 @@ public final class Ln {
         return lnImpl.logLevelToString(loglevel);
     }
 
+    public static void setTag(String tag) {
+        lnImpl.setTag(tag);
+    }
+
+    public static String getTag() {
+        return lnImpl.getTag();
+    }
+
 }

@@ -277,6 +277,8 @@ public final class RoboGuice {
          */
         public static void reset() {
             injector = null;
+            contextScope = null;
+            mapContextToInjector = new IdentityHashMap<Context, ContextScopedRoboInjector>();
             //clear annotation database finder
             //restore hierarchy filter
             Guice.setAnnotationDatabasePackageNames(null);

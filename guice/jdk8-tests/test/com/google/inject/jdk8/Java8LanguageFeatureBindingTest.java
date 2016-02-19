@@ -40,6 +40,7 @@ import java.util.function.Predicate;
  *
  * @author cgdecker@google.com (Colin Decker)
  */
+
 public class Java8LanguageFeatureBindingTest extends TestCase {
 
   // Some of these tests are kind of weird.
@@ -53,7 +54,7 @@ public class Java8LanguageFeatureBindingTest extends TestCase {
       }
     });
 
-    Predicate<Object> predicate = injector.getInstance(new Key<Predicate<Object>>() {});
+    Predicate<Object> predicate = injector.getInstance(Key.get(new TypeLiteral<Predicate<Object>>() {}));
     assertTrue(predicate.test(new Object()));
     assertFalse(predicate.test(null));
   }
@@ -69,7 +70,7 @@ public class Java8LanguageFeatureBindingTest extends TestCase {
       }
     });
 
-    Callable<String> callable = injector.getInstance(new Key<Callable<String>>() {});
+    Callable<String> callable = injector.getInstance(Key.get(new TypeLiteral<Callable<String>>() {}));
     assertEquals("foo", callable.call());
   }
 
@@ -89,7 +90,7 @@ public class Java8LanguageFeatureBindingTest extends TestCase {
     });
 
     try {
-      injector.getInstance(new Key<Callable<String>>() {});
+      injector.getInstance(Key.get(new TypeLiteral<Callable<String>>() {}));
     } catch (ProvisionException expected) {
       assertTrue(expected.getCause() instanceof RuntimeException);
       assertEquals("foo", expected.getCause().getMessage());

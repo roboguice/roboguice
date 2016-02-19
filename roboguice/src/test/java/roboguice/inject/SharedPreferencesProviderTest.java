@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.lang.reflect.Field;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -27,6 +29,16 @@ import android.preference.PreferenceManager;
 @RunWith(RobolectricTestRunner.class)
 public class SharedPreferencesProviderTest {
 
+    @Before
+    public void setUp() throws Exception {
+        RoboGuice.setupBaseApplicationInjector(Robolectric.application);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        RoboGuice.Util.reset();
+    }
+
     @Test
     public void shouldInjectDefaultSharedPrefs() throws Exception {
         final A a = Robolectric.buildActivity(A.class).create().get();
@@ -41,7 +53,7 @@ public class SharedPreferencesProviderTest {
 
     @Test
     public void shouldInjectNamedSharedPrefs() throws Exception {
-        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application,RoboGuice.DEFAULT_STAGE, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA() );
+        RoboGuice.overrideApplicationInjector(Robolectric.application, new ModuleA());
         try {
 
             final A a = Robolectric.buildActivity(A.class).create().get();
@@ -79,7 +91,7 @@ public class SharedPreferencesProviderTest {
 
     @Test
     public void shouldNotFallbackOnOldDefaultIfNamedFileSpecified() throws Exception {
-        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application,RoboGuice.DEFAULT_STAGE, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA() );
+        RoboGuice.overrideApplicationInjector(Robolectric.application, new ModuleA());
 
         final File oldDefault = new File("shared_prefs/default.xml");
         final File oldDir = new File("shared_prefs");

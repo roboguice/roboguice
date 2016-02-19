@@ -14,22 +14,23 @@ import android.content.Context;
 
 /**
  * A simple testcase that tests the {@link Astroboy} pojo.
- *
+ * <p/>
  * This test has no particularly complicated activity or context dependencies,
  * so we don't bother initializing the activity or really doing anything with it
  * at all.
  */
 @RunWith(RobolectricTestRunner.class)
 public class Astroboy1Test {
-    
+
     protected Context context;
     protected Astroboy astroboy;
-    
+
     @Before
     public void setup() {
-       RoboGuice.setUseAnnotationDatabases(false);
-       context = Robolectric.buildActivity(Activity.class).create().get();
-       astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
+        RoboGuice.setUseAnnotationDatabases(false);
+        RoboGuice.setupBaseApplicationInjector(Robolectric.application);
+        context = Robolectric.buildActivity(Activity.class).create().get();
+        astroboy = RoboGuice.getInjector(context).getInstance(Astroboy.class);
     }
 
     @Test

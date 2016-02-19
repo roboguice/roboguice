@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.google.inject.Inject;
 import com.google.inject.Stage;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,8 +30,13 @@ public class ActivityInjectionTest {
 
     @Before
     public void setup() {
-        RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application, Stage.DEVELOPMENT, RoboGuice.newDefaultRoboModule(Robolectric.application), new ModuleA());
+        RoboGuice.overrideApplicationInjector(Robolectric.application, new ModuleA());
         activity = Robolectric.buildActivity(DummyActivityTest.class).withIntent(new Intent(Robolectric.application, DummyActivityTest.class).putExtra("foobar", "goober")).create().get();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        RoboGuice.Util.reset();
     }
 
     @Test

@@ -4,6 +4,8 @@ import android.app.Activity;
 import com.google.inject.Inject;
 import com.google.inject.Key;
 import com.google.inject.Singleton;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -18,6 +20,16 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
 public class ContextScopeTest {
+
+    @Before
+    public void setUp() throws Exception {
+        RoboGuice.setupBaseApplicationInjector(Robolectric.application);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        RoboGuice.Util.reset();
+    }
 
     @Test
     public void shouldHaveContextInScopeMapAfterOnCreate() throws Exception {
@@ -37,7 +49,7 @@ public class ContextScopeTest {
 
     @Test
     public void shouldBeAbleToOpenMultipleScopes() {
-        final ContextScope scope = RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
+        final ContextScope scope = RoboGuice.getInjector(Robolectric.application).getContextScope();
         final Activity a = Robolectric.buildActivity(A.class).get();
         final Activity b = Robolectric.buildActivity(B.class).get();
 
@@ -49,7 +61,7 @@ public class ContextScopeTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldNotBeAbleToExitTheWrongScope() {
-        final ContextScope scope = RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application).getInstance(ContextScope.class);
+        final ContextScope scope = RoboGuice.getInjector(Robolectric.application).getContextScope();
         final Activity a = Robolectric.buildActivity(A.class).get();
         final Activity b = Robolectric.buildActivity(B.class).get();
 

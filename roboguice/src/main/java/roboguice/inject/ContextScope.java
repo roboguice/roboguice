@@ -21,6 +21,7 @@ import com.google.inject.Key;
 import com.google.inject.Provider;
 import com.google.inject.Scope;
 
+import javax.inject.Inject;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,6 +53,7 @@ public class ContextScope implements Scope {
     protected Map<Key<?>, Object> applicationScopedObjects = new HashMap<Key<?>, Object>();
     protected Application application;
 
+    @Inject
     public ContextScope(Application application) {
         this.application = application;
         // Add the context to the scope for key Context, Activity, etc.

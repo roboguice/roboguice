@@ -17,7 +17,8 @@ public class ConstructorModuleTest {
 		//GIVEN
 		Pojo instance = new Pojo();
 		//WHEN
-		RoboGuice.getOrCreateBaseApplicationInjector(Robolectric.application).injectMembers(instance);
+		RoboGuice.setupBaseApplicationInjector(Robolectric.application);
+		RoboGuice.getInjector(Robolectric.application).injectMembers(instance);
 		//THEN
 		//will only work if the TestModule could be loaded properly
 		assertThat( instance.getFoo(), notNullValue());

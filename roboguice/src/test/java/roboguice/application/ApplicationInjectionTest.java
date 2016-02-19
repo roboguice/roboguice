@@ -6,6 +6,8 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Random;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
@@ -27,7 +29,17 @@ import android.os.Bundle;
 public class ApplicationInjectionTest {
 
     private static final String TEST_PACKAGE_NAME = "org.robolectric.default";
-    
+
+    @Before
+    public void setUp() throws Exception {
+        RoboGuice.setupBaseApplicationInjector(Robolectric.application);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        RoboGuice.Util.reset();
+    }
+
     @Test
     public void shouldBeAbleToInjectIntoApplication() {
         Robolectric.application = new AppA();

@@ -27,7 +27,7 @@ See the Apache License Version 2.0 for the specific language governing permissio
 
   <groupId>com.google.inject</groupId>
   <artifactId>guice-parent</artifactId>
-  <version>4.0.1-blender-SNAPSHOT</version>
+  <version>4.0.1-blender</version>
 
   <name>Google Guice</name>
 
@@ -438,11 +438,11 @@ See the Apache License Version 2.0 for the specific language governing permissio
       <activation>
         <jdk>[1.8,)</jdk>
       </activation>
-      <!-- Activate jdk8-tests module only under JDK 8 -->
+      <!-- Activate jdk8-tests module only under JDK 8
       <modules>
         <module>jdk8-tests</module>
       </modules>
-      <!-- Disable doclint under JDK 8 -->
+      <Disable doclint under JDK 8 -->
       <reporting>
       <plugins>
           <plugin>

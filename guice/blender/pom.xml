@@ -3,14 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>blender</artifactId>
-	<version>4.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Blender</name>
 
 	<parent>
 		<groupId>com.google.inject</groupId>
 		<artifactId>guice-parent</artifactId>
-		<version>4.0.1-blender-SNAPSHOT</version>
+		<version>4.0.1-blender</version>
 	</parent>
 
 	<properties>

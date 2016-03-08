@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>com.google.inject</groupId>
 			<artifactId>blender</artifactId>
-			<version>${blender.version}</version>
+			<version>${guice.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.velocity</groupId>

@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>4.0.0</version>
+		<version>4.0.1-SNAPSHOT</version>
 	</parent>
 
 	<properties>

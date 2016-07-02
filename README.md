@@ -19,6 +19,11 @@ It works, and people are using it. Why not give it a spin?
 [Get Started with RoboGuice 3](https://github.com/roboguice/roboguice/wiki)!
 
 <br/>
+
+### Related projects: 
+
+* [RoboBlender Proguard Gradle Plugin](https://github.com/team-supercharge/roboblender-proguard-gradle-plugin) generates appropriate proguard rules for your roboblender configuration.
+
 <br/>
 <br/>
 

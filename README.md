@@ -1,28 +1,39 @@
+*As of August 2016, RoboGuice is no longer supported.  For nearly 5 years it was the #1 dependency injection framework on Android due to its ease-of-use, but other responsibilities have kept it from getting the attention it needed and over time it hasn't kept up with the needs of the community.  There are now many other excellent DI frameworks for Android, please consider migrating to one of them.*
+
+*Thank you for your many years of support.*
+
+---
+
+
+
+
+
+
 <img src="http://f.cl.ly/items/1G3K1n2L3g452n3i1M2q/roboguice-200px.png" align="left" />
-### Google Guice on Android, version 3.0
+### ~~Google Guice on Android, version 3.0~~
 [![Build Status on Travis:](https://travis-ci.org/roboguice/roboguice.svg?branch=master)](https://travis-ci.org/roboguice/roboguice) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.roboguice/roboguice)
 
 
 
-RoboGuice 3 smoothes out some of the wrinkles in your Android development experience and makes things simple and fun. Do you always forget to check for null when you getIntent().getExtras()? RoboGuice 3 will help you. Think casting findViewById() to a TextView shouldn’t be necessary? RoboGuice 3 is on it.
+~~RoboGuice 3 smoothes out some of the wrinkles in your Android development experience and makes things simple and fun. Do you always forget to check for null when you getIntent().getExtras()? RoboGuice 3 will help you. Think casting findViewById() to a TextView shouldn’t be necessary? RoboGuice 3 is on it.~~
 
-RoboGuice 3 takes the guesswork out of development. Inject your View, Resource, System Service, or any other object, and let RoboGuice 3 take care of the details.
+~~RoboGuice 3 takes the guesswork out of development. Inject your View, Resource, System Service, or any other object, and let RoboGuice 3 take care of the details.~~
 
-RoboGuice 3 slims down your application code. Less code means fewer opportunities for bugs. It also makes your code easier to follow -- no longer is your code littered with the mechanics of the Android platform, but now it can focus on the actual logic unique to your application.
+~~RoboGuice 3 slims down your application code. Less code means fewer opportunities for bugs. It also makes your code easier to follow -- no longer is your code littered with the mechanics of the Android platform, but now it can focus on the actual logic unique to your application.~~
 
-There’s no “magic”. Everything you need is configured explicitly for you by RoboGuice 3 or can be overridden by you.
+~~There’s no “magic”. Everything you need is configured explicitly for you by RoboGuice 3 or can be overridden by you.~~
 
-RoboGuice 3 applications have been Featured on the Android Market for years. It leverages the award-winning and production-ready Google Guice library to bring you simple dependency injection lightweight enough to use in a mobile application.
+~~RoboGuice 3 applications have been Featured on the Android Market for years. It leverages the award-winning and production-ready Google Guice library to bring you simple dependency injection lightweight enough to use in a mobile application.~~
 
-It works, and people are using it. Why not give it a spin?
+~~It works, and people are using it. Why not give it a spin?~~
 
-[Get Started with RoboGuice 3](https://github.com/roboguice/roboguice/wiki)!
+~~[Get Started with RoboGuice 3](https://github.com/roboguice/roboguice/wiki)!~~
 
 <br/>
 
-### Related projects: 
+### ~~Related projects:~~
 
-* [RoboBlender Proguard Gradle Plugin](https://github.com/team-supercharge/roboblender-proguard-gradle-plugin) generates appropriate proguard rules for your roboblender configuration.
+* ~~[RoboBlender Proguard Gradle Plugin](https://github.com/team-supercharge/roboblender-proguard-gradle-plugin) generates appropriate proguard rules for your roboblender configuration.~~
 
 <br/>
 <br/>

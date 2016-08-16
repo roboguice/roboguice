@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,25 +69,27 @@ public final class InjectionPoint {
     private final Member member;
     private final TypeLiteral<?> declaringType;
     private final ImmutableList<Dependency<?>> dependencies;
-
+    private final boolean isField;
 
     InjectionPoint(TypeLiteral<?> declaringType, Method method, boolean optional) {
-        member = method;
+        this.member = method;
         this.declaringType = declaringType;
         this.optional = optional;
-        dependencies = forMember(method, declaringType, method.getParameterAnnotations());
+        this.dependencies = forMember(method, declaringType, method.getParameterAnnotations());
+        isField = false;
     }
 
     InjectionPoint(TypeLiteral<?> declaringType, Constructor<?> constructor) {
-        member = constructor;
+        this.member = constructor;
         this.declaringType = declaringType;
-        optional = false;
-        dependencies = forMember(
+        this.optional = false;
+        this.dependencies = forMember(
                 constructor, declaringType, constructor.getParameterAnnotations());
+        isField = false;
     }
 
     InjectionPoint(TypeLiteral<?> declaringType, Field field, boolean optional) {
-        member = field;
+        this.member = field;
         this.declaringType = declaringType;
         this.optional = optional;
 
@@ -103,8 +106,9 @@ public final class InjectionPoint {
         }
         errors.throwConfigurationExceptionIfErrorsExist();
 
-        dependencies = ImmutableList.<Dependency<?>>of(
+        this.dependencies = ImmutableList.<Dependency<?>>of(
                 newDependency(key, Nullability.allowsNull(annotations), -1));
+        isField = true;
     }
 
     private ImmutableList<Dependency<?>> forMember(Member member, TypeLiteral<?> type,
@@ -166,9 +170,13 @@ public final class InjectionPoint {
         return optional;
     }
 
+    public boolean isField() {
+        return isField;
+    }
+
     /**
      * Returns true if the element is annotated with {@literal @}{@link Toolable}.
-     *
+     * 
      * @since 3.0
      */
     public boolean isToolable() {
@@ -179,7 +187,7 @@ public final class InjectionPoint {
      * Returns the generic type that defines this injection point. If the member exists on a
      * parameterized type, the result will include more type information than the member's {@link
      * Member#getDeclaringClass() raw declaring class}.
-     *
+     * 
      * @since 3.0
      */
     public TypeLiteral<?> getDeclaringType() {
@@ -187,7 +195,7 @@ public final class InjectionPoint {
     }
 
     @Override public boolean equals(Object o) {
-        return o instanceof InjectionPoint
+        return o.getClass() == InjectionPoint.class
                 && member.equals(((InjectionPoint) o).member)
                 && declaringType.equals(((InjectionPoint) o).declaringType);
     }
@@ -206,7 +214,7 @@ public final class InjectionPoint {
      * type literal.
      *
      * @param constructor any single constructor present on {@code type}.
-     *
+     * 
      * @since 3.0
      */
     public static <T> InjectionPoint forConstructor(Constructor<T> constructor) {
@@ -218,7 +226,7 @@ public final class InjectionPoint {
      *
      * @param constructor any single constructor present on {@code type}.
      * @param type the concrete type that defines {@code constructor}.
-     *
+     * 
      * @since 3.0
      */
     public static <T> InjectionPoint forConstructor(
@@ -312,6 +320,20 @@ public final class InjectionPoint {
         return forConstructorOf(TypeLiteral.get(type));
     }
 
+    /**
+    * Returns a new injection point for the specified method of {@code type}.
+    * This is useful for extensions that need to build dependency graphs from
+    * arbitrary methods.
+    *
+    * @param method any single method present on {@code type}.
+    * @param type the concrete type that defines {@code method}.
+    *
+    * @since 4.0
+    */
+    public static <T> InjectionPoint forMethod(Method method, TypeLiteral<T> type) {
+        return new InjectionPoint(type, method, false);
+    }
+  
     /**
      * Returns all static method and field injection points on {@code type}.
      *
@@ -423,9 +445,6 @@ public final class InjectionPoint {
         final TypeLiteral<?> declaringType;
         final boolean optional;
         final boolean jsr330;
-        InjectableMember previous;
-        InjectableMember next;
-
 
         InjectableMember(TypeLiteral<?> declaringType, Annotation atInject) {
             this.declaringType = declaringType;
@@ -486,51 +505,6 @@ public final class InjectionPoint {
         return a == null ? member.getAnnotation(Inject.class) : a;
     }
 
-    /**
-     * Linked list of injectable members.
-     */
-    static class InjectableMembers {
-      InjectableMember head;
-      InjectableMember tail;
-
-      void add(InjectableMember member) {
-        if (head == null) {
-          head = tail = member;
-        } else {
-          member.previous = tail;
-          tail.next = member;
-          tail = member;
-        }
-      }
-
-      void addAll(InjectableMembers members) {
-    	  InjectableMember memberToAdd = members.head;
-    	  while( memberToAdd != null ) {
-    		  add(memberToAdd);
-    		  memberToAdd = memberToAdd.next;
-    	  }
-      }
-
-      void remove(InjectableMember member) {
-        if (member.previous != null) {
-          member.previous.next = member.next;
-        }
-        if (member.next != null) {
-          member.next.previous = member.previous;
-        }
-        if (head == member) {
-          head = member.next;
-        }
-        if (tail == member) {
-          tail = member.previous;
-        }
-      }
-
-      boolean isEmpty() {
-        return head == null;
-      }
-    }
-
     /** Position in type hierarchy. */
     enum Position {
         TOP, // No need to check for overridden methods
@@ -543,11 +517,11 @@ public final class InjectionPoint {
      * Uses our position in the type hierarchy to perform optimizations.
      */
     static class OverrideIndex {
-        final InjectableMembers injectableMembers;
+        final LinkedList<InjectableMember> injectableMembers;
         Map<Signature, List<InjectableMethod>> bySignature;
         Position position = Position.TOP;
 
-        OverrideIndex(InjectableMembers injectableMembers) {
+        OverrideIndex(LinkedList<InjectableMember> injectableMembers) {
             this.injectableMembers = injectableMembers;
         }
 
@@ -560,7 +534,7 @@ public final class InjectionPoint {
          * remain backwards compatible with prior Guice versions, this will *not*
          * remove overridden methods if 'alwaysRemove' is false and the overridden
          * signature was annotated with a com.google.inject.Inject.
-         *
+         * 
          * @param method
          *          The method used to determine what is overridden and should be
          *          removed.
@@ -571,7 +545,7 @@ public final class InjectionPoint {
          *          if this method overrode any guice @Inject methods,
          *          {@link InjectableMethod#overrodeGuiceInject} is set to true
          */
-        boolean removeIfOverriddenBy(Method method, boolean alwaysRemove,
+        boolean removeIfOverriddenBy(Method method, boolean alwaysRemove, 
                 InjectableMethod injectableMethod) {
             if (position == Position.TOP) {
                 // If we're at the top of the hierarchy, there's nothing to override.
@@ -582,8 +556,7 @@ public final class InjectionPoint {
                 // We encountered a method in a subclass. Time to index the
                 // methods in the parent class.
                 bySignature = new HashMap<Signature, List<InjectableMethod>>();
-                for (InjectableMember member = injectableMembers.head; member != null;
-                        member = member.next) {
+                for (InjectableMember member : injectableMembers ) {
                     if (!(member instanceof InjectableMethod)) continue;
                     InjectableMethod im = (InjectableMethod) member;
                     if (im.isFinal()) continue;
@@ -646,53 +619,20 @@ public final class InjectionPoint {
         }
     }
 
-
-    static class Pair<A,B> {
-        final A a;
-        final B b;
-
-        public Pair(A a, B b) {
-            this.a = a;
-            this.b = b;
-        }
-
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Pair pair = (Pair) o;
-
-            return a.equals(pair.a) && b.equals(pair.b);
-
-        }
-
-        @Override
-        public int hashCode() {
-            int result = a.hashCode();
-            result = 31 * result + b.hashCode();
-            return result;
-        }
-    }
-
     private static Set<InjectionPoint> getInjectionPoints(final TypeLiteral<?> type,
             boolean statics, Errors errors) {
-
-    	InjectableMembers injectableMembers = new InjectableMembers();
+        LinkedList<InjectableMember>  injectableMembers = new LinkedList<InjectableMember>();
         final OverrideIndex overrideIndex = new OverrideIndex(injectableMembers);
         overrideIndex.position = Position.BOTTOM; // we start at the bottom of inheritance hierarchy
-
-    	filter.reset();
-    	computeInjectableMembers(type, statics, errors, injectableMembers, overrideIndex, filter);
+        filter.reset();
+        computeInjectableMembers(type, statics, errors, injectableMembers, overrideIndex, filter);
 
         if (injectableMembers.isEmpty()) {
             return Collections.emptySet();
         }
 
         ImmutableSet.Builder<InjectionPoint> builder = ImmutableSet.builder();
-        for (InjectableMember im = injectableMembers.head; im != null;
-                im = im.next) {
+        for (InjectableMember im : injectableMembers) {
             try {
                 builder.add(im.toInjectionPoint());
             } catch (ConfigurationException ignorable) {
@@ -713,11 +653,11 @@ public final class InjectionPoint {
      * @param errors used to record errors
      */
     private static void computeInjectableMembers(final TypeLiteral<?> type,
-            boolean statics, Errors errors, InjectableMembers injectableMembers, OverrideIndex overrideIndex, HierarchyTraversalFilter filter) {
+            boolean statics, Errors errors, List<InjectableMember> injectableMembers, OverrideIndex overrideIndex, HierarchyTraversalFilter filter) {
 
         Class<?> rawType = type.getRawType();
         if( !isWorthScanning(filter, rawType) ) {
-            return;
+          return;
         }
 
         //recursive call on parents
@@ -731,26 +671,26 @@ public final class InjectionPoint {
 
         Set<Field> allFields = filter.getAllFields(Inject.class.getName(), rawType);
         if( allFields != null ) {
-        	for( Field field : allFields ) {
-        		//System.out.printf("Field %s is injectable in class %s ",field.getName(),rawType.getName());
-        		if (Modifier.isStatic(field.getModifiers()) == statics) {
-        			Annotation atInject = getAtInject(field);
-        			if (atInject != null) {
-        				//System.out.printf("Field %s is gonna be injected in class %s ",field.getName(),rawType.getName());
-        				InjectableField injectableField = new InjectableField(type, field, atInject);
-        				if (injectableField.jsr330 && Modifier.isFinal(field.getModifiers())) {
-        					errors.cannotInjectFinalField(field);
-        				}
-        				injectableMembers.add(injectableField);
-        			}
-        		}
-        	}
+            for( Field field : allFields ) {
+                //System.out.printf("Field %s is injectable in class %s ",field.getName(),rawType.getName());
+                if (Modifier.isStatic(field.getModifiers()) == statics) {
+                    Annotation atInject = getAtInject(field);
+                    if (atInject != null) {
+                        //System.out.printf("Field %s is gonna be injected in class %s ",field.getName(),rawType.getName());
+                        InjectableField injectableField = new InjectableField(type, field, atInject);
+                      if (injectableField.jsr330 && Modifier.isFinal(field.getModifiers())) {
+                            errors.cannotInjectFinalField(field);
+                        }
+                        injectableMembers.add(injectableField);
+                    }
+                }
+            }
         }
 
         Set<Method> allMethods = filter.getAllMethods(Inject.class.getName(), rawType);
         if(allMethods != null ) {
             for (Method method : allMethods) {
-                if (isEligibleForInjection(method, statics)) {
+                if (Modifier.isStatic(method.getModifiers()) == statics) {
                     Annotation atInject = getAtInject(method);
                     if (atInject != null) {
                         InjectableMethod injectableMethod = new InjectableMethod(
@@ -790,33 +730,10 @@ public final class InjectionPoint {
     }
 
     private static boolean isWorthScanning(HierarchyTraversalFilter filter, Class<?> rawType) {
-        boolean worthScanning = filter.isWorthScanningForFields(Inject.class.getName(), rawType);
+        boolean worthScanning = filter.isWorthScanningForFields(Inject.class.getName(), rawType)
+                || filter.isWorthScanningForMethods(Inject.class.getName(), rawType);
         //System.out.printf( "Class %s is worth %b \n", rawType.getName(), worthScanning);
         return worthScanning;
-    }
-
-    /**
-     * Returns true if the method is eligible to be injected.  This is different than
-     * {@link #isValidMethod}, because ineligibility will not drop a method
-     * from being injected if a superclass was eligible & valid.
-     * Bridge & synthetic methods are excluded from eligibility for two reasons:
-     *
-     * <p>Prior to Java8, javac would generate these methods in subclasses without
-     * annotations, which means this would accidentally stop injecting a method
-     * annotated with {@link javax.inject.Inject}, since the spec says to stop
-     * injecting if a subclass isn't annotated with it.
-     *
-     * <p>Starting at Java8, javac copies the annotations to the generated subclass
-     * method, except it leaves out the generic types.  If this considered it a valid
-     * injectable method, this would eject the parent's overridden method that had the
-     * proper generic types, and would use invalid injectable parameters as a result.
-     *
-     * <p>The fix for both is simply to ignore these synthetic bridge methods.
-     */
-    private static boolean isEligibleForInjection(Method method, boolean statics) {
-      return Modifier.isStatic(method.getModifiers()) == statics
-          && !method.isBridge()
-          && !method.isSynthetic();
     }
 
     private static boolean isValidMethod(InjectableMethod injectableMethod,
@@ -835,16 +752,6 @@ public final class InjectionPoint {
         }
         return result;
     }
-
-    private static List<TypeLiteral<?>> hierarchyFor(TypeLiteral<?> type) {
-        List<TypeLiteral<?>> hierarchy = new ArrayList<TypeLiteral<?>>();
-        TypeLiteral<?> current = type;
-        while (current.getRawType() != Object.class) {
-          hierarchy.add(current);
-          current = current.getSupertype(current.getRawType().getSuperclass());
-        }
-        return hierarchy;
-      }
 
     /**
      * Returns true if a overrides b. Assumes signatures of a and b are the same and a's declaring
@@ -866,30 +773,30 @@ public final class InjectionPoint {
     /**
      * A method signature. Used to handle method overridding.
      */
-    static class Signature {
+    final static class Signature {
 
         final String name;
         final Class[] parameterTypes;
         final int hash;
 
         Signature(Method method) {
-            name = method.getName();
-            parameterTypes = method.getParameterTypes();
+            this.name = method.getName();
+            this.parameterTypes = method.getParameterTypes();
 
             int h = name.hashCode();
             h = h * 31 + parameterTypes.length;
             for (Class parameterType : parameterTypes) {
                 h = h * 31 + parameterType.hashCode();
             }
-            hash = h;
+            this.hash = h;
         }
 
         @Override public int hashCode() {
-            return hash;
+            return this.hash;
         }
 
         @Override public boolean equals(Object o) {
-            if (!(o instanceof Signature)) {
+            if (o.getClass() != Signature.class) {
                 return false;
             }
 

@@ -18,14 +18,7 @@ package com.google.inject.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Logger;
-
+import com.google.common.base.Optional;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
@@ -39,8 +32,19 @@ import com.google.inject.Provider;
 import com.google.inject.Provides;
 import com.google.inject.TypeLiteral;
 import com.google.inject.spi.Dependency;
+import com.google.inject.spi.InjectionPoint;
 import com.google.inject.spi.Message;
+import com.google.inject.spi.ModuleAnnotatedMethodScanner;
 import com.google.inject.util.Modules;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
 
 /**
  * Creates bindings to methods annotated with {@literal @}{@link Provides}. Use the scope and
@@ -50,26 +54,48 @@ import com.google.inject.util.Modules;
  * @author jessewilson@google.com (Jesse Wilson)
  */
 public final class ProviderMethodsModule implements Module {
-  private static final Key<Logger> LOGGER_KEY = Key.get(Logger.class);
+
+  private static ModuleAnnotatedMethodScanner PROVIDES_BUILDER =
+          new ModuleAnnotatedMethodScanner() {
+            @Override
+            public <T> Key<T> prepareMethod(
+                    Binder binder, Annotation annotation, Key<T> key, InjectionPoint injectionPoint) {
+              return key;
+            }
+
+            @Override
+            public Set<? extends Class<? extends Annotation>> annotationClasses() {
+              return ImmutableSet.of(Provides.class);
+            }
+          };
 
   private final Object delegate;
   private final TypeLiteral<?> typeLiteral;
-  private HierarchyTraversalFilter filter;
   private final boolean skipFastClassGeneration;
+  private final ModuleAnnotatedMethodScanner scanner;
+  private HierarchyTraversalFilter filter;
 
-  private ProviderMethodsModule(Object delegate, boolean skipFastClassGeneration) {
+  private ProviderMethodsModule(Object delegate, boolean skipFastClassGeneration,
+      ModuleAnnotatedMethodScanner scanner) {
     this.delegate = checkNotNull(delegate, "delegate");
-
-    typeLiteral = TypeLiteral.get(this.delegate.getClass());
-    filter = Guice.createHierarchyTraversalFilter();
+    this.typeLiteral = TypeLiteral.get(this.delegate.getClass());
     this.skipFastClassGeneration = skipFastClassGeneration;
+    this.scanner = scanner;
+    this.filter = Guice.createHierarchyTraversalFilter();
   }
 
   /**
    * Returns a module which creates bindings for provider methods from the given module.
    */
   public static Module forModule(Module module) {
-    return forObject(module, false);
+    return forObject(module, false, PROVIDES_BUILDER);
+  }
+
+  /**
+   * Returns a module which creates bindings methods in the module that match the scanner.
+   */
+  public static Module forModule(Object module, ModuleAnnotatedMethodScanner scanner) {
+    return forObject(module, false, scanner);
   }
 
   /**
@@ -80,16 +106,21 @@ public final class ProviderMethodsModule implements Module {
    * are only interested in Module metadata.
    */
   public static Module forObject(Object object) {
-    return forObject(object, true);
+    return forObject(object, true, PROVIDES_BUILDER);
   }
 
-  private static Module forObject(Object object, boolean skipFastClassGeneration) {
+  private static Module forObject(Object object, boolean skipFastClassGeneration,
+                                  ModuleAnnotatedMethodScanner scanner) {
     // avoid infinite recursion, since installing a module always installs itself
     if (object instanceof ProviderMethodsModule) {
       return Modules.EMPTY_MODULE;
     }
 
-    return new ProviderMethodsModule(object, skipFastClassGeneration);
+    return new ProviderMethodsModule(object, skipFastClassGeneration, scanner);
+  }
+
+  public Object getDelegateModule() {
+    return delegate;
   }
 
   public synchronized void configure(Binder binder) {
@@ -100,7 +131,7 @@ public final class ProviderMethodsModule implements Module {
 
   public List<ProviderMethod<?>> getProviderMethods(Binder binder) {
     List<ProviderMethod<?>> result = Lists.newArrayList();
-Multimap<Signature, Method> methodsBySignature = HashMultimap.create();
+    Multimap<Signature, Method> methodsBySignature = HashMultimap.create();
     filter.reset();
     Class<?> c = delegate.getClass();
     while( filter.isWorthScanningForMethods(Provides.class.getName(), c)) {
@@ -111,11 +142,12 @@ Multimap<Signature, Method> methodsBySignature = HashMultimap.create();
         // synthetic overrides in some cases where we don't want to generate an error (e.g.
         // increasing visibility of a subclass).
         if (((method.getModifiers() & (Modifier.PRIVATE | Modifier.STATIC)) == 0)
-            && !method.isBridge() && !method.isSynthetic()) {
+                && !method.isBridge() && !method.isSynthetic()) {
           methodsBySignature.put(new Signature(method), method);
         }
-        if (isProvider(method)) {
-          result.add(createProviderMethod(binder, method));
+        Optional<Annotation> annotation = isProvider(binder, method);
+        if (annotation.isPresent()) {
+          result.add(createProviderMethod(binder, method, annotation.get()));
         }
       }
       c = c.getSuperclass();
@@ -133,11 +165,13 @@ Multimap<Signature, Method> methodsBySignature = HashMultimap.create();
         }
         // now we know matching signature is in a subtype of method.getDeclaringClass()
         if (overrides(matchingSignature, method)) {
+          String annotationString = provider.getAnnotation().annotationType() == Provides.class
+                  ? "@Provides" : "@" + provider.getAnnotation().annotationType().getCanonicalName();
           binder.addError(
-              "Overriding @Provides methods is not allowed."
-                  + "\n\t@Provides method: %s\n\toverridden by: %s",
-              method,
-              matchingSignature);
+                  "Overriding " + annotationString + " methods is not allowed."
+                          + "\n\t" + annotationString + " method: %s\n\toverridden by: %s",
+                  method,
+                  matchingSignature);
           break;
         }
       }
@@ -151,10 +185,24 @@ Multimap<Signature, Method> methodsBySignature = HashMultimap.create();
    * Synthetic bridge methods are excluded. Starting with JDK 8, javac copies annotations onto
    * bridge methods (which always have erased signatures).
    */
-  private static boolean isProvider(Method method) {
-  return !method.isBridge()
-    && !method.isSynthetic()
-    && method.isAnnotationPresent(Provides.class);
+  private Optional<Annotation> isProvider(Binder binder, Method method) {
+    if (method.isBridge() || method.isSynthetic()) {
+      return Optional.absent();
+    }
+    Annotation annotation = null;
+    for (Class<? extends Annotation> annotationClass : scanner.annotationClasses()) {
+      Annotation foundAnnotation = method.getAnnotation(annotationClass);
+      if (foundAnnotation != null) {
+        if (annotation != null) {
+          binder.addError("More than one annotation claimed by %s on method %s."
+                          + " Methods can only have one annotation claimed per scanner.",
+                  scanner, method);
+          return Optional.absent();
+        }
+        annotation = foundAnnotation;
+      }
+    }
+    return Optional.fromNullable(annotation);
   }
 
   private final class Signature {
@@ -205,42 +253,34 @@ Multimap<Signature, Method> methodsBySignature = HashMultimap.create();
     return a.getDeclaringClass().getPackage().equals(b.getDeclaringClass().getPackage());
   }
 
-  private <T> ProviderMethod<T> createProviderMethod(Binder binder, Method method) {
+  private <T> ProviderMethod<T> createProviderMethod(Binder binder, Method method,
+                                                     Annotation annotation) {
     binder = binder.withSource(method);
     Errors errors = new Errors(method);
 
     // prepare the parameter providers
-    List<Dependency<?>> dependencies = Lists.newArrayList();
+    InjectionPoint point = InjectionPoint.forMethod(method, typeLiteral);
+    List<Dependency<?>> dependencies = point.getDependencies();
     List<Provider<?>> parameterProviders = Lists.newArrayList();
-    List<TypeLiteral<?>> parameterTypes = typeLiteral.getParameterTypes(method);
-    Annotation[][] parameterAnnotations = method.getParameterAnnotations();
-    for (int i = 0; i < parameterTypes.size(); i++) {
-      Key<?> key = getKey(errors, parameterTypes.get(i), method, parameterAnnotations[i]);
-      if (key.equals(LOGGER_KEY)) {
-        // If it was a Logger, change the key to be unique & bind it to a
-        // provider that provides a logger with a proper name.
-        // This solves issue 482 (returning a new anonymous logger on every call exhausts memory)
-        Key<Logger> loggerKey = Key.get(Logger.class, UniqueAnnotations.create());
-        binder.bind(loggerKey).toProvider(new LogProvider(method));
-        key = loggerKey;
-      }
-      dependencies.add(Dependency.get(key));
-      parameterProviders.add(binder.getProvider(key));
+    for (Dependency<?> dependency : point.getDependencies()) {
+      parameterProviders.add(binder.getProvider(dependency));
     }
 
     @SuppressWarnings("unchecked") // Define T as the method's return type.
-    TypeLiteral<T> returnType = (TypeLiteral<T>) typeLiteral.getReturnType(method);
-
+            TypeLiteral<T> returnType = (TypeLiteral<T>) typeLiteral.getReturnType(method);
     Key<T> key = getKey(errors, returnType, method, method.getAnnotations());
+    try {
+      key = scanner.prepareMethod(binder, annotation, key, point);
+    } catch(Throwable t) {
+      binder.addError(t);
+    }
     Class<? extends Annotation> scopeAnnotation
-    = Annotations.findScopeAnnotation(errors, method.getAnnotations());
-
+            = Annotations.findScopeAnnotation(errors, method.getAnnotations());
     for (Message message : errors.getMessages()) {
       binder.addError(message);
     }
-
     return ProviderMethod.create(key, method, delegate, ImmutableSet.copyOf(dependencies),
-        parameterProviders, scopeAnnotation, skipFastClassGeneration);
+            parameterProviders, scopeAnnotation, skipFastClassGeneration, annotation);
   }
 
   <T> Key<T> getKey(Errors errors, TypeLiteral<T> type, Member member, Annotation[] annotations) {
@@ -250,23 +290,11 @@ Multimap<Signature, Method> methodsBySignature = HashMultimap.create();
 
   @Override public boolean equals(Object o) {
     return o instanceof ProviderMethodsModule
-        && ((ProviderMethodsModule) o).delegate == delegate;
+            && ((ProviderMethodsModule) o).delegate == delegate
+            && ((ProviderMethodsModule) o).scanner == scanner;
   }
 
   @Override public int hashCode() {
     return delegate.hashCode();
-  }
-
-  /** A provider that returns a logger based on the method name. */
-  private static final class LogProvider implements Provider<Logger> {
-    private final String name;
-
-    public LogProvider(Method method) {
-      name = method.getDeclaringClass().getName() + "." + method.getName();
-    }
-
-    public Logger get() {
-      return Logger.getLogger(name);
-    }
   }
 }

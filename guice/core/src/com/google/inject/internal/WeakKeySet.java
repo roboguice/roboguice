@@ -91,9 +91,9 @@ final class WeakKeySet {
     if (backingMap == null) {
       backingMap = Maps.newHashMap();
     }
-    // if it's an instanceof Class, it was a JIT binding, which we don't
+    // if it's an.getClass() == Class.class, it was a JIT binding, which we don't
     // want to retain.
-    if (source instanceof Class || source == SourceProvider.UNKNOWN_SOURCE) {
+    if (source == null || source.getClass() == Class.class || source == SourceProvider.UNKNOWN_SOURCE) {
       source = null;
     }
     Multiset<Object> sources = backingMap.get(key);

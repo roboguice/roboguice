@@ -163,13 +163,13 @@ public final class BoundFieldModule implements Module {
         Bind bindAnnotation,
         TypeLiteral<?> fieldType) {
       this.field = field;
-      type = fieldType;
+      this.type = fieldType;
       this.bindAnnotation = bindAnnotation;
 
       field.setAccessible(true);
 
-      naturalType = getNaturalFieldType();
-      boundType = getBoundType();
+      this.naturalType = getNaturalFieldType();
+      this.boundType = getBoundType();
     }
 
     private TypeLiteral<?> getBoundType() {
@@ -184,7 +184,7 @@ public final class BoundFieldModule implements Module {
               "Non parameterized Provider fields must have an explicit "
               + "binding class via @Bind(to = Foo.class)");
         }
-        return naturalType.get();
+        return this.naturalType.get();
       } else {
         return TypeLiteral.get(bindClass);
       }
@@ -204,7 +204,7 @@ public final class BoundFieldModule implements Module {
     private Optional<TypeLiteral<?>> getNaturalFieldType() {
       if (isTransparentProvider(type.getRawType())) {
         Type providerType = type.getType();
-        if (providerType instanceof Class) {
+        if (providerType.getClass() == Class.class) {
           return Optional.absent();
         }
         Preconditions.checkState(providerType instanceof ParameterizedType);

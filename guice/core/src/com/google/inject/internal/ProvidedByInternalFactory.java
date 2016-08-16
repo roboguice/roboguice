@@ -21,9 +21,10 @@ import static com.google.common.base.Preconditions.checkState;
 
 import com.google.inject.Key;
 import com.google.inject.ProvidedBy;
-import com.google.inject.Provider;
 import com.google.inject.internal.InjectorImpl.JitLimitation;
 import com.google.inject.spi.Dependency;
+
+import javax.inject.Provider;
 
 /**
  * An {@link InternalFactory} for {@literal @}{@link ProvidedBy} bindings.
@@ -42,9 +43,8 @@ class ProvidedByInternalFactory<T> extends ProviderInternalFactory<T>
   ProvidedByInternalFactory(
       Class<?> rawType,
       Class<? extends Provider<?>> providerType,
-      Key<? extends Provider<T>> providerKey,
-      boolean allowProxy) {
-    super(providerKey, allowProxy);
+      Key<? extends Provider<T>> providerKey) {
+    super(providerKey);
     this.rawType = rawType;
     this.providerType = providerType; 
     this.providerKey = providerKey;
@@ -68,7 +68,7 @@ class ProvidedByInternalFactory<T> extends ProviderInternalFactory<T>
       errors = errors.withSource(providerKey);
       Provider<? extends T> provider = providerBinding.getInternalFactory().get(
           errors, context, dependency, true);
-      return circularGet(provider, errors, context, dependency, linked, provisionCallback);
+      return circularGet(provider, errors, context, dependency, provisionCallback);
     } finally {
       context.popState();
     }

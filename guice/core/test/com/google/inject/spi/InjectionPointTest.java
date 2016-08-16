@@ -203,11 +203,11 @@ public class InjectionPointTest extends TestCase {
     TypeLiteral<?> type = new TypeLiteral<ParameterizedInjections<String>>() {};
 
     InjectionPoint constructor = InjectionPoint.forConstructorOf(type);
-    assertEquals(new Key<Map<String, String>>() {},
+    assertEquals(Key.get(new TypeLiteral<Map<String, String>>() {}),
         getOnlyElement(constructor.getDependencies()).getKey());
 
     InjectionPoint field = getOnlyElement(InjectionPoint.forInstanceMethodsAndFields(type));
-    assertEquals(new Key<Set<String>>() {}, getOnlyElement(field.getDependencies()).getKey());
+    assertEquals(Key.get(new TypeLiteral<Set<String>>() {}), getOnlyElement(field.getDependencies()).getKey());
   }
 
   static class ParameterizedInjections<T> {
@@ -292,9 +292,9 @@ public class InjectionPointTest extends TestCase {
     assertPoints(points, RestrictedSuper.class, "jInject", "gInject");
     
     points = InjectionPoint.forInstanceMethodsAndFields(ExposedSub.class);
-    assertPointDependencies(points, new TypeLiteral<Provider<String>>() {});
+    assertPointDependencies(points, new TypeLiteral<Provider>() {});
     assertEquals(points.toString(), 2, points.size());
-    assertPoints(points, RestrictedSuper.class, "jInject", "gInject");
+    assertPoints(points, ExposedSub.class, "jInject", "gInject");
   }
   
   private void assertPoints(Iterable<InjectionPoint> points, Class<?> clazz,

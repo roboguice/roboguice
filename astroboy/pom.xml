@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.1-SNAPSHOT</version>
+		<version>4.0.1-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -19,6 +19,11 @@
 			<optional>true</optional>
 			<scope>provided</scope>
 		</dependency>
+    <dependency>
+      <groupId>com.jakewharton</groupId>
+      <artifactId>butterknife</artifactId>
+      <version>7.0.1</version>
+    </dependency>
 		<!-- TEST DEPENDENCIES -->
 		<!-- http://stackoverflow.com/a/18463743/693752 -->
 		<dependency>
@@ -44,6 +49,16 @@
 			<groupId>org.roboguice</groupId>
 			<artifactId>roboguice</artifactId>
 			<version>${project.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.google.inject</groupId>
+          <artifactId>guice</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>findbugs</groupId>
+          <artifactId>annotations</artifactId>
+        </exclusion>
+      </exclusions>
 		</dependency>
 
 		<!-- TEST DEPENDENCIES -->
@@ -84,6 +99,20 @@
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 				</configuration>
+				<executions>
+				        <execution>
+				                <id>default-compile</id>
+				                <phase>compile</phase>
+				                <goals>
+				                        <goal>compile</goal>
+				                </goals>
+				                <configuration>
+				                        <compilerArgs>
+				                                <arg>-Aincludes=org.roboguice.astroboy.*</arg>
+				                        </compilerArgs>
+				                </configuration>
+				        </execution>
+				</executions>
 			</plugin>
 		</plugins>
 

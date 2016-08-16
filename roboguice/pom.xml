@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.roboguice</groupId>
 		<artifactId>roboguice-aggregator</artifactId>
-		<version>3.1-SNAPSHOT</version>
+		<version>4.0.1-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -34,12 +34,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.google.android.maps</groupId>
-			<artifactId>maps</artifactId>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>android.support</groupId>
 			<artifactId>compatibility-v4</artifactId>
 			<scope>provided</scope>
@@ -50,13 +44,6 @@
 			<artifactId>compatibility-v7-appcompat</artifactId>
 			<optional>true</optional>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.actionbarsherlock</groupId>
-			<artifactId>actionbarsherlock</artifactId>
-			<type>jar</type>
-			<scope>provided</scope>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
@@ -223,11 +210,12 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- http://intellectualcramps.wordpress.com/2013/08/18/code-coverage-of-robolectric-tests-using-jacoco/ -->
+			<!-- http://intellectualcramps.wordpress.com/2013/08/18/code-coverage-of-robolectric-tests-using-jacoco/ 
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 			</plugin>
+-->
 			<!-- Create RoboGuice uber jar. Shade all dependencies, minimize and shrink. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

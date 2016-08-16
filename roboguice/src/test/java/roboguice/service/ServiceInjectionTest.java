@@ -1,51 +1,51 @@
 package roboguice.service;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-
-import javax.inject.Inject;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-
-import roboguice.RoboGuice;
-import roboguice.inject.InjectView;
-
-import com.google.inject.ConfigurationException;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.view.View;
+import javax.inject.Inject;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import roboguice.RoboGuice;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 @RunWith(RobolectricTestRunner.class)
 public class ServiceInjectionTest {
 
+    @Before
+    public void setUp() throws Exception {
+        RoboGuice.setupBaseApplicationInjector(Robolectric.application);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        RoboGuice.Util.reset();
+    }
+
     @Test
     public void shouldBeAbleToInjectInRoboService() {
-        final RoboServiceA roboService = new RoboServiceA();
+        final TestRoboServiceA roboService = new TestRoboServiceA();
         roboService.onCreate();
 
-        assertThat( roboService.context, equalTo((Context)roboService) );
+        assertThat(roboService.context, equalTo((Context) roboService));
     }
 
     @Test
     public void shouldBeAbleToInjectInRoboIntentService() {
-        final RoboIntentServiceA roboService = new RoboIntentServiceA("");
+        final TestRoboIntentServiceA roboService = new TestRoboIntentServiceA("");
         roboService.onCreate();
 
-        assertThat( roboService.context, equalTo((Context)roboService) );
+        assertThat(roboService.context, equalTo((Context) roboService));
     }
 
-    @Test(expected=ConfigurationException.class)
-    public void shouldNotAllowViewsInServices() {
-        final RoboServiceB roboService = new RoboServiceB();
-        roboService.onCreate();
-    }
-
-    public static class RoboServiceA extends RoboService {
+    public static class TestRoboServiceA extends TestRoboService {
         @Inject Context context;
 
         @Override
@@ -54,10 +54,10 @@ public class ServiceInjectionTest {
         }
     }
 
-    public static class RoboIntentServiceA extends RoboIntentService {
+    public static class TestRoboIntentServiceA extends TestRoboIntentService {
         @Inject Context context;
 
-        public RoboIntentServiceA(String name) {
+        public TestRoboIntentServiceA(String name) {
             super(name);
         }
 
@@ -65,14 +65,4 @@ public class ServiceInjectionTest {
         protected void onHandleIntent(Intent intent) {
         }
     }
-
-    public static class RoboServiceB extends RoboService {
-        @InjectView(100) View v;
-
-        @Override
-        public IBinder onBind(Intent intent) {
-            return null;
-        }
-    }
-
 }

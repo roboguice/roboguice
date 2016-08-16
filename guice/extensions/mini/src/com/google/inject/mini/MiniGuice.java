@@ -172,7 +172,7 @@ public final class MiniGuice {
       if (bindings.containsKey(key)) {
         continue;
       }
-      if (!(key.type instanceof Class) || key.annotation != null) {
+      if (!(key.type.getClass() == Class.class) {
         throw new IllegalArgumentException("No binding for " + key);
       }
       addJitBinding(key, requiredKey.requiredBy);

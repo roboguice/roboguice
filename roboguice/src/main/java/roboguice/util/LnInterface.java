@@ -40,4 +40,9 @@ public interface LnInterface {
     void setLoggingLevel(int level);
 
     String logLevelToString(int loglevel);
+
+    void setTag(String tag);
+
+    String getTag();
+
 }

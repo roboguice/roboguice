@@ -76,7 +76,7 @@ public class TypeLiteralInjectionTest extends TestCase {
   }
 
   public void testInjectTypeLiteralWithClassTypes() {
-    B<Integer> b = Guice.createInjector().getInstance(new Key<B<Integer>>() {});
+    B<Integer> b = Guice.createInjector().getInstance(Key.get(new TypeLiteral<B<Integer>>() {}));
     assertEquals(TypeLiteral.get(String.class), b.string);
     assertEquals(TypeLiteral.get(Integer.class), b.t);
     assertEquals(TypeLiteral.get(listOf(Integer.class)), b.listOfT);

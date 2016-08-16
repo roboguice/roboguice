@@ -19,10 +19,13 @@ package com.google.inject;
 import static com.google.inject.Asserts.assertContains;
 import static com.google.inject.Asserts.assertEqualsBothWays;
 import static com.google.inject.Asserts.assertNotSerializable;
+import static com.google.inject.Asserts.awaitClear;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import com.google.inject.Module;
 import com.google.inject.name.Named;
 import com.google.inject.name.Names;
+import com.google.inject.spi.Dependency;
 import com.google.inject.util.Types;
 
 import junit.framework.TestCase;
@@ -31,12 +34,15 @@ import java.io.IOException;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * @author crazybob@google.com (Bob Lee)
@@ -55,12 +61,6 @@ public class KeyTest extends TestCase {
     assertEquals(Foo.class, ki.getAnnotationType());
   }
 
-  public void testKeyEquality() {
-    Key<List<String>> a = new Key<List<String>>(Foo.class) {};
-    Key<List<String>> b = Key.get(new TypeLiteral<List<String>>() {}, Foo.class);
-    assertEqualsBothWays(a, b);
-  }
-
   public void testProviderKey() throws NoSuchMethodException {
     Key<?> actual = Key.get(getClass().getMethod("foo", List.class, List.class)
         .getGenericParameterTypes()[0]).providerKey();
@@ -74,10 +74,10 @@ public class KeyTest extends TestCase {
     Method m = getClass().getMethod("foo", List.class, List.class);
     Type[] types = m.getGenericParameterTypes();
     assertEquals(types[0], types[1]);
-    Key<List<String>> k = new Key<List<String>>() {};
+    Key<List<String>> k = Key.get(new TypeLiteral<List<String>>() {});
     assertEquals(types[0], k.getTypeLiteral().getType());
     assertFalse(types[0].equals(
-        new Key<List<Integer>>() {}.getTypeLiteral().getType()));
+            Key.get(new TypeLiteral<List<Integer>>() {}).getTypeLiteral().getType()));
   }
 
   /**
@@ -217,7 +217,7 @@ public class KeyTest extends TestCase {
   }
 
   private static <T> Key<T> createKey() {
-    return new Key<T>() {};
+    return Key.get(new TypeLiteral<T>() {});
   }
 
   interface B {}
@@ -274,5 +274,43 @@ public class KeyTest extends TestCase {
   @AllDefaults
   @Marker
   class HasAnnotations {}
+
+  public void testAnonymousClassesDontHoldRefs() {
+    final AtomicReference<Provider<List<String>>> stringProvider =
+        new AtomicReference<Provider<List<String>>>();
+    final AtomicReference<Provider<List<Integer>>> intProvider =
+        new AtomicReference<Provider<List<Integer>>>();
+    final Object foo = new Object() {
+      @SuppressWarnings("unused") @Inject List<String> list;
+    };
+    Module module = new AbstractModule() {
+      @Override protected void configure() {
+        bind(Key.get(new TypeLiteral<List<String>>() {})).toInstance(new ArrayList<String>());
+        bind(new TypeLiteral<List<Integer>>() {}).toInstance(new ArrayList<Integer>());
+
+        stringProvider.set(getProvider(Key.get(new TypeLiteral<List<String>>() {})));
+        intProvider.set(binder().getProvider(Dependency.get(Key.get(new TypeLiteral<List<Integer>>() {}))));
+
+        binder().requestInjection(new TypeLiteral<Object>() {}, foo);
+      }
+    };
+    WeakReference<Module> moduleRef = new WeakReference<Module>(module);
+    final Injector injector = Guice.createInjector(module);
+    module = null;
+    awaitClear(moduleRef); // Make sure anonymous keys & typeliterals don't hold the module.
+
+    Runnable runner = new Runnable() {
+      @Override public void run() {
+        injector.getInstance(Key.get(new TypeLiteral<Typed<String>>() {}));
+        injector.getInstance(Key.get(new TypeLiteral<Typed<Integer>>() {}));
+      }
+    };
+    WeakReference<Runnable> runnerRef = new WeakReference<Runnable>(runner);
+    runner.run();
+    runner = null;
+    awaitClear(runnerRef); // also make sure anonymous keys & typeliterals don't hold for JITs
+  }
+
+  static class Typed<T> {}
 
 }

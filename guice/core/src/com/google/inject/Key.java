@@ -52,7 +52,7 @@ import java.lang.reflect.Type;
  *
  * @author crazybob@google.com (Bob Lee)
  */
-public class Key<T> {
+public final class Key<T> {
 
   private final AnnotationStrategy annotationStrategy;
 
@@ -212,7 +212,7 @@ public class Key<T> {
     if (o == this) {
       return true;
     }
-    if (!(o instanceof Key<?>)) {
+    if (o.getClass() != Key.class) {
       return false;
     }
     Key<?> other = (Key<?>) o;
@@ -454,7 +454,7 @@ public class Key<T> {
     }
 
     @Override public boolean equals(Object o) {
-      if (!(o instanceof AnnotationInstanceStrategy)) {
+      if (o.getClass() != AnnotationInstanceStrategy.class) {
         return false;
       }
 
@@ -501,7 +501,7 @@ public class Key<T> {
     }
 
     @Override public boolean equals(Object o) {
-      if (!(o instanceof AnnotationTypeStrategy)) {
+      if (o.getClass() != AnnotationTypeStrategy.class) {
         return false;
       }
 

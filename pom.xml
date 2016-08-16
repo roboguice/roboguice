@@ -3,7 +3,7 @@
 	<groupId>org.roboguice</groupId>
 	<artifactId>roboguice-aggregator</artifactId>
 	<name>Aggregator</name>
-	<version>3.1-SNAPSHOT</version>
+	<version>4.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<prerequisites>
@@ -40,7 +40,7 @@
 		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
 		<lifecycle-mapping-plugin.version>1.0.0</lifecycle-mapping-plugin.version>
 		<maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
-		<findbugs-maven-plugin.version>2.5.2</findbugs-maven-plugin.version>
+		<findbugs-maven-plugin.version>3.0.1</findbugs-maven-plugin.version>
 		<maven-checkstyle-plugin.version>2.12.1</maven-checkstyle-plugin.version>
 		<maven-jar-plugin.version>2.4</maven-jar-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
@@ -49,8 +49,8 @@
 		<!-- LIBRARIES -->
 		<android-platform.version>4.1.1.4</android-platform.version>
 		<android-map.version>7_r1</android-map.version>
-		<android-build.version>19</android-build.version>
-		<guice.version>4.0-blender-SNAPSHOT</guice.version>
+		<android-build.version>20</android-build.version>
+		<guice.version>4.0.1-blender</guice.version>
 
 		<!--LIBRARIES -->
 		<android-map.version>7_r1</android-map.version>
@@ -336,6 +336,35 @@
 				<module>additional-tests</module>
 				<module>astroboy</module>
 			</modules>
+		</profile>
+		<profile>
+			<id>jdk8</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+      <!-- Disable doclint under JDK 8 -->
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<configuration>
+							<additionalparam>-Xdoclint:none</additionalparam>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 </project>

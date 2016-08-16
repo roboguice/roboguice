@@ -273,10 +273,8 @@ public class BinderTest extends TestCase {
     });
 
     assertSame(integers, injector.getInstance(Key.get(new TypeLiteral<Integer[]>() {})));
-    assertSame(integers, injector.getInstance(new Key<Integer[]>() {}));
     assertSame(integers, injector.getInstance(Integer[].class));
     assertSame(strings, injector.getInstance(Key.get(new TypeLiteral<String[]>() {})));
-    assertSame(strings, injector.getInstance(new Key<String[]>() {}));
     assertSame(strings, injector.getInstance(String[].class));
 
     try {
@@ -304,7 +302,6 @@ public class BinderTest extends TestCase {
       }
     });
     assertSame(strings, injector.getInstance(Key.get(new TypeLiteral<String[]>() {})));
-    assertSame(strings, injector.getInstance(new Key<String[]>() {}));
     assertSame(strings, injector.getInstance(String[].class));
   }
 

@@ -57,6 +57,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Default {@link Injector} implementation.
@@ -680,7 +681,7 @@ final class InjectorImpl implements Injector, Lookups {
 
     // this is unforunate. We don't support building TypeLiterals for type variable like 'T'. If
     // this proves problematic, we can probably fix TypeLiteral to support type variables
-    if (!(innerType instanceof Class)
+    if (!(innerType.getClass() == Class.class)
         && !(innerType instanceof GenericArrayType)
         && !(innerType instanceof ParameterizedType)) {
       throw errors.cannotInjectTypeLiteralOf(innerType).toException();
@@ -698,7 +699,7 @@ final class InjectorImpl implements Injector, Lookups {
   <T> BindingImpl<T> createProvidedByBinding(Key<T> key, Scoping scoping,
       ProvidedBy providedBy, Errors errors) throws ErrorsException {
     Class<?> rawType = key.getTypeLiteral().getRawType();
-    Class<? extends Provider<?>> providerType = providedBy.value();
+    Class<? extends javax.inject.Provider<?>> providerType = providedBy.value();
 
     // Make sure it's not the same type. TODO: Can we check for deeper loops?
     if (providerType == rawType) {
@@ -709,8 +710,7 @@ final class InjectorImpl implements Injector, Lookups {
     @SuppressWarnings("unchecked")
     Key<? extends Provider<T>> providerKey = (Key<? extends Provider<T>>) Key.get(providerType);
     ProvidedByInternalFactory<T> internalFactory =
-        new ProvidedByInternalFactory<T>(rawType, providerType,
-            providerKey, !options.disableCircularProxies);
+        new ProvidedByInternalFactory<T>(rawType, providerType, providerKey);
     Object source = rawType;
     BindingImpl<T> binding = LinkedProviderBindingImpl.createWithInitializer(
         this,
@@ -779,6 +779,12 @@ final class InjectorImpl implements Injector, Lookups {
       boolean jitDisabled, JitLimitation jitType) throws ErrorsException {
     // ask the parent to create the JIT binding
     if (parent != null) {
+      if (jitType == JitLimitation.NEW_OR_EXISTING_JIT
+          && jitDisabled && !parent.options.jitDisabled) {
+        // If the binding would be forbidden here but allowed in a parent, report an error instead
+        throw errors.jitDisabledInParent(key).toException();
+      }
+
       try {
         return parent.createJustInTimeBindingRecursive(key, new Errors(), jitDisabled,
             parent.options.jitDisabled ? JitLimitation.NO_JIT : jitType);
@@ -795,6 +801,7 @@ final class InjectorImpl implements Injector, Lookups {
       throw errors.childBindingAlreadySet(key, sources).toException();
     }
 
+    key = MoreTypes.canonicalizeKey(key); // before storing the key long-term, canonicalize it.
     BindingImpl<T> binding = createJustInTimeBinding(key, errors, jitDisabled, jitType);
     state.parent().blacklist(key, state, binding.getSource());
     jitBindings.put(key, binding);
@@ -991,13 +998,15 @@ final class InjectorImpl implements Injector, Lookups {
   }
 
   public <T> Provider<T> getProvider(Class<T> type) {
+    //System.out.println("creating provider of class : " + type);
     return getProvider(Key.get(type));
   }
 
-  <T> Provider<T> getProviderOrThrow(final Key<T> key, Errors errors) throws ErrorsException {
+  <T> Provider<T> getProviderOrThrow(final Dependency<T> dependency, Errors errors) throws ErrorsException {
+    final Key<T> key = dependency.getKey();
     final BindingImpl<? extends T> binding = getBindingOrThrow(key, errors, JitLimitation.NO_JIT);
-    final Dependency<T> dependency = Dependency.get(key);
 
+    //System.out.println("creating provider of key : " + key);
     return new Provider<T>() {
       public T get() {
         final Errors errors = new Errors(dependency);
@@ -1026,9 +1035,10 @@ final class InjectorImpl implements Injector, Lookups {
   }
 
   public <T> Provider<T> getProvider(final Key<T> key) {
+    //System.out.println("creating provider of key : " + key);
     Errors errors = new Errors(key);
     try {
-      Provider<T> result = getProviderOrThrow(key, errors);
+      Provider<T> result = getProviderOrThrow(Dependency.get(key), errors);
       errors.throwIfNewErrors(0);
       return result;
     } catch (ErrorsException e) {
@@ -1044,7 +1054,31 @@ final class InjectorImpl implements Injector, Lookups {
     return getProvider(type).get();
   }
 
+  /** @see #getGlobalInternalContext */
   private final ThreadLocal<Object[]> localContext;
+  /**
+   * Synchronization: map value is modified only for the current thread,
+   * it's ok to read map values of other threads. It can change between your
+   * calls.
+   *
+   * @see #getGlobalInternalContext
+   */
+  private static final ConcurrentMap<Thread, InternalContext> globalInternalContext =
+      Maps.newConcurrentMap();
+
+  /**
+   * Provides access to the internal context for the current injector of all threads.
+   * One does not need to use this from Guice source code as context could be passed on the stack.
+   * It is required for custom scopes which are called from Guice and sometimes do require
+   * access to current internal context, but it is not passed in. Contrary to {@link #localContext}
+   * it is not used to store injector-specific state, but to provide easy access to the current
+   * state.
+   *
+   * @return unmodifiable map
+   */
+  static Map<Thread, InternalContext> getGlobalInternalContext() {
+    return Collections.unmodifiableMap(globalInternalContext);
+  }
 
   /** Looks up thread local context. Creates (and removes) a new context if necessary. */
   <T> T callInContext(ContextualCallable<T> callable) throws ErrorsException {
@@ -1053,17 +1087,30 @@ final class InjectorImpl implements Injector, Lookups {
       reference = new Object[1];
       localContext.set(reference);
     }
+    Thread currentThread = Thread.currentThread();
     if (reference[0] == null) {
-      reference[0] = new InternalContext();
+      reference[0] = new InternalContext(options);
+      globalInternalContext.put(currentThread, (InternalContext) reference[0]);
       try {
-        return callable.call((InternalContext)reference[0]);
+        return callable.call((InternalContext) reference[0]);
       } finally {
-        // Only clear the context if this call created it.
+        // Only clear contexts if this call created them.
         reference[0] = null;
+        globalInternalContext.remove(currentThread);
       }
     } else {
-      // Someone else will clean up this context.
-      return callable.call((InternalContext)reference[0]);
+      Object previousGlobalInternalContext = globalInternalContext.get(currentThread);
+      globalInternalContext.put(currentThread, (InternalContext) reference[0]);
+      try {
+        // Someone else will clean up this local context.
+        return callable.call((InternalContext) reference[0]);
+      } finally {
+        if (previousGlobalInternalContext != null) {
+          globalInternalContext.put(currentThread, (InternalContext) previousGlobalInternalContext);
+        } else {
+          globalInternalContext.remove(currentThread);
+        }
+      }
     }
   }
 

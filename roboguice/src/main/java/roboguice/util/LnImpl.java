@@ -19,14 +19,18 @@ public class LnImpl implements LnInterface {
     }
 
     @Inject
-    public LnImpl(Application context) {
+    public LnImpl(Application application) {
+        init(application);
+    }
+
+    private void init(Application application) {
         try {
-            packageName = context.getPackageName();
-            final int flags = context.getPackageManager().getApplicationInfo(packageName, 0).flags;
+            packageName = application.getPackageName();
+            final int flags = application.getPackageManager().getApplicationInfo(packageName, 0).flags;
             minimumLogLevel = (flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0 ? Log.VERBOSE : Log.INFO;
             tag = packageName.toUpperCase(Locale.US);
 
-            Ln.d("Configuring Logging, minimum log level is %s", Ln.logLevelToString(minimumLogLevel) );
+            Ln.d("Configuring Logging, minimum log level is %s", Ln.logLevelToString(minimumLogLevel));
 
         } catch( Exception e ) {
             try {
@@ -47,7 +51,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.VERBOSE )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.VERBOSE, message);
     }
@@ -57,7 +61,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.VERBOSE )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.VERBOSE, message);
     }
@@ -72,7 +76,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.DEBUG )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.DEBUG, message);
     }
@@ -82,7 +86,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.DEBUG )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.DEBUG, message);
     }
@@ -97,7 +101,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.INFO )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.INFO, message);
     }
@@ -107,7 +111,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.INFO )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.INFO, message);
     }
@@ -122,7 +126,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.WARN )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.WARN, message);
     }
@@ -132,7 +136,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.WARN )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.WARN, message);
     }
@@ -147,7 +151,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.ERROR )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args) + '\n' + Log.getStackTraceString(throwable);
         return println(Log.ERROR, message);
     }
@@ -157,7 +161,7 @@ public class LnImpl implements LnInterface {
         if( getLoggingLevel()> Log.ERROR )
             return 0;
 
-        final String s = Strings.toString(s1);
+        final String s = toString(s1);
         final String message = formatArgs(s, args);
         return println(Log.ERROR, message);
     }
@@ -202,28 +206,33 @@ public class LnImpl implements LnInterface {
     @Override
     public void setLoggingLevel(int level) {
         minimumLogLevel = level;
+        final int skipDepth = 6; // skip 6 stackframes to find the location where this was called
+        if( getLoggingLevel() <= Log.DEBUG ) {
+            final StackTraceElement trace = Thread.currentThread().getStackTrace()[skipDepth];
+            tag =  "/" + trace.getFileName() + ":" + trace.getLineNumber();
+        }
     }
 
-    public int println(int priority, String msg ) {
+    @Override
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    @Override
+    public String getTag() {
+        return tag;
+    }
+
+    private int println(int priority, String msg ) {
         return Log.println(priority, getTag(), processMessage(msg));
     }
 
-    protected String processMessage(String msg) {
+    private String processMessage(String msg) {
         if( getLoggingLevel() <= Log.DEBUG )
             msg = String.format("%s %s", Thread.currentThread().getName(), msg);
         return msg;
     }
 
-    protected String getTag() {
-        final int skipDepth = 6; // skip 6 stackframes to find the location where this was called
-        if( getLoggingLevel() <= Log.DEBUG ) {
-            final StackTraceElement trace = Thread.currentThread().getStackTrace()[skipDepth];
-            return tag + "/" + trace.getFileName() + ":" + trace.getLineNumber();
-        }
-
-        return tag;
-    }
-    
     //protected for testing.
     protected String formatArgs(final String s, Object... args) {
         //this is a bit tricky : if args is null, it is passed to formatting
@@ -236,5 +245,8 @@ public class LnImpl implements LnInterface {
         }
     }
 
+    private String toString(Object s1) {
+        return s1 == null ? "" : s1.toString();
+    }
 
 }

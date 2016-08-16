@@ -34,6 +34,7 @@ import com.google.inject.Scope;
 import com.google.inject.Scopes;
 import com.google.inject.Singleton;
 import com.google.inject.Stage;
+import com.google.inject.TypeLiteral;
 import com.google.inject.name.Names;
 
 import junit.framework.AssertionFailedError;
@@ -269,7 +270,7 @@ public class SpiBindingsTest extends TestCase {
       }
     });
 
-    Key<Provider<String>> providerOfStringKey = new Key<Provider<String>>() {};
+    Key<Provider<String>> providerOfStringKey = Key.get(new TypeLiteral<Provider<String>>() {});
     Binding<Provider<String>> binding = injector.getBinding(providerOfStringKey);
     assertEquals(providerOfStringKey, binding.getKey());
     checkBindingSource(binding);
@@ -381,7 +382,7 @@ public class SpiBindingsTest extends TestCase {
     visiting.set(true);
 
     // Check for Provider<String> binding -- that is still a ProviderBinding.
-    Key<Provider<String>> providerOfStringKey = new Key<Provider<String>>() {};
+    Key<Provider<String>> providerOfStringKey = Key.get(new TypeLiteral<Provider<String>>() {});
     Binding<Provider<String>> providerBinding = injector.getBinding(providerOfStringKey);
     assertEquals(providerOfStringKey, providerBinding.getKey());
     checkBindingSource(providerBinding);

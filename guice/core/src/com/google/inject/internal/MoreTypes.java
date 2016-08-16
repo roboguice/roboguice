@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.ConfigurationException;
+import com.google.inject.Key;
 import com.google.inject.Guice;
 import com.google.inject.HierarchyTraversalFilter;
 import com.google.inject.TypeLiteral;
@@ -67,6 +68,25 @@ public class MoreTypes {
           .build();
 
   /**
+   * Returns a key that doesn't hold any references to parent classes.
+   * This is necessary for anonymous keys, so ensure we don't hold a ref
+   * to the containing module (or class) forever.
+   */
+  public static <T> Key<T> canonicalizeKey(Key<T> key) {
+    // If we know this isn't a subclass, return as-is.
+    // Otherwise, recreate the key to avoid the subclass 
+    if (key.getClass() == Key.class) {
+      return key;
+    } else if (key.getAnnotation() != null) {
+      return Key.get(key.getTypeLiteral(), key.getAnnotation());
+    } else if (key.getAnnotationType() != null) {
+      return Key.get(key.getTypeLiteral(), key.getAnnotationType());
+    } else {
+      return Key.get(key.getTypeLiteral());
+    }
+  }
+
+  /**
    * Returns an type that's appropriate for use in a key.
    *
    * <p>If the raw type of {@code typeLiteral} is a {@code javax.inject.Provider}, this returns a
@@ -96,16 +116,27 @@ public class MoreTypes {
 
     @SuppressWarnings("unchecked")
     TypeLiteral<T> wrappedPrimitives = (TypeLiteral<T>) PRIMITIVE_TO_WRAPPER.get(typeLiteral);
-    return wrappedPrimitives != null
-        ? wrappedPrimitives
-        : typeLiteral;
+    if (wrappedPrimitives != null) {
+      return wrappedPrimitives;
+    }
+
+    // If we know this isn't a subclass, return as-is.
+    if (typeLiteral.getClass() == TypeLiteral.class) {
+      return typeLiteral;
+    }
+
+    // recreate the TypeLiteral to avoid anonymous TypeLiterals from holding refs to their
+    // surrounding classes.
+    @SuppressWarnings("unchecked")
+    TypeLiteral<T> recreated = (TypeLiteral<T>) TypeLiteral.get(typeLiteral.getType());
+    return recreated;
   }
 
   /**
    * Returns true if {@code type} is free from type variables.
    */
   private static boolean isFullySpecified(Type type) {
-    if (type instanceof Class) {
+    if (type.getClass() == Class.class) {
       return true;
 
     } else if (type instanceof CompositeType) {
@@ -125,7 +156,7 @@ public class MoreTypes {
    * type is {@link Serializable}.
    */
   public static Type canonicalize(Type type) {
-    if (type instanceof Class) {
+    if (type.getClass() == Class.class) {
       Class<?> c = (Class<?>) type;
       return c.isArray() ? new GenericArrayTypeImpl(canonicalize(c.getComponentType())) : c;
 
@@ -152,7 +183,7 @@ public class MoreTypes {
   }
 
   public static Class<?> getRawType(Type type) {
-    if (type instanceof Class<?>) {
+    if (type.getClass() == Class.class) {
       // type is a normal class.
       return (Class<?>) type;
 
@@ -163,7 +194,7 @@ public class MoreTypes {
       // Neal isn't either but suspects some pathological case related
       // to nested classes exists.
       Type rawType = parameterizedType.getRawType();
-      checkArgument(rawType instanceof Class,
+      checkArgument(rawType.getClass() == Class.class,
           "Expected a Class, but <%s> is of type %s", type, type.getClass().getName());
       return (Class<?>) rawType;
 
@@ -190,7 +221,7 @@ public class MoreTypes {
       // also handles (a == null && b == null)
       return true;
 
-    } else if (a instanceof Class) {
+    } else if (a.getClass() == Class.class) {
       // Class already specifies equals().
       return a.equals(b);
 
@@ -245,7 +276,7 @@ public class MoreTypes {
   }
 
   public static String typeToString(Type type) {
-    return type instanceof Class ? ((Class) type).getName() : type.toString();
+    return type.getClass() == Class.class ? ((Class) type).getName() : type.toString();
   }
 
   /**
@@ -332,7 +363,7 @@ public class MoreTypes {
    */
   private static Class<?> declaringClassOf(TypeVariable typeVariable) {
     GenericDeclaration genericDeclaration = typeVariable.getGenericDeclaration();
-    return genericDeclaration instanceof Class
+    return genericDeclaration.getClass() == Class.class
         ? (Class<?>) genericDeclaration
         : null;
   }
@@ -345,13 +376,7 @@ public class MoreTypes {
 
     public ParameterizedTypeImpl(Type ownerType, Type rawType, Type... typeArguments) {
       // require an owner type if the raw type needs it
-      if (rawType instanceof Class<?>) {
-        Class rawTypeAsClass = (Class) rawType;
-        checkArgument(ownerType != null || rawTypeAsClass.getEnclosingClass() == null,
-            "No owner type for enclosed %s", rawType);
-        checkArgument(ownerType == null || rawTypeAsClass.getEnclosingClass() != null,
-            "Owner type for unenclosed %s", rawType);
-      }
+      ensureOwnerType(ownerType, rawType);
 
       this.ownerType = ownerType == null ? null : canonicalize(ownerType);
       this.rawType = canonicalize(rawType);
@@ -417,6 +442,16 @@ public class MoreTypes {
         stringBuilder.append(", ").append(typeToString(typeArguments[i]));
       }
       return stringBuilder.append(">").toString();
+    }
+
+    private static void ensureOwnerType(Type ownerType, Type rawType) {
+      if (rawType.getClass() == Class.class) {
+        Class rawTypeAsClass = (Class) rawType;
+        checkArgument(ownerType != null || rawTypeAsClass.getEnclosingClass() == null,
+            "No owner type for enclosed %s", rawType);
+        checkArgument(ownerType == null || rawTypeAsClass.getEnclosingClass() != null,
+            "Owner type for unenclosed %s", rawType);
+      }
     }
 
     private static final long serialVersionUID = 0;
@@ -520,7 +555,7 @@ public class MoreTypes {
   }
 
   private static void checkNotPrimitive(Type type, String use) {
-    checkArgument(!(type instanceof Class<?>) || !((Class) type).isPrimitive(),
+    checkArgument(!(type.getClass() == Class.class) || !((Class) type).isPrimitive(),
         "Primitive types are not allowed in %s: %s", use, type);
   }
 

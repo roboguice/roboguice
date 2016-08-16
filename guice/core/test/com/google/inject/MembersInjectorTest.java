@@ -217,7 +217,7 @@ public class MembersInjectorTest extends TestCase {
       }
     });
     MembersInjector<A<C>> membersInjector =
-        injector.getInstance(new Key<MembersInjector<A<C>>>() {});
+        injector.getInstance(Key.get(new TypeLiteral<MembersInjector<A<C>>>() {}));
 
     A<C> a = new A<C>();
     membersInjector.injectMembers(a);
@@ -225,7 +225,8 @@ public class MembersInjectorTest extends TestCase {
     assertSame(myFavouriteC, a.b.c);
 
     assertEquals("MembersInjector<java.lang.String>",
-        injector.getInstance(new Key<MembersInjector<String>>() {}).toString());
+            injector.getInstance(Key.get(new TypeLiteral<MembersInjector<String>>() {
+            })).toString());
   }
 
   public void testGettingRawMembersInjector() {
@@ -242,7 +243,7 @@ public class MembersInjectorTest extends TestCase {
   public void testGettingAnnotatedMembersInjector() {
     Injector injector = Guice.createInjector();
     try {
-      injector.getInstance(new Key<MembersInjector<String>>(Names.named("foo")) {});
+      injector.getInstance(Key.get(new TypeLiteral<MembersInjector<String>>() {},Names.named("foo")));
       fail();
     } catch (ConfigurationException expected) {
       assertContains(expected.getMessage(),

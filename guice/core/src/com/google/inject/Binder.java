@@ -20,7 +20,9 @@ import com.google.inject.binder.AnnotatedBindingBuilder;
 import com.google.inject.binder.AnnotatedConstantBindingBuilder;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.matcher.Matcher;
+import com.google.inject.spi.Dependency;
 import com.google.inject.spi.Message;
+import com.google.inject.spi.ModuleAnnotatedMethodScanner;
 import com.google.inject.spi.ProvisionListener;
 import com.google.inject.spi.TypeConverter;
 import com.google.inject.spi.TypeListener;
@@ -323,6 +325,18 @@ public interface Binder {
   <T> Provider<T> getProvider(Key<T> key);
 
   /**
+   * Returns the provider used to obtain instances for the given injection key.
+   * The returned provider will be attached to the injection point and will
+   * follow the nullability specified in the dependency.
+   * Additionally, the returned provider will not be valid until the {@link Injector} 
+   * has been created. The provider will throw an {@code IllegalStateException} if you
+   * try to use it beforehand.
+   *
+   * @since 4.0
+   */
+  <T> Provider<T> getProvider(Dependency<T> dependency);
+
+  /**
    * Returns the provider used to obtain instances for the given injection type.
    * The returned provider will not be valid until the {@link Injector} has been
    * created. The provider will throw an {@code IllegalStateException} if you
@@ -429,8 +443,8 @@ public interface Binder {
   /**
    * Instructs the Injector that bindings must be listed in a Module in order to
    * be injected. Classes that are not explicitly bound in a module cannot be
-   * injected. Bindings created through a linked binding (
-   * <code>bind(Foo.class).to(FooImpl.class)</code>) are allowed, but the
+   * injected. Bindings created through a linked binding
+   * (<code>bind(Foo.class).to(FooImpl.class)</code>) are allowed, but the
    * implicit binding (<code>FooImpl</code>) cannot be directly injected unless
    * it is also explicitly bound (<code>bind(FooImpl.class)</code>).
    * <p>
@@ -447,10 +461,11 @@ public interface Binder {
    * does, the behavior is limited only to that child or any grandchildren. No
    * siblings of the child will require explicit bindings.
    * <p>
-   * If the parent did not require explicit bindings but the child does, it is
-   * possible that a linked binding in the child may add a JIT binding to the
-   * parent. The child will not be allowed to reference the target binding
-   * directly, but the parent and other children of the parent may be able to.
+   * In the absence of an explicit binding for the target, linked bindings in
+   * child injectors create a binding for the target in the parent. Since this
+   * behavior can be surprising, it causes an error instead if explicit bindings
+   * are required. To avoid this error, add an explicit binding for the target,
+   * either in the child or the parent.
    * 
    * @since 3.0
    */
@@ -493,4 +508,15 @@ public interface Binder {
    * @since 4.0
    */
   void requireExactBindingAnnotations();
+
+  /**
+   * Adds a scanner that will look in all installed modules for annotations the scanner can parse,
+   * and binds them like {@literal @}Provides methods. Scanners apply to all modules installed in
+   * the injector. Scanners installed in child injectors or private modules do not impact modules in
+   * siblings or parents, however scanners installed in parents do apply to all child injectors and
+   * private modules.
+   *
+   * @since 4.0
+   */
+  void scanModulesForAnnotatedMethods(ModuleAnnotatedMethodScanner scanner);
 }

@@ -35,8 +35,8 @@ import com.google.inject.ConfigurationException;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
-import com.google.inject.Module;
 import com.google.inject.Provider;
+import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 import com.google.inject.binder.LinkedBindingBuilder;
 import com.google.inject.internal.Errors;
@@ -121,11 +121,7 @@ public abstract class Multibinder<T> {
    * itself bound with no binding annotation.
    */
   public static <T> Multibinder<T> newSetBinder(Binder binder, TypeLiteral<T> type) {
-    binder = binder.skipSources(RealMultibinder.class, Multibinder.class);
-    RealMultibinder<T> result = new RealMultibinder<T>(binder, type,
-        Key.get(Multibinder.<T>setOf(type)), Key.get(Multibinder.<T>collectionOfProvidersOf(type)));
-    binder.install(result);
-    return result;
+    return newRealSetBinder(binder, Key.get(type));
   }
 
   /**
@@ -133,7 +129,7 @@ public abstract class Multibinder<T> {
    * itself bound with no binding annotation.
    */
   public static <T> Multibinder<T> newSetBinder(Binder binder, Class<T> type) {
-    return newSetBinder(binder, TypeLiteral.get(type));
+    return newRealSetBinder(binder, Key.get(type));
   }
 
   /**
@@ -142,12 +138,7 @@ public abstract class Multibinder<T> {
    */
   public static <T> Multibinder<T> newSetBinder(
       Binder binder, TypeLiteral<T> type, Annotation annotation) {
-    binder = binder.skipSources(RealMultibinder.class, Multibinder.class);
-    RealMultibinder<T> result = new RealMultibinder<T>(binder, type,
-        Key.get(Multibinder.<T>setOf(type), annotation),
-        Key.get(Multibinder.<T>collectionOfProvidersOf(type), annotation));
-    binder.install(result);
-    return result;
+    return newRealSetBinder(binder, Key.get(type, annotation));
   }
 
   /**
@@ -156,7 +147,7 @@ public abstract class Multibinder<T> {
    */
   public static <T> Multibinder<T> newSetBinder(
       Binder binder, Class<T> type, Annotation annotation) {
-    return newSetBinder(binder, TypeLiteral.get(type), annotation);
+    return newRealSetBinder(binder, Key.get(type, annotation));
   }
 
   /**
@@ -165,10 +156,26 @@ public abstract class Multibinder<T> {
    */
   public static <T> Multibinder<T> newSetBinder(Binder binder, TypeLiteral<T> type,
       Class<? extends Annotation> annotationType) {
+    return newRealSetBinder(binder, Key.get(type, annotationType));
+  }
+
+  /**
+   * Returns a new multibinder that collects instances of the key's type in a {@link Set} that is
+   * itself bound with the annotation (if any) of the key.
+   *
+   * @since 4.0
+   */
+  public static <T> Multibinder<T> newSetBinder(Binder binder, Key<T> key) {
+    return newRealSetBinder(binder, key);
+  }
+
+  /**
+   * Implementation of newSetBinder.
+   */
+  static <T> RealMultibinder<T> newRealSetBinder(Binder binder, Key<T> key) {
     binder = binder.skipSources(RealMultibinder.class, Multibinder.class);
-    RealMultibinder<T> result = new RealMultibinder<T>(binder, type,
-        Key.get(Multibinder.<T>setOf(type), annotationType),
-        Key.get(Multibinder.<T>collectionOfProvidersOf(type), annotationType));
+    RealMultibinder<T> result = new RealMultibinder<T>(binder, key.getTypeLiteral(),
+        key.ofType(setOf(key.getTypeLiteral())));
     binder.install(result);
     return result;
   }
@@ -179,7 +186,7 @@ public abstract class Multibinder<T> {
    */
   public static <T> Multibinder<T> newSetBinder(Binder binder, Class<T> type,
       Class<? extends Annotation> annotationType) {
-    return newSetBinder(binder, TypeLiteral.get(type), annotationType);
+    return newSetBinder(binder, Key.get(type, annotationType));
   }
 
   @SuppressWarnings("unchecked") // wrapping a T in a Set safely returns a Set<T>
@@ -194,6 +201,15 @@ public abstract class Multibinder<T> {
     Type providerType = Types.providerOf(elementType.getType());
     Type type = Types.newParameterizedType(Collection.class, providerType);
     return (TypeLiteral<Collection<Provider<T>>>) TypeLiteral.get(type);
+  }
+
+  @SuppressWarnings("unchecked")
+  static <T> TypeLiteral<Collection<javax.inject.Provider<T>>> collectionOfJavaxProvidersOf(
+      TypeLiteral<T> elementType) {
+    Type providerType =
+        Types.newParameterizedType(javax.inject.Provider.class, elementType.getType());
+    Type type = Types.newParameterizedType(Collection.class, providerType);
+    return (TypeLiteral<Collection<javax.inject.Provider<T>>>) TypeLiteral.get(type);
   }
 
   /**
@@ -247,6 +263,7 @@ public abstract class Multibinder<T> {
     private final String setName;
     private final Key<Set<T>> setKey;
     private final Key<Collection<Provider<T>>> collectionOfProvidersKey;
+    private final Key<Collection<javax.inject.Provider<T>>> collectionOfJavaxProvidersKey;
     private final Key<Boolean> permitDuplicatesKey;
 
     /* the target injector's binder. non-null until initialization, null afterwards */
@@ -259,13 +276,12 @@ public abstract class Multibinder<T> {
     /** whether duplicates are allowed. Possibly configured by a different instance */
     private boolean permitDuplicates;
 
-    private RealMultibinder(Binder binder, TypeLiteral<T> elementType, Key<Set<T>> setKey,
-        Key<Collection<Provider<T>>> collectionOfProvidersKey) {
+    private RealMultibinder(Binder binder, TypeLiteral<T> elementType, Key<Set<T>> setKey) {
       this.binder = checkNotNull(binder, "binder");
       this.elementType = checkNotNull(elementType, "elementType");
       this.setKey = checkNotNull(setKey, "setKey");
-      this.collectionOfProvidersKey =
-          checkNotNull(collectionOfProvidersKey, "collectionOfProviders");
+      this.collectionOfProvidersKey = setKey.ofType(collectionOfProvidersOf(elementType));
+      this.collectionOfJavaxProvidersKey = setKey.ofType(collectionOfJavaxProvidersOf(elementType));
       this.setName = RealElement.nameOf(setKey);
       this.permitDuplicatesKey = Key.get(Boolean.class, named(toString() + " permits duplicates"));
     }
@@ -276,17 +292,27 @@ public abstract class Multibinder<T> {
       binder.bind(setKey).toProvider(this);
       binder.bind(collectionOfProvidersKey).toProvider(
           new RealMultibinderCollectionOfProvidersProvider());
+
+      // The collection this exposes is internally an ImmutableList, so it's OK to massage
+      // the guice Provider to javax Provider in the value (since the guice Provider implements
+      // javax Provider).
+      @SuppressWarnings("unchecked")
+      Key key = (Key) collectionOfProvidersKey;
+      binder.bind(collectionOfJavaxProvidersKey).to(key);
     }
 
     @Override public Multibinder<T> permitDuplicates() {
       binder.install(new PermitDuplicatesModule(permitDuplicatesKey));
       return this;
     }
+    
+    Key<T> getKeyForNewItem() {
+      checkConfiguration(!isInitialized(), "Multibinder was already initialized");
+      return Key.get(elementType, new RealElement(setName, MULTIBINDER, ""));
+    }
 
     @Override public LinkedBindingBuilder<T> addBinding() {
-      checkConfiguration(!isInitialized(), "Multibinder was already initialized");
-
-      return binder.bind(Key.get(elementType, new RealElement(setName, MULTIBINDER, "")));
+      return binder.bind(getKeyForNewItem());
     }
 
     /**
@@ -347,7 +373,9 @@ public abstract class Multibinder<T> {
       Map<T, Binding<T>> result = new LinkedHashMap<T, Binding<T>>(mapCapacity(bindings.size()));
       for (Binding<T> binding : bindings) {
         final T newValue = binding.getProvider().get();
-        checkConfiguration(newValue != null, "Set injection failed due to null element");
+        checkConfiguration(newValue != null,
+            "Set injection failed due to null element bound at: %s",
+            binding.getSource());
         Binding<T> duplicateBinding = result.put(newValue, binding);
         if (!permitDuplicates && duplicateBinding != null) {
           throw newDuplicateValuesException(result, binding, newValue, duplicateBinding);
@@ -403,7 +431,8 @@ public abstract class Multibinder<T> {
         return keyMatches(binding.getKey())
             || binding.getKey().equals(permitDuplicatesKey)
             || binding.getKey().equals(setKey)
-            || binding.getKey().equals(collectionOfProvidersKey);
+            || binding.getKey().equals(collectionOfProvidersKey)
+            || binding.getKey().equals(collectionOfJavaxProvidersKey);
       } else {
         return false;
       }

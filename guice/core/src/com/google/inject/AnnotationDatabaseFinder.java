@@ -21,9 +21,9 @@ import java.util.Set;
 public class AnnotationDatabaseFinder {
     
     private HashSet<String> classesContainingInjectionPointsSet = new HashSet<String>();
-    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassContainingInjectionToInjectedFieldSet = new HashMap<String, Map<String, Set<String>>>();
-    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassContainingInjectionToInjectedMethodSet = new HashMap<String, Map<String, Set<String>>>();
-    private HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassContainingInjectionToInjectedConstructorSet = new HashMap<String, Map<String, Set<String>>>();
+    private HashMap<String, Map<String, String[]>> mapAnnotationToMapClassContainingInjectionToInjectedFieldSet = new HashMap<String, Map<String, String[]>>();
+    private HashMap<String, Map<String, String[]>> mapAnnotationToMapClassContainingInjectionToInjectedMethodSet = new HashMap<String, Map<String, String[]>>();
+    private HashMap<String, Map<String, String[]>> mapAnnotationToMapClassContainingInjectionToInjectedConstructorSet = new HashMap<String, Map<String, String[]>>();
     private HashSet<String> bindableClassesSet = new HashSet<String>();
 
     public AnnotationDatabaseFinder(String[] additionalPackageNames) {
@@ -52,15 +52,15 @@ public class AnnotationDatabaseFinder {
         return classesContainingInjectionPointsSet;
     }
     
-    public HashMap<String, Map<String, Set<String>>> getMapAnnotationToMapClassContainingInjectionToInjectedFieldSet() {
+    public HashMap<String, Map<String, String[]>> getMapAnnotationToMapClassContainingInjectionToInjectedFieldSet() {
         return mapAnnotationToMapClassContainingInjectionToInjectedFieldSet;
     }
 
-    public HashMap<String, Map<String, Set<String>>> getMapAnnotationToMapClassContainingInjectionToInjectedMethodSet() {
+    public HashMap<String, Map<String, String[]>> getMapAnnotationToMapClassContainingInjectionToInjectedMethodSet() {
         return mapAnnotationToMapClassContainingInjectionToInjectedMethodSet;
     }
     
-    public HashMap<String, Map<String, Set<String>>> getMapAnnotationToMapClassContainingInjectionToInjectedConstructorSet() {
+    public HashMap<String, Map<String, String[]>> getMapAnnotationToMapClassContainingInjectionToInjectedConstructorSet() {
         return mapAnnotationToMapClassContainingInjectionToInjectedConstructorSet;
     }
     

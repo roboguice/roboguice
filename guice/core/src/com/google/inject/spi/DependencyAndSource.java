@@ -28,6 +28,7 @@ import java.lang.reflect.Member;
  * source} where the dependency was bound.
  * 
  * @author sameb@google.com (Sam Berlin)
+ * @since 4.0
  */
 public final class DependencyAndSource {
   private final Dependency<?> dependency;
@@ -56,7 +57,7 @@ public final class DependencyAndSource {
    * class in question.
    */
   public String getBindingSource() {
-    if (source instanceof Class) {
+    if (source.getClass() == Class.class) {
       return StackTraceElements.forType((Class) source).toString();
     } else if (source instanceof Member) {
       return StackTraceElements.forMember((Member) source).toString();

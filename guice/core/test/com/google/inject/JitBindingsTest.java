@@ -19,7 +19,6 @@ package com.google.inject;
 import static com.google.common.collect.ImmutableSet.of;
 import static com.google.inject.Asserts.assertContains;
 import static com.google.inject.JitBindingsTest.GetBindingCheck.ALLOW_BINDING;
-import static com.google.inject.JitBindingsTest.GetBindingCheck.ALLOW_BINDING_PROVIDER;
 import static com.google.inject.JitBindingsTest.GetBindingCheck.FAIL_ALL;
 import junit.framework.TestCase;
 
@@ -38,6 +37,14 @@ public class JitBindingsTest extends TestCase {
   
   private String jitFailed(TypeLiteral<?> clazz) {
     return "Explicit bindings are required and " + clazz + " is not explicitly bound.";
+  }
+
+  private String jitInParentFailed(Class<?> clazz) {
+    return jitInParentFailed(TypeLiteral.get(clazz));
+  }
+
+  private String jitInParentFailed(TypeLiteral<?> clazz) {
+    return "Explicit bindings are required and " + clazz + " would be bound in a parent injector.";
   }
   
   private String inChildMessage(Class<?> clazz) {
@@ -160,8 +167,8 @@ public class JitBindingsTest extends TestCase {
       });
       fail();
     } catch(CreationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(ScopedFooImpl.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(ScopedFooImpl.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
   }
   
@@ -190,8 +197,8 @@ public class JitBindingsTest extends TestCase {
       }).getInstance(Bar.class);
       fail("should have failed");
     } catch(ConfigurationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(Bar.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(Bar.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
   }
   
@@ -207,8 +214,8 @@ public class JitBindingsTest extends TestCase {
       });
       fail("should have failed");
     } catch (CreationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(Bar.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(Bar.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
   }
 
@@ -222,8 +229,8 @@ public class JitBindingsTest extends TestCase {
       }).getProvider(Bar.class);
       fail("should have failed");
     } catch (ConfigurationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(Bar.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(Bar.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
   }
 
@@ -239,8 +246,8 @@ public class JitBindingsTest extends TestCase {
       });
       fail("should have failed");
     } catch (CreationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(Bar.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(Bar.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
   }
   
@@ -310,8 +317,8 @@ public class JitBindingsTest extends TestCase {
       });
       fail("should have failed");
     } catch(CreationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(Foo.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(Foo.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
     
     Injector child = parent.createChildInjector(new AbstractModule() {
@@ -338,7 +345,7 @@ public class JitBindingsTest extends TestCase {
     ensureWorks(grandchild, FooBar.class, Foo.class, Bar.class);
     ensureFails(grandchild, ALLOW_BINDING, FooImpl.class);
     ensureFails(child, ALLOW_BINDING, FooImpl.class);
-    ensureInChild(parent, FooImpl.class, FooBar.class, Foo.class);    
+    ensureInChild(parent, FooImpl.class, FooBar.class, Foo.class);
   }
   
   public void testChildInjectorAddsOption() {
@@ -360,8 +367,8 @@ public class JitBindingsTest extends TestCase {
       });
       fail("should have failed");
     } catch(CreationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(Foo.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(Foo.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
     assertEquals(totalParentBindings, parent.getAllBindings().size());
     
@@ -370,26 +377,11 @@ public class JitBindingsTest extends TestCase {
       protected void configure() {
         binder().requireExplicitBindings();
         bind(Foo.class).to(FooImpl.class);
+        bind(FooImpl.class);
       }
     });
-    totalParentBindings++; // creating this child added FooImpl to the parent.
     assertEquals(totalParentBindings, parent.getAllBindings().size());
     ensureWorks(child, Foo.class, Bar.class);
-    ensureFails(child, ALLOW_BINDING_PROVIDER, FooImpl.class);
-    // Make extra certain that if something tries to inject a FooImpl from child
-    // that it fails, even if calling getBinding().getProvider works.. because
-    // the binding is built with the parent injector.
-    try {
-      child.injectMembers(new Object() {
-        @SuppressWarnings("unused")
-        @Inject
-        void inject(FooImpl fooImpl) {}
-      });
-      fail();
-    } catch(ConfigurationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(FooImpl.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
-    }
     
     Injector grandchild = child.createChildInjector(new AbstractModule() {
       @Override
@@ -399,8 +391,6 @@ public class JitBindingsTest extends TestCase {
     });
     assertEquals(totalParentBindings, parent.getAllBindings().size());    
     ensureWorks(grandchild, FooBar.class, Foo.class, Bar.class);
-    ensureFails(grandchild, ALLOW_BINDING_PROVIDER, FooImpl.class);
-    ensureFails(child, ALLOW_BINDING_PROVIDER, FooImpl.class);
     
     // Make sure siblings of children don't inherit each others settings...
     // a new child should be able to get FooImpl.
@@ -425,8 +415,8 @@ public class JitBindingsTest extends TestCase {
       });
       fail("should have failed");
     } catch(CreationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(Bar.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(Bar.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
     
     Injector injector = Guice.createInjector(new AbstractModule() {
@@ -463,8 +453,8 @@ public class JitBindingsTest extends TestCase {
       });
       fail("should have failed");
     } catch(CreationException expected) {
-      assertContains(expected.getMessage(), "1) " + jitFailed(Bar.class));
-      assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+      assertContains(expected.getMessage(), jitFailed(Bar.class));
+      assertEquals(1, expected.getErrorMessages().size());
     }
   }
 
@@ -501,7 +491,7 @@ public class JitBindingsTest extends TestCase {
         }
       });
 
-    WantsTypeLiterals<String> foo = injector.getInstance(new Key<WantsTypeLiterals<String>>() {});
+    WantsTypeLiterals<String> foo = injector.getInstance(Key.get(new TypeLiteral<WantsTypeLiterals<String>>() {}));
     assertEquals(foo.literal.getRawType(), String.class);
     assertEquals(of("bar"), foo.set);
   }
@@ -522,7 +512,91 @@ public class JitBindingsTest extends TestCase {
     String data = injector.getInstance(String.class);
     assertEquals("foo", data);
   }
-  
+
+  public void testJitLinkedBindingInParentFails() {
+    try {
+      Guice.createInjector(new AbstractModule() {
+        @Override
+        protected void configure() {
+          install(new PrivateModule() {
+            @Override
+            protected void configure() {
+              binder().requireExplicitBindings();
+              bind(Foo.class).to(FooImpl.class);
+            }
+          });
+        }
+      });
+      fail("should have failed");
+    } catch (CreationException expected) {
+      assertContains(expected.getMessage(), jitInParentFailed(FooImpl.class));
+      assertEquals(1, expected.getErrorMessages().size());
+    }
+  }
+
+  public void testJitProviderBindingInParentFails() {
+    try {
+      Guice.createInjector(new AbstractModule() {
+        @Override
+        protected void configure() {
+          install(new PrivateModule() {
+            @Override
+            protected void configure() {
+              binder().requireExplicitBindings();
+              bind(Foo.class).toProvider(FooProvider.class);
+            }
+          });
+        }
+      });
+      fail("should have failed");
+    } catch (CreationException expected) {
+      assertContains(expected.getMessage(), jitInParentFailed(FooProvider.class));
+      assertEquals(1, expected.getErrorMessages().size());
+    }
+  }
+
+  public void testJitImplementedByBindingInParentFails() {
+    try {
+      Guice.createInjector(new AbstractModule() {
+        @Override
+        protected void configure() {
+          install(new PrivateModule() {
+            @Override
+            protected void configure() {
+              binder().requireExplicitBindings();
+              bind(ImplBy.class);
+            }
+          });
+        }
+      });
+      fail("should have failed");
+    } catch (CreationException expected) {
+      assertContains(expected.getMessage(), jitInParentFailed(ImplByImpl.class));
+      assertEquals(1, expected.getErrorMessages().size());
+    }
+  }
+
+  public void testJitProvidedByBindingInParentFails() {
+    try {
+      Guice.createInjector(new AbstractModule() {
+        @Override
+        protected void configure() {
+          install(new PrivateModule() {
+            @Override
+            protected void configure() {
+              binder().requireExplicitBindings();
+              bind(ProvBy.class);
+            }
+          });
+        }
+      });
+      fail("should have failed");
+    } catch (CreationException expected) {
+      assertContains(expected.getMessage(), jitInParentFailed(ProvByProvider.class));
+      assertEquals(1, expected.getErrorMessages().size());
+    }
+  }
+
   private void ensureWorks(Injector injector, Class<?>... classes) {
     for(int i = 0; i < classes.length; i++) {
       injector.getInstance(classes[i]);
@@ -538,16 +612,16 @@ public class JitBindingsTest extends TestCase {
         injector.getInstance(classes[i]);
         fail("should have failed tring to retrieve class: " + classes[i]);
       } catch(ConfigurationException expected) {
-        assertContains(expected.getMessage(), "1) " + jitFailed(classes[i]));
-        assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+        assertContains(expected.getMessage(), jitFailed(classes[i]));
+        assertEquals(1, expected.getErrorMessages().size());
       }
       
       try { 
         injector.getProvider(classes[i]);
         fail("should have failed tring to retrieve class: " + classes[i]);
       } catch(ConfigurationException expected) {
-        assertContains(expected.getMessage(), "1) " + jitFailed(classes[i]));
-        assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+        assertContains(expected.getMessage(), jitFailed(classes[i]));
+        assertEquals(1, expected.getErrorMessages().size());
       }
       
       if (getBinding == GetBindingCheck.ALLOW_BINDING
@@ -562,16 +636,16 @@ public class JitBindingsTest extends TestCase {
           if (getBinding == GetBindingCheck.ALLOW_BINDING_PROVIDER) {
             throw expected;
           }
-          assertContains(expected.getMessage(), "1) " + jitFailed(classes[i]));
-          assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+          assertContains(expected.getMessage(), jitFailed(classes[i]));
+          assertEquals(1, expected.getErrorMessages().size());
         }
       } else {
         try {
           injector.getBinding(classes[i]);
           fail("should have failed tring to retrieve class: " + classes[i]);          
         } catch(ConfigurationException expected) {
-          assertContains(expected.getMessage(), "1) " + jitFailed(classes[i]));
-          assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+          assertContains(expected.getMessage(), jitFailed(classes[i]));
+          assertEquals(1, expected.getErrorMessages().size());
         }
       }
     }
@@ -583,24 +657,24 @@ public class JitBindingsTest extends TestCase {
         injector.getInstance(classes[i]);
         fail("should have failed tring to retrieve class: " + classes[i]);
       } catch(ConfigurationException expected) {
-        assertContains(expected.getMessage(), "1) " + inChildMessage(classes[i]));
-        assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+        assertContains(expected.getMessage(), inChildMessage(classes[i]));
+        assertEquals(1, expected.getErrorMessages().size());
       }
       
       try { 
         injector.getProvider(classes[i]);
         fail("should have failed tring to retrieve class: " + classes[i]);
       } catch(ConfigurationException expected) {
-        assertContains(expected.getMessage(), "1) " + inChildMessage(classes[i]));
-        assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+        assertContains(expected.getMessage(), inChildMessage(classes[i]));
+        assertEquals(1, expected.getErrorMessages().size());
       }
       
       try {
         injector.getBinding(classes[i]);
         fail("should have failed tring to retrieve class: " + classes[i]);          
       } catch(ConfigurationException expected) {
-        assertContains(expected.getMessage(), "1) " + inChildMessage(classes[i]));
-        assertTrue(expected.getMessage(), !expected.getMessage().contains("2) "));
+        assertContains(expected.getMessage(), inChildMessage(classes[i]));
+        assertEquals(1, expected.getErrorMessages().size());
       }
     }
   }

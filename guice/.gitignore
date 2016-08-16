@@ -1,9 +1,14 @@
-/build/
+build/
 target/
-bin/
+/bin/
 .project
 .classpath
 .settings/
 *~
 *.orig
 *.new
+.idea/
+*.iml
+*.ipr
+guice.iws
+.DS_Store

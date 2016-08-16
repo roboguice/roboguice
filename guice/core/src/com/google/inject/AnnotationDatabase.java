@@ -10,9 +10,9 @@ public abstract class AnnotationDatabase {
     protected AnnotationDatabase() {}
 
     //TODO rename methods
-    public abstract void fillAnnotationClassesAndFieldsNames(HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToFieldSet);
-    public abstract void fillAnnotationClassesAndMethods(HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToMethodSet);
-    public abstract void fillAnnotationClassesAndConstructors(HashMap<String, Map<String, Set<String>>> mapAnnotationToMapClassWithInjectionNameToConstructorSet);
+    public abstract void fillAnnotationClassesAndFieldsNames(HashMap<String, Map<String, String[]>> mapAnnotationToMapClassWithInjectionNameToFieldSet);
+    public abstract void fillAnnotationClassesAndMethods(HashMap<String, Map<String, String[]>> mapAnnotationToMapClassWithInjectionNameToMethodSet);
+    public abstract void fillAnnotationClassesAndConstructors(HashMap<String, Map<String, String[]>> mapAnnotationToMapClassWithInjectionNameToConstructorSet);
     public abstract void fillClassesContainingInjectionPointSet(HashSet<String> classesContainingInjectionPointsSet);
     public abstract void fillBindableClasses(HashSet<String> injectedClasses);
 

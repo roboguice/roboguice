@@ -1,11 +1,12 @@
 package org.roboguice.astroboy.activity;
 
+import android.app.Activity;
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.AstroboyRemoteControl;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
+import roboguice.RoboGuice;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -30,15 +31,14 @@ import com.google.inject.Inject;
  *     an object's default constructor, versus when it does something "special"
  *     like call getSystemService()
  */
-@ContentView(R.layout.main)
-public class AstroboyMasterConsole extends RoboActivity {
+public class AstroboyMasterConsole extends Activity {
 
     // Various views that we inject into the activity.
     // Equivalent to calling findViewById() in your onCreate(), except more succinct
-    @InjectView(R.id.self_destruct) Button selfDestructButton;
-    @InjectView(R.id.say_text)      EditText sayText;
-    @InjectView(R.id.brush_teeth)   Button brushTeethButton;
-    @InjectView(tag="fightevil")    Button fightEvilButton;     // we can also use tags if we want
+    @Bind(R.id.self_destruct) Button selfDestructButton;
+    @Bind(R.id.say_text)      EditText sayText;
+    @Bind(R.id.brush_teeth)   Button brushTeethButton;
+    @Bind(R.id.fight_evil)    Button fightEvilButton;     // we can also use tags if we want
 
 
     // Standard Guice injection of Plain Old Java Objects (POJOs)
@@ -56,6 +56,9 @@ public class AstroboyMasterConsole extends RoboActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); // @Inject, @InjectResource, and @InjectExtra injection happens during super.onCreate()
+        setContentView(R.layout.main);
+        ButterKnife.bind(this);
+        RoboGuice.getInjector(this).injectMembers(this);
 
         sayText.setOnEditorActionListener(new OnEditorActionListener() {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {

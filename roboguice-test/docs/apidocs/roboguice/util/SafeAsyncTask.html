@@ -1,0 +1,794 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>
+SafeAsyncTask (roboguice 1.1-SNAPSHOT API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="SafeAsyncTask (roboguice 1.1-SNAPSHOT API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="class-use/SafeAsyncTask.html"><FONT CLASS="NavBarFont1"><B>Use</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+</EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../roboguice/util/RoboThread.html" title="class in roboguice.util"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../index.html?roboguice/util/SafeAsyncTask.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="SafeAsyncTask.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+roboguice.util</FONT>
+<BR>
+Class SafeAsyncTask&lt;ResultT&gt;</H2>
+<PRE>
+java.lang.Object
+  <IMG SRC="../../resources/inherit.gif" ALT="extended by "><B>roboguice.util.SafeAsyncTask&lt;ResultT&gt;</B>
+</PRE>
+<DL>
+<DT><DT><B>Type Parameters:</B><DD><CODE>ResultT</CODE> - </DL>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD>java.util.concurrent.Callable&lt;ResultT&gt;</DD>
+</DL>
+<DL>
+<DT><B>Direct Known Subclasses:</B> <DD><A HREF="../../roboguice/util/RoboAsyncTask.html" title="class in roboguice.util">RoboAsyncTask</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public abstract class <B>SafeAsyncTask&lt;ResultT&gt;</B><DT>extends java.lang.Object<DT>implements java.util.concurrent.Callable&lt;ResultT&gt;</DL>
+</PRE>
+
+<P>
+A class similar but unrelated to android's <CODE>AsyncTask</CODE>.
+
+ Unlike AsyncTask, this class properly propagates exceptions.
+
+ If you're familiar with AsyncTask and are looking for <CODE>AsyncTask.doInBackground(Object[])</CODE>,
+ we've named it <CODE>Callable.call()</CODE> here to conform with java 1.5's <CODE>Callable</CODE> interface.
+
+ Current limitations: does not yet handle progress, although it shouldn't be
+ hard to add.
+
+ If using your own executor, you must call future() to get a runnable you can execute.
+<P>
+
+<P>
+<HR>
+
+<P>
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+
+<A NAME="nested_class_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Nested Class Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;class</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="type parameter in SafeAsyncTask.Task">ResultT</A>&gt;</B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected static&nbsp;java.util.concurrent.Executor</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#DEFAULT_EXECUTOR">DEFAULT_EXECUTOR</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>static&nbsp;int</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#DEFAULT_POOL_SIZE">DEFAULT_POOL_SIZE</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;java.util.concurrent.Executor</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#executor">executor</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;java.util.concurrent.FutureTask&lt;java.lang.Void&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#future">future</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;android.os.Handler</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#handler">handler</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;java.lang.StackTraceElement[]</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#launchLocation">launchLocation</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#SafeAsyncTask()">SafeAsyncTask</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets executor to Executors.newFixedThreadPool(DEFAULT_POOL_SIZE) and
+ Handler to new Handler()</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#SafeAsyncTask(java.util.concurrent.Executor)">SafeAsyncTask</A></B>(java.util.concurrent.Executor&nbsp;executor)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets Handler to new Handler()</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#SafeAsyncTask(android.os.Handler)">SafeAsyncTask</A></B>(android.os.Handler&nbsp;handler)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sets executor to Executors.newFixedThreadPool(DEFAULT_POOL_SIZE)</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#SafeAsyncTask(android.os.Handler, java.util.concurrent.Executor)">SafeAsyncTask</A></B>(android.os.Handler&nbsp;handler,
+              java.util.concurrent.Executor&nbsp;executor)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#cancel(boolean)">cancel</A></B>(boolean&nbsp;mayInterruptIfRunning)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#execute()">execute</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#execute(java.lang.StackTraceElement[])">execute</A></B>(java.lang.StackTraceElement[]&nbsp;launchLocation)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;java.util.concurrent.Executor</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#executor()">executor</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>&lt;<A HREF="../../roboguice/util/SafeAsyncTask.html" title="type parameter in SafeAsyncTask">ResultT</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#executor(java.util.concurrent.Executor)">executor</A></B>(java.util.concurrent.Executor&nbsp;executor)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;java.util.concurrent.FutureTask&lt;java.lang.Void&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#future()">future</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;android.os.Handler</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#handler()">handler</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;<A HREF="../../roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>&lt;<A HREF="../../roboguice/util/SafeAsyncTask.html" title="type parameter in SafeAsyncTask">ResultT</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#handler(android.os.Handler)">handler</A></B>(android.os.Handler&nbsp;handler)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/SafeAsyncTask.html" title="type parameter in SafeAsyncTask">ResultT</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#newTask()">newTask</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#onException(java.lang.Exception)">onException</A></B>(java.lang.Exception&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logs the exception as an Error by default, but this method may
+ be overridden by subclasses.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#onFinally()">onFinally</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#onInterrupted(java.lang.InterruptedException)">onInterrupted</A></B>(java.lang.InterruptedException&nbsp;e)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Called when the thread has been interrupted, likely because
+ the task was canceled.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#onPreExecute()">onPreExecute</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/util/SafeAsyncTask.html#onSuccess(ResultT)">onSuccess</A></B>(<A HREF="../../roboguice/util/SafeAsyncTask.html" title="type parameter in SafeAsyncTask">ResultT</A>&nbsp;t)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.Object</B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.util.concurrent.Callable"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from interface java.util.concurrent.Callable</B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE>call</CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ FIELD DETAIL =========== -->
+
+<A NAME="field_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Field Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="DEFAULT_POOL_SIZE"><!-- --></A><H3>
+DEFAULT_POOL_SIZE</H3>
+<PRE>
+public static final int <B>DEFAULT_POOL_SIZE</B></PRE>
+<DL>
+<DL>
+<DT><B>See Also:</B><DD><A HREF="../../constant-values.html#roboguice.util.SafeAsyncTask.DEFAULT_POOL_SIZE">Constant Field Values</A></DL>
+</DL>
+<HR>
+
+<A NAME="DEFAULT_EXECUTOR"><!-- --></A><H3>
+DEFAULT_EXECUTOR</H3>
+<PRE>
+protected static final java.util.concurrent.Executor <B>DEFAULT_EXECUTOR</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="handler"><!-- --></A><H3>
+handler</H3>
+<PRE>
+protected android.os.Handler <B>handler</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="executor"><!-- --></A><H3>
+executor</H3>
+<PRE>
+protected java.util.concurrent.Executor <B>executor</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="launchLocation"><!-- --></A><H3>
+launchLocation</H3>
+<PRE>
+protected java.lang.StackTraceElement[] <B>launchLocation</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="future"><!-- --></A><H3>
+future</H3>
+<PRE>
+protected java.util.concurrent.FutureTask&lt;java.lang.Void&gt; <B>future</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="SafeAsyncTask()"><!-- --></A><H3>
+SafeAsyncTask</H3>
+<PRE>
+public <B>SafeAsyncTask</B>()</PRE>
+<DL>
+<DD>Sets executor to Executors.newFixedThreadPool(DEFAULT_POOL_SIZE) and
+ Handler to new Handler()
+<P>
+</DL>
+<HR>
+
+<A NAME="SafeAsyncTask(android.os.Handler)"><!-- --></A><H3>
+SafeAsyncTask</H3>
+<PRE>
+public <B>SafeAsyncTask</B>(android.os.Handler&nbsp;handler)</PRE>
+<DL>
+<DD>Sets executor to Executors.newFixedThreadPool(DEFAULT_POOL_SIZE)
+<P>
+</DL>
+<HR>
+
+<A NAME="SafeAsyncTask(java.util.concurrent.Executor)"><!-- --></A><H3>
+SafeAsyncTask</H3>
+<PRE>
+public <B>SafeAsyncTask</B>(java.util.concurrent.Executor&nbsp;executor)</PRE>
+<DL>
+<DD>Sets Handler to new Handler()
+<P>
+</DL>
+<HR>
+
+<A NAME="SafeAsyncTask(android.os.Handler, java.util.concurrent.Executor)"><!-- --></A><H3>
+SafeAsyncTask</H3>
+<PRE>
+public <B>SafeAsyncTask</B>(android.os.Handler&nbsp;handler,
+                     java.util.concurrent.Executor&nbsp;executor)</PRE>
+<DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="future()"><!-- --></A><H3>
+future</H3>
+<PRE>
+public java.util.concurrent.FutureTask&lt;java.lang.Void&gt; <B>future</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="executor(java.util.concurrent.Executor)"><!-- --></A><H3>
+executor</H3>
+<PRE>
+public <A HREF="../../roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>&lt;<A HREF="../../roboguice/util/SafeAsyncTask.html" title="type parameter in SafeAsyncTask">ResultT</A>&gt; <B>executor</B>(java.util.concurrent.Executor&nbsp;executor)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="executor()"><!-- --></A><H3>
+executor</H3>
+<PRE>
+public java.util.concurrent.Executor <B>executor</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="handler(android.os.Handler)"><!-- --></A><H3>
+handler</H3>
+<PRE>
+public <A HREF="../../roboguice/util/SafeAsyncTask.html" title="class in roboguice.util">SafeAsyncTask</A>&lt;<A HREF="../../roboguice/util/SafeAsyncTask.html" title="type parameter in SafeAsyncTask">ResultT</A>&gt; <B>handler</B>(android.os.Handler&nbsp;handler)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="handler()"><!-- --></A><H3>
+handler</H3>
+<PRE>
+public android.os.Handler <B>handler</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="execute()"><!-- --></A><H3>
+execute</H3>
+<PRE>
+public void <B>execute</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="execute(java.lang.StackTraceElement[])"><!-- --></A><H3>
+execute</H3>
+<PRE>
+protected void <B>execute</B>(java.lang.StackTraceElement[]&nbsp;launchLocation)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="cancel(boolean)"><!-- --></A><H3>
+cancel</H3>
+<PRE>
+public boolean <B>cancel</B>(boolean&nbsp;mayInterruptIfRunning)</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="onPreExecute()"><!-- --></A><H3>
+onPreExecute</H3>
+<PRE>
+protected void <B>onPreExecute</B>()
+                     throws java.lang.Exception</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE>Exception,</CODE> - captured on passed to onException() if present.
+<DD><CODE>java.lang.Exception</CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="onSuccess(java.lang.Object)"><!-- --></A><A NAME="onSuccess(ResultT)"><!-- --></A><H3>
+onSuccess</H3>
+<PRE>
+protected void <B>onSuccess</B>(<A HREF="../../roboguice/util/SafeAsyncTask.html" title="type parameter in SafeAsyncTask">ResultT</A>&nbsp;t)
+                  throws java.lang.Exception</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>t</CODE> - the result of <CODE>Callable.call()</CODE>
+<DT><B>Throws:</B>
+<DD><CODE>Exception,</CODE> - captured on passed to onException() if present.
+<DD><CODE>java.lang.Exception</CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="onInterrupted(java.lang.InterruptedException)"><!-- --></A><H3>
+onInterrupted</H3>
+<PRE>
+protected void <B>onInterrupted</B>(java.lang.InterruptedException&nbsp;e)</PRE>
+<DL>
+<DD>Called when the thread has been interrupted, likely because
+ the task was canceled.
+
+ By default, calls <A HREF="../../roboguice/util/SafeAsyncTask.html#onException(java.lang.Exception)"><CODE>onException(Exception)</CODE></A>, but this method
+ may be overridden to handle interruptions differently than other
+ exceptions.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - the exception thrown from <A HREF="../../roboguice/util/SafeAsyncTask.html#onPreExecute()"><CODE>onPreExecute()</CODE></A>, <CODE>Callable.call()</CODE>, or <A HREF="../../roboguice/util/SafeAsyncTask.html#onSuccess(ResultT)"><CODE>onSuccess(Object)</CODE></A></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="onException(java.lang.Exception)"><!-- --></A><H3>
+onException</H3>
+<PRE>
+protected void <B>onException</B>(java.lang.Exception&nbsp;e)
+                    throws java.lang.RuntimeException</PRE>
+<DL>
+<DD>Logs the exception as an Error by default, but this method may
+ be overridden by subclasses.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>e</CODE> - the exception thrown from <A HREF="../../roboguice/util/SafeAsyncTask.html#onPreExecute()"><CODE>onPreExecute()</CODE></A>, <CODE>Callable.call()</CODE>, or <A HREF="../../roboguice/util/SafeAsyncTask.html#onSuccess(ResultT)"><CODE>onSuccess(Object)</CODE></A>
+<DT><B>Throws:</B>
+<DD><CODE>RuntimeException,</CODE> - ignored
+<DD><CODE>java.lang.RuntimeException</CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="onFinally()"><!-- --></A><H3>
+onFinally</H3>
+<PRE>
+protected void <B>onFinally</B>()
+                  throws java.lang.RuntimeException</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+
+<DT><B>Throws:</B>
+<DD><CODE>RuntimeException,</CODE> - ignored
+<DD><CODE>java.lang.RuntimeException</CODE></DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="newTask()"><!-- --></A><H3>
+newTask</H3>
+<PRE>
+protected <A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util">SafeAsyncTask.Task</A>&lt;<A HREF="../../roboguice/util/SafeAsyncTask.html" title="type parameter in SafeAsyncTask">ResultT</A>&gt; <B>newTask</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="class-use/SafeAsyncTask.html"><FONT CLASS="NavBarFont1"><B>Use</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+</EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;<A HREF="../../roboguice/util/RoboThread.html" title="class in roboguice.util"><B>PREV CLASS</B></A>&nbsp;
+&nbsp;<A HREF="../../roboguice/util/SafeAsyncTask.Task.html" title="class in roboguice.util"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../index.html?roboguice/util/SafeAsyncTask.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="SafeAsyncTask.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;<A HREF="#nested_class_summary">NESTED</A>&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#169; 2011. All Rights Reserved.
+</BODY>
+</HTML>

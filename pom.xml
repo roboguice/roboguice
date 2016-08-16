@@ -335,6 +335,7 @@
 				<module>roboguice</module>
 				<module>additional-tests</module>
 				<module>astroboy</module>
+				<module>roboguice-test</module>
 			</modules>
 		</profile>
 	</profiles>

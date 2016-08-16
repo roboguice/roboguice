@@ -1,0 +1,698 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!--NewPage-->
+<HTML>
+<HEAD>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<TITLE>
+RoboApplication (roboguice 1.1-SNAPSHOT API)
+</TITLE>
+
+
+<LINK REL ="stylesheet" TYPE="text/css" HREF="../../stylesheet.css" TITLE="Style">
+
+<SCRIPT type="text/javascript">
+function windowTitle()
+{
+    if (location.href.indexOf('is-external=true') == -1) {
+        parent.document.title="RoboApplication (roboguice 1.1-SNAPSHOT API)";
+    }
+}
+</SCRIPT>
+<NOSCRIPT>
+</NOSCRIPT>
+
+</HEAD>
+
+<BODY BGCOLOR="white" onload="windowTitle();">
+<HR>
+
+
+<!-- ========= START OF TOP NAVBAR ======= -->
+<A NAME="navbar_top"><!-- --></A>
+<A HREF="#skip-navbar_top" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_top_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="class-use/RoboApplication.html"><FONT CLASS="NavBarFont1"><B>Use</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+</EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;PREV CLASS&nbsp;
+&nbsp;<A HREF="../../roboguice/application/RoboInjectableApplication.html" title="class in roboguice.application"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../index.html?roboguice/application/RoboApplication.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="RoboApplication.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_top"></A>
+<!-- ========= END OF TOP NAVBAR ========= -->
+
+<HR>
+<!-- ======== START OF CLASS DATA ======== -->
+<H2>
+<FONT SIZE="-1">
+roboguice.application</FONT>
+<BR>
+Class RoboApplication</H2>
+<PRE>
+java.lang.Object
+  <IMG SRC="../../resources/inherit.gif" ALT="extended by ">android.content.Context
+      <IMG SRC="../../resources/inherit.gif" ALT="extended by ">android.content.ContextWrapper
+          <IMG SRC="../../resources/inherit.gif" ALT="extended by ">android.app.Application
+              <IMG SRC="../../resources/inherit.gif" ALT="extended by "><B>roboguice.application.RoboApplication</B>
+</PRE>
+<DL>
+<DT><B>All Implemented Interfaces:</B> <DD>android.content.ComponentCallbacks, <A HREF="../../roboguice/inject/InjectorProvider.html" title="interface in roboguice.inject">InjectorProvider</A></DD>
+</DL>
+<DL>
+<DT><B>Direct Known Subclasses:</B> <DD><A HREF="../../roboguice/application/RoboInjectableApplication.html" title="class in roboguice.application">RoboInjectableApplication</A></DD>
+</DL>
+<HR>
+<DL>
+<DT><PRE>public class <B>RoboApplication</B><DT>extends android.app.Application<DT>implements <A HREF="../../roboguice/inject/InjectorProvider.html" title="interface in roboguice.inject">InjectorProvider</A></DL>
+</PRE>
+
+<P>
+This class is in charge of starting the Guice configuration. When the
+ <A HREF="../../roboguice/application/RoboApplication.html#getInjector()"><CODE>getInjector()</CODE></A> method is called for the first time, a new Injector is
+ created, and the magic begins !<br />
+ <br />
+ To add your own custom bindings, you should override this class and override
+ the <A HREF="../../roboguice/application/RoboApplication.html#addApplicationModules(java.util.List)"><CODE>addApplicationModules(List)</CODE></A> method. <br />
+ <br />
+ You must define this class (or any subclass) as the application in your
+ <strong>AndroidManifest.xml</strong> file. This can be done by adding <code>android:name="fully qualified name of your application class"</code> to the <code>&lt;application/&gt;</code> tag. <br />
+ <br />
+ For instance : <br /> <code>&lt;application android:icon="@drawable/icon"
+ android:label="@string/app_name"
+ android:name="roboguice.application.RoboApplication"&gt; [...] &lt;/application&gt; </code>
+<P>
+
+<P>
+<DL>
+<DT><B>Author:</B></DT>
+  <DD>Mike Burton</DD>
+<DT><B>See Also:</B><DD><A HREF="../../roboguice/application/RoboInjectableApplication.html" title="class in roboguice.application"><CODE>How to get your Application injected as well.</CODE></A></DL>
+<HR>
+
+<P>
+<!-- =========== FIELD SUMMARY =========== -->
+
+<A NAME="field_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Field Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;com.google.inject.Provider&lt;android.content.Context&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#contextProvider">contextProvider</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#contextScope">contextScope</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#eventManager">eventManager</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#extrasListener">extrasListener</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;com.google.inject.Injector</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#guiceInjector">guiceInjector</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The <CODE>Injector</CODE> of your application.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#preferenceListener">preferenceListener</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/inject/ResourceListener.html" title="class in roboguice.inject">ResourceListener</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#resourceListener">resourceListener</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;java.util.List&lt;<A HREF="../../roboguice/inject/StaticTypeListener.html" title="interface in roboguice.inject">StaticTypeListener</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#staticTypeListeners">staticTypeListeners</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;com.google.inject.Provider&lt;android.content.Context&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#throwingContextProvider">throwingContextProvider</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;<A HREF="../../roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A></CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#viewListener">viewListener</A></B></CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="fields_inherited_from_class_android.content.Context"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Fields inherited from class android.content.Context</B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE>ACCESSIBILITY_SERVICE, ACCOUNT_SERVICE, ACTIVITY_SERVICE, ALARM_SERVICE, AUDIO_SERVICE, BIND_AUTO_CREATE, BIND_DEBUG_UNBIND, CLIPBOARD_SERVICE, CONNECTIVITY_SERVICE, CONTEXT_IGNORE_SECURITY, CONTEXT_INCLUDE_CODE, CONTEXT_RESTRICTED, INPUT_METHOD_SERVICE, KEYGUARD_SERVICE, LAYOUT_INFLATER_SERVICE, LOCATION_SERVICE, MODE_APPEND, MODE_PRIVATE, MODE_WORLD_READABLE, MODE_WORLD_WRITEABLE, NOTIFICATION_SERVICE, POWER_SERVICE, SEARCH_SERVICE, SENSOR_SERVICE, TELEPHONY_SERVICE, VIBRATOR_SERVICE, WALLPAPER_SERVICE, WIFI_SERVICE, WINDOW_SERVICE</CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ======== CONSTRUCTOR SUMMARY ======== -->
+
+<A NAME="constructor_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Constructor Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#RoboApplication()">RoboApplication</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+</TABLE>
+&nbsp;
+<!-- ========== METHOD SUMMARY =========== -->
+
+<A NAME="method_summary"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="2"><FONT SIZE="+2">
+<B>Method Summary</B></FONT></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#addApplicationModules(java.util.List)">addApplicationModules</A></B>(java.util.List&lt;com.google.inject.Module&gt;&nbsp;modules)</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You should override this method to add your own custom bindings.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#allowContextObservers()">allowContextObservers</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;boolean</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#allowPreferenceInjection()">allowPreferenceInjection</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns whether or not <A HREF="../../roboguice/inject/InjectPreference.html" title="annotation in roboguice.inject"><CODE>InjectPreference</CODE></A> will be
+ supported.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;com.google.inject.Injector</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#createInjector()">createInjector</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Creates an <CODE>Injector</CODE> configured for this application.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;com.google.inject.Injector</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#getInjector()">getInjector</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Returns the <CODE>Injector</CODE> of your application.</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>&nbsp;java.util.List&lt;<A HREF="../../roboguice/inject/StaticTypeListener.html" title="interface in roboguice.inject">StaticTypeListener</A>&gt;</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#getStaticTypeListeners()">getStaticTypeListeners</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</TD>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD ALIGN="right" VALIGN="top" WIDTH="1%"><FONT SIZE="-1">
+<CODE>protected &nbsp;void</CODE></FONT></TD>
+<TD><CODE><B><A HREF="../../roboguice/application/RoboApplication.html#initInstanceMembers()">initInstanceMembers</A></B>()</CODE>
+
+<BR>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Since we don't create the injector when the <A HREF="../../roboguice/application/RoboApplication.html" title="class in roboguice.application"><CODE>RoboApplication</CODE></A> is
+ instantiated, but rather when getInjector is first called (lazy
+ initialization), the same lazy initialization is applied to this
+ application instance members, which are not used until the injector is
+ first created.</TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_android.app.Application"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class android.app.Application</B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE>onConfigurationChanged, onCreate, onLowMemory, onTerminate</CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_android.content.ContextWrapper"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class android.content.ContextWrapper</B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE>attachBaseContext, bindService, checkCallingOrSelfPermission, checkCallingOrSelfUriPermission, checkCallingPermission, checkCallingUriPermission, checkPermission, checkUriPermission, checkUriPermission, clearWallpaper, createPackageContext, databaseList, deleteDatabase, deleteFile, enforceCallingOrSelfPermission, enforceCallingOrSelfUriPermission, enforceCallingPermission, enforceCallingUriPermission, enforcePermission, enforceUriPermission, enforceUriPermission, fileList, getApplicationContext, getApplicationInfo, getAssets, getBaseContext, getCacheDir, getClassLoader, getContentResolver, getDatabasePath, getDir, getFilesDir, getFileStreamPath, getMainLooper, getPackageCodePath, getPackageManager, getPackageName, getPackageResourcePath, getResources, getSharedPreferences, getSystemService, getTheme, getWallpaper, getWallpaperDesiredMinimumHeight, getWallpaperDesiredMinimumWidth, grantUriPermission, isRestricted, openFileInput, openFileOutput, openOrCreateDatabase, peekWallpaper, registerReceiver, registerReceiver, removeStickyBroadcast, revokeUriPermission, sendBroadcast, sendBroadcast, sendOrderedBroadcast, sendOrderedBroadcast, sendStickyBroadcast, sendStickyOrderedBroadcast, setTheme, setWallpaper, setWallpaper, startActivity, startInstrumentation, startIntentSender, startService, stopService, unbindService, unregisterReceiver</CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_android.content.Context"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class android.content.Context</B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE>getString, getString, getText, obtainStyledAttributes, obtainStyledAttributes, obtainStyledAttributes, obtainStyledAttributes</CODE></TD>
+</TR>
+</TABLE>
+&nbsp;<A NAME="methods_inherited_from_class_java.lang.Object"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#EEEEFF" CLASS="TableSubHeadingColor">
+<TH ALIGN="left"><B>Methods inherited from class java.lang.Object</B></TH>
+</TR>
+<TR BGCOLOR="white" CLASS="TableRowColor">
+<TD><CODE>clone, equals, finalize, getClass, hashCode, notify, notifyAll, toString, wait, wait, wait</CODE></TD>
+</TR>
+</TABLE>
+&nbsp;
+<P>
+
+<!-- ============ FIELD DETAIL =========== -->
+
+<A NAME="field_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Field Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="guiceInjector"><!-- --></A><H3>
+guiceInjector</H3>
+<PRE>
+protected com.google.inject.Injector <B>guiceInjector</B></PRE>
+<DL>
+<DD>The <CODE>Injector</CODE> of your application.
+<P>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="contextScope"><!-- --></A><H3>
+contextScope</H3>
+<PRE>
+protected <A HREF="../../roboguice/inject/ContextScope.html" title="class in roboguice.inject">ContextScope</A> <B>contextScope</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="throwingContextProvider"><!-- --></A><H3>
+throwingContextProvider</H3>
+<PRE>
+protected com.google.inject.Provider&lt;android.content.Context&gt; <B>throwingContextProvider</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="contextProvider"><!-- --></A><H3>
+contextProvider</H3>
+<PRE>
+protected com.google.inject.Provider&lt;android.content.Context&gt; <B>contextProvider</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="resourceListener"><!-- --></A><H3>
+resourceListener</H3>
+<PRE>
+protected <A HREF="../../roboguice/inject/ResourceListener.html" title="class in roboguice.inject">ResourceListener</A> <B>resourceListener</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="viewListener"><!-- --></A><H3>
+viewListener</H3>
+<PRE>
+protected <A HREF="../../roboguice/inject/ViewListener.html" title="class in roboguice.inject">ViewListener</A> <B>viewListener</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="extrasListener"><!-- --></A><H3>
+extrasListener</H3>
+<PRE>
+protected <A HREF="../../roboguice/inject/ExtrasListener.html" title="class in roboguice.inject">ExtrasListener</A> <B>extrasListener</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="preferenceListener"><!-- --></A><H3>
+preferenceListener</H3>
+<PRE>
+protected <A HREF="../../roboguice/inject/PreferenceListener.html" title="class in roboguice.inject">PreferenceListener</A> <B>preferenceListener</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="staticTypeListeners"><!-- --></A><H3>
+staticTypeListeners</H3>
+<PRE>
+protected java.util.List&lt;<A HREF="../../roboguice/inject/StaticTypeListener.html" title="interface in roboguice.inject">StaticTypeListener</A>&gt; <B>staticTypeListeners</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+<HR>
+
+<A NAME="eventManager"><!-- --></A><H3>
+eventManager</H3>
+<PRE>
+protected <A HREF="../../roboguice/event/EventManager.html" title="class in roboguice.event">EventManager</A> <B>eventManager</B></PRE>
+<DL>
+<DL>
+</DL>
+</DL>
+
+<!-- ========= CONSTRUCTOR DETAIL ======== -->
+
+<A NAME="constructor_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Constructor Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="RoboApplication()"><!-- --></A><H3>
+RoboApplication</H3>
+<PRE>
+public <B>RoboApplication</B>()</PRE>
+<DL>
+</DL>
+
+<!-- ============ METHOD DETAIL ========== -->
+
+<A NAME="method_detail"><!-- --></A>
+<TABLE BORDER="1" WIDTH="100%" CELLPADDING="3" CELLSPACING="0" SUMMARY="">
+<TR BGCOLOR="#CCCCFF" CLASS="TableHeadingColor">
+<TH ALIGN="left" COLSPAN="1"><FONT SIZE="+2">
+<B>Method Detail</B></FONT></TH>
+</TR>
+</TABLE>
+
+<A NAME="getInjector()"><!-- --></A><H3>
+getInjector</H3>
+<PRE>
+public com.google.inject.Injector <B>getInjector</B>()</PRE>
+<DL>
+<DD>Returns the <CODE>Injector</CODE> of your application. If none exists yet,
+ creates one by calling <A HREF="../../roboguice/application/RoboApplication.html#createInjector()"><CODE>createInjector()</CODE></A>. <br />
+ <br />
+ This method is thread-safe.<br />
+ <br />
+ If you decide to override getInjector(), you will have to handle
+ synchronization.
+<P>
+<DD><DL>
+<DT><B>Specified by:</B><DD><CODE><A HREF="../../roboguice/inject/InjectorProvider.html#getInjector()">getInjector</A></CODE> in interface <CODE><A HREF="../../roboguice/inject/InjectorProvider.html" title="interface in roboguice.inject">InjectorProvider</A></CODE></DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="initInstanceMembers()"><!-- --></A><H3>
+initInstanceMembers</H3>
+<PRE>
+protected void <B>initInstanceMembers</B>()</PRE>
+<DL>
+<DD>Since we don't create the injector when the <A HREF="../../roboguice/application/RoboApplication.html" title="class in roboguice.application"><CODE>RoboApplication</CODE></A> is
+ instantiated, but rather when getInjector is first called (lazy
+ initialization), the same lazy initialization is applied to this
+ application instance members, which are not used until the injector is
+ first created. The main advantage is that roboguice footprint is close to
+ zero if no RoboActivity is used when running the application.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="createInjector()"><!-- --></A><H3>
+createInjector</H3>
+<PRE>
+protected com.google.inject.Injector <B>createInjector</B>()</PRE>
+<DL>
+<DD>Creates an <CODE>Injector</CODE> configured for this application. This
+ <CODE>Injector</CODE> will be configured with a <A HREF="../../roboguice/config/RoboModule.html" title="class in roboguice.config"><CODE>RoboModule</CODE></A> , plus
+ any <CODE>Module</CODE> you might add by overriding
+ <A HREF="../../roboguice/application/RoboApplication.html#addApplicationModules(java.util.List)"><CODE>addApplicationModules(List)</CODE></A>. <br />
+ <br />
+ In most cases, you should <strong>NOT</strong> override the
+ <A HREF="../../roboguice/application/RoboApplication.html#createInjector()"><CODE>createInjector()</CODE></A> method.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="addApplicationModules(java.util.List)"><!-- --></A><H3>
+addApplicationModules</H3>
+<PRE>
+protected void <B>addApplicationModules</B>(java.util.List&lt;com.google.inject.Module&gt;&nbsp;modules)</PRE>
+<DL>
+<DD>You should override this method to add your own custom bindings. <br />
+ To do so, you must create implementations of the <CODE>Module</CODE>
+ interface, and add them to the list of <CODE>Module</CODE> given as a
+ parameter. The easiest way to create an <CODE>Module</CODE> implementation is
+ to subclass <A HREF="../../roboguice/config/AbstractAndroidModule.html" title="class in roboguice.config"><CODE>AbstractAndroidModule</CODE></A>, which provides proxy methods
+ to the binder methods (enabling more readable configuration)<br />
+ <br />
+ This method is called by <A HREF="../../roboguice/application/RoboApplication.html#createInjector()"><CODE>createInjector()</CODE></A>.<br />
+ <br />
+ The default implementation is a no-op and does nothing.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>modules</CODE> - The list of modules to which you may add your own custom
+            modules. Please notice that it already contains one module,
+            which is this.</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="allowPreferenceInjection()"><!-- --></A><H3>
+allowPreferenceInjection</H3>
+<PRE>
+protected boolean <B>allowPreferenceInjection</B>()</PRE>
+<DL>
+<DD>Returns whether or not <A HREF="../../roboguice/inject/InjectPreference.html" title="annotation in roboguice.inject"><CODE>InjectPreference</CODE></A> will be
+ supported.
+ It is supported by default, but applications that have no
+ <A HREF="../../roboguice/activity/RoboPreferenceActivity.html" title="class in roboguice.activity"><CODE>RoboPreferenceActivity</CODE></A>'s may want to turn this
+ off for a slight startup performance gain.
+<P>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="allowContextObservers()"><!-- --></A><H3>
+allowContextObservers</H3>
+<PRE>
+protected boolean <B>allowContextObservers</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<HR>
+
+<A NAME="getStaticTypeListeners()"><!-- --></A><H3>
+getStaticTypeListeners</H3>
+<PRE>
+public java.util.List&lt;<A HREF="../../roboguice/inject/StaticTypeListener.html" title="interface in roboguice.inject">StaticTypeListener</A>&gt; <B>getStaticTypeListeners</B>()</PRE>
+<DL>
+<DD><DL>
+</DL>
+</DD>
+<DD><DL>
+</DL>
+</DD>
+</DL>
+<!-- ========= END OF CLASS DATA ========= -->
+<HR>
+
+
+<!-- ======= START OF BOTTOM NAVBAR ====== -->
+<A NAME="navbar_bottom"><!-- --></A>
+<A HREF="#skip-navbar_bottom" title="Skip navigation links"></A>
+<TABLE BORDER="0" WIDTH="100%" CELLPADDING="1" CELLSPACING="0" SUMMARY="">
+<TR>
+<TD COLSPAN=2 BGCOLOR="#EEEEFF" CLASS="NavBarCell1">
+<A NAME="navbar_bottom_firstrow"><!-- --></A>
+<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="3" SUMMARY="">
+  <TR ALIGN="center" VALIGN="top">
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../overview-summary.html"><FONT CLASS="NavBarFont1"><B>Overview</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-summary.html"><FONT CLASS="NavBarFont1"><B>Package</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#FFFFFF" CLASS="NavBarCell1Rev"> &nbsp;<FONT CLASS="NavBarFont1Rev"><B>Class</B></FONT>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="class-use/RoboApplication.html"><FONT CLASS="NavBarFont1"><B>Use</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="package-tree.html"><FONT CLASS="NavBarFont1"><B>Tree</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../deprecated-list.html"><FONT CLASS="NavBarFont1"><B>Deprecated</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../index-all.html"><FONT CLASS="NavBarFont1"><B>Index</B></FONT></A>&nbsp;</TD>
+  <TD BGCOLOR="#EEEEFF" CLASS="NavBarCell1">    <A HREF="../../help-doc.html"><FONT CLASS="NavBarFont1"><B>Help</B></FONT></A>&nbsp;</TD>
+  </TR>
+</TABLE>
+</TD>
+<TD ALIGN="right" VALIGN="top" ROWSPAN=3><EM>
+</EM>
+</TD>
+</TR>
+
+<TR>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+&nbsp;PREV CLASS&nbsp;
+&nbsp;<A HREF="../../roboguice/application/RoboInjectableApplication.html" title="class in roboguice.application"><B>NEXT CLASS</B></A></FONT></TD>
+<TD BGCOLOR="white" CLASS="NavBarCell2"><FONT SIZE="-2">
+  <A HREF="../../index.html?roboguice/application/RoboApplication.html" target="_top"><B>FRAMES</B></A>  &nbsp;
+&nbsp;<A HREF="RoboApplication.html" target="_top"><B>NO FRAMES</B></A>  &nbsp;
+&nbsp;<SCRIPT type="text/javascript">
+  <!--
+  if(window==top) {
+    document.writeln('<A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>');
+  }
+  //-->
+</SCRIPT>
+<NOSCRIPT>
+  <A HREF="../../allclasses-noframe.html"><B>All Classes</B></A>
+</NOSCRIPT>
+
+
+</FONT></TD>
+</TR>
+<TR>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+  SUMMARY:&nbsp;NESTED&nbsp;|&nbsp;<A HREF="#field_summary">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_summary">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_summary">METHOD</A></FONT></TD>
+<TD VALIGN="top" CLASS="NavBarCell3"><FONT SIZE="-2">
+DETAIL:&nbsp;<A HREF="#field_detail">FIELD</A>&nbsp;|&nbsp;<A HREF="#constructor_detail">CONSTR</A>&nbsp;|&nbsp;<A HREF="#method_detail">METHOD</A></FONT></TD>
+</TR>
+</TABLE>
+<A NAME="skip-navbar_bottom"></A>
+<!-- ======== END OF BOTTOM NAVBAR ======= -->
+
+<HR>
+Copyright &#169; 2011. All Rights Reserved.
+</BODY>
+</HTML>

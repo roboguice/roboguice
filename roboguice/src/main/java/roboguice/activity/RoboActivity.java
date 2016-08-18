@@ -203,7 +203,7 @@ public class RoboActivity extends Activity implements RoboContext {
      * @return true if name begins with a lowercase character (indicating a package) and it doesn't start with com.android
      */
     protected static boolean shouldInjectOnCreateView(String name) {
-        return false; // && Character.isLowerCase(name.charAt(0)) && !name.startsWith("com.android") && !name.equals("fragment");
+        return Character.isLowerCase(name.charAt(0)) && !name.startsWith("com.android") && !name.equals("fragment");
     }
 
     protected static View injectOnCreateView(String name, Context context, AttributeSet attrs) {

@@ -1,9 +1,15 @@
 package org.roboguice.astroboy.activity;
 
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import org.roboguice.astroboy.R;
 import org.roboguice.astroboy.controller.AstroboyRemoteControl;
 
+import org.roboguice.astroboy.view.OpenCloseTVView;
+import org.roboguice.astroboy.view.TVEvent;
+import org.roboguice.astroboy.view.TVStatusView;
 import roboguice.activity.RoboActivity;
+import roboguice.event.Observes;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 import android.content.Intent;
@@ -35,6 +41,7 @@ public class AstroboyMasterConsole extends RoboActivity {
 
     // Various views that we inject into the activity.
     // Equivalent to calling findViewById() in your onCreate(), except more succinct
+    @InjectView(R.id.main) LinearLayout mainLinearLayout;
     @InjectView(R.id.self_destruct) Button selfDestructButton;
     @InjectView(R.id.say_text)      EditText sayText;
     @InjectView(R.id.brush_teeth)   Button brushTeethButton;
@@ -51,7 +58,7 @@ public class AstroboyMasterConsole extends RoboActivity {
     // used by default to configure every RoboGuice injector.
     @Inject AstroboyRemoteControl remoteControl;
     @Inject Vibrator vibrator;
-
+    private TVStatusView tvStatusView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,6 +96,14 @@ public class AstroboyMasterConsole extends RoboActivity {
             }
         });
 
+        tvStatusView = new TVStatusView(this);
+        tvStatusView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        mainLinearLayout.addView(tvStatusView);
+    }
+
+    @SuppressWarnings("unused")
+    public void onUpdateTvEvent(@Observes TVEvent event) {
+        tvStatusView.updateStatus(event.getStatus());
     }
 
 }

@@ -3,6 +3,8 @@
 *Thank you for your many years of support.*
 
 ---
+For a list of alternatives Dependency Injection engines for Android, please visit:
+https://github.com/stephanenicolas/toothpick#alternative-dependency-injection-di-engines-for-android
 
 
 
